@@ -9,6 +9,8 @@ import DemoContainer from '../examples/DemoContainer';
 import * as buttonCodes from '../examples/Button/codes';
 import * as iconCodes from '../examples/Icon/codes';
 import * as spaceCodes from '../examples/Space/codes';
+import * as typographyCodes from '../examples/Typography/codes';
+import * as tooltipCodes from '../examples/Tooltip/codes';
 
 // 主题切换演示
 const App: React.FC = () => {
@@ -135,6 +137,92 @@ const App: React.FC = () => {
               title="对齐方式"
               description="支持 start、center、end、baseline 四种对齐方式。"
               code={spaceCodes.alignCode}
+            />
+          </section>
+
+          {/* Typography 组件演示 */}
+          <section style={{ marginBottom: '48px' }}>
+            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+              Typography 排版组件
+            </h2>
+
+            <DemoContainer
+              title="基础用法"
+              description="Typography 组件包含 Title、Paragraph、Text、Link 四个子组件，用于展示不同层级的文本内容。"
+              code={typographyCodes.basicCode}
+            />
+
+            <DemoContainer
+              title="文本样式"
+              description="支持加粗、斜体、下划线、删除线、代码、高亮等多种文本装饰效果。"
+              code={typographyCodes.textStyleCode}
+            />
+
+            <DemoContainer
+              title="文本类型"
+              description="提供 secondary、success、warning、danger 四种语义化的文本类型。"
+              code={typographyCodes.textTypeCode}
+            />
+
+            <DemoContainer
+              title="可复制文本"
+              description="通过 copyable 属性启用文本复制功能，支持自定义复制内容和提示文本。"
+              code={typographyCodes.copyableCode}
+            />
+
+            <DemoContainer
+              title="可编辑文本"
+              description="通过 editable 属性启用文本编辑功能，点击编辑图标即可修改文本内容。"
+              code={typographyCodes.editableCode}
+            />
+
+            <DemoContainer
+              title="文本省略"
+              description="通过 ellipsis 属性实现文本溢出省略，支持单行/多行省略和展开功能。"
+              code={typographyCodes.ellipsisCode}
+            />
+
+            <DemoContainer
+              title="链接组件"
+              description="Link 组件用于展示可点击的链接，支持新窗口打开和禁用状态。"
+              code={typographyCodes.linksCode}
+            />
+          </section>
+
+          {/* Tooltip 组件演示 */}
+          <section style={{ marginBottom: '48px' }}>
+            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+              Tooltip 文字提示组件
+            </h2>
+
+            <DemoContainer
+              title="基础用法"
+              description="最简单的用法，鼠标悬停时显示提示文字。"
+              code={tooltipCodes.basicCode}
+            />
+
+            <DemoContainer
+              title="不同位置"
+              description="支持 12 个不同的弹出位置，包括上、下、左、右及其组合方向。"
+              code={tooltipCodes.placementCode}
+            />
+
+            <DemoContainer
+              title="不同触发方式"
+              description="支持 hover、focus、click 和 contextMenu 四种触发方式。"
+              code={tooltipCodes.triggerCode}
+            />
+
+            <DemoContainer
+              title="延迟显示/隐藏"
+              description="设置鼠标移入后延时显示和移出后延时隐藏的时间。"
+              code={tooltipCodes.delayCode}
+            />
+
+            <DemoContainer
+              title="受控模式"
+              description="通过 visible 属性控制提示框的显示和隐藏。"
+              code={tooltipCodes.controlledCode}
             />
           </section>
         </div>

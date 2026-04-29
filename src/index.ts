@@ -18,6 +18,24 @@ export type { ConfigProviderProps, ThemeConfig, ComponentSize } from './componen
 export { default as Space } from './components/Space';
 export type { SpaceProps, SpaceSize, SpaceDirection, SpaceAlign } from './components/Space';
 
+// Typography Component
+export { default as Typography } from './components/Typography';
+export type {
+  TypographyProps,
+  TextType,
+  CopyConfig,
+  EditableConfig,
+  EllipsisConfig,
+  BaseProps,
+  TitleProps,
+  ParagraphProps,
+  LinkProps,
+} from './components/Typography';
+
+// Tooltip Component
+export { default as Tooltip } from './components/Tooltip';
+export type { TooltipProps, TooltipPlacement, TooltipTrigger } from './components/Tooltip';
+
 // Utils
 export * from './utils';
 

@@ -251,8 +251,6 @@ npm run docs:preview
    - Tag
    - Badge
    - Grid
-   - Space
-   - Icon
    - Typography
    ```
 

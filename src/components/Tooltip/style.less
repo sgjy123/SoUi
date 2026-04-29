@@ -1,0 +1,225 @@
+@import '../../styles/variables.less';
+
+// ==================== Tooltip Wrapper ====================
+
+.soui-tooltip-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+// ==================== Tooltip Animations ====================
+
+@keyframes soui-tooltip-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// ==================== Tooltip ====================
+
+.soui-tooltip {
+  position: absolute;
+  z-index: @z-index-popover;
+  max-width: 250px;
+  font-size: @font-size-base;
+  line-height: @line-height-base;
+  color: @text-color-inverse;
+  text-align: left;
+  word-wrap: break-word;
+  pointer-events: none;
+  animation: soui-tooltip-fade-in @transition-duration @transition-timing-function;
+  white-space: nowrap;
+
+  // Arrow
+  &-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    pointer-events: none;
+  }
+
+  // Inner content
+  &-inner {
+    min-width: 30px;
+    min-height: 32px;
+    padding: 6px @padding-sm;
+    background-color: rgba(0, 0, 0, 0.85);
+    border-radius: @border-radius-base;
+    box-shadow: @box-shadow-secondary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // ==================== Top Placement ====================
+
+  &-placement-top,
+  &-placement-topLeft,
+  &-placement-topRight {
+    bottom: 100%;
+    margin-bottom: 8px;
+    padding-bottom: 5px;
+
+    .soui-tooltip-arrow {
+      bottom: 0;
+      border-width: 5px 5px 0;
+      border-color: rgba(0, 0, 0, 0.85) transparent transparent;
+    }
+  }
+
+  &-placement-top {
+    left: 50%;
+    transform: translateX(-50%);
+
+    .soui-tooltip-arrow {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  &-placement-topLeft {
+    left: 0;
+
+    .soui-tooltip-arrow {
+      left: 16px;
+    }
+  }
+
+  &-placement-topRight {
+    right: 0;
+
+    .soui-tooltip-arrow {
+      right: 16px;
+    }
+  }
+
+  // ==================== Bottom Placement ====================
+
+  &-placement-bottom,
+  &-placement-bottomLeft,
+  &-placement-bottomRight {
+    top: 100%;
+    margin-top: 8px;
+    padding-top: 5px;
+
+    .soui-tooltip-arrow {
+      top: 0;
+      border-width: 0 5px 5px;
+      border-color: transparent transparent rgba(0, 0, 0, 0.85);
+    }
+  }
+
+  &-placement-bottom {
+    left: 50%;
+    transform: translateX(-50%);
+
+    .soui-tooltip-arrow {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  &-placement-bottomLeft {
+    left: 0;
+
+    .soui-tooltip-arrow {
+      left: 16px;
+    }
+  }
+
+  &-placement-bottomRight {
+    right: 0;
+
+    .soui-tooltip-arrow {
+      right: 16px;
+    }
+  }
+
+  // ==================== Left Placement ====================
+
+  &-placement-left,
+  &-placement-leftTop,
+  &-placement-leftBottom {
+    right: 100%;
+    margin-right: 8px;
+    padding-right: 5px;
+
+    .soui-tooltip-arrow {
+      right: 0;
+      border-width: 5px 0 5px 5px;
+      border-color: transparent transparent transparent rgba(0, 0, 0, 0.85);
+    }
+  }
+
+  &-placement-left {
+    top: 50%;
+    transform: translateY(-50%);
+
+    .soui-tooltip-arrow {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  &-placement-leftTop {
+    top: 0;
+
+    .soui-tooltip-arrow {
+      top: 16px;
+    }
+  }
+
+  &-placement-leftBottom {
+    bottom: 0;
+
+    .soui-tooltip-arrow {
+      bottom: 16px;
+    }
+  }
+
+  // ==================== Right Placement ====================
+
+  &-placement-right,
+  &-placement-rightTop,
+  &-placement-rightBottom {
+    left: 100%;
+    margin-left: 8px;
+    padding-left: 5px;
+
+    .soui-tooltip-arrow {
+      left: 0;
+      border-width: 5px 5px 5px 0;
+      border-color: transparent rgba(0, 0, 0, 0.85) transparent transparent;
+    }
+  }
+
+  &-placement-right {
+    top: 50%;
+    transform: translateY(-50%);
+
+    .soui-tooltip-arrow {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  &-placement-rightTop {
+    top: 0;
+
+    .soui-tooltip-arrow {
+      top: 16px;
+    }
+  }
+
+  &-placement-rightBottom {
+    bottom: 0;
+
+    .soui-tooltip-arrow {
+      bottom: 16px;
+    }
+  }
+}

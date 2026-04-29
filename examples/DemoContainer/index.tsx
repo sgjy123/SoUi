@@ -3,6 +3,8 @@ import { LiveProvider, LiveEditor, LiveError, LivePreview } from 'react-live';
 import Button from '../../src/components/Button';
 import Space from '../../src/components/Space';
 import Icon from '../../src/components/Icon';
+import Typography from '../../src/components/Typography';
+import Tooltip from '../../src/components/Tooltip';
 import './style.less';
 
 interface DemoContainerProps {
@@ -28,6 +30,12 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Button,
     Space,
     Icon,
+    Typography,
+    Title: Typography.Title,
+    Paragraph: Typography.Paragraph,
+    Text: Typography.Text,
+    Link: Typography.Link,
+    Tooltip,
     ...scope,
   };
 

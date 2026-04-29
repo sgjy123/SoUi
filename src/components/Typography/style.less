@@ -1,0 +1,339 @@
+@import '../../styles/variables.less';
+
+// ==================== Base Typography ====================
+
+.soui-typography {
+  color: @text-color;
+  font-size: @font-size-base;
+  line-height: @line-height-base;
+  word-wrap: break-word;
+  word-break: break-word;
+
+  // Override default margins for headings and paragraphs
+  &-title,
+  &-paragraph {
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  // Remove default heading styles
+  &-title {
+    font-weight: 600;
+    color: @text-color;
+
+    &-1 {
+      font-size: @font-size-xl * 2.5; // 50px
+      line-height: 1.23;
+
+      // 确保内部的 Text 组件继承标题的字体大小
+      .soui-typography-text {
+        font-size: inherit;
+      }
+    }
+
+    &-2 {
+      font-size: @font-size-xl * 2; // 40px
+      line-height: 1.25;
+
+      .soui-typography-text {
+        font-size: inherit;
+      }
+    }
+
+    &-3 {
+      font-size: @font-size-xl * 1.5; // 30px
+      line-height: 1.3;
+
+      .soui-typography-text {
+        font-size: inherit;
+      }
+    }
+
+    &-4 {
+      font-size: @font-size-xl * 1.25; // 25px
+      line-height: 1.35;
+
+      .soui-typography-text {
+        font-size: inherit;
+      }
+    }
+
+    &-5 {
+      font-size: @font-size-xl; // 20px
+      line-height: 1.4;
+
+      .soui-typography-text {
+        font-size: inherit;
+      }
+    }
+  }
+
+  &-paragraph {
+    margin-bottom: 1em;
+  }
+
+  // ==================== Text Styles ====================
+
+  &-text {
+    display: inline-block;
+  }
+
+  &-link {
+    color: @primary-color;
+    text-decoration: none;
+    cursor: pointer;
+    .transition-color();
+
+    &:hover {
+      color: @primary-hover-color;
+    }
+
+    &:active {
+      color: @primary-active-color;
+    }
+
+    &:focus {
+      outline: 2px solid fade(@primary-color, 20%);
+      outline-offset: 2px;
+    }
+
+    // 确保内部 Text 组件不影响链接样式
+    .soui-typography-text {
+      color: inherit;
+      display: inline;
+      font-size: inherit;
+    }
+
+    &.soui-typography-disabled {
+      color: @text-color-disabled;
+      cursor: not-allowed;
+      pointer-events: none;
+
+      .soui-typography-text {
+        color: inherit;
+      }
+    }
+  }
+
+  // ==================== Text Decorations ====================
+
+  &-disabled {
+    color: @text-color-disabled !important;
+    cursor: not-allowed;
+  }
+
+  &-mark {
+    background-color: #ffe58f;
+    padding: 0 2px;
+  }
+
+  &-code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    background-color: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: @border-radius-sm;
+    padding: 0 4px;
+    font-size: @font-size-sm;
+  }
+
+  &-underline {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  &-delete {
+    text-decoration: line-through;
+  }
+
+  &-strong {
+    font-weight: 600;
+  }
+
+  &-italic {
+    font-style: italic;
+  }
+
+  // ==================== Text Types ====================
+
+  &-secondary {
+    color: @text-color-secondary;
+  }
+
+  &-success {
+    color: @success-color;
+  }
+
+  &-warning {
+    color: @warning-color;
+  }
+
+  &-danger {
+    color: @error-color;
+  }
+
+  // ==================== Ellipsis ====================
+
+  &-ellipsis {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  &-expand {
+    display: inline-block;
+    color: @primary-color;
+    cursor: pointer;
+    margin-left: 4px;
+    font-size: @font-size-base;
+    white-space: nowrap;
+    flex-shrink: 0;
+    .transition-color();
+
+    &:hover {
+      color: @primary-hover-color;
+    }
+
+    &:active {
+      color: @primary-active-color;
+    }
+  }
+
+  &-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: 8px;
+    padding: 6px 10px;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: @font-size-sm;
+    line-height: @line-height-sm;
+    border-radius: @border-radius-sm;
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 300px;
+    z-index: @z-index-popover;
+    pointer-events: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 16px;
+      border: 5px solid transparent;
+      border-top-color: rgba(0, 0, 0, 0.75);
+    }
+  }
+
+  // ==================== Operations (Copy/Edit) ====================
+
+  &-operations {
+    display: inline-flex;
+    align-items: center;
+    gap: @margin-xs;
+    margin-left: @margin-xs;
+  }
+
+  &-operation {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: @text-color-secondary;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: @border-radius-sm;
+    position: relative;
+    .transition-color();
+
+    &:hover {
+      color: @primary-color;
+      background-color: fade(@primary-color, 6%);
+    }
+
+    &:active {
+      color: @primary-active-color;
+    }
+
+    &-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 6px;
+      padding: 4px 8px;
+      background-color: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      font-size: @font-size-sm;
+      border-radius: @border-radius-sm;
+      white-space: nowrap;
+      z-index: @z-index-popover;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 4px solid transparent;
+        border-top-color: rgba(0, 0, 0, 0.75);
+      }
+    }
+  }
+
+  // ==================== Editable ====================
+
+  &-editable {
+    display: inline-flex;
+    align-items: center;
+    gap: @margin-xs;
+
+    &-input {
+      border: 1px solid @primary-color;
+      border-radius: @border-radius-sm;
+      padding: 2px @padding-xs;
+      font-size: inherit;
+      font-family: inherit;
+      color: inherit;
+      outline: none;
+      min-width: 100px;
+      .transition-all();
+
+      &:focus {
+        box-shadow: 0 0 0 2px fade(@primary-color, 20%);
+      }
+    }
+
+    &-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: @margin-xs;
+    }
+  }
+
+  // ==================== Copy Feedback ====================
+
+  &-copied {
+    .soui-typography-operation {
+      color: @success-color;
+    }
+  }
+}
+
+// ==================== Responsive Adjustments ====================
+
+@media (max-width: @screen-md) {
+  .soui-typography {
+    &-title {
+      &-1 {
+        font-size: @font-size-xl * 2; // 40px
+      }
+
+      &-2 {
+        font-size: @font-size-xl * 1.75; // 35px
+      }
+
+      &-3 {
+        font-size: @font-size-xl * 1.25; // 25px
+      }
+    }
+  }
+}

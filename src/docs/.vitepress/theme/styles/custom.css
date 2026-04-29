@@ -1,0 +1,110 @@
+/** 自定义样式 */
+
+/* 颜色展示卡片 */
+.color-card {
+  border-radius: var(--vp-c-radius);
+  padding: 16px;
+  margin-bottom: 16px;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.color-card:hover {
+  transform: translateY(-2px);
+}
+
+.color-name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.color-value {
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.color-variable {
+  font-family: var(--vp-font-family-mono);
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 8px;
+}
+
+/* 间距展示 */
+.spacing-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.spacing-box {
+  background-color: var(--vp-c-brand-lighter);
+  border: 2px solid var(--vp-c-brand);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--vp-c-brand-darker);
+}
+
+.spacing-label {
+  min-width: 80px;
+  font-family: var(--vp-font-family-mono);
+  font-size: 13px;
+}
+
+.spacing-value {
+  color: var(--vp-c-text-2);
+  font-size: 13px;
+}
+
+/* 代码示例增强 */
+.vp-doc .custom-block {
+  border-radius: 8px;
+}
+
+.vp-doc table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* 组件演示容器 */
+.demo-container {
+  border: 1px solid var(--vp-c-border);
+  border-radius: var(--vp-c-radius);
+  padding: 24px;
+  margin: 24px 0;
+  background-color: var(--vp-c-bg);
+}
+
+.demo-source {
+  margin-top: 16px;
+  border-top: 1px solid var(--vp-c-border);
+  padding-top: 16px;
+}
+
+/* 功能色展示 */
+.functional-color {
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  color: white;
+}
+
+.functional-info {
+  margin-top: 8px;
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .color-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
