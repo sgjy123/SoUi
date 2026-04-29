@@ -167,6 +167,28 @@ export default () => (
 );
 ```
 
+### 自定义颜色
+
+通过 `color` 和 `bgColor` 属性自定义文字颜色和背景颜色。
+
+```tsx
+import { Tooltip, Button, Space } from '@soui/ui';
+
+export default () => (
+  <Space wrap>
+    <Tooltip title="成功提示" color="#fff" bgColor="#52c41a">
+      <Button type="primary">成功</Button>
+    </Tooltip>
+    <Tooltip title="警告提示" color="#fff" bgColor="#faad14">
+      <Button type="primary">警告</Button>
+    </Tooltip>
+    <Tooltip title="错误提示" color="#fff" bgColor="#ff4d4f">
+      <Button type="primary">错误</Button>
+    </Tooltip>
+  </Space>
+);
+```
+
 ### 多行文本
 
 Tooltip 支持显示多行文本内容，会自动换行。
@@ -257,7 +279,8 @@ export default () => (
 | mouseLeaveDelay | 鼠标移出后延时多少才隐藏 Tooltip，单位：秒 | `number` | `0.1` | - |
 | overlayClassName | 卡片类名 | `string` | - | - |
 | overlayStyle | 卡片样式 | `React.CSSProperties` | - | - |
-| arrowPointAtCenter | 箭头是否指向目标元素中心 | `boolean` | `true` | - |
+| color | 文字颜色 | `string` | - | - |
+| bgColor | 背景颜色 | `string` | - | - |
 
 ## 设计原则
 

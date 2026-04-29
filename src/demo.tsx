@@ -224,6 +224,12 @@ const App: React.FC = () => {
               description="通过 visible 属性控制提示框的显示和隐藏。"
               code={tooltipCodes.controlledCode}
             />
+
+            <DemoContainer
+              title="自定义颜色"
+              description="通过 color 和 bgColor 属性自定义文字颜色和背景颜色。"
+              code={tooltipCodes.colorCode}
+            />
           </section>
         </div>
       </div>

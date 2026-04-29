@@ -41,9 +41,32 @@ export interface TooltipProps {
   overlayClassName?: string;
   /** 额外的样式 */
   overlayStyle?: React.CSSProperties;
+  /** 文字颜色 */
+  color?: string;
+  /** 背景颜色 */
+  bgColor?: string;
   /** 子元素 */
   children?: React.ReactNode;
 }
+
+// ==================== Helper Functions ====================
+
+// 根据放置位置计算箭头的边框颜色
+const getArrowBorderColor = (placement: TooltipPlacement, bgColor: string): string => {
+  const transparent = 'transparent';
+
+  if (placement.startsWith('top')) {
+    return `${bgColor} ${transparent} ${transparent}`;
+  }
+  if (placement.startsWith('bottom')) {
+    return `${transparent} ${transparent} ${bgColor}`;
+  }
+  if (placement.startsWith('left')) {
+    return `${transparent} ${transparent} ${transparent} ${bgColor}`;
+  }
+  // right
+  return `${transparent} ${bgColor} ${transparent} ${transparent}`;
+};
 
 // ==================== Main Component ====================
 
@@ -58,6 +81,8 @@ const Tooltip: React.FC<TooltipProps> = ({
   mouseLeaveDelay = 0.1,
   overlayClassName,
   overlayStyle,
+  color,
+  bgColor,
   children,
 }) => {
   const [internalVisible, setInternalVisible] = useState(defaultVisible);
@@ -193,8 +218,17 @@ const Tooltip: React.FC<TooltipProps> = ({
           style={overlayStyle}
           role="tooltip"
         >
-          <div className="soui-tooltip-arrow" />
-          <div className="soui-tooltip-inner">
+          <div
+            className="soui-tooltip-arrow"
+            style={bgColor ? { borderColor: getArrowBorderColor(placement, bgColor) } : undefined}
+          />
+          <div
+            className="soui-tooltip-inner"
+            style={{
+              backgroundColor: bgColor,
+              color: color,
+            }}
+          >
             {title}
           </div>
         </div>

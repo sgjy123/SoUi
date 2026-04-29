@@ -15,15 +15,15 @@ export default defineConfig({
     ['meta', { name: 'theme-color', content: '#1677ff' }],
   ],
   
-  // Logo 配置
-  logo: {
-    src: '/logo.svg',
-    width: 48,
-    height: 48,
-  },
-  
   // 主题配置
   themeConfig: {
+    // Logo 配置
+    logo: {
+      src: '/logo.svg',
+      width: 24,
+      height: 24,
+    },
+    
     // 导航栏
     nav: [
       { text: '指南', link: '/guide/introduction' },
@@ -113,7 +113,10 @@ export default defineConfig({
 
   // Vite 配置（支持 React 和 Less）
   vite: {
-    plugins: [react()],
+    plugins: [react() as any],
+    build: {
+      outDir: '../dist-docs',
+    },
     css: {
       preprocessorOptions: {
         less: {
@@ -128,11 +131,6 @@ export default defineConfig({
     config: (md) => {
       // 可以在这里添加自定义 markdown-it 插件
     },
-  },
-
-  // 构建配置
-  build: {
-    outDir: 'dist-docs',
   },
 })
 

@@ -59,16 +59,37 @@ export const delayCode = `<Tooltip
   <Button type="primary">延迟显示/隐藏</Button>
 </Tooltip>`;
 
-export const controlledCode = `const [visible, setVisible] = useState(false);
+export const controlledCode = `() => {
+  const [visible, setVisible] = useState(false);
 
-<Space direction="vertical">
-  <Tooltip
-    title="受控模式的提示"
-    visible={visible}
-    onVisibleChange={setVisible}
-  >
-    <Button onClick={() => setVisible(!visible)}>
-      {visible ? '隐藏' : '显示'}提示框
-    </Button>
+  return (
+    <Space direction="vertical">
+      <Tooltip
+        title="受控模式的提示"
+        visible={visible}
+        onVisibleChange={setVisible}
+        trigger="click"
+      >
+        这种一般用于需要手动控制提示框显示隐藏的场景
+      </Tooltip>
+      <Button onClick={() => setVisible(!visible)}>
+        {visible ? '隐藏' : '显示'}提示框
+      </Button>
+    </Space>
+  );
+}`;
+
+export const colorCode = `<Space wrap>
+  <Tooltip title="成功提示" color="#fff" bgColor="#52c41a">
+    <Button type="primary">成功</Button>
+  </Tooltip>
+  <Tooltip title="警告提示" color="#fff" bgColor="#faad14">
+    <Button type="primary">警告</Button>
+  </Tooltip>
+  <Tooltip title="错误提示" color="#fff" bgColor="#ff4d4f">
+    <Button type="primary">错误</Button>
+  </Tooltip>
+  <Tooltip title="信息提示" color="#fff" bgColor="#1677ff">
+    <Button type="primary">信息</Button>
   </Tooltip>
 </Space>`;
