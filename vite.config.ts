@@ -5,7 +5,16 @@ import { resolve } from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react({
+    babel: {
+      parserOpts: {
+        plugins: ['decorators-legacy', 'classProperties']
+      }
+    }
+  })],
+  optimizeDeps: {
+    include: ['react-live'],
+  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),

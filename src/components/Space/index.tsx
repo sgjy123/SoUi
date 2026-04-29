@@ -15,6 +15,10 @@ export interface SpaceProps {
   align?: SpaceAlign;
   /** 是否自动换行 */
   wrap?: boolean;
+  /** 是否为块级元素（占据整行） */
+  block?: boolean;
+  /** 分隔符 */
+  split?: React.ReactNode;
   /** 子节点 */
   children?: React.ReactNode;
   /** 自定义类名 */
@@ -28,6 +32,8 @@ const Space: React.FC<SpaceProps> = ({
   direction = 'horizontal',
   align,
   wrap = false,
+  block = false,
+  split,
   children,
   className,
   style,
@@ -47,11 +53,36 @@ const Space: React.FC<SpaceProps> = ({
 
   const gap = getSizeValue(size);
 
+  // 处理分隔符逻辑
+  const renderItems = () => {
+    if (!children) return null;
+    
+    const childArray = React.Children.toArray(children).filter(
+      (child) => child !== null && child !== undefined
+    );
+    
+    if (childArray.length === 0) return null;
+
+    return childArray.map((child, index) => {
+      const key = (child as React.ReactElement)?.key || `space-item-${index}`;
+      
+      return (
+        <React.Fragment key={key}>
+          <div className="soui-space-item">{child}</div>
+          {index < childArray.length - 1 && split && (
+            <span className="soui-space-split">{split}</span>
+          )}
+        </React.Fragment>
+      );
+    });
+  };
+
   const spaceClassName = classNames(
     'soui-space',
     `soui-space-${direction}`,
     {
       'soui-space-wrap': wrap,
+      'soui-space-block': block,
     },
     className
   );
@@ -65,7 +96,7 @@ const Space: React.FC<SpaceProps> = ({
 
   return (
     <div className={spaceClassName} style={spaceStyle}>
-      {children}
+      {renderItems()}
     </div>
   );
 };

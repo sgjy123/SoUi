@@ -54,7 +54,9 @@
   },
   "dependencies": {
     "@icon-park/react": "^1.4.2",
-    "classnames": "^2.5.1"
+    "classnames": "^2.5.1",
+    "prism-react-renderer": "^2.4.1",
+    "react-live": "^4.1.8"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
@@ -63,6 +65,7 @@
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "crypto-browserify": "^3.12.0",
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
@@ -72,8 +75,7 @@
     "rimraf": "^5.0.5",
     "typescript": "~5.3.3",
     "vite": "^4.5.0",
-    "vitepress": "^1.0.0-rc.45",
-    "crypto-browserify": "^3.12.0"
+    "vitepress": "^1.0.0-rc.45"
   },
   "volta": {
     "node": "18.20.8"

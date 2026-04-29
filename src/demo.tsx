@@ -1,70 +1,14 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import Button from './components/Button';
-import Icon from './components/Icon';
-import ConfigProvider, { useConfig } from './components/ConfigProvider';
+import ConfigProvider from './components/ConfigProvider';
 import Space from './components/Space';
+import Button from './components/Button';
+import DemoContainer from '../examples/DemoContainer';
 
-const DemoContent: React.FC = () => {
-  const { theme } = useConfig();
-
-  return (
-    <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }}>
-      <h1>SoUi 组件库演示</h1>
-      <p>当前主题色：{theme?.primaryColor}</p>
-
-      {/* Button 组件演示 */}
-      <div style={{ marginBottom: '24px' }}>
-        <h2>Button 按钮</h2>
-        <div style={{ marginBottom: '16px' }}>
-          <Button type="default">默认</Button>
-          <Button type="primary">主要</Button>
-          <Button type="dashed">虚线</Button>
-          <Button type="text">文本</Button>
-          <Button type="link">链接</Button>
-        </div>
-        <div style={{ marginBottom: '16px' }}>
-          <Button size="large">大</Button>
-          <Button>中</Button>
-          <Button size="small">小</Button>
-        </div>
-        <div style={{ marginBottom: '16px' }}>
-          <Button loading>加载中</Button>
-          <Button disabled>禁用</Button>
-          <Button danger>危险</Button>
-          <Button icon="Search">图标</Button>
-        </div>
-        <div style={{ marginBottom: '16px' }}>
-          <Button shape="circle" aria-label="circle">
-            <Icon name="Home" size={16} />
-          </Button>
-          <Button shape="round">椭圆</Button>
-          <Button onClick={() => alert('点击了！')}>触发 Alert</Button>
-        </div>
-      </div>
-
-      {/* Icon 组件演示 */}
-      <div style={{ marginBottom: '24px' }}>
-        <h2>Icon 图标</h2>
-        <p>以下图标使用主题色（未指定 fill 时）：</p>
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '16px' }}>
-          <Icon name="Home" size={24} theme="outline" />
-          <Icon name="User" size={24} theme="outline" />
-          <Icon name="Setting" size={24} theme="outline" />
-          <Icon name="Search" size={24} theme="outline" />
-          <Icon name="Loading" size={24} theme="outline" />
-        </div>
-        <p>以下图标使用自定义颜色：</p>
-        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-          <Icon name="CheckCorrect" size={24} theme="filled" fill="#52c41a" />
-          <Icon name="Close" size={24} theme="filled" fill="#ff4d4f" />
-          <Icon name="Info" size={24} theme="filled" fill="#1677ff" />
-          <Icon name="Reminder" size={24} theme="filled" fill="#faad14" />
-        </div>
-      </div>
-    </div>
-  );
-};
+// 导入各组件的示例代码
+import * as buttonCodes from '../examples/Button/codes';
+import * as iconCodes from '../examples/Icon/codes';
+import * as spaceCodes from '../examples/Space/codes';
 
 // 主题切换演示
 const App: React.FC = () => {
@@ -82,11 +26,21 @@ const App: React.FC = () => {
 
   return (
     <ConfigProvider theme={theme}>
-      <div>
-        <div style={{ padding: '20px', background: '#f5f5f5', marginBottom: '20px' }}>
+      <div style={{ minHeight: '100vh', background: '#f5f5f5' }}>
+        {/* 顶部导航栏 */}
+        <div style={{
+          padding: '20px 40px',
+          background: '#fff',
+          marginBottom: '20px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <h1 style={{ margin: 0, fontSize: '24px' }}>SoUi 组件库演示</h1>
           <Space>
-            <Button 
-              type={customTheme ? 'default' : 'primary'} 
+            <Button
+              type={customTheme ? 'default' : 'primary'}
               onClick={() => setCustomTheme(!customTheme)}
             >
               {customTheme ? '切换回默认主题' : '切换为紫色主题'}
@@ -94,7 +48,96 @@ const App: React.FC = () => {
             <span>当前主题：{customTheme ? '紫色主题' : '默认蓝色主题'}</span>
           </Space>
         </div>
-        <DemoContent />
+
+        {/* 主要内容区域 */}
+        <div style={{ padding: '0 40px 40px', maxWidth: '1200px', margin: '0 auto' }}>
+          {/* Button 组件演示 */}
+          <section style={{ marginBottom: '48px' }}>
+            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+              Button 按钮组件
+            </h2>
+
+            <DemoContainer
+              title="基本类型"
+              description="按钮的基本类型：主要按钮、默认按钮、虚线按钮、文本按钮和链接按钮。"
+              code={buttonCodes.basicCode}
+            />
+
+            <DemoContainer
+              title="按钮尺寸"
+              description="按钮有大、中、小三种尺寸，默认为中等尺寸。"
+              code={buttonCodes.sizeCode}
+            />
+
+            <DemoContainer
+              title="按钮状态"
+              description="按钮可以设置为加载中、禁用或危险状态。"
+              code={buttonCodes.statusCode}
+            />
+
+            <DemoContainer
+              title="按钮形状"
+              description="按钮支持圆形、椭圆形以及带图标的按钮。"
+              code={buttonCodes.shapeCode}
+            />
+          </section>
+
+          {/* Icon 组件演示 */}
+          <section style={{ marginBottom: '48px' }}>
+            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+              Icon 图标组件
+            </h2>
+
+            <DemoContainer
+              title="基本图标"
+              description="展示不同类型的图标，包括轮廓图标和填充图标。未指定 fill 时使用主题色。"
+              code={iconCodes.basicCode}
+            />
+          </section>
+
+          {/* Space 组件演示 */}
+          <section style={{ marginBottom: '48px' }}>
+            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+              Space 间距组件
+            </h2>
+
+            <DemoContainer
+              title="基本用法"
+              description="Space 组件用于设置子元素之间的间距。"
+              code={spaceCodes.basicCode}
+            />
+
+            <DemoContainer
+              title="间距尺寸"
+              description="支持 small、middle、large 三种预设尺寸，也可以自定义数值（像素）。"
+              code={spaceCodes.sizeCode}
+            />
+
+            <DemoContainer
+              title="排列方向"
+              description="支持水平和垂直两种排列方向，默认为水平方向。"
+              code={spaceCodes.directionCode}
+            />
+
+            <DemoContainer
+              title="块级显示"
+              description="通过 block 属性控制 Space 是否为块级元素。默认 inline-flex，设置 block 后变为 flex 占据整行。"
+              code={spaceCodes.blockCode}
+            />
+
+            <DemoContainer
+              title="分隔符"
+              description="通过 split 属性在子元素之间添加分隔符，支持文本、符号或自定义元素。"
+              code={spaceCodes.splitCode}
+            />
+
+            <DemoContainer
+              title="对齐方式"
+              description="支持 start、center、end、baseline 四种对齐方式。"
+              code={spaceCodes.alignCode}
+            />
+          </section>
+        </div>
       </div>
     </ConfigProvider>
   );

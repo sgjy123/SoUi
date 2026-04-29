@@ -1,6 +1,10 @@
 .soui-space {
   display: inline-flex;
   
+  &.soui-space-block {
+    display: flex;
+  }
+  
   &.soui-space-vertical {
     flex-direction: column;
   }
@@ -8,4 +12,12 @@
   &.soui-space-wrap {
     flex-wrap: wrap;
   }
+}
+
+.soui-space-item {
+  display: inline-block;
+}
+
+.soui-space-split {
+  display: inline-block;
 }
