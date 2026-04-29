@@ -1,0 +1,120 @@
+// Import variables
+@import './variables.less';
+
+// ==================== CSS Variables Root ====================
+// 这些变量可以通过 ConfigProvider 动态配置
+:root {
+  --soui-primary-color: @primary-color;
+  --soui-primary-hover-color: @primary-hover-color;
+  --soui-primary-active-color: @primary-active-color;
+  --soui-success-color: @success-color;
+  --soui-warning-color: @warning-color;
+  --soui-error-color: @error-color;
+  --soui-info-color: @info-color;
+  --soui-border-radius: @border-radius-base;
+  --soui-font-size: @font-size-base;
+  --soui-line-height: @line-height-base;
+}
+
+// ==================== Global Styles ====================
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  font-size: var(--soui-font-size, @font-size-base);
+  line-height: var(--soui-line-height, @line-height-base);
+  color: @text-color;
+  background-color: @bg-color-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Reset default styles
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+a {
+  color: var(--soui-primary-color, @primary-color);
+  text-decoration: none;
+  transition: color @transition-duration @transition-timing-function;
+  
+  &:hover {
+    color: var(--soui-primary-hover-color, @primary-hover-color);
+  }
+  
+  &:active {
+    color: var(--soui-primary-active-color, @primary-active-color);
+  }
+}
+
+ul, ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+// Clearfix
+.clearfix() {
+  &::before,
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+// Scrollbar styles
+.soui-scrollbar {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// Focus styles
+.soui-focus-highlight {
+  &:focus-visible {
+    outline: 2px solid var(--soui-primary-color, @primary-color);
+    outline-offset: 2px;
+  }
+}
+
+// Disabled state mixin
+.disabled-mixin() {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}

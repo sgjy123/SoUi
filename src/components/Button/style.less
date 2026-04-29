@@ -1,0 +1,375 @@
+// Button Styles
+@import '../../styles/variables.less';
+
+// Keyframes
+@keyframes soui-button-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes soui-ripple-effect {
+  to {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+// Size mixins
+.button-size(@height, @padding, @font-size) {
+  height: @height;
+  padding: @padding;
+  font-size: @font-size;
+  
+  &.soui-button-shape-circle {
+    width: @height;
+    min-width: @height;
+    padding: 0;
+  }
+}
+
+// Base button styles
+.soui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 1.5715;
+  white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+  transition: all @transition-duration @transition-timing-function;
+  user-select: none;
+  touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
+  outline: none;
+  
+  // Reset default button styles
+  border: 1px solid transparent;
+  
+  // Inner container
+  &-inner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  // Content
+  &-content {
+    display: inline-block;
+  }
+  
+  // Icon
+  &-icon {
+    display: inline-flex;
+    align-items: center;
+    
+    svg {
+      vertical-align: -0.125em;
+    }
+  }
+  
+  &-loading-icon {
+    display: inline-flex;
+    align-items: center;
+    animation: soui-button-spin 1s infinite linear;
+  }
+  
+  // Ripple effect
+  &-ripple {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    transform: scale(0);
+    animation: soui-ripple-effect 0.6s ease-out;
+    pointer-events: none;
+  }
+  
+  // Shapes
+  &-shape-default {
+    border-radius: @border-radius-base;
+  }
+  
+  &-shape-circle {
+    border-radius: 50%;
+    padding: 0;
+    text-align: center;
+    
+    .soui-button-inner {
+      justify-content: center;
+    }
+  }
+  
+  &-shape-round {
+    border-radius: 9999px;
+  }
+  
+  // Sizes
+  &-large {
+    .button-size(@control-height-lg, 16px 20px, @font-size-lg);
+  }
+  
+  &-middle {
+    .button-size(@control-height-base, 8px 15px, @font-size-base);
+  }
+  
+  &-small {
+    .button-size(@control-height-sm, 4px 10px, @font-size-sm);
+  }
+  
+  // Block button
+  &-block {
+    display: flex;
+    width: 100%;
+  }
+  
+  // Icon only button
+  &-icon-only {
+    padding: 0 !important;
+    
+    .soui-button-inner {
+      justify-content: center;
+    }
+    
+    .soui-button-icon,
+    .soui-button-loading-icon {
+      margin: 0;
+    }
+  }
+  
+  // Types
+  &-default {
+    color: @text-color;
+    background-color: #fff;
+    border-color: @border-color;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+    
+    &:hover {
+      color: var(--soui-primary-hover-color, @primary-hover-color);
+      border-color: var(--soui-primary-hover-color, @primary-hover-color);
+      background-color: #fff;
+    }
+    
+    &:active {
+      color: var(--soui-primary-active-color, @primary-active-color);
+      border-color: var(--soui-primary-active-color, @primary-active-color);
+      background-color: #fff;
+    }
+  }
+  
+  &-primary {
+    color: #fff;
+    background-color: var(--soui-primary-color, @primary-color);
+    border-color: var(--soui-primary-color, @primary-color);
+    box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+    
+    &:hover {
+      color: #fff;
+      background-color: var(--soui-primary-hover-color, @primary-hover-color);
+      border-color: var(--soui-primary-hover-color, @primary-hover-color);
+    }
+    
+    &:active {
+      color: #fff;
+      background-color: var(--soui-primary-active-color, @primary-active-color);
+      border-color: var(--soui-primary-active-color, @primary-active-color);
+    }
+  }
+  
+  &-dashed {
+    color: @text-color;
+    background-color: #fff;
+    border-style: dashed;
+    border-color: @border-color;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+    
+    &:hover {
+      color: var(--soui-primary-hover-color, @primary-hover-color);
+      border-color: var(--soui-primary-hover-color, @primary-hover-color);
+      background-color: #fff;
+    }
+    
+    &:active {
+      color: var(--soui-primary-active-color, @primary-active-color);
+      border-color: var(--soui-primary-active-color, @primary-active-color);
+      background-color: #fff;
+    }
+  }
+  
+  &-text {
+    color: @text-color;
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    
+    &:hover {
+      color: @text-color;
+      background-color: rgba(0, 0, 0, 0.06);
+      border-color: transparent;
+    }
+    
+    &:active {
+      color: @text-color;
+      background-color: rgba(0, 0, 0, 0.15);
+      border-color: transparent;
+    }
+  }
+  
+  &-link {
+    color: var(--soui-primary-color, @primary-color);
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    
+    &:hover {
+      color: var(--soui-primary-hover-color, @primary-hover-color);
+      background-color: transparent;
+      border-color: transparent;
+    }
+    
+    &:active {
+      color: var(--soui-primary-active-color, @primary-active-color);
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+  
+  // Ghost button
+  &-ghost {
+    background-color: transparent;
+    border-color: #fff;
+    color: #fff;
+    
+    &.soui-button-primary {
+      color: var(--soui-primary-color, @primary-color);
+      border-color: var(--soui-primary-color, @primary-color);
+    }
+    
+    &.soui-button-danger {
+      color: var(--soui-error-color, @error-color);
+      border-color: var(--soui-error-color, @error-color);
+    }
+  }
+  
+  // Danger button
+  &-danger {
+    &.soui-button-default,
+    &.soui-button-dashed {
+      color: var(--soui-error-color, @error-color);
+      border-color: var(--soui-error-color, @error-color);
+      
+      &:hover {
+        color: #fff;
+        background-color: var(--soui-error-color, @error-color);
+        border-color: var(--soui-error-color, @error-color);
+      }
+      
+      &:active {
+        color: #fff;
+        background-color: darken(@error-color, 5%);
+        border-color: darken(@error-color, 5%);
+      }
+    }
+    
+    &.soui-button-primary {
+      color: #fff;
+      background-color: var(--soui-error-color, @error-color);
+      border-color: var(--soui-error-color, @error-color);
+      
+      &:hover {
+        background-color: lighten(@error-color, 5%);
+        border-color: lighten(@error-color, 5%);
+      }
+      
+      &:active {
+        background-color: darken(@error-color, 5%);
+        border-color: darken(@error-color, 5%);
+      }
+    }
+    
+    &.soui-button-text,
+    &.soui-button-link {
+      color: var(--soui-error-color, @error-color);
+      
+      &:hover {
+        color: lighten(@error-color, 10%);
+      }
+    }
+  }
+  
+  // Disabled state
+  &-disabled,
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    box-shadow: none;
+    
+    &:hover,
+    &:active {
+      opacity: 0.6;
+    }
+  }
+  
+  // Loading state
+  &-loading {
+    cursor: default;
+    opacity: 0.7;
+  }
+}
+
+// Button Group
+.soui-button-group {
+  display: inline-flex;
+  
+  .soui-button {
+    border-radius: 0;
+    margin-right: -1px;
+    position: relative;
+    z-index: 1;
+    
+    &:hover,
+    &:focus,
+    &:active {
+      z-index: 2;
+    }
+    
+    &:first-child {
+      border-top-left-radius: @border-radius-base;
+      border-bottom-left-radius: @border-radius-base;
+    }
+    
+    &:last-child {
+      border-top-right-radius: @border-radius-base;
+      border-bottom-right-radius: @border-radius-base;
+      margin-right: 0;
+    }
+  }
+  
+  // Vertical group
+  &-vertical {
+    display: flex;
+    flex-direction: column;
+    
+    .soui-button {
+      margin-right: 0;
+      margin-bottom: -1px;
+      
+      &:first-child {
+        border-top-left-radius: @border-radius-base;
+        border-top-right-radius: @border-radius-base;
+      }
+      
+      &:last-child {
+        border-bottom-left-radius: @border-radius-base;
+        border-bottom-right-radius: @border-radius-base;
+        margin-bottom: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,101 @@
+// ==================== Colors ====================
+@primary-color: #1677ff;
+@primary-hover-color: #4096ff;
+@primary-active-color: #0958d9;
+
+@success-color: #52c41a;
+@warning-color: #faad14;
+@error-color: #ff4d4f;
+@info-color: #1677ff;
+
+// ==================== Text Colors ====================
+@text-color: rgba(0, 0, 0, 0.88);
+@text-color-secondary: rgba(0, 0, 0, 0.65);
+@text-color-disabled: rgba(0, 0, 0, 0.25);
+@text-color-inverse: #fff;
+
+// ==================== Background Colors ====================
+@bg-color-base: #fff;
+@bg-color-container: #fff;
+@bg-color-layout: #f5f5f5;
+@bg-color-disable: #f5f5f5;
+
+// ==================== Border Colors ====================
+@border-color: #d9d9d9;
+@border-color-split: #f0f0f0;
+@border-color-inverse: #fff;
+
+// ==================== Sizes ====================
+@border-radius-base: 6px;
+@border-radius-sm: 2px;
+@border-radius-lg: 8px;
+
+@font-size-base: 14px;
+@font-size-sm: 12px;
+@font-size-lg: 16px;
+@font-size-xl: 20px;
+
+@line-height-base: 1.5715;
+@line-height-sm: 1.6667;
+@line-height-lg: 1.5;
+
+@size-unit: 4px;
+@size-step: 4px;
+
+// Component sizes
+@control-height-base: 32px;
+@control-height-sm: 24px;
+@control-height-lg: 40px;
+
+// Padding
+@padding-xs: 4px;
+@padding-sm: 8px;
+@padding-md: 16px;
+@padding-lg: 24px;
+@padding-xl: 32px;
+
+// Margin
+@margin-xs: 4px;
+@margin-sm: 8px;
+@margin-md: 16px;
+@margin-lg: 24px;
+@margin-xl: 32px;
+
+// ==================== Shadows ====================
+@shadow-color: rgba(0, 0, 0, 0.1);
+@shadow-color-secondary: rgba(0, 0, 0, 0.06);
+
+@box-shadow: 0 2px 8px @shadow-color;
+@box-shadow-secondary: 0 6px 16px @shadow-color;
+@box-shadow-tertiary: 0 1px 2px @shadow-color;
+
+// ==================== Transitions ====================
+@transition-duration: 0.3s;
+@transition-timing-function: ease-in-out;
+
+.transition-all() {
+  transition: all @transition-duration @transition-timing-function;
+}
+
+.transition-color() {
+  transition: color @transition-duration @transition-timing-function,
+              background-color @transition-duration @transition-timing-function,
+              border-color @transition-duration @transition-timing-function;
+}
+
+// ==================== Z-index ====================
+@z-index-base: 1;
+@z-index-popup-base: 1000;
+@z-index-modal: 1000;
+@z-index-notification: 1010;
+@z-index-message: 1010;
+@z-index-popover: 1030;
+@z-index-picker: 1050;
+
+// ==================== Screen Sizes ====================
+@screen-xs: 480px;
+@screen-sm: 576px;
+@screen-md: 768px;
+@screen-lg: 992px;
+@screen-xl: 1200px;
+@screen-xxl: 1600px;
