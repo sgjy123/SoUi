@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import classNames from 'classnames';
 import Icon from '../Icon';
+import Tooltip from '../Tooltip';
 import './style.less';
 
 // ==================== Types ====================
@@ -85,33 +86,27 @@ const OperationButton: React.FC<OperationButtonProps> = ({
   onClick,
   className,
 }) => {
-  const [visible, setVisible] = useState(false);
-
-  const handleMouseEnter = () => {
-    if (tooltip !== false) {
-      setVisible(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setVisible(false);
-  };
-
   const tooltipText = typeof tooltip === 'string' ? tooltip : undefined;
+  const tooltipEnabled = tooltip !== false;
 
-  return (
+  const buttonContent = (
     <span
       className={classNames('soui-typography-operation', className)}
       onClick={onClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       {icon}
-      {visible && tooltipText && (
-        <span className="soui-typography-operation-tooltip">{tooltipText}</span>
-      )}
     </span>
   );
+
+  if (tooltipEnabled && tooltipText) {
+    return (
+      <Tooltip title={tooltipText} placement="top">
+        {buttonContent}
+      </Tooltip>
+    );
+  }
+
+  return buttonContent;
 };
 
 // ==================== Text Component ====================
@@ -139,10 +134,8 @@ const Text: React.FC<BaseProps & React.HTMLAttributes<HTMLSpanElement>> = ({
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [isEllipsis, setIsEllipsis] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
   const contentRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const tooltipTimerRef = useRef<NodeJS.Timeout>();
 
   // Handle editable
   useEffect(() => {
@@ -340,6 +333,21 @@ const Text: React.FC<BaseProps & React.HTMLAttributes<HTMLSpanElement>> = ({
       );
     }
 
+    // Wrap content with Tooltip if needed
+    if (ellipsis && !expanded) {
+      const ellipsisConfig = typeof ellipsis === 'object' ? ellipsis : {};
+      const tooltip = ellipsisConfig.tooltip;
+      
+      if (tooltip) {
+        const tooltipContent = typeof tooltip === 'string' ? tooltip : String(children);
+        return (
+          <Tooltip title={tooltipContent} placement="top">
+            {content}
+          </Tooltip>
+        );
+      }
+    }
+
     return content;
   };
 
@@ -411,54 +419,27 @@ const Text: React.FC<BaseProps & React.HTMLAttributes<HTMLSpanElement>> = ({
     }
   };
 
-  // Render tooltip for ellipsis
-  const renderTooltip = () => {
-    if (!ellipsis || expanded) return null;
-
-    const ellipsisConfig = typeof ellipsis === 'object' ? ellipsis : {};
-    const tooltip = ellipsisConfig.tooltip;
-
-    // Only show tooltip if tooltip is explicitly set (string or true)
-    if (!tooltip) return null;
-
-    const tooltipContent = typeof tooltip === 'string' ? tooltip : String(children);
-
-    return (
-      <span
-        className="soui-typography-tooltip"
-        style={{ display: showTooltip ? 'block' : 'none' }}
-      >
-        {tooltipContent}
-      </span>
-    );
-  };
-
-  // Handle tooltip mouse events
-  const handleTooltipMouseEnter = () => {
-    if (tooltipTimerRef.current) clearTimeout(tooltipTimerRef.current);
-    setShowTooltip(true);
-  };
-
-  const handleTooltipMouseLeave = () => {
-    tooltipTimerRef.current = setTimeout(() => setShowTooltip(false), 100);
-  };
-
   return (
     <span
       style={{ display: 'inline-flex', alignItems: 'flex-end', maxWidth: '100%', position: 'relative' }}
-      onMouseEnter={handleTooltipMouseEnter}
-      onMouseLeave={handleTooltipMouseLeave}
     >
-      <span
-        ref={contentRef}
-        className={typographyClassName}
-        style={{ ...style, ...ellipsisStyle }}
-        onClick={onClick}
-        {...props}
+      <Tooltip
+        title={ellipsis && !expanded && typeof ellipsis === 'object' && ellipsis.tooltip
+          ? (typeof ellipsis.tooltip === 'string' ? ellipsis.tooltip : String(children))
+          : undefined
+        }
+        placement="top"
       >
-        {renderContent()}
-      </span>
-      {renderTooltip()}
+        <span
+          ref={contentRef}
+          className={typographyClassName}
+          style={{ ...style, ...ellipsisStyle }}
+          onClick={onClick}
+          {...props}
+        >
+          {renderContent()}
+        </span>
+      </Tooltip>
       {renderExpandButton()}
       {renderOperations()}
     </span>

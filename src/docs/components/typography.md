@@ -128,7 +128,7 @@ export default () => (
 
 ### 可复制文本
 
-通过 copyable 属性启用文本复制功能。
+通过 copyable 属性启用文本复制功能。鼠标悬停在复制图标上会显示 Tooltip 提示。
 
 ```tsx
 import { Typography, Space } from '@soui/ui';
@@ -144,7 +144,7 @@ export default () => (
       <Text
         copyable={{
           text: '自定义复制内容',
-          tooltips: ['点击复制', '已复制'],
+          tooltips: '点击复制',
         }}
       >
         自定义复制内容
@@ -372,7 +372,7 @@ export default () => (
 | text | 复制的文本内容 | `string` | 组件内容 | - |
 | onCopy | 复制回调 | `(event: MouseEvent) => void` | - | - |
 | icon | 自定义复制图标 | `ReactNode` | 默认图标 | - |
-| tooltips | 提示文本 | `boolean \| string` | `true` | - |
+| tooltips | 提示文本（使用 Tooltip 组件显示） | `boolean \| string` | `true` | - |
 
 ### EditableConfig
 
@@ -385,7 +385,7 @@ export default () => (
 | onFinish | 完成编辑回调 | `(value: string) => void` | - | - |
 | triggerType | 触发方式 | `('icon' \| 'text')[]` | `['icon']` | - |
 | icon | 自定义编辑图标 | `ReactNode` | 默认图标 | - |
-| tooltip | 提示文本 | `boolean \| string` | `'编辑'` | - |
+| tooltip | 提示文本（使用 Tooltip 组件显示） | `boolean \| string` | `'编辑'` | - |
 
 ### EllipsisConfig
 
@@ -397,7 +397,7 @@ export default () => (
 | symbol | 展开按钮文案 | `ReactNode` | `'展开'` | - |
 | onExpand | 展开回调 | `(e: MouseEvent) => void` | - | - |
 | onEllipsis | 省略状态变化回调 | `(ellipsis: boolean) => void` | - | - |
-| tooltip | 悬浮提示内容 | `boolean \| string` | `false` | - |
+| tooltip | 悬浮提示内容（使用 Tooltip 组件显示） | `boolean \| string` | `false` | - |
 
 ## 设计原则
 
@@ -511,11 +511,20 @@ const [editing, setEditing] = useState(false);
 
 ### 省略时如何显示 Tooltip？
 
+Typography 组件内置了 Tooltip 组件来显示省略文本的完整内容。当设置 `tooltip` 属性时，鼠标悬停在省略文本上会显示 Tooltip 提示框。
+
 ```tsx
 <Text ellipsis={{ tooltip: '完整的文本内容' }}>
   可能被省略的文本
 </Text>
 ```
+
+Tooltip 提示框支持以下配置：
+- `tooltip={true}`：显示组件内容作为提示文本
+- `tooltip="自定义文本"`：显示指定的提示文本
+- `tooltip={false}`：禁用提示框
+
+> **提示**：Typography 内部的 Tooltip 使用的是 SoUi 的 [Tooltip 组件](/components/tooltip)，具有相同的样式和行为。
 
 ### 如何自定义展开按钮？
 
@@ -536,3 +545,4 @@ const [editing, setEditing] = useState(false);
 - [Button 按钮](/components/button) - 可与文本配合使用
 - [Icon 图标](/components/icon) - 自定义复制和编辑图标
 - [Space 间距](/components/space) - 控制文本组件间距
+- [Tooltip 文字提示](/components/tooltip) - Typography 内部使用的 Tooltip 组件

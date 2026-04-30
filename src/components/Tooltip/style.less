@@ -31,7 +31,7 @@
   word-wrap: break-word;
   pointer-events: none;
   animation: soui-tooltip-fade-in @transition-duration @transition-timing-function;
-  white-space: nowrap;
+  white-space: normal;
 
   // Arrow
   &-arrow {
@@ -50,9 +50,8 @@
     background-color: rgba(0, 0, 0, 0.85);
     border-radius: @border-radius-base;
     box-shadow: @box-shadow-secondary;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    white-space: normal;
+    word-break: break-word;
   }
 
   // ==================== Top Placement ====================
