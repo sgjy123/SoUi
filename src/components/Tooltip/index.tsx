@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import './style.less';
 
@@ -55,64 +56,81 @@ export interface TooltipProps {
 
 // ==================== Utility Functions ====================
 
+// 获取元素相对于容器的位置
+const getRelativePosition = (element: HTMLElement, container: HTMLElement) => {
+  const elementRect = element.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+
+  return {
+    top: elementRect.top - containerRect.top + container.scrollTop,
+    left: elementRect.left - containerRect.left + container.scrollLeft,
+    width: elementRect.width,
+    height: elementRect.height,
+    right: elementRect.right - containerRect.left + container.scrollLeft,
+    bottom: elementRect.bottom - containerRect.top + container.scrollTop,
+    x: elementRect.left - containerRect.left + container.scrollLeft,
+    y: elementRect.top - containerRect.top + container.scrollTop,
+  };
+};
+
+// 计算浮层位置
 const getPlacementStyles = (
   placement: TooltipPlacement,
-  triggerRect: DOMRect,
+  triggerPos: ReturnType<typeof getRelativePosition>,
   tooltipRect: DOMRect
 ): React.CSSProperties => {
   const gap = 8;
   let top = 0;
   let left = 0;
 
-  // getBoundingClientRect() 返回相对于视口的位置，配合 fixed 定位直接使用
   switch (placement) {
     case 'top':
-      top = triggerRect.top - tooltipRect.height - gap;
-      left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
+      top = triggerPos.top - tooltipRect.height - gap;
+      left = triggerPos.left + (triggerPos.width - tooltipRect.width) / 2;
       break;
     case 'topLeft':
-      top = triggerRect.top - tooltipRect.height - gap;
-      left = triggerRect.left;
+      top = triggerPos.top - tooltipRect.height - gap;
+      left = triggerPos.left;
       break;
     case 'topRight':
-      top = triggerRect.top - tooltipRect.height - gap;
-      left = triggerRect.right - tooltipRect.width;
+      top = triggerPos.top - tooltipRect.height - gap;
+      left = triggerPos.right - tooltipRect.width;
       break;
     case 'bottom':
-      top = triggerRect.bottom + gap;
-      left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
+      top = triggerPos.bottom + gap;
+      left = triggerPos.left + (triggerPos.width - tooltipRect.width) / 2;
       break;
     case 'bottomLeft':
-      top = triggerRect.bottom + gap;
-      left = triggerRect.left;
+      top = triggerPos.bottom + gap;
+      left = triggerPos.left;
       break;
     case 'bottomRight':
-      top = triggerRect.bottom + gap;
-      left = triggerRect.right - tooltipRect.width;
+      top = triggerPos.bottom + gap;
+      left = triggerPos.right - tooltipRect.width;
       break;
     case 'left':
-      top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-      left = triggerRect.left - tooltipRect.width - gap;
+      top = triggerPos.top + (triggerPos.height - tooltipRect.height) / 2;
+      left = triggerPos.left - tooltipRect.width - gap;
       break;
     case 'leftTop':
-      top = triggerRect.top;
-      left = triggerRect.left - tooltipRect.width - gap;
+      top = triggerPos.top;
+      left = triggerPos.left - tooltipRect.width - gap;
       break;
     case 'leftBottom':
-      top = triggerRect.bottom - tooltipRect.height;
-      left = triggerRect.left - tooltipRect.width - gap;
+      top = triggerPos.bottom - tooltipRect.height;
+      left = triggerPos.left - tooltipRect.width - gap;
       break;
     case 'right':
-      top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-      left = triggerRect.right + gap;
+      top = triggerPos.top + (triggerPos.height - tooltipRect.height) / 2;
+      left = triggerPos.right + gap;
       break;
     case 'rightTop':
-      top = triggerRect.top;
-      left = triggerRect.right + gap;
+      top = triggerPos.top;
+      left = triggerPos.right + gap;
       break;
     case 'rightBottom':
-      top = triggerRect.bottom - tooltipRect.height;
-      left = triggerRect.right + gap;
+      top = triggerPos.bottom - tooltipRect.height;
+      left = triggerPos.right + gap;
       break;
   }
 
@@ -120,6 +138,111 @@ const getPlacementStyles = (
     top: `${top}px`,
     left: `${left}px`,
   };
+};
+
+// ==================== Tooltip Popup Component ====================
+
+interface TooltipPopupProps {
+  title: React.ReactNode;
+  placement: TooltipPlacement;
+  overlayClassName?: string;
+  overlayStyle?: React.CSSProperties;
+  positionStyle: React.CSSProperties;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  innerRef: React.RefObject<HTMLDivElement>;
+}
+
+const TooltipPopup: React.FC<TooltipPopupProps> = ({
+  title,
+  placement,
+  overlayClassName,
+  overlayStyle,
+  positionStyle,
+  onMouseEnter,
+  onMouseLeave,
+  innerRef,
+}) => {
+  // 计算箭头位置样式
+  const arrowStyle: React.CSSProperties = {};
+  switch (placement) {
+    case 'top':
+    case 'topLeft':
+    case 'topRight':
+      arrowStyle.bottom = '-6px';
+      if (placement === 'top') {
+        arrowStyle.left = '50%';
+        arrowStyle.transform = 'translateX(-50%)';
+      } else if (placement === 'topLeft') {
+        arrowStyle.left = '16px';
+      } else {
+        arrowStyle.right = '16px';
+      }
+      break;
+    case 'bottom':
+    case 'bottomLeft':
+    case 'bottomRight':
+      arrowStyle.top = '-6px';
+      if (placement === 'bottom') {
+        arrowStyle.left = '50%';
+        arrowStyle.transform = 'translateX(-50%)';
+      } else if (placement === 'bottomLeft') {
+        arrowStyle.left = '16px';
+      } else {
+        arrowStyle.right = '16px';
+      }
+      break;
+    case 'left':
+    case 'leftTop':
+    case 'leftBottom':
+      arrowStyle.right = '-6px';
+      if (placement === 'left') {
+        arrowStyle.top = '50%';
+        arrowStyle.transform = 'translateY(-50%)';
+      } else if (placement === 'leftTop') {
+        arrowStyle.top = '16px';
+      } else {
+        arrowStyle.bottom = '16px';
+      }
+      break;
+    case 'right':
+    case 'rightTop':
+    case 'rightBottom':
+      arrowStyle.left = '-6px';
+      if (placement === 'right') {
+        arrowStyle.top = '50%';
+        arrowStyle.transform = 'translateY(-50%)';
+      } else if (placement === 'rightTop') {
+        arrowStyle.top = '16px';
+      } else {
+        arrowStyle.bottom = '16px';
+      }
+      break;
+  }
+
+  return (
+    <div
+      className={classNames('soui-tooltip', `soui-tooltip-${placement}`, overlayClassName)}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 1030,
+        ...overlayStyle,
+      }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <div
+        ref={innerRef}
+        className="soui-tooltip-wrapper"
+        style={positionStyle}
+      >
+        <div className="soui-tooltip-arrow" style={arrowStyle} />
+        <div className="soui-tooltip-inner">{title}</div>
+      </div>
+    </div>
+  );
 };
 
 // ==================== Main Component ====================
@@ -143,14 +266,23 @@ const Tooltip: React.FC<TooltipProps> = ({
   ...props
 }) => {
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
-  const [position, setPosition] = useState<React.CSSProperties>({ left: 0, top: 0 });
+  const [positionStyle, setPositionStyle] = useState<React.CSSProperties>({});
   const triggerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // 判断是否为受控模式
   const isControlled = controlledOpen !== undefined;
   const visible = isControlled ? controlledOpen : internalOpen;
+
+  // 获取容器
+  const getContainer = useCallback(() => {
+    if (getPopupContainer && triggerRef.current) {
+      return getPopupContainer(triggerRef.current);
+    }
+    return document.body;
+  }, [getPopupContainer]);
 
   // 清除定时器
   const clearTimer = useCallback(() => {
@@ -160,18 +292,18 @@ const Tooltip: React.FC<TooltipProps> = ({
     }
   }, []);
 
-  // 更新位置
+  // 更新位置 - 参考 antd 实现方式
   const updatePosition = useCallback(() => {
-    if (!triggerRef.current || !tooltipRef.current) return;
+    if (!triggerRef.current || !tooltipRef.current || !containerRef.current) return;
 
-    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const triggerPos = getRelativePosition(triggerRef.current, containerRef.current);
     const tooltipRect = tooltipRef.current.getBoundingClientRect();
 
     // 确保尺寸有效
     if (tooltipRect.width === 0 && tooltipRect.height === 0) return;
 
-    const newPosition = getPlacementStyles(placement, triggerRect, tooltipRect);
-    setPosition(newPosition);
+    const newPosition = getPlacementStyles(placement, triggerPos, tooltipRect);
+    setPositionStyle(newPosition);
   }, [placement]);
 
   // 打开浮层
@@ -239,28 +371,36 @@ const Tooltip: React.FC<TooltipProps> = ({
     };
   }
 
-  // 浮层显示时计算位置
+  // 获取容器并计算位置
   useEffect(() => {
     if (!visible || !title) return;
 
-    // 使用 requestAnimationFrame 确保 DOM 已渲染且布局完成
+    // 获取容器
+    containerRef.current = getContainer();
+
+    // 使用 requestAnimationFrame 确保 DOM 已渲染
     const rafId = requestAnimationFrame(() => {
       updatePosition();
     });
 
     return () => cancelAnimationFrame(rafId);
-  }, [visible, title, placement]);
+  }, [visible, title, placement, getContainer, updatePosition]);
 
-  // 监听窗口 resize（fixed 定位不需要监听 scroll，因为坐标是相对于视口的）
+  // 监听窗口滚动和 resize
   useEffect(() => {
     if (!visible) return;
 
-    const handleResize = () => {
+    const handleUpdate = () => {
       updatePosition();
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleUpdate, true);
+    window.addEventListener('resize', handleUpdate);
+
+    return () => {
+      window.removeEventListener('scroll', handleUpdate, true);
+      window.removeEventListener('resize', handleUpdate);
+    };
   }, [visible, updatePosition]);
 
   // 点击外部关闭
@@ -306,62 +446,19 @@ const Tooltip: React.FC<TooltipProps> = ({
     );
   }
 
-  // 计算箭头位置样式
-  const arrowPositionStyle: React.CSSProperties = {};
-  switch (placement) {
-    case 'top':
-    case 'topLeft':
-    case 'topRight':
-      arrowPositionStyle.bottom = '-6px';
-      if (placement === 'top') {
-        arrowPositionStyle.left = '50%';
-        arrowPositionStyle.transform = 'translateX(-50%)';
-      } else if (placement === 'topLeft') {
-        arrowPositionStyle.left = '16px';
-      } else {
-        arrowPositionStyle.right = '16px';
-      }
-      break;
-    case 'bottom':
-    case 'bottomLeft':
-    case 'bottomRight':
-      arrowPositionStyle.top = '-6px';
-      if (placement === 'bottom') {
-        arrowPositionStyle.left = '50%';
-        arrowPositionStyle.transform = 'translateX(-50%)';
-      } else if (placement === 'bottomLeft') {
-        arrowPositionStyle.left = '16px';
-      } else {
-        arrowPositionStyle.right = '16px';
-      }
-      break;
-    case 'left':
-    case 'leftTop':
-    case 'leftBottom':
-      arrowPositionStyle.right = '-6px';
-      if (placement === 'left') {
-        arrowPositionStyle.top = '50%';
-        arrowPositionStyle.transform = 'translateY(-50%)';
-      } else if (placement === 'leftTop') {
-        arrowPositionStyle.top = '16px';
-      } else {
-        arrowPositionStyle.bottom = '16px';
-      }
-      break;
-    case 'right':
-    case 'rightTop':
-    case 'rightBottom':
-      arrowPositionStyle.left = '-6px';
-      if (placement === 'right') {
-        arrowPositionStyle.top = '50%';
-        arrowPositionStyle.transform = 'translateY(-50%)';
-      } else if (placement === 'rightTop') {
-        arrowPositionStyle.top = '16px';
-      } else {
-        arrowPositionStyle.bottom = '16px';
-      }
-      break;
-  }
+  // 使用 Portal 渲染浮层到指定容器
+  const popupContent = visible && title ? (
+    <TooltipPopup
+      title={title}
+      placement={placement}
+      overlayClassName={overlayClassName}
+      overlayStyle={overlayStyle}
+      positionStyle={positionStyle}
+      onMouseEnter={triggers.includes('hover') ? handleOpen : undefined}
+      onMouseLeave={triggers.includes('hover') ? handleClose : undefined}
+      innerRef={tooltipRef}
+    />
+  ) : null;
 
   return (
     <>
@@ -375,22 +472,9 @@ const Tooltip: React.FC<TooltipProps> = ({
         {children}
       </div>
 
-      {visible && title && (
-        <div
-          ref={tooltipRef}
-          className={classNames('soui-tooltip', `soui-tooltip-${placement}`, overlayClassName)}
-          style={{
-            position: 'fixed',
-            zIndex: 1030,
-            ...position,
-            ...overlayStyle,
-          }}
-          onMouseEnter={triggers.includes('hover') ? handleOpen : undefined}
-          onMouseLeave={triggers.includes('hover') ? handleClose : undefined}
-        >
-          <div className="soui-tooltip-arrow" style={arrowPositionStyle} />
-          <div className="soui-tooltip-inner">{title}</div>
-        </div>
+      {popupContent && ReactDOM.createPortal(
+        popupContent,
+        containerRef.current || document.body
       )}
     </>
   );
