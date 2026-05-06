@@ -1,87 +1,70 @@
 # Tooltip 文字提示
 
-简单的文字提示气泡框。
+简单的文字提示气泡框，用于展示额外的信息。
 
 ## 何时使用
 
-- 鼠标移入则显示提示，移出消失，延迟显示和隐藏
-- 相较于 `Popover`，Tooltip 更轻量，仅用于展示简单的文字提示信息
-- 需要为用户提供额外的说明或帮助信息时
+- 鼠标悬停时显示提示信息
+- 需要为按钮、图标等元素添加说明文字
+- 空间有限无法完整展示内容时
+- 需要提供操作指引或补充说明
 
 ## 代码演示
 
 ### 基础用法
 
-最简单的用法，鼠标悬停时显示提示文字。
+最简单的用法，鼠标悬停显示提示信息。
 
 ```tsx
 import { Tooltip, Button } from '@soui/ui';
 
 export default () => (
-  <Tooltip title="这是提示文字">
-    <Button type="primary">悬停显示提示</Button>
+  <Tooltip title="这是一个提示">
+    <Button>悬停显示提示</Button>
   </Tooltip>
 );
 ```
 
-### 不同位置
+### 弹出位置
 
-支持 12 个不同的弹出位置。
+支持 12 个不同的弹出位置，可以灵活选择提示框的展示方向。
 
 ```tsx
 import { Tooltip, Button, Space } from '@soui/ui';
 
-export default () => {
-  const placements = [
-    'topLeft', 'top', 'topRight',
-    'leftTop', 'left', 'leftBottom',
-    'rightTop', 'right', 'rightBottom',
-    'bottomLeft', 'bottom', 'bottomRight',
-  ];
-
-  return (
-    <div style={{ padding: 50 }}>
-      <Space direction="vertical" size="large">
-        <Space>
-          <span style={{ width: 80 }}></span>
-          {['topLeft', 'top', 'topRight'].map(p => (
-            <Tooltip key={p} title={p} placement={p as any}>
-              <Button>{p}</Button>
-            </Tooltip>
-          ))}
-          <span style={{ width: 80 }}></span>
-        </Space>
-        <Space>
-          {['leftTop', 'left', 'leftBottom'].map(p => (
-            <Tooltip key={p} title={p} placement={p as any}>
-              <Button>{p}</Button>
-            </Tooltip>
-          ))}
-          <span style={{ width: 120 }}></span>
-          {['rightTop', 'right', 'rightBottom'].map(p => (
-            <Tooltip key={p} title={p} placement={p as any}>
-              <Button>{p}</Button>
-            </Tooltip>
-          ))}
-        </Space>
-        <Space>
-          <span style={{ width: 80 }}></span>
-          {['bottomLeft', 'bottom', 'bottomRight'].map(p => (
-            <Tooltip key={p} title={p} placement={p as any}>
-              <Button>{p}</Button>
-            </Tooltip>
-          ))}
-          <span style={{ width: 80 }}></span>
-        </Space>
-      </Space>
-    </div>
-  );
-};
+export default () => (
+  <Space wrap>
+    <Tooltip title="上方" placement="top">
+      <Button>top</Button>
+    </Tooltip>
+    <Tooltip title="左上方" placement="topLeft">
+      <Button>topLeft</Button>
+    </Tooltip>
+    <Tooltip title="右上方" placement="topRight">
+      <Button>topRight</Button>
+    </Tooltip>
+    <Tooltip title="左侧" placement="left">
+      <Button>left</Button>
+    </Tooltip>
+    <Tooltip title="右侧" placement="right">
+      <Button>right</Button>
+    </Tooltip>
+    <Tooltip title="下方" placement="bottom">
+      <Button>bottom</Button>
+    </Tooltip>
+    <Tooltip title="左下方" placement="bottomLeft">
+      <Button>bottomLeft</Button>
+    </Tooltip>
+    <Tooltip title="右下方" placement="bottomRight">
+      <Button>bottomRight</Button>
+    </Tooltip>
+  </Space>
+);
 ```
 
-### 不同触发方式
+### 触发方式
 
-支持 hover、focus、click 和 contextMenu 四种触发方式。
+支持 hover、click、focus、contextMenu 四种触发方式。
 
 ```tsx
 import { Tooltip, Button, Space } from '@soui/ui';
@@ -89,177 +72,103 @@ import { Tooltip, Button, Space } from '@soui/ui';
 export default () => (
   <Space wrap>
     <Tooltip title="悬停触发" trigger="hover">
-      <Button>Hover</Button>
-    </Tooltip>
-    <Tooltip title="聚焦触发" trigger="focus">
-      <Button>Focus</Button>
+      <Button>hover</Button>
     </Tooltip>
     <Tooltip title="点击触发" trigger="click">
-      <Button>Click</Button>
+      <Button type="primary">click</Button>
+    </Tooltip>
+    <Tooltip title="聚焦触发" trigger="focus">
+      <Button type="dashed">focus</Button>
     </Tooltip>
     <Tooltip title="右键触发" trigger="contextMenu">
-      <Button>Context Menu</Button>
+      <Button type="text">contextMenu</Button>
     </Tooltip>
   </Space>
 );
 ```
 
-### 延迟显示/隐藏
-
-设置鼠标移入后延时显示和移出后延时隐藏的时间。
-
-```tsx
-import { Tooltip, Button } from '@soui/ui';
-
-export default () => (
-  <Tooltip
-    title="延迟显示的提示"
-    mouseEnterDelay={0.5}
-    mouseLeaveDelay={0.3}
-  >
-    <Button type="primary">延迟显示/隐藏</Button>
-  </Tooltip>
-);
-```
-
 ### 受控模式
 
-通过 `visible` 属性控制提示框的显示和隐藏。
+通过 `open` 和 `onOpenChange` 属性控制提示框的显示和隐藏。
 
 ```tsx
 import { useState } from 'react';
 import { Tooltip, Button, Space } from '@soui/ui';
 
 export default () => {
-  const [visible, setVisible] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <Space direction="vertical">
       <Tooltip
-        title="受控模式的提示"
-        visible={visible}
-        onVisibleChange={setVisible}
+        title="受控模式的提示框"
+        open={open}
+        onOpenChange={(visible) => setOpen(visible)}
       >
-        <Button onClick={() => setVisible(!visible)}>
-          {visible ? '隐藏' : '显示'}提示框
-        </Button>
+        <Button>受控模式（当前：{open ? '显示' : '隐藏'}）</Button>
       </Tooltip>
+      <Button onClick={() => setOpen(!open)}>
+        切换显示状态
+      </Button>
     </Space>
   );
 };
 ```
 
-### 自定义样式
+### 延迟显示/隐藏
 
-通过 `overlayClassName` 和 `overlayStyle` 自定义提示框样式。
-
-```tsx
-import { Tooltip, Button } from '@soui/ui';
-
-export default () => (
-  <Tooltip
-    title="自定义样式的提示文字"
-    overlayClassName="custom-tooltip"
-    overlayStyle={{ backgroundColor: '#52c41a', color: '#fff' }}
-  >
-    <Button type="primary">自定义样式</Button>
-  </Tooltip>
-);
-```
-
-### 自定义颜色
-
-通过 `color` 和 `bgColor` 属性自定义文字颜色和背景颜色。
+通过 `mouseEnterDelay` 和 `mouseLeaveDelay` 设置延迟时间（秒）。
 
 ```tsx
 import { Tooltip, Button, Space } from '@soui/ui';
 
 export default () => (
   <Space wrap>
-    <Tooltip title="成功提示" color="#fff" bgColor="#52c41a">
-      <Button type="primary">成功</Button>
+    <Tooltip title="延迟 0.5 秒显示" mouseEnterDelay={0.5}>
+      <Button>延迟显示</Button>
     </Tooltip>
-    <Tooltip title="警告提示" color="#fff" bgColor="#faad14">
-      <Button type="primary">警告</Button>
-    </Tooltip>
-    <Tooltip title="错误提示" color="#fff" bgColor="#ff4d4f">
-      <Button type="primary">错误</Button>
+    <Tooltip title="延迟 1 秒隐藏" mouseLeaveDelay={1}>
+      <Button type="primary">延迟隐藏</Button>
     </Tooltip>
   </Space>
 );
 ```
 
-### 多行文本
+### 销毁 DOM
 
-Tooltip 支持显示多行文本内容，会自动换行。
-
-```tsx
-import { Tooltip, Button } from '@soui/ui';
-
-export default () => (
-  <Tooltip title="这是第一行提示文字&#10;这是第二行提示文字&#10;这是第三行提示文字">
-    <Button>多行文本</Button>
-  </Tooltip>
-);
-```
-
-### 富文本内容
-
-`title` 属性支持 React 节点，可以包含 HTML 元素。
-
-```tsx
-import { Tooltip, Button } from '@soui/ui';
-
-export default () => (
-  <Tooltip
-    title={
-      <div>
-        <div style={{ fontWeight: 'bold', marginBottom: 4 }}>提示标题</div>
-        <div>这是详细的提示内容</div>
-        <div style={{ fontSize: 12, color: '#999', marginTop: 4 }}>附加信息</div>
-      </div>
-    }
-  >
-    <Button type="primary">富文本内容</Button>
-  </Tooltip>
-);
-```
-
-### 禁用状态
-
-当子元素处于禁用状态时，可以通过包裹一层元素来实现 Tooltip 显示。
+通过 `destroyOnHidden` 属性控制关闭后是否销毁浮层 DOM，默认为 false。
 
 ```tsx
 import { Tooltip, Button, Space } from '@soui/ui';
 
 export default () => (
   <Space wrap>
-    {/* 这种方式在按钮禁用时不会显示 Tooltip */}
-    <Tooltip title="禁用的按钮">
-      <Button disabled>禁用按钮</Button>
+    <Tooltip title="关闭后不销毁 DOM" destroyOnHidden={false}>
+      <Button>不销毁（默认）</Button>
     </Tooltip>
-
-    {/* 正确的方式：包裹一层 span */}
-    <Tooltip title="禁用的按钮">
-      <span>
-        <Button disabled>禁用按钮（可显示提示）</Button>
-      </span>
+    <Tooltip title="关闭后销毁 DOM" destroyOnHidden>
+      <Button type="primary">销毁 DOM</Button>
     </Tooltip>
   </Space>
 );
 ```
 
-### 组合触发方式
+### 自定义容器
 
-可以同时设置多种触发方式。
+通过 `getPopupContainer` 指定浮层渲染的父节点，默认渲染到 body 上。
 
 ```tsx
 import { Tooltip, Button } from '@soui/ui';
 
 export default () => (
-  <Tooltip title="悬停或聚焦都会显示" trigger={['hover', 'focus']}>
-    <Button>Hover 或 Focus</Button>
-  </Tooltip>
+  <div id="custom-container" style={{ padding: '20px', border: '1px solid #d9d9d9' }}>
+    <Tooltip
+      title="浮层将渲染在此容器内"
+      getPopupContainer={(triggerNode) => triggerNode.parentElement!}
+    >
+      <Button>自定义容器</Button>
+    </Tooltip>
+  </div>
 );
 ```
 
@@ -270,17 +179,35 @@ export default () => (
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|--------|------|
 | title | 提示文字 | `React.ReactNode` | - | - |
-| placement | 弹出位置 | `'top' \| 'topLeft' \| 'topRight' \| 'bottom' \| 'bottomLeft' \| 'bottomRight' \| 'left' \| 'leftTop' \| 'leftBottom' \| 'right' \| 'rightTop' \| 'rightBottom'` | `'top'` | - |
-| trigger | 触发方式 | `'hover' \| 'focus' \| 'click' \| 'contextMenu' \| Array<'hover' \| 'focus' \| 'click' \| 'contextMenu'>` | `'hover'` | - |
-| visible | 是否显示（受控） | `boolean` | - | - |
-| defaultVisible | 是否默认显示 | `boolean` | `false` | - |
-| onVisibleChange | 显示/隐藏回调 | `(visible: boolean) => void` | - | - |
-| mouseEnterDelay | 鼠标移入后延时多少才显示 Tooltip，单位：秒 | `number` | `0.1` | - |
-| mouseLeaveDelay | 鼠标移出后延时多少才隐藏 Tooltip，单位：秒 | `number` | `0.1` | - |
-| overlayClassName | 卡片类名 | `string` | - | - |
-| overlayStyle | 卡片样式 | `React.CSSProperties` | - | - |
-| color | 文字颜色 | `string` | - | - |
-| bgColor | 背景颜色 | `string` | - | - |
+| trigger | 触发方式 | `TooltipTrigger \| TooltipTrigger[]` | `'hover'` | - |
+| placement | 弹出位置 | `TooltipPlacement` | `'top'` | - |
+| open | 是否可见（受控） | `boolean` | - | - |
+| defaultOpen | 默认是否可见（非受控） | `boolean` | `false` | - |
+| getPopupContainer | 浮层渲染父节点，默认渲染到 body 上 | `(triggerNode: HTMLElement) => HTMLElement` | - | - |
+| destroyOnHidden | 关闭后是否销毁 dom | `boolean` | `false` | - |
+| mouseEnterDelay | 鼠标移入延迟（秒） | `number` | `0.1` | - |
+| mouseLeaveDelay | 鼠标移出延迟（秒） | `number` | `0.1` | - |
+| onOpenChange | 显示变化回调 | `(open: boolean) => void` | - | - |
+| className | 自定义类名 | `string` | - | - |
+| overlayClassName | 浮层类名 | `string` | - | - |
+| style | 自定义样式 | `React.CSSProperties` | - | - |
+| overlayStyle | 浮层样式 | `React.CSSProperties` | - | - |
+
+### TooltipPlacement
+
+```typescript
+type TooltipPlacement =
+  | 'top' | 'topLeft' | 'topRight'
+  | 'bottom' | 'bottomLeft' | 'bottomRight'
+  | 'left' | 'leftTop' | 'leftBottom'
+  | 'right' | 'rightTop' | 'rightBottom';
+```
+
+### TooltipTrigger
+
+```typescript
+type TooltipTrigger = 'hover' | 'click' | 'focus' | 'contextMenu';
+```
 
 ## 设计原则
 
@@ -288,76 +215,89 @@ export default () => (
 
 ```tsx
 // 简洁明了的提示文字
-<Tooltip title="保存文件">
-  <Button icon="Save" />
+<Tooltip title="保存更改">
+  <Button icon={<Icon name="Save" />}>保存</Button>
 </Tooltip>
 
-// 提供有用的补充信息
-<Tooltip title="密码至少包含8个字符，包括字母和数字">
-  <Input placeholder="请输入密码" />
+// 使用合适的触发方式
+<Tooltip title="点击删除" trigger="click">
+  <Button danger>删除</Button>
 </Tooltip>
 ```
 
 ### ❌ 避免使用
 
 ```tsx
-// 不要放置过长的文字
-<Tooltip title="这是一段非常长的提示文字，可能会让用户阅读困难...">
+// 避免过长的提示文字
+<Tooltip title="这是一段非常非常长的提示文字，可能会影响用户体验...">
   <Button>按钮</Button>
 </Tooltip>
 
-// 不要嵌套 Tooltip
-<Tooltip title="外层">
-  <Tooltip title="内层">
-    <Button>按钮</Button>
-  </Tooltip>
+// 避免在禁用元素上直接使用（需要使用外层包裹）
+<Tooltip title="提示">
+  <Button disabled>禁用按钮</Button>
+</Tooltip>
+
+// 正确做法：使用 span 包裹
+<Tooltip title="提示">
+  <span>
+    <Button disabled>禁用按钮</Button>
+  </span>
 </Tooltip>
 ```
 
 ## 无障碍访问
 
-- Tooltip 遵循 WAI-ARIA 规范，使用 `role="tooltip"` 属性
-- 支持键盘焦点触发（当 `trigger` 包含 `focus` 时）
-- 提示内容对屏幕阅读器友好
+- Tooltip 组件遵循 WAI-ARIA 规范
+- 支持键盘操作，focus 触发方式可用于无障碍场景
+- 提示文字应简洁明了，便于屏幕阅读器朗读
 
 ## FAQ
 
-### Tooltip 和 Popover 有什么区别？
+### Tooltip 在禁用按钮上不显示怎么办？
 
-Tooltip 更适合展示简单的文字提示，而 Popover 可以承载更复杂的内容（如表单、列表等）。如果提示内容较复杂或需要用户交互，建议使用 Popover。
+禁用的按钮不会触发鼠标事件，需要用外层元素包裹：
 
-### 如何自定义 Tooltip 的样式？
+```tsx
+<Tooltip title="提示">
+  <span>
+    <Button disabled>禁用按钮</Button>
+  </span>
+</Tooltip>
+```
 
-可以通过 `overlayClassName` 添加自定义类名，或通过 `overlayStyle` 直接设置样式：
+### 如何自定义浮层的样式？
+
+可以使用 `overlayClassName` 和 `overlayStyle` 属性：
 
 ```tsx
 <Tooltip
-  title="提示文字"
+  title="提示"
+  overlayClassName="my-tooltip"
   overlayStyle={{ backgroundColor: '#52c41a' }}
 >
-  <Button>按钮</Button>
+  <Button>绿色提示框</Button>
 </Tooltip>
 ```
 
-### 为什么 Tooltip 没有显示？
+### getPopupContainer 的作用是什么？
 
-可能的原因：
-1. `title` 为空或未设置
-2. 触发方式与操作不匹配
-3. 检查是否有 CSS 层级问题（z-index）
-
-### 如何在移动端使用 Tooltip？
-
-在移动端，建议将 `trigger` 设置为 `'click'`，因为移动设备没有 hover 状态：
+`getPopupContainer` 用于指定浮层渲染的父节点。默认情况下浮层会渲染到 `body` 上，这在某些场景下可能导致定位问题（例如在固定容器内滚动时）。通过此属性可以将浮层渲染到指定的容器内：
 
 ```tsx
-<Tooltip title="提示文字" trigger="click">
-  <Button>点击显示</Button>
+<Tooltip
+  title="提示"
+  getPopupContainer={(triggerNode) => triggerNode.parentElement!}
+>
+  <Button>自定义容器</Button>
 </Tooltip>
 ```
+
+### destroyOnHidden 有什么作用？
+
+`destroyOnHidden` 控制关闭后是否销毁浮层 DOM。默认为 `false`，即关闭后保留 DOM 节点，这样下次打开时无需重新创建，性能更好。设置为 `true` 会在关闭时销毁 DOM，适用于对内存敏感的场景。
 
 ## 相关资源
 
 - [Popover 气泡卡片](/components/popover)
-- [Button 按钮](/components/button)
 - [Typography 排版](/components/typography)

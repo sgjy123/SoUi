@@ -197,38 +197,38 @@ const App: React.FC = () => {
 
             <DemoContainer
               title="基础用法"
-              description="最简单的用法，鼠标悬停时显示提示文字。"
+              description="最简单的用法，鼠标悬停显示提示信息。"
               code={tooltipCodes.basicCode}
             />
 
             <DemoContainer
-              title="不同位置"
-              description="支持 12 个不同的弹出位置，包括上、下、左、右及其组合方向。"
+              title="弹出位置"
+              description="支持 12 个不同的弹出位置，可以灵活选择提示框的展示方向。"
               code={tooltipCodes.placementCode}
             />
 
             <DemoContainer
-              title="不同触发方式"
-              description="支持 hover、focus、click 和 contextMenu 四种触发方式。"
+              title="触发方式"
+              description="支持 hover、click、focus、contextMenu 四种触发方式。"
               code={tooltipCodes.triggerCode}
             />
 
             <DemoContainer
-              title="延迟显示/隐藏"
-              description="设置鼠标移入后延时显示和移出后延时隐藏的时间。"
-              code={tooltipCodes.delayCode}
-            />
-
-            <DemoContainer
               title="受控模式"
-              description="通过 visible 属性控制提示框的显示和隐藏。"
+              description="通过 open 和 onOpenChange 属性控制提示框的显示和隐藏。"
               code={tooltipCodes.controlledCode}
             />
 
             <DemoContainer
-              title="自定义颜色"
-              description="通过 color 和 bgColor 属性自定义文字颜色和背景颜色。"
-              code={tooltipCodes.colorCode}
+              title="延迟显示/隐藏"
+              description="通过 mouseEnterDelay 和 mouseLeaveDelay 设置延迟时间（秒）。"
+              code={tooltipCodes.delayCode}
+            />
+
+            <DemoContainer
+              title="销毁 DOM"
+              description="通过 destroyOnHidden 属性控制关闭后是否销毁浮层 DOM，默认为 false。"
+              code={tooltipCodes.destroyCode}
             />
           </section>
         </div>

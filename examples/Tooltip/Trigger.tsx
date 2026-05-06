@@ -7,16 +7,16 @@ const Trigger: React.FC = () => {
   return (
     <Space wrap>
       <Tooltip title="悬停触发" trigger="hover">
-        <Button>Hover</Button>
-      </Tooltip>
-      <Tooltip title="聚焦触发" trigger="focus">
-        <Button>Focus</Button>
+        <Button>hover</Button>
       </Tooltip>
       <Tooltip title="点击触发" trigger="click">
-        <Button>Click</Button>
+        <Button type="primary">click</Button>
+      </Tooltip>
+      <Tooltip title="聚焦触发" trigger="focus">
+        <Button type="dashed">focus</Button>
       </Tooltip>
       <Tooltip title="右键触发" trigger="contextMenu">
-        <Button>Context Menu</Button>
+        <Button type="text">contextMenu</Button>
       </Tooltip>
     </Space>
   );

@@ -4,19 +4,20 @@ import Button from '../../src/components/Button';
 import Space from '../../src/components/Space';
 
 const Controlled: React.FC = () => {
-  const [visible, setVisible] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <Space direction="vertical">
       <Tooltip
-        title="受控模式的提示"
-        visible={visible}
-        onVisibleChange={setVisible}
+        title="受控模式的提示框"
+        open={open}
+        onOpenChange={(visible) => setOpen(visible)}
       >
-        <Button onClick={() => setVisible(!visible)}>
-          {visible ? '隐藏' : '显示'}提示框
-        </Button>
+        <Button>受控模式（当前：{open ? '显示' : '隐藏'}）</Button>
       </Tooltip>
+      <Button onClick={() => setOpen(!open)}>
+        切换显示状态
+      </Button>
     </Space>
   );
 };
