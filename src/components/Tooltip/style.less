@@ -1,97 +1,136 @@
-@import '../../styles/variables.less';
-
-// ==================== Tooltip ====================
-
 .soui-tooltip {
-  // 基础样式 - 使用 absolute 定位，配合 Portal 渲染到指定容器
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: @z-index-popover;
+  position: fixed;
   max-width: 250px;
-  visibility: visible;
-
-  // 动画
-  animation: soui-tooltip-zoom-in 0.15s @transition-timing-function;
-
-  // 浮层定位包装器 - 用于绝对定位
-  &-wrapper {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  // 箭头
-  &-arrow {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 5px;
-    border-color: transparent;
-    pointer-events: none;
-  }
-
-  // 箭头方向 - 上方箭头（箭头向下指）
-  &-top &-arrow,
-  &-topLeft &-arrow,
-  &-topRight &-arrow {
-    border-top-color: rgba(0, 0, 0, 0.75);
-  }
-
-  // 箭头方向 - 下方箭头（箭头向上指）
-  &-bottom &-arrow,
-  &-bottomLeft &-arrow,
-  &-bottomRight &-arrow {
-    border-bottom-color: rgba(0, 0, 0, 0.75);
-  }
-
-  // 箭头方向 - 左侧箭头（箭头向右指）
-  &-left &-arrow,
-  &-leftTop &-arrow,
-  &-leftBottom &-arrow {
-    border-left-color: rgba(0, 0, 0, 0.75);
-  }
-
-  // 箭头方向 - 右侧箭头（箭头向左指）
-  &-right &-arrow,
-  &-rightTop &-arrow,
-  &-rightBottom &-arrow {
-    border-right-color: rgba(0, 0, 0, 0.75);
-  }
-
-  // 内部容器
-  &-inner {
-    min-height: 34px;
-    padding: @padding-xs @padding-sm;
-    color: @text-color-inverse;
-    font-size: @font-size-base;
-    line-height: @line-height-base;
-    text-align: left;
-    text-decoration: none;
-    word-wrap: break-word;
-    background-color: rgba(0, 0, 0, 0.75);
-    border-radius: @border-radius-base;
-    box-shadow: @box-shadow;
-  }
-
-  // 触发器
-  &-trigger {
-    display: inline-block;
-  }
+  box-sizing: border-box;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #fff;
+  word-wrap: break-word;
+  animation: soui-tooltip-fade-in 0.15s ease;
+}
+.soui-tooltip-inner {
+  min-width: 30px;
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.88);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.12),
+    0 3px 6px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
 }
 
-// ==================== Animations ====================
+.soui-tooltip-arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.88);
+  transform: rotate(45deg);
+}
 
-@keyframes soui-tooltip-zoom-in {
-  0% {
+/* ==================== top ==================== */
+
+.soui-tooltip-top .soui-tooltip-arrow,
+.soui-tooltip-topLeft .soui-tooltip-arrow,
+.soui-tooltip-topRight .soui-tooltip-arrow {
+  bottom: -4px;
+}
+
+.soui-tooltip-top .soui-tooltip-arrow {
+  left: 50%;
+
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.soui-tooltip-topLeft .soui-tooltip-arrow {
+  left: 16px;
+}
+
+.soui-tooltip-topRight .soui-tooltip-arrow {
+  right: 16px;
+}
+
+/* ==================== bottom ==================== */
+
+.soui-tooltip-bottom .soui-tooltip-arrow,
+.soui-tooltip-bottomLeft .soui-tooltip-arrow,
+.soui-tooltip-bottomRight .soui-tooltip-arrow {
+  top: -4px;
+}
+
+.soui-tooltip-bottom .soui-tooltip-arrow {
+  left: 50%;
+
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.soui-tooltip-bottomLeft .soui-tooltip-arrow {
+  left: 16px;
+}
+
+.soui-tooltip-bottomRight .soui-tooltip-arrow {
+  right: 16px;
+}
+
+/* ==================== left ==================== */
+
+.soui-tooltip-left .soui-tooltip-arrow,
+.soui-tooltip-leftTop .soui-tooltip-arrow,
+.soui-tooltip-leftBottom .soui-tooltip-arrow {
+  right: -4px;
+}
+
+.soui-tooltip-left .soui-tooltip-arrow {
+  top: 50%;
+
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.soui-tooltip-leftTop .soui-tooltip-arrow {
+  top: 16px;
+}
+
+.soui-tooltip-leftBottom .soui-tooltip-arrow {
+  bottom: 16px;
+}
+
+/* ==================== right ==================== */
+
+.soui-tooltip-right .soui-tooltip-arrow,
+.soui-tooltip-rightTop .soui-tooltip-arrow,
+.soui-tooltip-rightBottom .soui-tooltip-arrow {
+  left: -4px;
+}
+
+.soui-tooltip-right .soui-tooltip-arrow {
+  top: 50%;
+
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.soui-tooltip-rightTop .soui-tooltip-arrow {
+  top: 16px;
+}
+
+.soui-tooltip-rightBottom .soui-tooltip-arrow {
+  bottom: 16px;
+}
+
+/* ==================== trigger ==================== */
+
+.soui-tooltip-trigger {
+  display: inline-flex;
+}
+
+/* ==================== animation ==================== */
+
+@keyframes soui-tooltip-fade-in {
+  from {
     opacity: 0;
-    transform: scale(0);
-    transform-origin: var(--tooltip-origin, center);
+    transform: scale(0.96);
   }
-  100% {
+  to {
     opacity: 1;
     transform: scale(1);
-    transform-origin: var(--tooltip-origin, center);
   }
 }
