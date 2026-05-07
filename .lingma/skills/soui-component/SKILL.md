@@ -1,6 +1,6 @@
 ---
 name: soui-component
-description: SoUi 组件库开发指南。用于创建新组件、编写组件文档和示例。当用户要求"创建一个组件"、"添加新组件"或"实现 xxx 组件"时使用此 Skill。
+description: SoUi 组件库开发指南。用于创建新组件、编写组件文档和示例。当用户要求"创建一个组件"、"添加新组件"或"实现 xxx 组件"时使用此 Skill。**重要：在开始开发前，必须询问用户是否希望参考主流 UI 框架（Ant Design、MUI、Chakra UI、Tailwind UI 或不参考）**。
 ---
 
 # SoUi 组件开发 Skill
@@ -51,7 +51,82 @@ SoUi/
 
 当用户要求创建一个新组件时，按以下步骤执行：
 
+### 步骤 0: 确定参考框架（可选）
+
+在开始创建组件之前，询问用户是否需要参考主流 UI 框架的实现方式。
+
+**询问模板：**
+```
+请问您希望这个组件参考哪个主流框架的实现方式？
+
+选项：
+1. Ant Design - 企业级中后台 UI 规范
+2. Material-UI (MUI) - Google Material Design 风格
+3. Chakra UI - 现代、可访问性优先的设计系统
+4. Tailwind UI - 实用优先的 CSS 框架配套组件
+5. 不参考特定框架，按照 SoUi 设计规范独立实现
+6. 其他（请说明）
+```
+
+**如果用户选择参考框架：**
+1. 研究选定框架的对应组件 API 设计
+2. 分析其 Props 接口、默认值、变体等
+3. 在保持 SoUi 设计风格的前提下，借鉴合理的 API 设计
+4. 在文档中注明参考来源
+
+**如果用户选择不参考：**
+- 完全按照 SoUi 的设计规范和现有组件模式进行开发
+- 确保与现有组件保持一致的设计语言
+
+**使用 AskUserQuestion 工具示例：**
+```typescript
+{
+  questions: [{
+    question: "您希望这个组件参考哪个主流框架的实现方式？",
+    options: [
+      {
+        label: "Ant Design",
+        description: "企业级中后台 UI 规范，适合管理后台类组件"
+      },
+      {
+        label: "Material-UI (MUI)",
+        description: "Google Material Design 风格，现代化设计语言"
+      },
+      {
+        label: "Chakra UI",
+        description: "现代、可访问性优先的设计系统"
+      },
+      {
+        label: "Tailwind UI",
+        description: "实用优先的 CSS 框架配套组件"
+      },
+      {
+        label: "不参考特定框架",
+        description: "按照 SoUi 设计规范独立实现（推荐）"
+      }
+    ]
+  }]
+}
+```
+
 ### 步骤 1: 创建组件文件
+
+#### 1.0 研究参考框架（如果用户选择了参考框架）
+
+如果用户在步骤0中选择了参考某个主流框架，需要先研究该框架的对应组件：
+
+1. **查阅官方文档**：了解组件的 API 设计、Props 接口、默认值等
+2. **分析设计思路**：理解组件的设计哲学和使用场景
+3. **提取可借鉴点**：找出适合 SoUi 的 API 设计元素
+4. **保持 SoUi 风格**：确保最终设计与 SoUi 的整体风格一致
+
+**研究要点：**
+- Props 命名和类型
+- 默认值设置
+- 变体和状态
+- 子组件结构
+- 交互行为
+- 无障碍支持
 
 #### 1.1 创建组件目录
 ```bash
@@ -188,6 +263,10 @@ export type { ComponentNameProps, OtherType } from './components/ComponentName';
 
 简短描述组件用途。
 
+## 参考来源（如果参考了某个框架）
+
+本组件参考了 [Ant Design](https://ant.design/) 的 XXX 组件设计，在保持 SoUi 设计风格的前提下，借鉴了其 API 设计思路。
+
 ## 何时使用
 
 - 使用场景1
@@ -271,13 +350,14 @@ export default () => (
 
 **文档要点：**
 1. 标题格式：`# ComponentName 中文名称`
-2. 必须有"何时使用"章节
-3. 代码演示要有说明文字
-4. API 表格要完整
-5. 包含设计原则（推荐/避免）
-6. 包含无障碍访问说明
-7. 包含 FAQ
-8. 链接到相关组件
+2. **如果参考了框架，必须添加“参考来源”章节**
+3. 必须有“何时使用”章节
+4. 代码演示要有说明文字
+5. API 表格要完整
+6. 包含设计原则（推荐/避免）
+7. 包含无障碍访问说明
+8. 包含 FAQ
+9. 链接到相关组件
 
 #### 3.2 更新侧边栏配置
 
@@ -495,6 +575,8 @@ cd SoUi && npm run build
 
 从 `src/styles/variables.less` 中可用的变量：
 
+**注意**：即使参考了其他框架的设计，也必须使用 SoUi 的设计变量，保持项目一致性。
+
 ### 颜色
 ```less
 @primary-color: #1677ff;
@@ -545,12 +627,15 @@ cd SoUi && npm run build
 | 示例目录 | PascalCase | `Button`, `ConfigProvider` |
 | 示例文件 | PascalCase | `Basic.tsx`, `Size.tsx` |
 
+**注意**：即使参考了其他框架，也必须遵循 SoUi 的命名规范，保持项目一致性。
+
 ## TypeScript 类型规范
 
 1. **Props 接口命名**: `{ComponentName}Props`
 2. **枚举类型命名**: `{ComponentName}{PropertyName}`，如 `ButtonType`, `ButtonSize`
 3. **使用 JSDoc 注释**: 每个属性都要有说明
 4. **继承原生属性**: 使用 `Omit<React.HTMLAttributes<Element>, 'conflict'>`
+5. **如果参考了框架**：可以参考其 Props 命名和类型设计，但要保持 SoUi 的命名规范
 
 ```typescript
 export type ButtonType = 'default' | 'primary' | 'dashed';
@@ -566,28 +651,42 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 ## 最佳实践
 
 ### 组件设计
-1. 保持组件单一职责
-2. 提供合理的默认值
-3. 支持受控和非受控模式
-4. 考虑无障碍访问（ARIA 属性）
-5. 支持键盘操作
+1. **在开始开发前询问用户是否参考主流框架**
+2. 保持组件单一职责
+3. 提供合理的默认值
+4. 支持受控和非受控模式
+5. 考虑无障碍访问（ARIA 属性）
+6. 支持键盘操作
+
+### 参考框架的最佳实践
+- **何时参考**：当用户对 API 设计有特定偏好，或需要与某个生态系统兼容时
+- **如何参考**：研究目标框架的 Props 接口、默认值、变体等，但保持 SoUi 的设计风格
+- **何时不参考**：基础组件或 SoUi 已有明确设计规范时，建议独立实现以保持一致性
+- **文档注明**：如果参考了某个框架，在文档中应注明参考来源
 
 ### 样式设计
-1. 使用设计变量，避免硬编码
-2. 支持主题定制（CSS 变量）
-3. 考虑响应式适配
-4. 添加过渡动画提升体验
+1. **即使参考了其他框架，也必须使用 SoUi 的设计变量**
+2. 使用设计变量，避免硬编码
+3. 支持主题定制（CSS 变量）
+4. 考虑响应式适配
+5. 添加过渡动画提升体验
 
 ### 文档编写
-1. 示例代码要可运行
-2. API 文档要完整准确
-3. 提供正反示例对比
-4. 包含常见问题解答
+1. **如果参考了框架，必须在文档中添加“参考来源”章节**
+2. 示例代码要可运行
+3. API 文档要完整准确
+4. 提供正反示例对比
+5. 包含常见问题解答
 
 ## 检查清单
 
 创建组件后，确认完成以下事项：
 
+- [ ] **在开始开发前已询问用户是否参考主流框架**（重要！）
+- [ ] 如果用户选择参考框架，已研究该框架的 API 设计
+- [ ] 如果参考了框架，已在文档中添加“参考来源”章节
+- [ ] 如果参考了框架，已在文档中注明参考来源
+- [ ] 即使参考了其他框架，也使用了 SoUi 的设计变量和命名规范
 - [ ] 组件文件 `src/components/ComponentName/index.tsx` 已创建
 - [ ] 样式文件 `src/components/ComponentName/style.less` 已创建
 - [ ] 已在 `src/index.ts` 中导出组件和类型
@@ -608,6 +707,8 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 - [ ] 文档包含设计原则
 
 ## 快速开始模板
+
+**⚠️ 重要提醒**：在开始创建组件之前，必须先询问用户是否希望参考主流 UI 框架的实现方式。
 
 复制以下模板快速开始新组件开发：
 
