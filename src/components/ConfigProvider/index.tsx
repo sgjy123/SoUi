@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import classNames from 'classnames';
 import ConfigContext from './context';
-import type { ConfigProviderProps, ThemeConfig } from './types';
+import type { ConfigProviderProps, ThemeConfig, ConfigContextProps } from './types';
 import { defaultTheme } from './types';
 import './style.less';
 
@@ -35,6 +35,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     () => ({
       theme: mergedTheme,
       componentSize,
+      components: mergedTheme.components, // 传递组件级配置
     }),
     [mergedTheme, componentSize]
   );
@@ -83,6 +84,19 @@ export const useComponentSize = () => {
     throw new Error('useComponentSize must be used within ConfigProvider');
   }
   return context.componentSize || 'middle';
+};
+
+/**
+ * 获取组件级主题配置的 Hook
+ */
+export const useComponentTheme = <T extends keyof NonNullable<ConfigContextProps['components']>>(
+  componentName: T
+): NonNullable<ConfigContextProps['components']>[T] => {
+  const context = React.useContext(ConfigContext);
+  if (!context) {
+    throw new Error('useComponentTheme must be used within ConfigProvider');
+  }
+  return (context.components?.[componentName] || {}) as NonNullable<ConfigContextProps['components']>[T];
 };
 
 export { ConfigContext };

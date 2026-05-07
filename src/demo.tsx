@@ -1,61 +1,89 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import ConfigProvider from './components/ConfigProvider';
-import Space from './components/Space';
-import Button from './components/Button';
-import DemoContainer from '../examples/DemoContainer';
+import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
+import ConfigProvider from "./components/ConfigProvider";
+import Space from "./components/Space";
+import Button from "./components/Button";
+import DemoContainer from "../examples/DemoContainer";
 
 // 导入各组件的示例代码
-import * as buttonCodes from '../examples/Button/codes';
-import * as iconCodes from '../examples/Icon/codes';
-import * as spaceCodes from '../examples/Space/codes';
-import * as typographyCodes from '../examples/Typography/codes';
-import * as tooltipCodes from '../examples/Tooltip/codes';
+import * as buttonCodes from "../examples/Button/codes";
+import * as iconCodes from "../examples/Icon/codes";
+import * as spaceCodes from "../examples/Space/codes";
+import * as typographyCodes from "../examples/Typography/codes";
+import * as tooltipCodes from "../examples/Tooltip/codes";
 
 // 主题切换演示
 const App: React.FC = () => {
   const [customTheme, setCustomTheme] = useState(false);
 
-  const theme = customTheme ? {
-    primaryColor: '#722ed1',
-    primaryHoverColor: '#9254de',
-    primaryActiveColor: '#531dab',
-    successColor: '#52c41a',
-    warningColor: '#faad14',
-    errorColor: '#f5222d',
-    borderRadius: 8,
-  } : undefined;
+  const theme = customTheme
+    ? {
+        primaryColor: "#722ed1",
+        primaryHoverColor: "#9254de",
+        primaryActiveColor: "#531dab",
+        successColor: "#52c41a",
+        warningColor: "#faad14",
+        errorColor: "#f5222d",
+        borderRadius: 8,
+        components: {
+          Button: {
+            colorPrimary: "#2ed193ff",
+            borderRadius: 8,
+            controlHeight: 40,
+            fontSize: 16,
+          },
+          Input: {
+            colorBorder: "#d9d9d9",
+            borderRadius: 4,
+          },
+        },
+      }
+    : undefined;
 
   return (
     <ConfigProvider theme={theme}>
-      <div style={{ minHeight: '100vh', background: '#f5f5f5' }}>
+      <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
         {/* 顶部导航栏 */}
-        <div style={{
-          padding: '20px 40px',
-          background: '#fff',
-          marginBottom: '20px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-          <h1 style={{ margin: 0, fontSize: '24px' }}>SoUi 组件库演示</h1>
+        <div
+          style={{
+            padding: "20px 40px",
+            background: "#fff",
+            marginBottom: "20px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <h1 style={{ margin: 0, fontSize: "24px" }}>SoUi 组件库演示</h1>
           <Space>
             <Button
-              type={customTheme ? 'default' : 'primary'}
+              type={customTheme ? "default" : "primary"}
               onClick={() => setCustomTheme(!customTheme)}
             >
-              {customTheme ? '切换回默认主题' : '切换为紫色主题'}
+              {customTheme ? "切换回默认主题" : "切换为紫色主题"}
             </Button>
-            <span>当前主题：{customTheme ? '紫色主题' : '默认蓝色主题'}</span>
+            <span>当前主题：{customTheme ? "紫色主题" : "默认蓝色主题"}</span>
           </Space>
         </div>
 
         {/* 主要内容区域 */}
-        <div style={{ padding: '0 40px 40px', maxWidth: '1200px', margin: '0 auto' }}>
+        <div
+          style={{
+            padding: "0 40px 40px",
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
           {/* Button 组件演示 */}
-          <section style={{ marginBottom: '48px' }}>
-            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+          <section style={{ marginBottom: "48px" }}>
+            <h2
+              style={{
+                marginBottom: "24px",
+                paddingBottom: "12px",
+                borderBottom: "2px solid #1677ff",
+              }}
+            >
               Button 按钮组件
             </h2>
 
@@ -85,8 +113,14 @@ const App: React.FC = () => {
           </section>
 
           {/* Icon 组件演示 */}
-          <section style={{ marginBottom: '48px' }}>
-            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+          <section style={{ marginBottom: "48px" }}>
+            <h2
+              style={{
+                marginBottom: "24px",
+                paddingBottom: "12px",
+                borderBottom: "2px solid #1677ff",
+              }}
+            >
               Icon 图标组件
             </h2>
 
@@ -98,8 +132,14 @@ const App: React.FC = () => {
           </section>
 
           {/* Space 组件演示 */}
-          <section style={{ marginBottom: '48px' }}>
-            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+          <section style={{ marginBottom: "48px" }}>
+            <h2
+              style={{
+                marginBottom: "24px",
+                paddingBottom: "12px",
+                borderBottom: "2px solid #1677ff",
+              }}
+            >
               Space 间距组件
             </h2>
 
@@ -141,8 +181,14 @@ const App: React.FC = () => {
           </section>
 
           {/* Typography 组件演示 */}
-          <section style={{ marginBottom: '48px' }}>
-            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+          <section style={{ marginBottom: "48px" }}>
+            <h2
+              style={{
+                marginBottom: "24px",
+                paddingBottom: "12px",
+                borderBottom: "2px solid #1677ff",
+              }}
+            >
               Typography 排版组件
             </h2>
 
@@ -190,8 +236,14 @@ const App: React.FC = () => {
           </section>
 
           {/* Tooltip 组件演示 */}
-          <section style={{ marginBottom: '48px' }}>
-            <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+          <section style={{ marginBottom: "48px" }}>
+            <h2
+              style={{
+                marginBottom: "24px",
+                paddingBottom: "12px",
+                borderBottom: "2px solid #1677ff",
+              }}
+            >
               Tooltip 文字提示组件
             </h2>
 
@@ -255,4 +307,4 @@ const App: React.FC = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")!).render(<App />);

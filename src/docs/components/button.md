@@ -224,7 +224,33 @@ export default () => (
 
 ## 主题定制
 
-通过 ConfigProvider 自定义按钮样式：
+Button 组件支持全局主题和组件级主题定制。
+
+### 全局主题
+
+通过 ConfigProvider 的 `theme.primaryColor` 配置全局主色：
+
+```tsx
+import { ConfigProvider, Button } from '@soui/ui';
+
+function App() {
+  return (
+    <ConfigProvider
+      theme={{
+        primaryColor: '#722ed1',
+        primaryHoverColor: '#9254de',
+        primaryActiveColor: '#531dab',
+      }}
+    >
+      <Button type="primary">紫色主题按钮</Button>
+    </ConfigProvider>
+  );
+}
+```
+
+### 组件级主题（推荐）
+
+通过 `theme.components.Button` 配置按钮的专属样式：
 
 ```tsx
 import { ConfigProvider, Button } from '@soui/ui';
@@ -235,9 +261,10 @@ function App() {
       theme={{
         components: {
           Button: {
-            colorPrimary: '#your-color',
-            borderRadius: 8,
-            controlHeight: 40,
+            colorPrimary: '#2ed193',  // 按钮主色
+            borderRadius: 8,          // 圆角大小
+            controlHeight: 40,        // 按钮高度
+            fontSize: 16,             // 字体大小
           },
         },
       }}
@@ -246,6 +273,65 @@ function App() {
     </ConfigProvider>
   );
 }
+```
+
+### 组件级主题配置项
+
+| 配置项 | 说明 | 类型 | 默认值 | 版本 |
+|--------|------|------|--------|------|
+| colorPrimary | 按钮主色（primary 类型） | `string` | 继承全局 `primaryColor` | - |
+| borderRadius | 按钮圆角 | `number` | `6` | - |
+| controlHeight | 按钮高度 | `number` | `32` | - |
+| fontSize | 按钮字体大小 | `number` | `14` | - |
+
+### 使用示例
+
+```tsx
+import { ConfigProvider, Button, Space } from '@soui/ui';
+
+function App() {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Button: {
+            colorPrimary: '#1890ff',
+            borderRadius: 4,
+            controlHeight: 36,
+            fontSize: 14,
+          },
+        },
+      }}
+    >
+      <Space>
+        <Button type="primary">主要按钮</Button>
+        <Button>默认按钮</Button>
+        <Button type="dashed">虚线按钮</Button>
+      </Space>
+    </ConfigProvider>
+  );
+}
+```
+
+### 优先级
+
+CSS 变量的优先级从高到低：
+
+1. **组件级主题** (`theme.components.Button.*`)
+2. **全局主题** (`theme.*`)
+3. **Less 变量** (`variables.less`)
+
+```tsx
+// 全局主题设置主色为紫色
+theme={{
+  primaryColor: '#722ed1',
+  components: {
+    Button: {
+      // 按钮级会覆盖全局主题
+      colorPrimary: '#52c41a',  // 按钮主色为绿色
+    },
+  },
+}}
 ```
 
 ## 无障碍访问

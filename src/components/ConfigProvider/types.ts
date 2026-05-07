@@ -1,6 +1,31 @@
 import { ReactNode } from 'react';
 
 /**
+ * 组件级主题配置
+ */
+export interface ComponentThemeConfig {
+  /** 按钮组件配置 */
+  Button?: {
+    /** 主色，用于 primary 类型按钮 */
+    colorPrimary?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 控件高度（像素） */
+    controlHeight?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+  };
+  /** 输入框组件配置 */
+  Input?: {
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 圆角 */
+    borderRadius?: number;
+  };
+  // 可以继续添加其他组件的配置
+}
+
+/**
  * 主题配置接口
  */
 export interface ThemeConfig {
@@ -24,6 +49,8 @@ export interface ThemeConfig {
   fontSize?: number;
   /** 行高 */
   lineHeight?: number;
+  /** 组件级配置 */
+  components?: ComponentThemeConfig;
 }
 
 /**
@@ -49,6 +76,7 @@ export interface ConfigProviderProps {
 export interface ConfigContextProps extends ConfigProviderProps {
   theme?: ThemeConfig;
   componentSize?: ComponentSize;
+  components?: ComponentThemeConfig;
 }
 
 /**

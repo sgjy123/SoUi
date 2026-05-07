@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, MouseEvent, useState } from 'react';
 import classNames from 'classnames';
 import Icon from '../Icon';
+import { useComponentTheme } from '../ConfigProvider';
 import './style.less';
 
 export type ButtonType = 'default' | 'primary' | 'dashed' | 'text' | 'link';
@@ -87,6 +88,25 @@ const Button: React.FC<ButtonProps> & {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [loadingState, setLoadingState] = useState(false);
 
+  // 获取组件级主题配置
+  const buttonTheme = useComponentTheme('Button');
+
+  // 应用组件级主题到样式
+  const buttonStyle: React.CSSProperties = {
+    ...(buttonTheme?.colorPrimary && {
+      '--soui-button-color-primary': buttonTheme.colorPrimary,
+    }),
+    ...(buttonTheme?.borderRadius && {
+      '--soui-button-border-radius': `${buttonTheme.borderRadius}px`,
+    }),
+    ...(buttonTheme?.controlHeight && {
+      '--soui-button-control-height': `${buttonTheme.controlHeight}px`,
+    }),
+    ...(buttonTheme?.fontSize && {
+      '--soui-button-font-size': `${buttonTheme.fontSize}px`,
+    }),
+  } as any;
+
   // 处理加载延迟
   useEffect(() => {
     if (typeof loading === 'object' && loading.delay) {
@@ -167,6 +187,7 @@ const Button: React.FC<ButtonProps> & {
     <button
       ref={buttonRef}
       className={buttonClassName}
+      style={buttonStyle}
       disabled={disabled || isLoading}
       type={htmlType as ButtonHTMLType}
       onClick={handleClick}

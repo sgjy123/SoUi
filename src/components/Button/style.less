@@ -49,6 +49,12 @@
   overflow: hidden;
   outline: none;
   
+  // 组件级主题变量（支持覆盖）
+  --soui-button-color-primary: var(--soui-primary-color, @primary-color);
+  --soui-button-border-radius: @border-radius-base;
+  --soui-button-control-height: @control-height-base;
+  --soui-button-font-size: @font-size-base;
+  
   // Reset default button styles
   border: 1px solid transparent;
   
@@ -93,7 +99,7 @@
   
   // Shapes
   &-shape-default {
-    border-radius: @border-radius-base;
+    border-radius: var(--soui-button-border-radius);
   }
   
   &-shape-circle {
@@ -112,15 +118,39 @@
   
   // Sizes
   &-large {
-    .button-size(@control-height-lg, 16px 20px, @font-size-lg);
+    height: var(--soui-button-control-height, @control-height-lg);
+    padding: 16px 20px;
+    font-size: var(--soui-button-font-size, @font-size-lg);
+    
+    &.soui-button-shape-circle {
+      width: var(--soui-button-control-height, @control-height-lg);
+      min-width: var(--soui-button-control-height, @control-height-lg);
+      padding: 0;
+    }
   }
   
   &-middle {
-    .button-size(@control-height-base, 8px 15px, @font-size-base);
+    height: var(--soui-button-control-height, @control-height-base);
+    padding: 8px 15px;
+    font-size: var(--soui-button-font-size, @font-size-base);
+    
+    &.soui-button-shape-circle {
+      width: var(--soui-button-control-height, @control-height-base);
+      min-width: var(--soui-button-control-height, @control-height-base);
+      padding: 0;
+    }
   }
   
   &-small {
-    .button-size(@control-height-sm, 4px 10px, @font-size-sm);
+    height: var(--soui-button-control-height, @control-height-sm);
+    padding: 4px 10px;
+    font-size: var(--soui-button-font-size, @font-size-sm);
+    
+    &.soui-button-shape-circle {
+      width: var(--soui-button-control-height, @control-height-sm);
+      min-width: var(--soui-button-control-height, @control-height-sm);
+      padding: 0;
+    }
   }
   
   // Block button
@@ -165,8 +195,8 @@
   
   &-primary {
     color: #fff;
-    background-color: var(--soui-primary-color, @primary-color);
-    border-color: var(--soui-primary-color, @primary-color);
+    background-color: var(--soui-button-color-primary, var(--soui-primary-color, @primary-color));
+    border-color: var(--soui-button-color-primary, var(--soui-primary-color, @primary-color));
     box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
     
     &:hover {
