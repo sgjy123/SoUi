@@ -333,21 +333,6 @@ const Text: React.FC<BaseProps & React.HTMLAttributes<HTMLSpanElement>> = ({
       );
     }
 
-    // Wrap content with Tooltip if needed
-    if (ellipsis && !expanded) {
-      const ellipsisConfig = typeof ellipsis === 'object' ? ellipsis : {};
-      const tooltip = ellipsisConfig.tooltip;
-      
-      if (tooltip) {
-        const tooltipContent = typeof tooltip === 'string' ? tooltip : String(children);
-        return (
-          <Tooltip title={tooltipContent} placement="top">
-            {content}
-          </Tooltip>
-        );
-      }
-    }
-
     return content;
   };
 
@@ -419,27 +404,38 @@ const Text: React.FC<BaseProps & React.HTMLAttributes<HTMLSpanElement>> = ({
     }
   };
 
+  // Determine if we need to show tooltip
+  const shouldShowTooltip = ellipsis && !expanded && (
+    typeof ellipsis === 'boolean' || 
+    (typeof ellipsis === 'object' && ellipsis.tooltip !== false)
+  );
+  const tooltipContent = shouldShowTooltip
+    ? (typeof ellipsis === 'object' && typeof ellipsis.tooltip === 'string' 
+        ? ellipsis.tooltip 
+        : String(children))
+    : undefined;
+  const contentElement = (
+    <span
+      ref={contentRef}
+      className={typographyClassName}
+      style={{ ...style, ...ellipsisStyle }}
+      onClick={onClick}
+      {...props}
+    >
+      {renderContent()}
+    </span>
+  );
   return (
     <span
       style={{ display: 'inline-flex', alignItems: 'flex-end', maxWidth: '100%', position: 'relative' }}
     >
-      <Tooltip
-        title={ellipsis && !expanded && typeof ellipsis === 'object' && ellipsis.tooltip
-          ? (typeof ellipsis.tooltip === 'string' ? ellipsis.tooltip : String(children))
-          : undefined
-        }
-        placement="top"
-      >
-        <span
-          ref={contentRef}
-          className={typographyClassName}
-          style={{ ...style, ...ellipsisStyle }}
-          onClick={onClick}
-          {...props}
-        >
-          {renderContent()}
-        </span>
-      </Tooltip>
+      {shouldShowTooltip && tooltipContent ? (
+        <Tooltip title={tooltipContent} placement="top">
+          {contentElement}
+        </Tooltip>
+      ) : (
+        contentElement
+      )}
       {renderExpandButton()}
       {renderOperations()}
     </span>
@@ -550,7 +546,7 @@ const Paragraph: React.FC<ParagraphProps & Omit<React.HTMLAttributes<HTMLParagra
   );
 
   return (
-    <p
+    <div
       className={paragraphClassName}
       style={style}
       {...props}
@@ -570,7 +566,7 @@ const Paragraph: React.FC<ParagraphProps & Omit<React.HTMLAttributes<HTMLParagra
       >
         {children}
       </Text>
-    </p>
+    </div>
   );
 };
 
