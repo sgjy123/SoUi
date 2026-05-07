@@ -64,7 +64,7 @@ export default () => (
 
 ### 触发方式
 
-支持 hover、click、focus、contextMenu 四种触发方式。
+支持 hover、click、focus、contextMenu 四种触发方式，也可以组合使用。
 
 ```tsx
 import { Tooltip, Button, Space } from '@soui/ui';
@@ -134,9 +134,70 @@ export default () => (
 );
 ```
 
+### 自定义样式
+
+通过 `color`、`arrow`、`overlayClassName` 和 `overlayStyle` 自定义提示框样式。
+
+```tsx
+import { Tooltip, Button, Space } from '@soui/ui';
+
+export default () => (
+  <Space wrap>
+    <Tooltip title="绿色背景" color="#52c41a">
+      <Button>自定义颜色</Button>
+    </Tooltip>
+    <Tooltip 
+      title="无箭头" 
+      arrow={false}
+      overlayStyle={{ borderRadius: '8px' }}
+    >
+      <Button type="primary">隐藏箭头</Button>
+    </Tooltip>
+  </Space>
+);
+```
+
+### 禁用状态
+
+通过 `disabled` 属性禁用 Tooltip，禁用后不会触发显示。
+
+```tsx
+import { Tooltip, Button, Space } from '@soui/ui';
+
+export default () => (
+  <Space wrap>
+    <Tooltip title="正常状态">
+      <Button>正常按钮</Button>
+    </Tooltip>
+    <Tooltip title="已禁用" disabled>
+      <Button disabled>禁用按钮</Button>
+    </Tooltip>
+  </Space>
+);
+```
+
+### 自动调整位置
+
+通过 `autoAdjustOverflow` 控制是否自动调整位置以防止溢出视口，默认为 true。
+
+```tsx
+import { Tooltip, Button, Space } from '@soui/ui';
+
+export default () => (
+  <Space wrap>
+    <Tooltip title="自动调整位置" autoAdjustOverflow>
+      <Button>自动调整（默认）</Button>
+    </Tooltip>
+    <Tooltip title="不自动调整位置" autoAdjustOverflow={false}>
+      <Button type="primary">手动调整</Button>
+    </Tooltip>
+  </Space>
+);
+```
+
 ### 销毁 DOM
 
-通过 `destroyOnHidden` 属性控制关闭后是否销毁浮层 DOM，默认为 false。
+通过 `destroyOnHidden` 属性控制关闭后是否销毁浮层 DOM，默认为 true。
 
 ```tsx
 import { Tooltip, Button, Space } from '@soui/ui';
@@ -144,10 +205,10 @@ import { Tooltip, Button, Space } from '@soui/ui';
 export default () => (
   <Space wrap>
     <Tooltip title="关闭后不销毁 DOM" destroyOnHidden={false}>
-      <Button>不销毁（默认）</Button>
+      <Button>不销毁</Button>
     </Tooltip>
     <Tooltip title="关闭后销毁 DOM" destroyOnHidden>
-      <Button type="primary">销毁 DOM</Button>
+      <Button type="primary">销毁 DOM（默认）</Button>
     </Tooltip>
   </Space>
 );
@@ -161,7 +222,7 @@ export default () => (
 import { Tooltip, Button } from '@soui/ui';
 
 export default () => (
-  <div id="custom-container" style={{ padding: '20px', border: '1px solid #d9d9d9' }}>
+  <div style={{ padding: '20px', border: '1px solid #d9d9d9' }}>
     <Tooltip
       title="浮层将渲染在此容器内"
       getPopupContainer={(triggerNode) => triggerNode.parentElement!}
@@ -179,19 +240,27 @@ export default () => (
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|--------|------|
 | title | 提示文字 | `React.ReactNode` | - | - |
-| trigger | 触发方式 | `TooltipTrigger \| TooltipTrigger[]` | `'hover'` | - |
+| children | 子节点 | `React.ReactNode` | - | - |
 | placement | 弹出位置 | `TooltipPlacement` | `'top'` | - |
+| trigger | 触发方式 | `TooltipTrigger \| TooltipTrigger[]` | `'hover'` | - |
 | open | 是否可见（受控） | `boolean` | - | - |
 | defaultOpen | 默认是否可见（非受控） | `boolean` | `false` | - |
-| getPopupContainer | 浮层渲染父节点，默认渲染到 body 上 | `(triggerNode: HTMLElement) => HTMLElement` | - | - |
-| destroyOnHidden | 关闭后是否销毁 dom | `boolean` | `false` | - |
+| disabled | 是否禁用 | `boolean` | `false` | - |
+| fresh | 是否每次重新渲染内容 | `boolean` | `false` | - |
+| destroyOnHidden | 关闭后是否销毁 DOM | `boolean` | `true` | - |
+| autoAdjustOverflow | 是否自动调整位置以防止溢出 | `boolean` | `true` | - |
+| arrow | 是否显示箭头 | `boolean` | `true` | - |
+| color | 背景颜色 | `string` | - | - |
+| zIndex | z-index | `number` | `1030` | - |
 | mouseEnterDelay | 鼠标移入延迟（秒） | `number` | `0.1` | - |
 | mouseLeaveDelay | 鼠标移出延迟（秒） | `number` | `0.1` | - |
-| onOpenChange | 显示变化回调 | `(open: boolean) => void` | - | - |
-| className | 自定义类名 | `string` | - | - |
+| className | 触发器类名 | `string` | - | - |
+| style | 触发器样式 | `React.CSSProperties` | - | - |
 | overlayClassName | 浮层类名 | `string` | - | - |
-| style | 自定义样式 | `React.CSSProperties` | - | - |
 | overlayStyle | 浮层样式 | `React.CSSProperties` | - | - |
+| overlayInnerStyle | 浮层内部样式 | `React.CSSProperties` | - | - |
+| getPopupContainer | 浮层渲染父节点 | `(triggerNode: HTMLElement) => HTMLElement` | - | - |
+| onOpenChange | 显示变化回调 | `(open: boolean) => void` | - | - |
 
 ### TooltipPlacement
 
@@ -216,12 +285,17 @@ type TooltipTrigger = 'hover' | 'click' | 'focus' | 'contextMenu';
 ```tsx
 // 简洁明了的提示文字
 <Tooltip title="保存更改">
-  <Button icon={<Icon name="Save" />}>保存</Button>
+  <Button>保存</Button>
 </Tooltip>
 
 // 使用合适的触发方式
 <Tooltip title="点击删除" trigger="click">
   <Button danger>删除</Button>
+</Tooltip>
+
+// 使用 disabled 属性禁用
+<Tooltip title="功能未开放" disabled>
+  <Button disabled>禁用按钮</Button>
 </Tooltip>
 ```
 
@@ -233,12 +307,7 @@ type TooltipTrigger = 'hover' | 'click' | 'focus' | 'contextMenu';
   <Button>按钮</Button>
 </Tooltip>
 
-// 避免在禁用元素上直接使用（需要使用外层包裹）
-<Tooltip title="提示">
-  <Button disabled>禁用按钮</Button>
-</Tooltip>
-
-// 正确做法：使用 span 包裹
+// 避免不必要的 span 包裹（直接使用 disabled 属性即可）
 <Tooltip title="提示">
   <span>
     <Button disabled>禁用按钮</Button>
@@ -250,31 +319,31 @@ type TooltipTrigger = 'hover' | 'click' | 'focus' | 'contextMenu';
 
 - Tooltip 组件遵循 WAI-ARIA 规范
 - 支持键盘操作，focus 触发方式可用于无障碍场景
+- 按 ESC 键可以关闭显示的 Tooltip
 - 提示文字应简洁明了，便于屏幕阅读器朗读
 
 ## FAQ
 
-### Tooltip 在禁用按钮上不显示怎么办？
+### 如何禁用 Tooltip？
 
-禁用的按钮不会触发鼠标事件，需要用外层元素包裹：
+直接使用 `disabled` 属性即可：
 
 ```tsx
-<Tooltip title="提示">
-  <span>
-    <Button disabled>禁用按钮</Button>
-  </span>
+<Tooltip title="提示" disabled>
+  <Button disabled>禁用按钮</Button>
 </Tooltip>
 ```
 
 ### 如何自定义浮层的样式？
 
-可以使用 `overlayClassName` 和 `overlayStyle` 属性：
+可以使用 `color`、`overlayClassName` 和 `overlayStyle` 属性：
 
 ```tsx
 <Tooltip
   title="提示"
+  color="#52c41a"
   overlayClassName="my-tooltip"
-  overlayStyle={{ backgroundColor: '#52c41a' }}
+  overlayStyle={{ borderRadius: '8px' }}
 >
   <Button>绿色提示框</Button>
 </Tooltip>
@@ -295,7 +364,23 @@ type TooltipTrigger = 'hover' | 'click' | 'focus' | 'contextMenu';
 
 ### destroyOnHidden 有什么作用？
 
-`destroyOnHidden` 控制关闭后是否销毁浮层 DOM。默认为 `false`，即关闭后保留 DOM 节点，这样下次打开时无需重新创建，性能更好。设置为 `true` 会在关闭时销毁 DOM，适用于对内存敏感的场景。
+`destroyOnHidden` 控制关闭后是否销毁浮层 DOM。默认为 `true`，即关闭时销毁 DOM。设置为 `false` 会在关闭时保留 DOM 节点，这样下次打开时无需重新创建，性能更好：
+
+```tsx
+<Tooltip title="提示" destroyOnHidden={false}>
+  <Button>保留 DOM</Button>
+</Tooltip>
+```
+
+### 如何隐藏箭头？
+
+设置 `arrow={false}` 即可：
+
+```tsx
+<Tooltip title="提示" arrow={false}>
+  <Button>无箭头</Button>
+</Tooltip>
+```
 
 ## 相关资源
 

@@ -57,22 +57,24 @@ export const triggerCode = `<Space wrap>
 
 // ==================== Controlled Example ====================
 
-export const controlledCode = `const [open, setOpen] = useState(false);
+export const controlledCode = `() => {
+  const [open, setOpen] = useState(false);
 
-return (
-  <Space direction="vertical">
-    <Tooltip
-      title="受控模式的提示框"
-      open={open}
-      onOpenChange={(visible) => setOpen(visible)}
-    >
-      <Button>受控模式（当前：{open ? '显示' : '隐藏'}）</Button>
-    </Tooltip>
-    <Button onClick={() => setOpen(!open)}>
-      切换显示状态
-    </Button>
-  </Space>
-)`;
+  return (
+    <Space direction="vertical">
+      <Tooltip
+        title="受控模式的提示框"
+        open={open}
+        onOpenChange={(visible) => setOpen(visible)}
+      >
+        <Button>受控模式（当前：{open ? '显示' : '隐藏'}）</Button>
+      </Tooltip>
+      <Button onClick={() => setOpen(!open)}>
+        切换显示状态
+      </Button>
+    </Space>
+  );
+}`;
 
 // ==================== Delay Example ====================
 
@@ -89,9 +91,46 @@ export const delayCode = `<Space wrap>
 
 export const destroyCode = `<Space wrap>
   <Tooltip title="关闭后不销毁 DOM" destroyOnHidden={false}>
-    <Button>不销毁（默认）</Button>
+    <Button>不销毁</Button>
   </Tooltip>
   <Tooltip title="关闭后销毁 DOM" destroyOnHidden>
-    <Button type="primary">销毁 DOM</Button>
+    <Button type="primary">销毁 DOM（默认）</Button>
+  </Tooltip>
+</Space>`;
+
+// ==================== Style Example ====================
+
+export const styleCode = `<Space wrap>
+  <Tooltip title="绿色背景" color="#52c41a">
+    <Button>自定义颜色</Button>
+  </Tooltip>
+  <Tooltip 
+    title="无箭头" 
+    arrow={false}
+    overlayStyle={{ borderRadius: '8px' }}
+  >
+    <Button type="primary">隐藏箭头</Button>
+  </Tooltip>
+</Space>`;
+
+// ==================== AutoAdjust Example ====================
+
+export const autoAdjustCode = `<Space wrap>
+  <Tooltip title="自动调整位置" autoAdjustOverflow>
+    <Button>自动调整（默认）</Button>
+  </Tooltip>
+  <Tooltip title="不自动调整位置" autoAdjustOverflow={false}>
+    <Button type="primary">手动调整</Button>
+  </Tooltip>
+</Space>`;
+
+// ==================== Disabled Example ====================
+
+export const disabledCode = `<Space wrap>
+  <Tooltip title="正常状态">
+    <Button>正常按钮</Button>
+  </Tooltip>
+  <Tooltip title="已禁用" disabled>
+    <Button disabled>禁用按钮</Button>
   </Tooltip>
 </Space>`;

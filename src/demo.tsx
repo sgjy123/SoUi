@@ -227,8 +227,26 @@ const App: React.FC = () => {
 
             <DemoContainer
               title="销毁 DOM"
-              description="通过 destroyOnHidden 属性控制关闭后是否销毁浮层 DOM，默认为 false。"
+              description="通过 destroyOnHidden 属性控制关闭后是否销毁浮层 DOM，默认为 true。"
               code={tooltipCodes.destroyCode}
+            />
+
+            <DemoContainer
+              title="自定义样式"
+              description="通过 color、arrow、overlayStyle 等属性自定义提示框的样式。"
+              code={tooltipCodes.styleCode}
+            />
+
+            <DemoContainer
+              title="自动调整位置"
+              description="通过 autoAdjustOverflow 控制是否自动调整位置以防止溢出视口。"
+              code={tooltipCodes.autoAdjustCode}
+            />
+
+            <DemoContainer
+              title="禁用状态"
+              description="Tooltip 在禁用状态下不会触发显示，禁用按钮需要外层包裹。"
+              code={tooltipCodes.disabledCode}
             />
           </section>
         </div>
