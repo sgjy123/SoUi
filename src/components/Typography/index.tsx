@@ -406,12 +406,12 @@ const Text: React.FC<BaseProps & React.HTMLAttributes<HTMLSpanElement>> = ({
 
   // Determine if we need to show tooltip
   const shouldShowTooltip = ellipsis && !expanded && (
-    typeof ellipsis === 'boolean' || 
+    typeof ellipsis === 'boolean' ||
     (typeof ellipsis === 'object' && ellipsis.tooltip !== false)
   );
   const tooltipContent = shouldShowTooltip
-    ? (typeof ellipsis === 'object' && typeof ellipsis.tooltip === 'string' 
-        ? ellipsis.tooltip 
+    ? (typeof ellipsis === 'object' && typeof ellipsis.tooltip === 'string'
+        ? ellipsis.tooltip
         : String(children))
     : undefined;
   const contentElement = (
@@ -430,7 +430,7 @@ const Text: React.FC<BaseProps & React.HTMLAttributes<HTMLSpanElement>> = ({
       style={{ display: 'inline-flex', alignItems: 'flex-end', maxWidth: '100%', position: 'relative' }}
     >
       {shouldShowTooltip && tooltipContent ? (
-        <Tooltip title={tooltipContent} placement="top">
+        <Tooltip title={tooltipContent} placement="top" className="soui-typography-tooltip">
           {contentElement}
         </Tooltip>
       ) : (
