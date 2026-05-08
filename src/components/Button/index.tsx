@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, MouseEvent, useState } from 'react';
 import classNames from 'classnames';
 import Icon from '../Icon';
-import { useComponentTheme } from '../ConfigProvider';
+import { useComponentTheme, useTheme } from '../ConfigProvider';
 import './style.less';
 
 export type ButtonType = 'default' | 'primary' | 'dashed' | 'text' | 'link';
@@ -90,22 +90,60 @@ const Button: React.FC<ButtonProps> & {
 
   // 获取组件级主题配置
   const buttonTheme = useComponentTheme('Button');
+  // 获取全局主题配置
+  const globalTheme = useTheme();
 
-  // 应用组件级主题到样式
+  // 确定当前尺寸
+  const currentSize = size || 'middle';
+
+  // 应用组件级主题到样式（优先使用组件级配置，否则使用全局配置）
+  const borderRadiusValue = buttonTheme?.borderRadius || globalTheme?.borderRadius;
+  const fontSizeValue = buttonTheme?.fontSize || globalTheme?.fontSize;
+  const controlHeightValue = buttonTheme?.controlHeight;
+  
   const buttonStyle: React.CSSProperties = {
     ...(buttonTheme?.colorPrimary && {
       '--soui-button-color-primary': buttonTheme.colorPrimary,
     }),
-    ...(buttonTheme?.borderRadius && {
-      '--soui-button-border-radius': `${buttonTheme.borderRadius}px`,
+    ...(buttonTheme?.colorPrimaryHover && {
+      '--soui-button-color-primary-hover': buttonTheme.colorPrimaryHover,
     }),
-    ...(buttonTheme?.controlHeight && {
-      '--soui-button-control-height': `${buttonTheme.controlHeight}px`,
+    ...(buttonTheme?.colorPrimaryActive && {
+      '--soui-button-color-primary-active': buttonTheme.colorPrimaryActive,
     }),
-    ...(buttonTheme?.fontSize && {
-      '--soui-button-font-size': `${buttonTheme.fontSize}px`,
+    ...(borderRadiusValue && {
+      '--soui-button-border-radius': `${borderRadiusValue}px`,
+    }),
+    // 根据当前按钮尺寸设置对应的 CSS 变量
+    ...(controlHeightValue && {
+      [`--soui-button-control-height${currentSize === 'middle' ? '' : `-${currentSize}`}`]: `${controlHeightValue}px`,
+    }),
+    // 根据当前按钮尺寸设置对应的字体大小
+    ...(fontSizeValue && {
+      [`--soui-button-font-size${currentSize === 'middle' ? '-middle' : currentSize === 'small' ? '-sm' : '-large'}`]: `${fontSizeValue}px`,
     }),
   } as any;
+
+  // 计算 hover 和 active 颜色（如果没有手动配置）
+  const getHoverColor = (baseColor: string): string => {
+    // 简单的颜色变亮逻辑
+    return baseColor.replace(/ff$/, 'cc');
+  };
+
+  const getActiveColor = (baseColor: string): string => {
+    // 简单的颜色变暗逻辑
+    return baseColor.replace(/ff$/, '99');
+  };
+
+  // 如果有自定义主色，且没有手动配置 hover/active 颜色，则自动计算
+  if (buttonTheme?.colorPrimary) {
+    if (!buttonTheme.colorPrimaryHover) {
+      (buttonStyle as any)['--soui-button-color-primary-hover'] = getHoverColor(buttonTheme.colorPrimary);
+    }
+    if (!buttonTheme.colorPrimaryActive) {
+      (buttonStyle as any)['--soui-button-color-primary-active'] = getActiveColor(buttonTheme.colorPrimary);
+    }
+  } 
 
   // 处理加载延迟
   useEffect(() => {

@@ -8,6 +8,10 @@ export interface ComponentThemeConfig {
   Button?: {
     /** 主色，用于 primary 类型按钮 */
     colorPrimary?: string;
+    /** 悬停颜色 */
+    colorPrimaryHover?: string;
+    /** 激活颜色 */
+    colorPrimaryActive?: string;
     /** 圆角大小（像素） */
     borderRadius?: number;
     /** 控件高度（像素） */

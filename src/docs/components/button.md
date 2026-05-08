@@ -280,9 +280,15 @@ function App() {
 | 配置项 | 说明 | 类型 | 默认值 | 版本 |
 |--------|------|------|--------|------|
 | colorPrimary | 按钮主色（primary 类型） | `string` | 继承全局 `primaryColor` | - |
-| borderRadius | 按钮圆角 | `number` | `6` | - |
-| controlHeight | 按钮高度 | `number` | `32` | - |
-| fontSize | 按钮字体大小 | `number` | `14` | - |
+| colorPrimaryHover | 悬停颜色 | `string` | 自动计算 | - |
+| colorPrimaryActive | 激活颜色 | `string` | 自动计算 | - |
+| borderRadius | 按钮圆角 | `number` | 继承全局 `borderRadius` | - |
+| controlHeight | 按钮高度（应用到当前尺寸） | `number` | `32` | - |
+| fontSize | 按钮字体大小（应用到当前尺寸） | `number` | 继承全局 `fontSize` | - |
+
+> **注意**：
+> - `controlHeight` 和 `fontSize` 会根据按钮的实际尺寸（large/middle/small）自动应用到对应的 CSS 变量上
+> - 如果未设置 `colorPrimaryHover` 和 `colorPrimaryActive`，系统会根据 `colorPrimary` 自动计算
 
 ### 使用示例
 

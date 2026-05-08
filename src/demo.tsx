@@ -24,13 +24,16 @@ const App: React.FC = () => {
         successColor: "#52c41a",
         warningColor: "#faad14",
         errorColor: "#f5222d",
-        borderRadius: 8,
+        borderRadius: 10,  // 全局圆角配置（影响所有组件）
+        fontSize: 18,  // 全局字体大小配置（影响所有组件）
         components: {
           Button: {
-            colorPrimary: "#2ed193ff",
-            borderRadius: 8,
-            controlHeight: 40,
-            fontSize: 16,
+            colorPrimary: "#2ed193",
+            colorPrimaryHover: "#5cdbb9",  // 可选：自定义悬停颜色（如果不设置，会自动计算）
+            colorPrimaryActive: "#1aa373",  // 可选：自定义激活颜色（如果不设置，会自动计算）
+            borderRadius: 12,  // 组件级圆角配置（只影响按钮，优先级高于全局 borderRadius）
+            controlHeight: 40,  // 组件级按钮高度（只影响当前尺寸的按钮）
+            fontSize: 16,  // 组件级按钮字体大小（只影响当前尺寸的按钮，优先级高于全局 fontSize）
           },
           Input: {
             colorBorder: "#d9d9d9",
