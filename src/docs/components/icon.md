@@ -151,36 +151,148 @@ export default () => (
 );
 ```
 
-### 组件级配置
+## 主题定制
 
-通过 ConfigProvider 为 Icon 组件设置统一的默认配置。
+Icon 组件支持全局主题和组件级主题定制。
+
+### 全局主题
+
+通过 ConfigProvider 的 `theme.primaryColor` 配置全局主色，图标会自动继承：
 
 ```tsx
-import { Icon, Space, ConfigProvider } from '@soui/ui';
+import { ConfigProvider, Icon, Space } from '@soui/ui';
 
-export default () => (
-  <ConfigProvider
-    theme={{
-      components: {
-        Icon: {
-          size: 24,                    // 默认尺寸
-          colorPrimary: '#722ed1',     // 主色图标颜色
-          colorSuccess: '#52c41a',     // 成功状态颜色
-          colorWarning: '#faad14',     // 警告状态颜色
-          colorError: '#ff4d4f',       // 错误状态颜色
-          hoverOpacity: 0.7,           // 悬停透明度
-          activeOpacity: 0.5,          // 激活透明度
+function App() {
+  return (
+    <ConfigProvider
+      theme={{
+        primaryColor: '#722ed1',
+        successColor: '#52c41a',
+        warningColor: '#faad14',
+        errorColor: '#ff4d4f',
+      }}
+    >
+      <Space wrap size="large">
+        <Icon name="Home" color="primary" />
+        <Icon name="CheckCorrect" color="success" />
+        <Icon name="Reminder" color="warning" />
+        <Icon name="Close" color="error" />
+      </Space>
+    </ConfigProvider>
+  );
+}
+```
+
+### 组件级主题（推荐）
+
+通过 `theme.components.Icon` 配置图标的专属样式：
+
+```tsx
+import { ConfigProvider, Icon, Space } from '@soui/ui';
+
+function App() {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Icon: {
+            size: 28,                        // 默认尺寸
+            colorPrimary: '#722ed1',         // 主色图标颜色
+            colorSuccess: '#52c41a',         // 成功状态颜色
+            colorWarning: '#faad14',         // 警告状态颜色
+            colorError: '#ff4d4f',           // 错误状态颜色
+            colorInfo: '#1677ff',            // 信息状态颜色
+            colorDefault: 'rgba(0, 0, 0, 0.88)', // 默认颜色
+            hoverOpacity: 0.7,               // 悬停透明度
+            activeOpacity: 0.5,              // 激活透明度
+          },
         },
-      },
-    }}
-  >
-    <Space wrap size="large">
-      <Icon name="Home" />
-      <Icon name="CheckCorrect" color="success" />
-      <Icon name="Reminder" color="warning" />
-    </Space>
-  </ConfigProvider>
-);
+      }}
+    >
+      <Space wrap size="large">
+        <Icon name="Home" />
+        <Icon name="CheckCorrect" color="success" />
+        <Icon name="Reminder" color="warning" clickable />
+      </Space>
+    </ConfigProvider>
+  );
+}
+```
+
+### 组件级主题配置项
+
+| 配置项 | 说明 | 类型 | 默认值 | 版本 |
+|--------|------|------|--------|------|
+| size | 图标默认尺寸（像素） | `number` | `24` | - |
+| colorPrimary | 主色图标颜色 | `string` | 继承全局 `primaryColor` | - |
+| colorSuccess | 成功状态颜色 | `string` | 继承全局 `successColor` | - |
+| colorWarning | 警告状态颜色 | `string` | 继承全局 `warningColor` | - |
+| colorError | 错误状态颜色 | `string` | 继承全局 `errorColor` | - |
+| colorInfo | 信息状态颜色 | `string` | 继承全局 `infoColor` | - |
+| colorDefault | 默认颜色 | `string` | `rgba(0, 0, 0, 0.88)` | - |
+| colorSecondary | 次要颜色 | `string` | `rgba(0, 0, 0, 0.65)` | - |
+| colorDisabled | 禁用状态颜色 | `string` | `rgba(0, 0, 0, 0.25)` | - |
+| hoverOpacity | 悬停透明度（可点击时生效） | `number` | `0.7` | - |
+| activeOpacity | 激活透明度（可点击时生效） | `number` | `0.5` | - |
+
+> **注意**：
+> - `size` 配置会应用到所有未显式设置尺寸的图标
+> - 各种颜色配置会在对应 `color` 属性使用时生效
+> - `hoverOpacity` 和 `activeOpacity` 仅在图标设置为 `clickable` 或有 `onClick` 时生效
+
+### 使用示例
+
+```tsx
+import { ConfigProvider, Icon, Space } from '@soui/ui';
+
+function App() {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Icon: {
+            size: 20,
+            colorPrimary: '#1890ff',
+            hoverOpacity: 0.8,
+            activeOpacity: 0.6,
+          },
+        },
+      }}
+    >
+      <Space wrap size="large">
+        <Icon name="Home" />
+        <Icon name="User" />
+        <Icon name="Setting" clickable />
+      </Space>
+    </ConfigProvider>
+  );
+}
+```
+
+### 优先级
+
+CSS 变量的优先级从高到低：
+
+1. **组件 Props** (`size`, `fill`, `color`)
+2. **组件级主题** (`theme.components.Icon.*`)
+3. **全局主题** (`theme.*`)
+4. **Less 变量** (`variables.less`)
+
+```tsx
+// 全局主题设置主色为紫色
+theme={{
+  primaryColor: '#722ed1',
+  components: {
+    Icon: {
+      // 图标级会覆盖全局主题
+      colorPrimary: '#52c41a',  // 图标主色为绿色
+      size: 28,                 // 图标尺寸为 28px
+    },
+  },
+}}
+
+// Props 会覆盖所有配置
+<Icon name="Home" size={32} fill="#ff0000" /> // 最终尺寸 32px，颜色红色
 ```
 
 ### 配合按钮使用
@@ -226,17 +338,45 @@ export default () => (
 
 ### ConfigProvider 组件级配置
 
+通过 `theme.components.Icon` 可以为所有 Icon 组件设置统一的默认值。
+
 ```typescript
 interface IconThemeConfig {
-  size?: number;           // 默认尺寸（像素）
-  colorPrimary?: string;   // 主色图标颜色
-  colorSuccess?: string;   // 成功状态颜色
-  colorWarning?: string;   // 警告状态颜色
-  colorError?: string;     // 错误状态颜色
-  colorInfo?: string;      // 信息状态颜色
-  colorDefault?: string;   // 默认颜色
-  hoverOpacity?: number;   // 悬停透明度（0-1）
-  activeOpacity?: number;  // 激活透明度（0-1）
+  size?: number;                    // 默认尺寸（像素）
+  colorPrimary?: string;            // 主色图标颜色
+  colorSuccess?: string;            // 成功状态颜色
+  colorWarning?: string;            // 警告状态颜色
+  colorError?: string;              // 错误状态颜色
+  colorInfo?: string;               // 信息状态颜色
+  colorDefault?: string;            // 默认颜色
+  colorSecondary?: string;          // 次要颜色
+  colorDisabled?: string;           // 禁用状态颜色
+  hoverOpacity?: number;            // 悬停透明度（0-1）
+  activeOpacity?: number;           // 激活透明度（0-1）
+}
+```
+
+**使用示例：**
+
+```tsx
+import { ConfigProvider, Icon } from '@soui/ui';
+
+function App() {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Icon: {
+            size: 24,
+            colorPrimary: '#1677ff',
+            hoverOpacity: 0.7,
+          },
+        },
+      }}
+    >
+      <Icon name="Home" />
+    </ConfigProvider>
+  );
 }
 ```
 

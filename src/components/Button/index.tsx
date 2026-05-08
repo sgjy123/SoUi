@@ -221,15 +221,32 @@ const Button: React.FC<ButtonProps> & {
     className
   );
 
+  // 判断是否需要白色图标
+  const needsWhiteIcon = type === 'primary' || (type === 'default' && danger) || (ghost && !danger);
+
   // 渲染图标
   const renderIcon = () => {
     if (isLoading) {
-      return <Icon name="Loading" className="soui-button-loading-icon" size={16} theme="outline" />;
+      // loading图标颜色根据按钮类型决定
+      const loadingIconFill = needsWhiteIcon ? '#fff' : undefined;
+      return <Icon name="Loading" className="soui-button-loading-icon" size={16} theme="outline" fill={loadingIconFill} />;
     }
     if (typeof icon === 'string') {
-      return <span className="soui-button-icon"><Icon name={icon} size={16} theme="outline" /></span>;
+      // 对于 primary、danger 类型的按钮，图标颜色应该是白色
+      const iconFill = needsWhiteIcon ? '#fff' : undefined;
+      return <span className="soui-button-icon"><Icon name={icon} size={16} theme="outline" fill={iconFill} /></span>;
     }
     if (icon) {
+      // 如果是 ReactNode，检查是否是 Icon 组件并自动设置颜色
+      if (React.isValidElement(icon) && (icon.type as any).name === 'Icon') {
+        return (
+          <span className="soui-button-icon">
+            {React.cloneElement(icon as any, {
+              fill: (icon.props as any).fill || (needsWhiteIcon ? '#fff' : undefined),
+            })}
+          </span>
+        );
+      }
       return <span className="soui-button-icon">{icon}</span>;
     }
     return null;

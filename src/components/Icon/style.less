@@ -39,57 +39,57 @@
   }
 }
 
-// 图标尺寸辅助类
+// 图标尺寸辅助类 - 使用 CSS 变量
 .soui-icon-xs {
-  font-size: @icon-size-xs;
+  font-size: var(--soui-icon-size-xs, @icon-size-xs);
   
   svg {
-    width: @icon-size-xs;
-    height: @icon-size-xs;
+    width: var(--soui-icon-size-xs, @icon-size-xs);
+    height: var(--soui-icon-size-xs, @icon-size-xs);
   }
 }
 
 .soui-icon-sm {
-  font-size: @icon-size-sm;
+  font-size: var(--soui-icon-size-sm, @icon-size-sm);
   
   svg {
-    width: @icon-size-sm;
-    height: @icon-size-sm;
+    width: var(--soui-icon-size-sm, @icon-size-sm);
+    height: var(--soui-icon-size-sm, @icon-size-sm);
   }
 }
 
 .soui-icon-base {
-  font-size: @icon-size-base;
+  font-size: var(--soui-icon-size-base, @icon-size-base);
   
   svg {
-    width: @icon-size-base;
-    height: @icon-size-base;
+    width: var(--soui-icon-size-base, @icon-size-base);
+    height: var(--soui-icon-size-base, @icon-size-base);
   }
 }
 
 .soui-icon-lg {
-  font-size: @icon-size-lg;
+  font-size: var(--soui-icon-size-lg, @icon-size-lg);
   
   svg {
-    width: @icon-size-lg;
-    height: @icon-size-lg;
+    width: var(--soui-icon-size-lg, @icon-size-lg);
+    height: var(--soui-icon-size-lg, @icon-size-lg);
   }
 }
 
 .soui-icon-xl {
-  font-size: @icon-size-xl;
+  font-size: var(--soui-icon-size-xl, @icon-size-xl);
   
   svg {
-    width: @icon-size-xl;
-    height: @icon-size-xl;
+    width: var(--soui-icon-size-xl, @icon-size-xl);
+    height: var(--soui-icon-size-xl, @icon-size-xl);
   }
 }
 
 .soui-icon-xxl {
-  font-size: @icon-size-xxl;
+  font-size: var(--soui-icon-size-xxl, @icon-size-xxl);
   
   svg {
-    width: @icon-size-xxl;
-    height: @icon-size-xxl;
+    width: var(--soui-icon-size-xxl, @icon-size-xxl);
+    height: var(--soui-icon-size-xxl, @icon-size-xxl);
   }
 }

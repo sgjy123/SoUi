@@ -64,7 +64,7 @@ const Icon: React.FC<IconProps> = ({
       warning: iconTheme?.colorWarning || globalTheme.warningColor,
       error: iconTheme?.colorError || globalTheme.errorColor,
       info: iconTheme?.colorInfo || globalTheme.infoColor,
-      default: iconTheme?.colorDefault || globalTheme.primaryColor,
+      default: iconTheme?.colorDefault || 'rgba(0, 0, 0, 0.88)',
     };
 
     return colorMap[color] || '#000000';

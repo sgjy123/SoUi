@@ -132,6 +132,30 @@ const App: React.FC = () => {
               description="展示不同类型的图标，包括轮廓图标和填充图标。未指定 fill 时使用主题色。"
               code={iconCodes.basicCode}
             />
+
+            <DemoContainer
+              title="主题样式"
+              description="支持 outline（轮廓）和 filled（填充）两种主题样式。"
+              code={iconCodes.themeCode}
+            />
+
+            <DemoContainer
+              title="颜色配置"
+              description="支持预设颜色（primary、success、warning、error、info）和自定义颜色。"
+              code={iconCodes.colorCode}
+            />
+
+            <DemoContainer
+              title="尺寸配置"
+              description="通过 size 属性设置图标大小，单位为像素。"
+              code={iconCodes.sizeCode}
+            />
+
+            <DemoContainer
+              title="交互效果"
+              description="通过 clickable 属性启用点击交互，自动添加悬停和激活效果。"
+              code={iconCodes.interactiveCode}
+            />
           </section>
 
           {/* Space 组件演示 */}
