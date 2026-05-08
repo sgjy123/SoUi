@@ -261,10 +261,12 @@ function App() {
       theme={{
         components: {
           Button: {
-            colorPrimary: '#2ed193',  // 按钮主色
-            borderRadius: 8,          // 圆角大小
-            controlHeight: 40,        // 按钮高度
-            fontSize: 16,             // 字体大小
+            colorPrimary: '#2ed193',           // 按钮主色
+            colorPrimaryHover: '#5cdbb9',      // 悬停颜色（可选，不设置会自动计算）
+            colorPrimaryActive: '#1aa373',     // 激活颜色（可选，不设置会自动计算）
+            borderRadius: 8,                   // 圆角大小
+            controlHeight: 40,                 // 按钮高度
+            fontSize: 16,                      // 字体大小
           },
         },
       }}

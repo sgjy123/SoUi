@@ -102,15 +102,27 @@ const Button: React.FC<ButtonProps> & {
   const controlHeightValue = buttonTheme?.controlHeight;
   
   const buttonStyle: React.CSSProperties = {
-    ...(buttonTheme?.colorPrimary && {
+    // 颜色配置（组件级优先，否则使用全局主题）
+    ...(buttonTheme?.colorPrimary ? {
       '--soui-button-color-primary': buttonTheme.colorPrimary,
-    }),
-    ...(buttonTheme?.colorPrimaryHover && {
+    } : globalTheme?.primaryColor ? {
+      '--soui-button-color-primary': globalTheme.primaryColor,
+    } : {}),
+    ...(buttonTheme?.colorPrimaryHover ? {
       '--soui-button-color-primary-hover': buttonTheme.colorPrimaryHover,
-    }),
-    ...(buttonTheme?.colorPrimaryActive && {
+    } : globalTheme?.primaryHoverColor ? {
+      '--soui-button-color-primary-hover': globalTheme.primaryHoverColor,
+    } : {}),
+    ...(buttonTheme?.colorPrimaryActive ? {
       '--soui-button-color-primary-active': buttonTheme.colorPrimaryActive,
+    } : globalTheme?.primaryActiveColor ? {
+      '--soui-button-color-primary-active': globalTheme.primaryActiveColor,
+    } : {}),
+    // Danger 按钮颜色配置
+    ...(globalTheme?.errorColor && {
+      '--soui-error-color': globalTheme.errorColor,
     }),
+    // 圆角配置
     ...(borderRadiusValue && {
       '--soui-button-border-radius': `${borderRadiusValue}px`,
     }),
@@ -135,13 +147,15 @@ const Button: React.FC<ButtonProps> & {
     return baseColor.replace(/ff$/, '99');
   };
 
-  // 如果有自定义主色，且没有手动配置 hover/active 颜色，则自动计算
+  // 如果设置了组件级主色，且没有手动配置 hover/active 颜色，则自动计算
+  // 注意：全局主题的颜色已经在上面设置了，这里只处理组件级覆盖的情况
   if (buttonTheme?.colorPrimary) {
-    if (!buttonTheme.colorPrimaryHover) {
-      (buttonStyle as any)['--soui-button-color-primary-hover'] = getHoverColor(buttonTheme.colorPrimary);
+    const styleAny = buttonStyle as any;
+    if (!buttonTheme.colorPrimaryHover && !styleAny['--soui-button-color-primary-hover']) {
+      styleAny['--soui-button-color-primary-hover'] = getHoverColor(buttonTheme.colorPrimary);
     }
-    if (!buttonTheme.colorPrimaryActive) {
-      (buttonStyle as any)['--soui-button-color-primary-active'] = getActiveColor(buttonTheme.colorPrimary);
+    if (!buttonTheme.colorPrimaryActive && !styleAny['--soui-button-color-primary-active']) {
+      styleAny['--soui-button-color-primary-active'] = getActiveColor(buttonTheme.colorPrimary);
     }
   } 
 

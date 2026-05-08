@@ -243,6 +243,9 @@ SoUi 支持暗黑模式，颜色会自动适配：
 | 警告色 | `@warning-color` | `--soui-warning-color` | #faad14 |
 | 错误色 | `@error-color` | `--soui-error-color` | #ff4d4f |
 | 信息色 | `@info-color` | `--soui-info-color` | #1677ff |
+| 圆角 | `@border-radius-base` | `--soui-border-radius` | 6px |
+| 字体大小 | `@font-size-base` | `--soui-font-size` | 14px |
+| 行高 | `@line-height-base` | `--soui-line-height` | 1.5715 |
 
 ## 相关资源
 

@@ -46,29 +46,34 @@ function App() {
 
 ```typescript
 interface ThemeConfig {
-  // 基础配置
-  primaryColor?: string;
-  successColor?: string;
-  warningColor?: string;
-  errorColor?: string;
-  infoColor?: string;
+  // 颜色配置
+  primaryColor?: string;           // 主色
+  primaryHoverColor?: string;      // 主色悬停
+  primaryActiveColor?: string;     // 主色激活
+  successColor?: string;           // 成功色
+  warningColor?: string;           // 警告色
+  errorColor?: string;             // 错误色
+  infoColor?: string;              // 信息色
   
   // 尺寸配置
-  borderRadius?: number;
-  fontSize?: number;
-  lineHeight?: number;
-  
-  // 间距配置
-  spacingUnit?: number;
-  
-  // 算法配置
-  algorithm?: Algorithm | Algorithm[];
+  borderRadius?: number;           // 圆角（像素）
+  fontSize?: number;               // 字体大小（像素）
+  lineHeight?: number;             // 行高
   
   // 组件级配置
   components?: {
-    Button?: ComponentTheme;
-    Input?: ComponentTheme;
-    Card?: ComponentTheme;
+    Button?: {
+      colorPrimary?: string;       // 按钮主色
+      colorPrimaryHover?: string;  // 按钮悬停色
+      colorPrimaryActive?: string; // 按钮激活色
+      borderRadius?: number;       // 按钮圆角
+      controlHeight?: number;      // 按钮高度
+      fontSize?: number;           // 按钮字体大小
+    };
+    Input?: {
+      colorBorder?: string;        // 输入框边框色
+      borderRadius?: number;       // 输入框圆角
+    };
     // ... 其他组件
   };
 }
@@ -212,16 +217,20 @@ function App() {
     <ConfigProvider
       theme={{
         primaryColor: '#722ed1',
+        primaryHoverColor: '#9254de',
+        primaryActiveColor: '#531dab',
         components: {
           Button: {
-            colorPrimary: '#722ed1',
-            borderRadius: 8,
-            controlHeight: 40,
-            fontSize: 16,
+            colorPrimary: '#722ed1',           // 按钮主色（覆盖全局）
+            colorPrimaryHover: '#9254de',      // 悬停颜色
+            colorPrimaryActive: '#531dab',     // 激活颜色
+            borderRadius: 8,                   // 圆角大小
+            controlHeight: 40,                 // 按钮高度
+            fontSize: 16,                      // 字体大小
           },
           Input: {
-            colorBorder: '#d9d9d9',
-            borderRadius: 4,
+            colorBorder: '#d9d9d9',            // 输入框边框色
+            borderRadius: 4,                   // 输入框圆角
           },
         },
       }}
@@ -296,21 +305,10 @@ ConfigProvider 会自动生成 CSS 变量，您可以在任何地方使用：
   --soui-error-color: #ff4d4f;
   --soui-info-color: #1677ff;
   
-  /* 文本变量 */
-  --soui-text-color: rgba(0, 0, 0, 0.88);
-  --soui-text-color-secondary: rgba(0, 0, 0, 0.65);
-  --soui-text-color-disabled: rgba(0, 0, 0, 0.25);
-  
-  /* 背景变量 */
-  --soui-bg-color: #ffffff;
-  --soui-bg-color-layout: #f5f5f5;
-  
-  /* 边框变量 */
-  --soui-border-color: #d9d9d9;
+  /* 尺寸变量 */
   --soui-border-radius: 6px;
-  
-  /* 阴影变量 */
-  --soui-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --soui-font-size: 14px;
+  --soui-line-height: 1.5715;
 }
 ```
 

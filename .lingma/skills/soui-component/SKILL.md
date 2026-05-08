@@ -109,6 +109,153 @@ SoUi/
 }
 ```
 
+### 步骤 0.5: 查看主题样式和现有组件（重要！）
+
+**⚠️ 在开始编写代码前，必须先查看以下内容：**
+
+#### 1. 查看全局主题配置
+
+阅读以下文件了解 SoUi 的主题系统设计：
+
+- **`src/components/ConfigProvider/types.ts`** - 主题配置类型定义
+  - 了解可用的全局主题变量（primaryColor、borderRadius、fontSize 等）
+  - 了解组件级主题配置结构
+  
+- **`src/components/ConfigProvider/index.tsx`** - ConfigProvider 实现
+  - 了解如何生成 CSS 变量
+  - 了解 useTheme 和 useComponentTheme hooks
+
+- **`src/styles/global.less`** - 全局样式和 CSS 变量
+  - 查看 `:root` 中定义的 CSS 变量
+  - 了解全局样式的设置方式
+
+#### 2. 查看设计变量
+
+阅读 **`src/styles/variables.less`** 了解所有可用的 Less 变量：
+
+```less
+// 颜色变量
+@primary-color: #1677ff;
+@success-color: #52c41a;
+@warning-color: #faad14;
+@error-color: #ff4d4f;
+
+// 尺寸变量
+@border-radius-base: 6px;
+@font-size-base: 14px;
+@control-height-base: 32px;
+
+// 间距变量（4px 基准）
+@padding-xs: 4px;
+@padding-sm: 8px;
+@padding-md: 16px;
+@padding-lg: 24px;
+
+// 过渡变量
+@transition-duration: 0.3s;
+@transition-timing-function: ease-in-out;
+```
+
+#### 3. 查看现有组件实现
+
+选择 2-3 个相似的现有组件作为参考，学习它们的实现模式：
+
+**基础组件参考：**
+- **Button** (`src/components/Button/`) - 学习主题变量应用、尺寸适配、状态管理
+- **Icon** (`src/components/Icon/`) - 学习简单的展示型组件
+- **Space** (`src/components/Space/`) - 学习布局类组件
+
+**复杂组件参考：**
+- **Typography** (`src/components/Typography/`) - 学习组合式组件、子组件设计
+- **Tooltip** (`src/components/Tooltip/`) - 学习浮层组件、Portal 渲染
+
+**重点关注：**
+1. **主题变量应用模式**
+   ```tsx
+   // Button 组件的主题变量应用示例
+   const buttonTheme = useComponentTheme('Button');
+   const globalTheme = useTheme();
+   
+   const borderRadiusValue = buttonTheme?.borderRadius || globalTheme?.borderRadius;
+   
+   const buttonStyle: React.CSSProperties = {
+     '--soui-button-border-radius': `${borderRadiusValue}px`,
+   };
+   ```
+
+2. **CSS 变量命名规范**
+   - 全局变量：`--soui-{variable-name}`（如 `--soui-primary-color`）
+   - 组件变量：`--soui-{component}-{variable}`（如 `--soui-button-color-primary`）
+   - 尺寸变量：根据尺寸添加后缀（如 `--soui-button-control-height-large`）
+
+3. **样式优先级规则**
+   - 组件级配置 > 全局主题配置 > CSS 默认值 > Less 默认值
+   - 使用 `var(--css-variable, @less-variable)` 实现回退
+
+4. **组件结构设计**
+   - 主组件 + 子组件的组合模式
+   - Props 接口设计规范
+   - 类名命名规范（BEM）
+
+#### 4. 主题集成检查清单
+
+在设计新组件时，必须考虑以下主题相关的问题：
+
+**✅ 必须支持的配置：**
+- [ ] 圆角配置（borderRadius）
+- [ ] 字体大小配置（fontSize）
+- [ ] 主色配置（colorPrimary / primaryColor）
+- [ ] 悬停/激活状态颜色（hover/active colors）
+- [ ] 控件高度配置（controlHeight）
+
+**✅ 样式实现要求：**
+- [ ] 使用 CSS 变量而非硬编码颜色值
+- [ ] 支持全局主题和组件级主题两种配置方式
+- [ ] 提供合理的默认值（从 variables.less 获取）
+- [ ] 正确处理配置优先级
+- [ ] 在 style.less 中使用 `var()` 函数引用 CSS 变量
+
+**✅ TypeScript 类型定义：**
+- [ ] 在 `ConfigProvider/types.ts` 中添加组件级配置类型
+- [ ] 导出完整的 Props 类型
+- [ ] 为枚举类型添加 JSDoc 注释
+
+**示例：主题集成的完整流程**
+
+```tsx
+// 1. 在组件中获取主题配置
+const componentTheme = useComponentTheme('ComponentName');
+const globalTheme = useTheme();
+
+// 2. 计算最终值（组件级优先，否则使用全局配置）
+const borderRadiusValue = componentTheme?.borderRadius || globalTheme?.borderRadius;
+const fontSizeValue = componentTheme?.fontSize || globalTheme?.fontSize;
+
+// 3. 应用到样式
+const componentStyle: React.CSSProperties = {
+  ...(componentTheme?.colorPrimary ? {
+    '--soui-component-color-primary': componentTheme.colorPrimary,
+  } : globalTheme?.primaryColor ? {
+    '--soui-component-color-primary': globalTheme.primaryColor,
+  } : {}),
+  ...(borderRadiusValue && {
+    '--soui-component-border-radius': `${borderRadiusValue}px`,
+  }),
+  ...(fontSizeValue && {
+    '--soui-component-font-size': `${fontSizeValue}px`,
+  }),
+} as any;
+
+// 4. 在 style.less 中使用 CSS 变量
+.soui-component {
+  --soui-component-color-primary: var(--soui-primary-color, @primary-color);
+  --soui-component-border-radius: @border-radius-base;
+  
+  border-radius: var(--soui-component-border-radius);
+  color: var(--soui-component-color-primary);
+}
+```
+
 ### 步骤 1: 创建组件文件
 
 #### 1.0 研究参考框架（如果用户选择了参考框架）
@@ -683,6 +830,19 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 创建组件后，确认完成以下事项：
 
 - [ ] **在开始开发前已询问用户是否参考主流框架**（重要！）
+- [ ] **在编写代码前已查看主题样式和现有组件实现**（重要！）
+  - [ ] 已阅读 `ConfigProvider/types.ts` 了解主题配置类型
+  - [ ] 已阅读 `ConfigProvider/index.tsx` 了解主题实现方式
+  - [ ] 已阅读 `styles/variables.less` 了解可用的设计变量
+  - [ ] 已参考 2-3 个相似的现有组件实现
+- [ ] **主题集成已完成**（重要！）
+  - [ ] 支持圆角配置（borderRadius）
+  - [ ] 支持字体大小配置（fontSize）
+  - [ ] 支持主色配置（colorPrimary / primaryColor）
+  - [ ] 使用 CSS 变量而非硬编码颜色值
+  - [ ] 正确处理配置优先级（组件级 > 全局 > CSS 默认 > Less 默认）
+  - [ ] 在 style.less 中使用 `var()` 函数引用 CSS 变量
+  - [ ] 在 `ConfigProvider/types.ts` 中添加了组件级配置类型
 - [ ] 如果用户选择参考框架，已研究该框架的 API 设计
 - [ ] 如果参考了框架，已在文档中添加“参考来源”章节
 - [ ] 如果参考了框架，已在文档中注明参考来源

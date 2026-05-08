@@ -1,6 +1,8 @@
 # SoUi 组件开发快速参考
 
-## ⚠️ 重要提醒：创建组件前必须询问
+## ⚠️ 重要提醒：创建组件前必须完成以下步骤
+
+### 1. 询问参考框架
 
 在开始创建新组件之前，**必须询问用户是否希望参考主流 UI 框架**：
 
@@ -18,6 +20,37 @@
 - 借鉴合理的 Props 接口和默认值
 - **但必须保持 SoUi 的设计风格和使用 SoUi 的设计变量**
 - 在文档中注明参考来源
+
+### 2. 查看主题样式和现有组件（重要！）
+
+**在编写代码前，必须先查看以下内容：**
+
+#### 必读文件：
+1. **`src/components/ConfigProvider/types.ts`** - 了解主题配置类型
+2. **`src/components/ConfigProvider/index.tsx`** - 了解主题实现方式
+3. **`src/styles/variables.less`** - 了解可用的设计变量
+4. **`src/styles/global.less`** - 了解全局 CSS 变量
+
+#### 必参组件（选择 2-3 个相似的）：
+- **Button** - 学习主题变量应用、尺寸适配
+- **Icon** - 学习简单的展示型组件
+- **Typography** - 学习组合式组件
+- **Tooltip** - 学习浮层组件
+
+#### 主题集成要点：
+```tsx
+// 获取主题配置
+const componentTheme = useComponentTheme('ComponentName');
+const globalTheme = useTheme();
+
+// 计算最终值（组件级优先）
+const borderRadiusValue = componentTheme?.borderRadius || globalTheme?.borderRadius;
+
+// 应用到样式
+const style = {
+  '--soui-component-border-radius': `${borderRadiusValue}px`,
+} as any;
+```
 
 详见 [CONVERSATION_FLOW.md](./CONVERSATION_FLOW.md)
 
@@ -48,6 +81,14 @@ SoUi/
 - **如果参考**：研究目标框架的 API 设计，但保持 SoUi 的设计风格
 - **文档注明**：如果参考了框架，必须在文档中添加“参考来源”章节
 - **使用 SoUi 变量**：即使参考了其他框架，也必须使用 SoUi 的设计变量
+
+### 0.5. 主题集成（重要！）
+- **查看主题配置**：阅读 `ConfigProvider/types.ts` 和 `index.tsx`
+- **查看设计变量**：阅读 `styles/variables.less`
+- **参考现有组件**：选择 2-3 个相似组件学习实现模式
+- **支持配置项**：borderRadius、fontSize、colorPrimary、controlHeight
+- **使用 CSS 变量**：避免硬编码颜色值，使用 `var()` 函数
+- **优先级规则**：组件级 > 全局 > CSS 默认 > Less 默认
 
 ### 1. 类名规范
 - 前缀: `soui-`

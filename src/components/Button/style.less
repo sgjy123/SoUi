@@ -171,20 +171,20 @@
 
   &-primary {
     color: #fff;
-    background-color: var(--soui-button-color-primary);
-    border-color: var(--soui-button-color-primary);
+    background-color: var(--soui-button-color-primary, var(--soui-primary-color, @primary-color));
+    border-color: var(--soui-button-color-primary, var(--soui-primary-color, @primary-color));
     box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
 
     &:hover {
       color: #fff;
-      background-color: var(--soui-button-color-primary-hover);
-      border-color: var(--soui-button-color-primary-hover);
+      background-color: var(--soui-button-color-primary-hover, var(--soui-primary-hover-color, @primary-hover-color));
+      border-color: var(--soui-button-color-primary-hover, var(--soui-primary-hover-color, @primary-hover-color));
     }
 
     &:active {
       color: #fff;
-      background-color: var(--soui-button-color-primary-active);
-      border-color: var(--soui-button-color-primary-active);
+      background-color: var(--soui-button-color-primary-active, var(--soui-primary-active-color, @primary-active-color));
+      border-color: var(--soui-button-color-primary-active, var(--soui-primary-active-color, @primary-active-color));
     }
   }
 
@@ -253,8 +253,8 @@
     color: #fff;
 
     &.soui-button-primary {
-      color: var(--soui-primary-color, @primary-color);
-      border-color: var(--soui-primary-color, @primary-color);
+      color: var(--soui-button-color-primary, var(--soui-primary-color, @primary-color));
+      border-color: var(--soui-button-color-primary, var(--soui-primary-color, @primary-color));
     }
 
     &.soui-button-danger {
@@ -278,8 +278,8 @@
 
       &:active {
         color: #fff;
-        background-color: darken(@error-color, 5%);
-        border-color: darken(@error-color, 5%);
+        background-color: var(--soui-error-color-hover, darken(@error-color, 5%));
+        border-color: var(--soui-error-color-hover, darken(@error-color, 5%));
       }
     }
 
@@ -289,13 +289,13 @@
       border-color: var(--soui-error-color, @error-color);
 
       &:hover {
-        background-color: lighten(@error-color, 5%);
-        border-color: lighten(@error-color, 5%);
+        background-color: var(--soui-error-color-hover, lighten(@error-color, 5%));
+        border-color: var(--soui-error-color-hover, lighten(@error-color, 5%));
       }
 
       &:active {
-        background-color: darken(@error-color, 5%);
-        border-color: darken(@error-color, 5%);
+        background-color: var(--soui-error-color-active, darken(@error-color, 5%));
+        border-color: var(--soui-error-color-active, darken(@error-color, 5%));
       }
     }
 
@@ -304,7 +304,7 @@
       color: var(--soui-error-color, @error-color);
 
       &:hover {
-        color: lighten(@error-color, 10%);
+        color: var(--soui-error-color-hover, lighten(@error-color, 10%));
       }
     }
   }
@@ -346,13 +346,13 @@
     }
 
     &:first-child {
-      border-top-left-radius: @border-radius-base;
-      border-bottom-left-radius: @border-radius-base;
+      border-top-left-radius: var(--soui-button-border-radius, @border-radius-base);
+      border-bottom-left-radius: var(--soui-button-border-radius, @border-radius-base);
     }
 
     &:last-child {
-      border-top-right-radius: @border-radius-base;
-      border-bottom-right-radius: @border-radius-base;
+      border-top-right-radius: var(--soui-button-border-radius, @border-radius-base);
+      border-bottom-right-radius: var(--soui-button-border-radius, @border-radius-base);
       margin-right: 0;
     }
   }
@@ -367,13 +367,13 @@
       margin-bottom: -1px;
 
       &:first-child {
-        border-top-left-radius: @border-radius-base;
-        border-top-right-radius: @border-radius-base;
+        border-top-left-radius: var(--soui-button-border-radius, @border-radius-base);
+        border-top-right-radius: var(--soui-button-border-radius, @border-radius-base);
       }
 
       &:last-child {
-        border-bottom-left-radius: @border-radius-base;
-        border-bottom-right-radius: @border-radius-base;
+        border-bottom-left-radius: var(--soui-button-border-radius, @border-radius-base);
+        border-bottom-right-radius: var(--soui-button-border-radius, @border-radius-base);
         margin-bottom: 0;
       }
     }
