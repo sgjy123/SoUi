@@ -9,8 +9,87 @@
   line-height: 0;
   text-align: center;
   vertical-align: -0.125em;
+  transition: opacity @transition-duration ease-in-out;
   
   svg {
     display: block;
+    transition: transform @transition-duration ease-in-out;
+  }
+}
+
+// 可点击图标样式
+.soui-icon-clickable {
+  cursor: @icon-cursor-pointer;
+  user-select: none;
+  
+  &:hover {
+    opacity: var(--soui-icon-hover-opacity, @icon-hover-opacity);
+    
+    svg {
+      transform: scale(1.05);
+    }
+  }
+  
+  &:active {
+    opacity: var(--soui-icon-active-opacity, @icon-active-opacity);
+    
+    svg {
+      transform: scale(0.95);
+    }
+  }
+}
+
+// 图标尺寸辅助类
+.soui-icon-xs {
+  font-size: @icon-size-xs;
+  
+  svg {
+    width: @icon-size-xs;
+    height: @icon-size-xs;
+  }
+}
+
+.soui-icon-sm {
+  font-size: @icon-size-sm;
+  
+  svg {
+    width: @icon-size-sm;
+    height: @icon-size-sm;
+  }
+}
+
+.soui-icon-base {
+  font-size: @icon-size-base;
+  
+  svg {
+    width: @icon-size-base;
+    height: @icon-size-base;
+  }
+}
+
+.soui-icon-lg {
+  font-size: @icon-size-lg;
+  
+  svg {
+    width: @icon-size-lg;
+    height: @icon-size-lg;
+  }
+}
+
+.soui-icon-xl {
+  font-size: @icon-size-xl;
+  
+  svg {
+    width: @icon-size-xl;
+    height: @icon-size-xl;
+  }
+}
+
+.soui-icon-xxl {
+  font-size: @icon-size-xxl;
+  
+  svg {
+    width: @icon-size-xxl;
+    height: @icon-size-xxl;
   }
 }

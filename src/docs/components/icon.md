@@ -104,7 +104,7 @@ export default () => (
 
 ### 点击交互
 
-支持 onClick 事件，可以配合其他操作使用。
+支持 onClick 事件，设置 `clickable` 属性可自动添加悬停和点击效果。
 
 ```tsx
 import { Icon, Space, Message } from '@soui/ui';
@@ -114,22 +114,72 @@ export default () => (
     <Icon
       name="Like"
       size={24}
+      clickable
       onClick={() => Message.success('已点赞')}
-      style={{ cursor: 'pointer' }}
     />
     <Icon
       name="Share"
       size={24}
+      clickable
       onClick={() => Message.info('分享功能')}
-      style={{ cursor: 'pointer' }}
     />
     <Icon
       name="Download"
       size={24}
+      clickable
       onClick={() => Message.loading('下载中...')}
-      style={{ cursor: 'pointer' }}
     />
   </Space>
+);
+```
+
+### 预设颜色
+
+通过 `color` 属性使用预设颜色，支持 primary、success、warning、error、info 等主题色。
+
+```tsx
+import { Icon, Space } from '@soui/ui';
+
+export default () => (
+  <Space wrap size="large">
+    <Icon name="CheckCorrect" size={24} color="primary" />
+    <Icon name="CheckCorrect" size={24} color="success" />
+    <Icon name="Reminder" size={24} color="warning" />
+    <Icon name="Close" size={24} color="error" />
+    <Icon name="Info" size={24} color="info" />
+  </Space>
+);
+```
+
+### 组件级配置
+
+通过 ConfigProvider 为 Icon 组件设置统一的默认配置。
+
+```tsx
+import { Icon, Space, ConfigProvider } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      components: {
+        Icon: {
+          size: 24,                    // 默认尺寸
+          colorPrimary: '#722ed1',     // 主色图标颜色
+          colorSuccess: '#52c41a',     // 成功状态颜色
+          colorWarning: '#faad14',     // 警告状态颜色
+          colorError: '#ff4d4f',       // 错误状态颜色
+          hoverOpacity: 0.7,           // 悬停透明度
+          activeOpacity: 0.5,          // 激活透明度
+        },
+      },
+    }}
+  >
+    <Space wrap size="large">
+      <Icon name="Home" />
+      <Icon name="CheckCorrect" color="success" />
+      <Icon name="Reminder" color="warning" />
+    </Space>
+  </ConfigProvider>
 );
 ```
 
@@ -161,8 +211,10 @@ export default () => (
 |------|------|------|--------|------|
 | name | 图标名称 | `string` | - | - |
 | theme | 图标主题 | `'outline' \| 'filled'` | `outline` | - |
-| size | 图标大小 | `number` | `24` | - |
-| fill | 填充颜色 | `string` | 主题色 | - |
+| size | 图标大小（像素） | `number` | `24` | - |
+| fill | 填充颜色（优先级高于 color） | `string` | 主题色 | - |
+| color | 预设颜色类型 | `'primary' \| 'success' \| 'warning' \| 'error' \| 'info' \| 'default'` | `default` | - |
+| clickable | 是否可点击（自动添加 hover/active 效果） | `boolean` | `false` | - |
 | className | 自定义类名 | `string` | - | - |
 | style | 自定义内联样式 | `CSSProperties` | - | - |
 
@@ -171,6 +223,22 @@ export default () => (
 | 事件名 | 说明 | 类型 |
 |--------|------|------|
 | onClick | 点击事件 | `(e: MouseEvent) => void` |
+
+### ConfigProvider 组件级配置
+
+```typescript
+interface IconThemeConfig {
+  size?: number;           // 默认尺寸（像素）
+  colorPrimary?: string;   // 主色图标颜色
+  colorSuccess?: string;   // 成功状态颜色
+  colorWarning?: string;   // 警告状态颜色
+  colorError?: string;     // 错误状态颜色
+  colorInfo?: string;      // 信息状态颜色
+  colorDefault?: string;   // 默认颜色
+  hoverOpacity?: number;   // 悬停透明度（0-1）
+  activeOpacity?: number;  // 激活透明度（0-1）
+}
+```
 
 ## 图标列表
 

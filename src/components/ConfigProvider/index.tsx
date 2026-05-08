@@ -17,6 +17,9 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
 
   // 生成 CSS 变量样式
   const cssVariables: React.CSSProperties = useMemo(() => {
+    // 获取 Icon 组件级配置
+    const iconTheme = mergedTheme.components?.Icon || {};
+    
     return {
       '--soui-primary-color': mergedTheme.primaryColor,
       '--soui-primary-hover-color': mergedTheme.primaryHoverColor,
@@ -28,6 +31,17 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-border-radius': `${mergedTheme.borderRadius}px`,
       '--soui-font-size': `${mergedTheme.fontSize}px`,
       '--soui-line-height': mergedTheme.lineHeight?.toString(),
+      
+      // Icon 全局变量
+      '--soui-icon-size': `${iconTheme.size || 24}px`,
+      '--soui-icon-color-primary': iconTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-icon-color-success': iconTheme.colorSuccess || mergedTheme.successColor,
+      '--soui-icon-color-warning': iconTheme.colorWarning || mergedTheme.warningColor,
+      '--soui-icon-color-error': iconTheme.colorError || mergedTheme.errorColor,
+      '--soui-icon-color-info': iconTheme.colorInfo || mergedTheme.infoColor,
+      '--soui-icon-color-default': iconTheme.colorDefault || mergedTheme.primaryColor,
+      '--soui-icon-hover-opacity': iconTheme.hoverOpacity?.toString() || '0.7',
+      '--soui-icon-active-opacity': iconTheme.activeOpacity?.toString() || '0.5',
     } as any;
   }, [mergedTheme]);
 

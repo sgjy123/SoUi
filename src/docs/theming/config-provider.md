@@ -74,6 +74,17 @@ interface ThemeConfig {
       colorBorder?: string;        // 输入框边框色
       borderRadius?: number;       // 输入框圆角
     };
+    Icon?: {
+      size?: number;               // 默认尺寸（像素）
+      colorPrimary?: string;       // 主色图标颜色
+      colorSuccess?: string;       // 成功状态颜色
+      colorWarning?: string;       // 警告状态颜色
+      colorError?: string;         // 错误状态颜色
+      colorInfo?: string;          // 信息状态颜色
+      colorDefault?: string;       // 默认颜色
+      hoverOpacity?: number;       // 悬停透明度（0-1）
+      activeOpacity?: number;      // 激活透明度（0-1）
+    };
     // ... 其他组件
   };
 }
@@ -309,6 +320,17 @@ ConfigProvider 会自动生成 CSS 变量，您可以在任何地方使用：
   --soui-border-radius: 6px;
   --soui-font-size: 14px;
   --soui-line-height: 1.5715;
+  
+  /* Icon 变量 */
+  --soui-icon-size: 24px;
+  --soui-icon-color-primary: #1677ff;
+  --soui-icon-color-success: #52c41a;
+  --soui-icon-color-warning: #faad14;
+  --soui-icon-color-error: #ff4d4f;
+  --soui-icon-color-info: #1677ff;
+  --soui-icon-color-default: #1677ff;
+  --soui-icon-hover-opacity: 0.7;
+  --soui-icon-active-opacity: 0.5;
 }
 ```
 

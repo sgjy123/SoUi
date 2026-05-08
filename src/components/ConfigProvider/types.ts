@@ -26,6 +26,27 @@ export interface ComponentThemeConfig {
     /** 圆角 */
     borderRadius?: number;
   };
+  /** 图标组件配置 */
+  Icon?: {
+    /** 默认图标尺寸（像素） */
+    size?: number;
+    /** 主色图标颜色 */
+    colorPrimary?: string;
+    /** 成功状态颜色 */
+    colorSuccess?: string;
+    /** 警告状态颜色 */
+    colorWarning?: string;
+    /** 错误状态颜色 */
+    colorError?: string;
+    /** 信息状态颜色 */
+    colorInfo?: string;
+    /** 默认颜色 */
+    colorDefault?: string;
+    /** 悬停透明度 */
+    hoverOpacity?: number;
+    /** 激活透明度 */
+    activeOpacity?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

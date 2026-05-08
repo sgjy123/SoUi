@@ -1,20 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import classNames from 'classnames';
 import * as Icons from '@icon-park/react';
 import ConfigContext from '../ConfigProvider/context';
+import type { ComponentThemeConfig } from '../ConfigProvider/types';
 import './style.less';
 
 export type IconTheme = 'outline' | 'filled';
 
+export type IconColor = 'primary' | 'success' | 'warning' | 'error' | 'info' | 'default';
+
 export interface IconProps {
   /** 图标名称 */
   name: string;
-  /** 主题 */
+  /** 主题风格 */
   theme?: IconTheme;
-  /** 图标大小 */
+  /** 图标大小（像素） */
   size?: number;
   /** 填充颜色 */
   fill?: string;
+  /** 预设颜色类型 */
+  color?: IconColor;
+  /** 是否可点击 */
+  clickable?: boolean;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -25,15 +32,43 @@ export interface IconProps {
 const Icon: React.FC<IconProps> = ({
   name,
   theme = 'outline',
-  size = 24,
+  size,
   fill,
+  color = 'default',
+  clickable,
   className,
   style,
   onClick,
 }) => {
   // 从 ConfigContext 获取主题配置
   const context = useContext(ConfigContext);
-  const defaultFill = fill || context?.theme?.primaryColor || '#000000';
+  const globalTheme = context?.theme || {};
+  const iconTheme = (context?.components?.Icon || {}) as ComponentThemeConfig['Icon'];
+
+  // 计算图标尺寸（优先级：props > 组件级配置 > 全局配置 > 默认值）
+  const iconSize = useMemo(() => {
+    if (size !== undefined) return size;
+    if (iconTheme?.size !== undefined) return iconTheme.size;
+    return 24;
+  }, [size, iconTheme?.size]);
+
+  // 计算图标颜色（优先级：props.fill > props.color > 组件级配置 > 全局配置）
+  const iconFill = useMemo(() => {
+    // 如果直接传入 fill，优先使用
+    if (fill) return fill;
+
+    // 根据 color 属性选择预设颜色
+    const colorMap: Record<IconColor, string | undefined> = {
+      primary: iconTheme?.colorPrimary || globalTheme.primaryColor,
+      success: iconTheme?.colorSuccess || globalTheme.successColor,
+      warning: iconTheme?.colorWarning || globalTheme.warningColor,
+      error: iconTheme?.colorError || globalTheme.errorColor,
+      info: iconTheme?.colorInfo || globalTheme.infoColor,
+      default: iconTheme?.colorDefault || globalTheme.primaryColor,
+    };
+
+    return colorMap[color] || '#000000';
+  }, [fill, color, iconTheme, globalTheme]);
 
   // 根据 name 动态获取图标组件
   const IconComponent = (Icons as any)[name];
@@ -43,20 +78,25 @@ const Icon: React.FC<IconProps> = ({
     return null;
   }
 
-  const iconClassName = classNames('soui-icon', className);
+  const iconClassName = classNames('soui-icon', {
+    'soui-icon-clickable': clickable || onClick,
+  }, className);
 
   return (
     <span
       className={iconClassName}
-      style={style}
+      style={{
+        '--soui-icon-size': `${iconSize}px`,
+        ...style,
+      } as React.CSSProperties}
       onClick={onClick}
       role="img"
       aria-label={name}
     >
       <IconComponent
         theme={theme}
-        size={size}
-        fill={defaultFill}
+        size={iconSize}
+        fill={iconFill}
       />
     </span>
   );
