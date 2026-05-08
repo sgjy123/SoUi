@@ -28,36 +28,49 @@
 SoUi/
 ├── src/                          # 源代码目录
 │   ├── components/               # 组件库核心
-│   │   ├── Alert/               # 警告提示组件
-│   │   │   ├── index.tsx        # 组件入口和导出
-│   │   │   └── Alert.tsx        # 组件实现（如需要）
-│   │   ├── Badge/               # 徽标组件
-│   │   ├── Button/              # 按钮组件
-│   │   ├── Card/                # 卡片组件
-│   │   ├── ConfigProvider/      # 全局配置提供者
-│   │   │   ├── index.tsx        # ConfigProvider 组件
-│   │   │   ├── context.ts       # Context 定义
-│   │   │   └── types.ts         # 类型定义
-│   │   ├── Grid/                # 栅格布局
-│   │   │   ├── Row.tsx          # 行组件
-│   │   │   └── Col.tsx          # 列组件
-│   │   ├── Icon/                # 图标组件
-│   │   ├── Input/               # 输入框组件
-│   │   ├── Message/             # 全局提示组件
-│   │   ├── Modal/               # 对话框组件
-│   │   ├── Space/               # 间距组件
-│   │   ├── Tag/                 # 标签组件
-│   │   └── Typography/          # 排版组件
+│   │   ├── Alert/                # 警告提示组件
+│   │   │   ├── index.tsx         # 组件主文件（实现+导出）
+│   │   │   └── style.less        # 组件样式
+│   │   ├── Badge/                # 徽标组件
+│   │   ├── Button/               # 按钮组件
+│   │   ├── Card/                 # 卡片组件
+│   │   ├── ConfigProvider/       # 全局配置提供者
+│   │   │   ├── index.tsx         # ConfigProvider 组件
+│   │   │   ├── context.ts        # Context 定义
+│   │   │   └── types.ts          # 类型定义
+│   │   ├── Grid/                 # 栅格布局
+│   │   │   ├── index.tsx         # 组件主文件
+│   │   │   ├── style.less        # 组件样式
+│   │   │   └── types.ts          # 类型定义
+│   │   ├── Icon/                 # 图标组件
+│   │   ├── Input/                # 输入框组件
+│   │   ├── Message/              # 全局提示组件
+│   │   ├── Modal/                # 对话框组件
+│   │   ├── Space/                # 间距组件
+│   │   ├── Tag/                  # 标签组件
+│   │   └── Typography/           # 排版组件
 │   ├── hooks/                    # 自定义 Hooks
-│   │   └── useMessage.ts        # Message Hook
+│   │   └── useMessage.ts         # Message Hook
 │   ├── styles/                   # 全局样式
-│   │   ├── variables.less       # Less 变量
-│   │   ├── mixins.less          # Less 混入
-│   │   └── index.less           # 样式入口
+│   │   ├── variables.less        # Less 变量
+│   │   ├── mixins.less           # Less 混入
+│   │   ├── global.less           # 全局样式和 CSS 变量
+│   │   └── index.less            # 样式入口
 │   ├── utils/                    # 工具函数
-│   │   └── classnames.ts        # 类名工具
-│   ├── demo.tsx                  # 演示示例
-│   └── index.ts                  # 统一导出入口
+│   │   └── classnames.ts         # 类名工具
+│   ├── demo.tsx                  # 演示示例入口
+│   ├── index.ts                  # 统一导出入口
+│   └── docs/                     # 文档目录
+│       ├── components/           # 组件文档
+│       │   └── button.md         # 组件文档文件
+│       └── .vitepress/           # VitePress 配置
+│           └── config.ts         # 文档配置（侧边栏）
+├── examples/                     # 示例代码目录
+│   ├── DemoContainer/            # 演示容器组件
+│   │   └── index.tsx             # DemoContainer 主文件
+│   └── Button/                   # 组件示例
+│       ├── Basic.tsx             # 基础示例
+│       └── codes.ts              # 示例代码字符串
 ├── dist/                         # 构建输出目录
 │   ├── soui.umd.js              # UMD 格式
 │   ├── soui.es.js               # ES Module 格式
@@ -74,25 +87,25 @@ SoUi/
 ### 标准组件目录结构
 
 ```
-component-library/
-├── src/
-│   ├── components/          # 组件目录
-│   │   ├── Button/         # 单个组件
-│   │   │   ├── index.tsx   # 组件入口
-│   │   │   ├── Button.tsx  # 组件实现
-│   │   │   ├── Button.less # 组件样式
-│   │   │   ├── types.ts    # 类型定义
-│   │   │   └── __tests__/  # 测试文件
-│   │   └── ...
-│   ├── hooks/              # 自定义 Hooks
-│   ├── styles/             # 全局样式
-│   ├── utils/              # 工具函数
-│   ├── theme/              # 主题配置
-│   └── index.ts            # 统一导出
-├── dist/                   # 构建输出
-├── docs/                   # 文档
-└── tests/                  # 测试配置
+SoUi/src/components/
+├── ComponentName/          # 单个组件目录（PascalCase）
+│   ├── index.tsx          # 组件主文件（实现+导出）
+│   ├── style.less         # 组件样式（统一命名）
+│   └── types.ts           # 类型定义（可选）
+└── ...
 ```
+
+**组件命名规范：**
+
+| 项目 | 命名规则 | 示例 |
+|------|---------|------|
+| 组件目录 | PascalCase | `Button`, `ConfigProvider` |
+| 组件文件名 | index.tsx | `index.tsx` |
+| 样式文件名 | style.less | `style.less` |
+| CSS 类名 | kebab-case with prefix | `.soui-button`, `.soui-button-primary` |
+| 文档文件 | kebab-case | `button.md`, `config-provider.md` |
+| 示例目录 | PascalCase | `Button`, `ConfigProvider` |
+| 示例文件 | PascalCase | `Basic.tsx`, `Size.tsx` |
 
 ## 🔧 组件开发规范
 
@@ -101,7 +114,7 @@ component-library/
 ```tsx
 import React, { FC, HTMLAttributes } from 'react';
 import classNames from 'classnames';
-import './Component.less';
+import './style.less';
 
 export interface ComponentProps extends HTMLAttributes<HTMLDivElement> {
   /** 属性说明 */
@@ -160,10 +173,20 @@ export interface CommonProps {
 @success-color: #52c41a;
 @warning-color: #faad14;
 @error-color: #ff4d4f;
+@text-color: rgba(0, 0, 0, 0.88);
+@text-color-secondary: rgba(0, 0, 0, 0.65);
 
 @font-size-base: 14px;
 @border-radius-base: 6px;
-@spacing-unit: 8px;
+@control-height-base: 32px;
+
+@padding-xs: 4px;
+@padding-sm: 8px;
+@padding-md: 16px;
+@padding-lg: 24px;
+
+@transition-duration: 0.3s;
+@transition-timing-function: ease-in-out;
 
 // 混入
 .border-box() {
@@ -177,8 +200,10 @@ export interface CommonProps {
 }
 ```
 
-**组件样式：**
+**组件样式（style.less）：**
 ```less
+@import '../../styles/variables.less';  // 必须导入变量
+
 @soui-prefix: soui;
 
 .@{soui-prefix}-button {
@@ -189,8 +214,11 @@ export interface CommonProps {
   align-items: center;
   justify-content: center;
   
+  // 使用 CSS 变量支持主题定制
+  --soui-button-color-primary: var(--soui-primary-color, @primary-color);
+  
   &--primary {
-    background-color: @primary-color;
+    background-color: var(--soui-button-color-primary);
   }
   
   &--disabled {
@@ -199,6 +227,11 @@ export interface CommonProps {
   }
 }
 ```
+
+**CSS 变量命名规范：**
+- 全局变量：`--soui-{variable-name}`（如 `--soui-primary-color`）
+- 组件变量：`--soui-{component}-{variable}`（如 `--soui-button-color-primary`）
+- 使用 `var(--css-variable, @less-variable)` 实现优雅降级
 
 ### 4. 组件设计原则
 
@@ -223,55 +256,128 @@ export interface CommonProps {
 ### 1. Design Token 系统
 
 ```typescript
-// theme/design-tokens.ts
-export const designTokens = {
-  colors: {
-    primary: '#1677ff',
-    success: '#52c41a',
-    warning: '#faad14',
-    error: '#ff4d4f',
-  },
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '16px',
-    lg: '24px',
-  },
-  borderRadius: {
-    small: '4px',
-    medium: '6px',
-    large: '8px',
-  },
-};
+// src/styles/variables.less（Less 变量）
+@primary-color: #1677ff;
+@success-color: #52c41a;
+@warning-color: #faad14;
+@error-color: #ff4d4f;
+
+@font-size-base: 14px;
+@border-radius-base: 6px;
+@control-height-base: 32px;
+
+@transition-duration: 0.3s;
 ```
 
 ### 2. ConfigProvider 实现
 
 ```tsx
-// components/ConfigProvider/index.tsx
-import React, { createContext, useContext } from 'react';
-
-interface ThemeConfig {
+// src/components/ConfigProvider/types.ts
+export interface ThemeConfig {
   primaryColor?: string;
   borderRadius?: number;
-  components?: Record<string, any>;
+  fontSize?: number;
+  controlHeight?: number;
+  components?: Record<string, ComponentThemeConfig>;
 }
+
+export interface ComponentThemeConfig {
+  [key: string]: any;
+}
+```
+
+```tsx
+// src/components/ConfigProvider/index.tsx
+import React, { createContext, useContext, useMemo } from 'react';
+import type { ThemeConfig } from './types';
 
 const ConfigContext = createContext<ThemeConfig>({});
 
-export const ConfigProvider: FC<{
-  theme: ThemeConfig;
-  children: ReactNode;
-}> = ({ theme, children }) => {
+export const ConfigProvider: React.FC<{
+  theme?: ThemeConfig;
+  children: React.ReactNode;
+}> = ({ theme = {}, children }) => {
+  const cssVariables = useMemo(() => {
+    const variables: React.CSSProperties = {};
+    
+    if (theme.primaryColor) {
+      variables['--soui-primary-color'] = theme.primaryColor;
+    }
+    if (theme.borderRadius) {
+      variables['--soui-border-radius'] = `${theme.borderRadius}px`;
+    }
+    if (theme.fontSize) {
+      variables['--soui-font-size'] = `${theme.fontSize}px`;
+    }
+    if (theme.controlHeight) {
+      variables['--soui-control-height'] = `${theme.controlHeight}px`;
+    }
+    
+    return variables;
+  }, [theme]);
+
   return (
     <ConfigContext.Provider value={theme}>
-      {children}
+      <style>{`
+        :root {
+          --soui-primary-color: ${theme.primaryColor || '#1677ff'};
+          --soui-border-radius: ${theme.borderRadius || 6}px;
+          --soui-font-size: ${theme.fontSize || 14}px;
+          --soui-control-height: ${theme.controlHeight || 32}px;
+        }
+      `}</style>
+      <div style={cssVariables}>{children}</div>
     </ConfigContext.Provider>
   );
 };
 
-export const useConfig = () => useContext(ConfigContext);
+export const useTheme = () => useContext(ConfigContext);
+
+export const useComponentTheme = (componentName: string) => {
+  const theme = useTheme();
+  return theme.components?.[componentName];
+};
 ```
+
+### 3. 主题集成流程
+
+在组件中使用主题变量的标准方式：
+
+```tsx
+// src/components/Button/index.tsx
+import React from 'react';
+import { useTheme, useComponentTheme } from '../ConfigProvider';
+import './style.less';
+
+const Button: React.FC<ButtonProps> = ({ className, children, ...props }) => {
+  const globalTheme = useTheme();
+  const buttonTheme = useComponentTheme('Button');
+  
+  const borderRadiusValue = buttonTheme?.borderRadius || globalTheme?.borderRadius;
+  const fontSizeValue = buttonTheme?.fontSize || globalTheme?.fontSize;
+  
+  const buttonStyle: React.CSSProperties = {
+    ...(borderRadiusValue && {
+      '--soui-button-border-radius': `${borderRadiusValue}px`,
+    }),
+    ...(fontSizeValue && {
+      '--soui-button-font-size': `${fontSizeValue}px`,
+    }),
+  } as any;
+
+  return (
+    <button className="soui-button" style={buttonStyle} {...props}>
+      {children}
+    </button>
+  );
+};
+```
+
+**主题配置优先级（从高到低）：**
+1. 组件级配置（通过 `components.Button` 设置）
+2. 全局主题配置（通过 ConfigProvider `theme` 属性）
+3. CSS 默认值（通过 `:root` 设置）
+4. Less 默认值（通过 `variables.less`）
 
 ## 🧪 测试策略
 
@@ -312,63 +418,142 @@ describe('Button', () => {
 
 ## 📚 文档规范
 
-### 1. README 模板
+### 1. 组件文档模板（`src/docs/components/component-name.md`）
 
 ```markdown
-# Component Name
+# ComponentName 中文名称
 
-组件描述...
+简短描述组件用途。
 
-## Installation
+## 参考来源（如果参考了某个框架）
 
-```bash
-npm install @soui/ui
-```
+本组件参考了 [Ant Design](https://ant.design/) 的 XXX 组件设计，在保持 SoUi 设计风格的前提下，借鉴了其 API 设计思路。
 
-## Usage
+## 何时使用
+
+- 使用场景1
+- 使用场景2
+- 使用场景3
+
+## 代码演示
+
+### 基础用法
+
+示例说明文字。
 
 ```tsx
-import { Component } from '@soui/ui';
+import { ComponentName } from '@soui/ui';
 
-function App() {
-  return <Component prop="value" />;
-}
+export default () => (
+  <ComponentName prop="value">内容</ComponentName>
+);
+```
+
+### 另一个示例
+
+更多示例说明。
+
+```tsx
+import { ComponentName } from '@soui/ui';
+
+export default () => (
+  <ComponentName variant="secondary">内容</ComponentName>
+);
 ```
 
 ## API
 
-| Prop | Description | Type | Default |
-|------|-------------|------|---------|
-| prop1 | 说明 | `string` | - |
-| prop2 | 说明 | `boolean` | `false` |
+### 属性
 
-## Examples
+| 参数 | 说明 | 类型 | 默认值 | 版本 |
+|------|------|------|--------|------|
+| prop1 | 属性说明 | `type` | `default` | - |
+| prop2 | 属性说明 | `type` | `default` | - |
 
-更多示例...
-```
+### 事件
 
-### 2. Storybook 故事
+| 事件名 | 说明 | 类型 |
+|--------|------|------|
+| onClick | 点击事件 | `(e: Event) => void` |
+
+## 设计原则
+
+### ✅ 推荐用法
 
 ```tsx
-// Button.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
-
-const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
-  component: Button,
-};
-
-export default meta;
-type Story = StoryObj<typeof Button>;
-
-export const Primary: Story = {
-  args: {
-    children: 'Primary Button',
-    type: 'primary',
-  },
-};
+// 好的示例
+<ComponentName prop="value" />
 ```
+
+### ❌ 避免使用
+
+```tsx
+// 不好的示例
+<ComponentName invalidProp="value" />
+```
+
+## 无障碍访问
+
+组件遵循 WAI-ARIA 规范的说明。
+
+## FAQ
+
+### 常见问题1？
+
+解答...
+
+### 常见问题2？
+
+解答...
+
+## 相关资源
+
+- [Related Component](/components/related)
+```
+
+### 2. 侧边栏配置（`src/docs/.vitepress/config.ts`）
+
+```typescript
+function sidebarComponents() {
+  return [
+    {
+      text: '基础组件',
+      collapsed: false,
+      items: [
+        // ... 现有组件
+        { text: 'ComponentName 中文名', link: 'component-name' },
+      ],
+    },
+  ];
+}
+```
+
+### 3. 示例代码目录（`examples/ComponentName/`）
+
+```
+examples/ComponentName/
+├── Basic.tsx        # 基础用法
+├── Size.tsx         # 不同尺寸
+├── Status.tsx       # 不同状态
+├── Variant.tsx      # 不同变体
+├── Advanced.tsx     # 高级用法
+└── codes.ts         # 示例代码字符串
+```
+
+**codes.ts 示例：**
+```typescript
+export const basicCode = `<ComponentName>
+  内容
+</ComponentName>`;
+
+export const sizeCode = `<Space>
+  <ComponentName size="small">小</ComponentName>
+  <ComponentName size="middle">中</ComponentName>
+  <ComponentName size="large">大</ComponentName>
+</Space>`;
+```
+
+**注意**：`codes.ts` 中的代码字符串用于 `react-live` 实时演示，**不支持变量声明**，必须直接内联值。
 
 ## 🚀 构建和发布
 
@@ -382,6 +567,11 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
@@ -418,8 +608,102 @@ export default defineConfig({
     }
   },
   "files": ["dist", "src"],
-  "sideEffects": ["dist/*", "*.less"]
+  "sideEffects": ["dist/*", "*.less"],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx",
+    "preview": "vite preview"
+  }
 }
+```
+
+### 3. 演示页面配置（`src/demo.tsx`）
+
+```tsx
+import React from 'react';
+import DemoContainer from '../examples/DemoContainer';
+import * as buttonCodes from '../examples/Button/codes';
+import * as inputCodes from '../examples/Input/codes';
+
+const App: React.FC = () => {
+  return (
+    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <h1 style={{ marginBottom: '32px' }}>SoUi 组件库演示</h1>
+
+      {/* Button 组件演示 */}
+      <section style={{ marginBottom: '48px' }}>
+        <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+          Button 按钮
+        </h2>
+        <DemoContainer
+          title="基础用法"
+          description="按钮的基础用法。"
+          code={buttonCodes.basicCode}
+        />
+      </section>
+
+      {/* Input 组件演示 */}
+      <section style={{ marginBottom: '48px' }}>
+        <h2 style={{ marginBottom: '24px', paddingBottom: '12px', borderBottom: '2px solid #1677ff' }}>
+          Input 输入框
+        </h2>
+        <DemoContainer
+          title="基础用法"
+          description="输入框的基础用法。"
+          code={inputCodes.basicCode}
+        />
+      </section>
+    </div>
+  );
+};
+
+export default App;
+```
+
+### 4. DemoContainer 配置（`examples/DemoContainer/index.tsx`）
+
+```tsx
+import React from 'react';
+import { LiveProvider, LiveEditor, LivePreview } from 'react-live';
+import Button from '../../src/components/Button';
+import Input from '../../src/components/Input';
+import Space from '../../src/components/Space';
+
+const defaultScope = {
+  React,
+  useState: React.useState,
+  Button,
+  Input,
+  Space,
+};
+
+interface DemoContainerProps {
+  title: string;
+  description?: string;
+  code: string;
+}
+
+const DemoContainer: React.FC<DemoContainerProps> = ({ title, description, code }) => {
+  return (
+    <div style={{ marginBottom: '32px' }}>
+      <h3 style={{ marginBottom: '8px', fontSize: '16px', fontWeight: 600 }}>
+        {title}
+      </h3>
+      {description && (
+        <p style={{ marginBottom: '16px', color: 'rgba(0, 0, 0, 0.65)' }}>
+          {description}
+        </p>
+      )}
+      <LiveProvider code={code} scope={defaultScope}>
+        <LivePreview style={{ padding: '16px', backgroundColor: '#f5f5f5', borderRadius: '8px', marginBottom: '12px' }} />
+        <LiveEditor style={{ fontSize: '14px', borderRadius: '8px' }} />
+      </LiveProvider>
+    </div>
+  );
+};
+
+export default DemoContainer;
 ```
 
 ## 🎯 性能优化
