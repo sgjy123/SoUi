@@ -197,6 +197,7 @@ function sidebarComponents() {
       items: [
         { text: 'Grid 栅格', link: 'grid' },
         { text: 'Space 间距', link: 'space' },
+        { text: 'Divider 分割线', link: 'divider' },
       ],
     },
     {

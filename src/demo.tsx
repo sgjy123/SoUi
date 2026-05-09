@@ -11,6 +11,7 @@ import * as iconCodes from "../examples/Icon/codes";
 import * as spaceCodes from "../examples/Space/codes";
 import * as typographyCodes from "../examples/Typography/codes";
 import * as tooltipCodes from "../examples/Tooltip/codes";
+import * as dividerCodes from "../examples/Divider/codes";
 
 // 主题切换演示
 const App: React.FC = () => {
@@ -329,6 +330,43 @@ const App: React.FC = () => {
               title="禁用状态"
               description="Tooltip 在禁用状态下不会触发显示，禁用按钮需要外层包裹。"
               code={tooltipCodes.disabledCode}
+            />
+          </section>
+
+          {/* Divider 组件演示 */}
+          <section style={{ marginBottom: "48px" }}>
+            <h2
+              style={{
+                marginBottom: "24px",
+                paddingBottom: "12px",
+                borderBottom: "2px solid #1677ff",
+              }}
+            >
+              Divider 分割线组件
+            </h2>
+
+            <DemoContainer
+              title="基础用法"
+              description="水平分割线和虚线样式。"
+              code={dividerCodes.basicCode}
+            />
+
+            <DemoContainer
+              title="带文字的分割线"
+              description="可以在分割线中嵌入文字，支持居中、左对齐、右对齐。"
+              code={dividerCodes.withTextCode}
+            />
+
+            <DemoContainer
+              title="垂直分割线"
+              description="用于分隔行内元素，如导航菜单。"
+              code={dividerCodes.verticalCode}
+            />
+
+            <DemoContainer
+              title="自定义颜色"
+              description="通过 color 属性自定义分割线的颜色。"
+              code={dividerCodes.customColorCode}
             />
           </section>
         </div>

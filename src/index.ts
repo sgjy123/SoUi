@@ -36,6 +36,10 @@ export type {
 export { default as Tooltip } from './components/Tooltip';
 export type { TooltipProps, TooltipPlacement, TooltipTrigger } from './components/Tooltip';
 
+// Divider Component
+export { default as Divider } from './components/Divider';
+export type { DividerProps, DividerType, DividerOrientation } from './components/Divider';
+
 // Utils
 export * from './utils';
 

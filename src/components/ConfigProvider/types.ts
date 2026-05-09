@@ -181,6 +181,13 @@ export interface ComponentThemeConfig {
     /** 动画缓动函数 */
     animationTimingFunction?: string;
   };
+  /** Divider 分割线组件配置 */
+  Divider?: {
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 
@@ -214,6 +221,8 @@ export interface ThemeConfig {
   paddingMD?: number;
   /** 大间距（像素） */
   paddingLG?: number;
+  /** 边框颜色 */
+  borderColorBase?: string;
   
   // Typography 全局配置
   /** 小字号（像素） */
@@ -328,6 +337,7 @@ export const defaultTheme: ThemeConfig = {
   paddingSM: 8,
   paddingMD: 16,
   paddingLG: 24,
+  borderColorBase: '#d9d9d9',
   
   // Typography 全局默认值
   fontSizeSM: 12,
