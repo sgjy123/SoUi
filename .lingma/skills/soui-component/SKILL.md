@@ -129,9 +129,67 @@ SoUi/
   - 查看 `:root` 中定义的 CSS 变量
   - 了解全局样式的设置方式
 
-#### 2. 查看设计变量
+#### 2. 查看设计变量和设计令牌系统
 
-阅读 **`src/styles/variables.less`** 了解所有可用的 Less 变量：
+SoUi 采用**三层设计令牌系统**，这是理解主题变量的关键：
+
+##### **第1层: 设计令牌 (Design Tokens) - 真正的全局变量**
+
+这些是不带组件前缀的全局变量，可被多个组件复用：
+
+```less
+/* 在 :root 中定义 */
+--soui-color-bg-default: rgba(0, 0, 0, 0.88);      // 默认深色背景
+--soui-color-text-inverse: #fff;                    // 反色文本(白色)
+--soui-font-size-sm: 12px;                          // 小字号
+--soui-line-height-sm: 1.6667;                      // 小行高
+--soui-border-radius: 6px;                          // 基础圆角
+--soui-box-shadow-secondary: 0 3px 6px ...;        // 次级阴影
+--soui-z-index-popover: 1030;                       // 浮层层级
+--soui-transition-duration: 0.2s;                   // 动画时长
+```
+
+**特点:**
+- ✅ 不带组件前缀，是真正的全局变量
+- ✅ 可以被 Button、Card、Tooltip 等多个组件复用
+- ✅ 修改一个变量，所有使用该令牌的组件都会更新
+- ✅ 符合 DRY 原则，避免重复定义
+
+##### **第2层: 组件配置点 (Component Configuration Points)**
+
+这些是引用设计令牌的配置接口，允许通过 ConfigProvider 统一修改组件：
+
+```less
+/* 在 :root 中定义，引用第1层 */
+--soui-tooltip-bg-color: var(--soui-color-bg-default);
+--soui-tooltip-text-color: var(--soui-color-text-inverse);
+--soui-tooltip-font-size: var(--soui-font-size-sm);
+--soui-tooltip-max-width: 250px;              // Tooltip专属
+--soui-tooltip-arrow-size: 8px;               // Tooltip专属
+```
+
+**特点:**
+- ✅ 大部分属性引用全局令牌，保持统一
+- ✅ 少数专属属性（如 maxWidth、arrowSize）独立定义
+- ✅ 用户可以通过 `theme.tooltipBgColor` 统一修改
+- ✅ 作为 ConfigProvider 的配置接口
+
+##### **第3层: 组件级覆盖 (Component-Level Override)**
+
+通过 `components.Tooltip` 自定义特定配置，优先级最高：
+
+```less
+/* 在 ConfigProvider 中生成 */
+--soui-tooltip-color-bg-default: #333;       // 用户自定义
+--soui-tooltip-font-size-component: 14px;    // 用户自定义
+```
+
+**优先级规则:**
+```
+Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
+```
+
+阅读 **`src/styles/variables.less`** 了解所有可用的 Less 变量（作为最终回退）：
 
 ```less
 // 颜色变量
@@ -184,9 +242,34 @@ SoUi/
    ```
 
 2. **CSS 变量命名规范**
-   - 全局变量：`--soui-{variable-name}`（如 `--soui-primary-color`）
-   - 组件变量：`--soui-{component}-{variable}`（如 `--soui-button-color-primary`）
-   - 尺寸变量：根据尺寸添加后缀（如 `--soui-button-control-height-large`）
+
+   SoUi 采用分层命名策略：
+   
+   **第1层 - 设计令牌（不带组件前缀）:**
+   ```less
+   --soui-color-bg-default      // 全局背景色
+   --soui-font-size-sm          // 全局小字号
+   --soui-border-radius         // 全局圆角
+   --soui-box-shadow-secondary  // 全局阴影
+   ```
+   
+   **第2层 - 组件配置点（带组件前缀）:**
+   ```less
+   --soui-tooltip-bg-color      // Tooltip背景色配置点
+   --soui-tooltip-max-width     // Tooltip最大宽度
+   --soui-button-color-primary  // Button主色配置点
+   ```
+   
+   **第3层 - 组件级覆盖（带-component后缀）:**
+   ```less
+   --soui-tooltip-color-bg-default-component  // Tooltip背景色覆盖
+   --soui-tooltip-font-size-component         // Tooltip字号覆盖
+   ```
+   
+   **命名原则:**
+   - ✅ 能通用的变量 → 不带组件前缀，作为设计令牌
+   - ✅ 不能通用的变量 → 带组件前缀，作为组件配置点
+   - ✅ 组件级覆盖 → 添加 `-component` 后缀
 
 3. **样式优先级规则**
    - 组件级配置 > 全局主题配置 > CSS 默认值 > Less 默认值
@@ -220,7 +303,7 @@ SoUi/
 - [ ] 导出完整的 Props 类型
 - [ ] 为枚举类型添加 JSDoc 注释
 
-**示例：主题集成的完整流程**
+**示例：主题集成的完整流程（分层设计）**
 
 ```tsx
 // 1. 在组件中获取主题配置
@@ -231,30 +314,45 @@ const globalTheme = useTheme();
 const borderRadiusValue = componentTheme?.borderRadius || globalTheme?.borderRadius;
 const fontSizeValue = componentTheme?.fontSize || globalTheme?.fontSize;
 
-// 3. 应用到样式
+// 3. 应用到样式 - 生成第1层和第2层CSS变量
 const componentStyle: React.CSSProperties = {
-  ...(componentTheme?.colorPrimary ? {
-    '--soui-component-color-primary': componentTheme.colorPrimary,
-  } : globalTheme?.primaryColor ? {
-    '--soui-component-color-primary': globalTheme.primaryColor,
-  } : {}),
-  ...(borderRadiusValue && {
-    '--soui-component-border-radius': `${borderRadiusValue}px`,
-  }),
-  ...(fontSizeValue && {
-    '--soui-component-font-size': `${fontSizeValue}px`,
-  }),
+  // === 第1层: 设计令牌 (如果该组件需要定义新的全局令牌) ===
+  '--soui-color-bg-default': globalTheme?.tooltipBgColor,
+  '--soui-font-size-sm': `${globalTheme?.tooltipFontSize}px`,
+  
+  // === 第2层: 组件配置点 (引用设计令牌或自定义) ===
+  '--soui-component-bg-color': componentTheme?.colorBgDefault || globalTheme?.tooltipBgColor,
+  '--soui-component-font-size': componentTheme?.fontSize ? `${componentTheme.fontSize}px` : undefined,
+  '--soui-component-border-radius': borderRadiusValue ? `${borderRadiusValue}px` : undefined,
+  
+  // === 第3层: 组件级覆盖 (优先级最高) ===
+  '--soui-component-bg-color-component': componentTheme?.colorBgDefault,
+  '--soui-component-font-size-component': componentTheme?.fontSize ? `${componentTheme.fontSize}px` : undefined,
 } as any;
 
-// 4. 在 style.less 中使用 CSS 变量
+// 4. 在 style.less 中使用 CSS 变量（三层回退）
 .soui-component {
-  --soui-component-color-primary: var(--soui-primary-color, @primary-color);
-  --soui-component-border-radius: @border-radius-base;
+  // 第1层: 引用全局设计令牌
+  --soui-color-bg-default: var(--soui-color-bg-default, @bg-color-base);
+  --soui-font-size-sm: var(--soui-font-size-sm, @font-size-sm);
   
-  border-radius: var(--soui-component-border-radius);
-  color: var(--soui-component-color-primary);
+  // 第2层: 组件配置点（引用设计令牌）
+  --soui-component-bg-color: var(--soui-color-bg-default);
+  --soui-component-font-size: var(--soui-font-size-sm);
+  --soui-component-border-radius: var(--soui-border-radius, @border-radius-base);
+  
+  // 实际样式使用（三层回退：组件级 > 全局 > Less）
+  background: var(--soui-component-bg-color-component, var(--soui-component-bg-color));
+  font-size: var(--soui-component-font-size-component, var(--soui-component-font-size));
+  border-radius: var(--soui-component-border-radius-component, var(--soui-component-border-radius));
 }
 ```
+
+**关键要点:**
+- ✅ **第1层**: 定义真正的全局变量，不带组件前缀
+- ✅ **第2层**: 组件配置点引用第1层，大部分属性复用设计令牌
+- ✅ **第3层**: 组件级覆盖添加 `-component` 后缀
+- ✅ **样式文件**: 使用 `var()` 实现三层回退机制
 
 ### 步骤 1: 创建组件文件
 
@@ -724,6 +822,32 @@ cd SoUi && npm run build
 
 **注意**：即使参考了其他框架的设计，也必须使用 SoUi 的设计变量，保持项目一致性。
 
+### 三层设计令牌系统
+
+SoUi 采用分层设计，新组件开发时应遵循以下原则：
+
+1. **第1层 - 设计令牌**: 如果组件需要新的全局变量（如颜色、字号），在 `global.less` 的 `:root` 中添加不带组件前缀的变量
+2. **第2层 - 组件配置点**: 在 `global.less` 和 `ConfigProvider/style.less` 中添加带组件前缀的配置点，引用第1层的设计令牌
+3. **第3层 - 组件级覆盖**: 在 `ConfigProvider/index.tsx` 中生成带 `-component` 后缀的覆盖变量
+
+**示例:**
+```less
+/* global.less - 第1层和第2层 */
+:root {
+  /* 第1层: 设计令牌 */
+  --soui-color-bg-default: rgba(0, 0, 0, 0.88);
+  
+  /* 第2层: 组件配置点 */
+  --soui-tooltip-bg-color: var(--soui-color-bg-default);
+}
+
+/* ConfigProvider/style.less - 回退值 */
+.soui-config-provider {
+  --soui-color-bg-default: rgba(0, 0, 0, 0.88);
+  --soui-tooltip-bg-color: var(--soui-color-bg-default);
+}
+```
+
 ### 颜色
 ```less
 @primary-color: #1677ff;
@@ -813,8 +937,11 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 
 ### 样式设计
 1. **即使参考了其他框架，也必须使用 SoUi 的设计变量**
-2. 使用设计变量，避免硬编码
-3. 支持主题定制（CSS 变量）
+2. **遵循三层设计令牌系统**（重要！）
+   - 能通用的变量 → 定义为第1层设计令牌（不带组件前缀）
+   - 组件专属变量 → 定义为第2层配置点（带组件前缀）
+   - 用户可覆盖的变量 → 生成第3层覆盖变量（带 `-component` 后缀）
+3. 使用 CSS 变量支持主题定制
 4. 考虑响应式适配
 5. 添加过渡动画提升体验
 
@@ -839,9 +966,12 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   - [ ] 支持圆角配置（borderRadius）
   - [ ] 支持字体大小配置（fontSize）
   - [ ] 支持主色配置（colorPrimary / primaryColor）
-  - [ ] 使用 CSS 变量而非硬编码颜色值
+  - [ ] **使用三层设计令牌系统**（重要！）
+    - [ ] 第1层：定义全局设计令牌（不带组件前缀）
+    - [ ] 第2层：组件配置点引用设计令牌
+    - [ ] 第3层：组件级覆盖添加 `-component` 后缀
   - [ ] 正确处理配置优先级（组件级 > 全局 > CSS 默认 > Less 默认）
-  - [ ] 在 style.less 中使用 `var()` 函数引用 CSS 变量
+  - [ ] 在 style.less 中使用 `var()` 实现三层回退
   - [ ] 在 `ConfigProvider/types.ts` 中添加了组件级配置类型
 - [ ] 如果用户选择参考框架，已研究该框架的 API 设计
 - [ ] 如果参考了框架，已在文档中添加“参考来源”章节

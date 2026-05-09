@@ -1,6 +1,118 @@
 # soui-component Skill 更新总结
 
-## 更新时间
+## 最新更新
+**更新时间**: 2026-05-08  
+**更新内容**: 添加三层设计令牌系统规范
+
+### 更新原因
+根据 Tooltip 组件主题化改造的经验，发现需要明确 CSS 变量的分层设计原则，避免变量命名混乱和重复定义。
+
+### 主要更新内容
+
+#### 1. SKILL.md 更新 - 三层设计令牌系统
+
+##### **新增：步骤 0.5 中的设计令牌系统详解**
+
+在“查看设计变量”部分，新增了完整的三层设计令牌系统说明：
+
+**第1层 - 设计令牌 (Design Tokens)**
+- 真正的全局变量，不带组件前缀
+- 可被多个组件复用
+- 示例：`--soui-color-bg-default`, `--soui-font-size-sm`
+
+**第2层 - 组件配置点 (Component Configuration Points)**
+- 引用设计令牌的配置接口
+- 带组件前缀，允许通过 ConfigProvider 统一修改
+- 示例：`--soui-tooltip-bg-color: var(--soui-color-bg-default)`
+
+**第3层 - 组件级覆盖 (Component-Level Override)**
+- 通过 `components.Tooltip` 自定义
+- 添加 `-component` 后缀，优先级最高
+- 示例：`--soui-tooltip-font-size-component`
+
+##### **更新：CSS 变量命名规范**
+
+从简单的命名规则升级为分层命名策略：
+
+```less
+/* 第1层 - 设计令牌（不带组件前缀） */
+--soui-color-bg-default
+--soui-font-size-sm
+
+/* 第2层 - 组件配置点（带组件前缀） */
+--soui-tooltip-bg-color
+--soui-button-color-primary
+
+/* 第3层 - 组件级覆盖（带-component后缀） */
+--soui-tooltip-color-bg-default-component
+```
+
+**命名原则:**
+- ✅ 能通用的变量 → 不带组件前缀，作为设计令牌
+- ✅ 不能通用的变量 → 带组件前缀，作为组件配置点
+- ✅ 组件级覆盖 → 添加 `-component` 后缀
+
+##### **更新：主题集成完整流程示例**
+
+提供了基于三层设计的完整代码示例：
+
+```tsx
+// ConfigProvider/index.tsx - 生成三层CSS变量
+const componentStyle = {
+  // 第1层: 设计令牌
+  '--soui-color-bg-default': globalTheme?.tooltipBgColor,
+  
+  // 第2层: 组件配置点
+  '--soui-component-bg-color': componentTheme?.colorBgDefault || globalTheme?.tooltipBgColor,
+  
+  // 第3层: 组件级覆盖
+  '--soui-component-bg-color-component': componentTheme?.colorBgDefault,
+};
+```
+
+```less
+// style.less - 三层回退机制
+.soui-component {
+  // 第1层: 引用全局设计令牌
+  --soui-color-bg-default: var(--soui-color-bg-default, @bg-color-base);
+  
+  // 第2层: 组件配置点（引用设计令牌）
+  --soui-component-bg-color: var(--soui-color-bg-default);
+  
+  // 实际样式使用（三层回退）
+  background: var(--soui-component-bg-color-component, var(--soui-component-bg-color));
+}
+```
+
+##### **新增：设计变量参考章节**
+
+在文档末尾添加了“三层设计令牌系统”说明，指导新组件开发时如何正确应用分层设计。
+
+##### **更新：检查清单**
+
+在主题集成检查项中，新增了三层设计令牌系统的验证：
+
+```markdown
+- [ ] **使用三层设计令牌系统**（重要！）
+  - [ ] 第1层：定义全局设计令牌（不带组件前缀）
+  - [ ] 第2层：组件配置点引用设计令牌
+  - [ ] 第3层：组件级覆盖添加 `-component` 后缀
+```
+
+##### **更新：样式设计最佳实践**
+
+强调遵循三层设计令牌系统的重要性：
+
+```markdown
+2. **遵循三层设计令牌系统**（重要！）
+   - 能通用的变量 → 定义为第1层设计令牌（不带组件前缀）
+   - 组件专属变量 → 定义为第2层配置点（带组件前缀）
+   - 用户可覆盖的变量 → 生成第3层覆盖变量（带 `-component` 后缀）
+```
+
+---
+
+## 之前更新
 2026-05-07
 
 ## 更新原因
