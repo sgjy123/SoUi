@@ -59,6 +59,30 @@ interface ThemeConfig {
   borderRadius?: number;           // 圆角（像素）
   fontSize?: number;               // 字体大小（像素）
   lineHeight?: number;             // 行高
+  paddingSM?: number;              // 小间距（像素）
+  paddingMD?: number;              // 中间距（像素）
+  paddingLG?: number;              // 大间距（像素）
+  
+  // Typography 全局配置
+  fontSizeSM?: number;             // 小字号（像素）
+  fontSizeLG?: number;             // 大字号（像素）
+  fontSizeXL?: number;             // 超大字号（像素）
+  headingLevel1FontSize?: number;  // H1 标题字号（像素）
+  headingLevel2FontSize?: number;  // H2 标题字号（像素）
+  headingLevel3FontSize?: number;  // H3 标题字号（像素）
+  headingLevel4FontSize?: number;  // H4 标题字号（像素）
+  headingLevel5FontSize?: number;  // H5 标题字号（像素）
+  headingLevel1FontSizeMD?: number;  // H1 标题字号-中等屏幕（像素）
+  headingLevel2FontSizeMD?: number;  // H2 标题字号-中等屏幕（像素）
+  headingLevel3FontSizeMD?: number;  // H3 标题字号-中等屏幕（像素）
+  headingLevel1LineHeight?: number;  // H1 标题行高
+  headingLevel2LineHeight?: number;  // H2 标题行高
+  headingLevel3LineHeight?: number;  // H3 标题行高
+  headingLevel4LineHeight?: number;  // H4 标题行高
+  headingLevel5LineHeight?: number;  // H5 标题行高
+  markBackgroundColor?: string;    // 标记背景色
+  codeBackgroundColor?: string;    // 代码块背景色
+  codeBorderColor?: string;        // 代码块边框色
   
   // 组件级配置
   components?: {
@@ -84,6 +108,61 @@ interface ThemeConfig {
       colorDefault?: string;       // 默认颜色
       hoverOpacity?: number;       // 悬停透明度（0-1）
       activeOpacity?: number;      // 激活透明度（0-1）
+    };
+    Typography?: {
+      // 颜色配置
+      colorText?: string;          // 主要文本颜色
+      colorTextSecondary?: string; // 次要文本颜色
+      colorTextDisabled?: string;  // 禁用文本颜色
+      colorLink?: string;          // 链接颜色
+      colorLinkHover?: string;     // 链接悬停颜色
+      colorLinkActive?: string;    // 链接激活颜色
+      
+      // 状态颜色
+      colorSuccess?: string;       // Success 状态颜色
+      colorWarning?: string;       // Warning 状态颜色
+      colorDanger?: string;        // Danger 状态颜色
+      
+      // 字号配置
+      fontSize?: number;           // 基础字号
+      fontSizeSM?: number;         // 小字号
+      fontSizeLG?: number;         // 大字号
+      fontSizeXL?: number;         // 超大字号
+      heading1FontSize?: number;   // H1 字号
+      heading2FontSize?: number;   // H2 字号
+      heading3FontSize?: number;   // H3 字号
+      heading4FontSize?: number;   // H4 字号
+      heading5FontSize?: number;   // H5 字号
+      
+      // 行高配置
+      lineHeight?: number;         // 基础行高
+      heading1LineHeight?: number; // H1 行高
+      heading2LineHeight?: number; // H2 行高
+      heading3LineHeight?: number; // H3 行高
+      heading4LineHeight?: number; // H4 行高
+      heading5LineHeight?: number; // H5 行高
+      
+      // 字重配置
+      headingFontWeight?: number;  // 标题字重
+      strongFontWeight?: number;   // 加粗字重
+      
+      // 特殊样式
+      markBackgroundColor?: string;    // 标记背景色
+      codeBackgroundColor?: string;    // 代码块背景色
+      codeBorderColor?: string;        // 代码块边框色
+      codeBorderRadius?: number;       // 代码块圆角
+      
+      // 操作按钮
+      operationGap?: number;           // 操作按钮间距
+      operationHoverBgOpacity?: number;// 操作按钮悬停背景透明度
+      
+      // 编辑框
+      editableBorderColor?: string;    // 编辑框边框颜色
+      editableFocusShadowOpacity?: number; // 编辑框聚焦阴影透明度
+      
+      // 展开/收起
+      expandColor?: string;        // 展开按钮颜色
+      expandHoverColor?: string;   // 展开按钮悬停颜色
     };
     // ... 其他组件
   };
@@ -221,7 +300,7 @@ export default function ThemeSwitcher() {
 针对特定组件进行样式定制：
 
 ```tsx
-import { ConfigProvider, Button } from '@soui/ui';
+import { ConfigProvider, Button, Space } from '@soui/ui';
 
 function App() {
   return (
@@ -230,6 +309,9 @@ function App() {
         primaryColor: '#722ed1',
         primaryHoverColor: '#9254de',
         primaryActiveColor: '#531dab',
+        paddingSM: 8,     // 小间距
+        paddingMD: 16,    // 中间距
+        paddingLG: 24,    // 大间距
         components: {
           Button: {
             colorPrimary: '#722ed1',           // 按钮主色（覆盖全局）
@@ -246,7 +328,10 @@ function App() {
         },
       }}
     >
-      <Button type="primary">紫色按钮</Button>
+      <Space size="middle">
+        <Button type="primary">紫色按钮</Button>
+        <Button>默认按钮</Button>
+      </Space>
     </ConfigProvider>
   );
 }
@@ -320,6 +405,36 @@ ConfigProvider 会自动生成 CSS 变量，您可以在任何地方使用：
   --soui-border-radius: 6px;
   --soui-font-size: 14px;
   --soui-line-height: 1.5715;
+  
+  /* Space 间距变量 */
+  --soui-size-small: 8px;
+  --soui-size-middle: 16px;
+  --soui-size-large: 24px;
+  
+  /* Typography 排版变量 */
+  --soui-typography-font-size-sm: 12px;
+  --soui-typography-font-size-base: 14px;
+  --soui-typography-font-size-lg: 16px;
+  --soui-typography-font-size-xl: 20px;
+  --soui-typography-heading-1-font-size: 50px;
+  --soui-typography-heading-2-font-size: 40px;
+  --soui-typography-heading-3-font-size: 30px;
+  --soui-typography-heading-4-font-size: 25px;
+  --soui-typography-heading-5-font-size: 20px;
+  --soui-typography-heading-1-font-size-md: 40px;
+  --soui-typography-heading-2-font-size-md: 35px;
+  --soui-typography-heading-3-font-size-md: 25px;
+  --soui-typography-heading-1-line-height: 1.23;
+  --soui-typography-heading-2-line-height: 1.25;
+  --soui-typography-heading-3-line-height: 1.3;
+  --soui-typography-heading-4-line-height: 1.35;
+  --soui-typography-heading-5-line-height: 1.4;
+  --soui-typography-color-text: rgba(0, 0, 0, 0.88);
+  --soui-typography-color-text-secondary: rgba(0, 0, 0, 0.65);
+  --soui-typography-color-link: #1677ff;
+  --soui-typography-mark-bg-color: #ffe58f;
+  --soui-typography-code-bg-color: rgba(0, 0, 0, 0.04);
+  --soui-typography-code-border-color: rgba(0, 0, 0, 0.06);
   
   /* Icon 变量 */
   --soui-icon-size: 24px;

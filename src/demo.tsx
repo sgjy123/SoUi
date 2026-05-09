@@ -26,6 +26,9 @@ const App: React.FC = () => {
         errorColor: "#f5222d",
         borderRadius: 10,  // 全局圆角配置（影响所有组件）
         fontSize: 18,  // 全局字体大小配置（影响所有组件）
+        paddingSM: 8,  // 小间距
+        paddingMD: 16,  // 中间距
+        paddingLG: 24,  // 大间距
         components: {
           Button: {
             colorPrimary: "#2ed193",

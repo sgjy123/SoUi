@@ -251,12 +251,12 @@ export default () => (
 
 ### 尺寸说明
 
-| 尺寸 | 数值 |
-|------|------|
-| small | 8px |
-| middle | 16px |
-| large | 24px |
-| number | 自定义像素值 |
+| 尺寸 | 默认值 | 说明 |
+|------|--------|------|
+| small | 8px | 对应 `theme.paddingSM`，可通过 ConfigProvider 配置 |
+| middle | 16px | 对应 `theme.paddingMD`，可通过 ConfigProvider 配置 |
+| large | 24px | 对应 `theme.paddingLG`，可通过 ConfigProvider 配置 |
+| number | - | 自定义像素值，优先级最高 |
 
 ## 设计原则
 
@@ -321,6 +321,86 @@ export default () => (
     <Button>按钮</Button>
   </Space>
 </div>
+```
+
+## 主题定制
+
+Space 组件的间距可以通过 ConfigProvider 进行全局或组件级配置。
+
+### 全局主题配置
+
+通过 ConfigProvider 的 `theme` 属性设置全局间距：
+
+```tsx
+import { ConfigProvider, Space, Button } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      paddingSM: 8,   // 小间距
+      paddingMD: 16,  // 中间距
+      paddingLG: 24,  // 大间距
+    }}
+  >
+    <Space size="small">
+      <Button>小间距 (8px)</Button>
+      <Button>小间距 (8px)</Button>
+    </Space>
+    
+    <Space size="middle">
+      <Button>中间距 (16px)</Button>
+      <Button>中间距 (16px)</Button>
+    </Space>
+    
+    <Space size="large">
+      <Button>大间距 (24px)</Button>
+      <Button>大间距 (24px)</Button>
+    </Space>
+  </ConfigProvider>
+);
+```
+
+### 配置项说明
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| paddingSM | 小间距（对应 size="small"） | `number` | `8` |
+| paddingMD | 中间距（对应 size="middle"） | `number` | `16` |
+| paddingLG | 大间距（对应 size="large"） | `number` | `24` |
+
+### 使用示例
+
+```tsx
+// 自定义间距
+<ConfigProvider
+  theme={{
+    paddingSM: 4,
+    paddingMD: 12,
+    paddingLG: 20,
+  }}
+>
+  <App />
+</ConfigProvider>
+```
+
+### 优先级说明
+
+Space 组件的间距遵循以下优先级规则：
+
+1. **Props 直接指定**：通过 `size` 属性传入数字时，直接使用指定的像素值
+2. **CSS 变量**：通过 ConfigProvider 配置的 CSS 变量
+3. **Less 变量**：作为回退值的 Less 变量（当 CSS 变量未定义时使用）
+
+```tsx
+// 最高优先级：直接指定数值
+<Space size={32}>  {/* 始终为 32px */}
+  <Button>按钮</Button>
+</Space>
+
+// 中等优先级：使用主题配置
+<Space size="middle">  {/* 使用 paddingMD 的值 */}
+  <Button>按钮</Button>
+</Space>
 ```
 
 ## 最佳实践

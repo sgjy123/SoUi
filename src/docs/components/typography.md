@@ -466,6 +466,261 @@ Typography 组件遵循 WAI-ARIA 规范：
 </Link>
 ```
 
+## 主题定制
+
+Typography 组件的样式可以通过 ConfigProvider 进行全局或组件级配置。
+
+### 全局主题配置
+
+通过 ConfigProvider 的 `theme` 属性设置全局排版样式：
+
+```tsx
+import { ConfigProvider, Typography } from '@soui/ui';
+
+const { Title, Paragraph, Text } = Typography;
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      // 字号配置
+      fontSize: 14,
+      fontSizeSM: 12,
+      fontSizeLG: 16,
+      fontSizeXL: 20,
+      
+      // 标题字号配置
+      headingLevel1FontSize: 50,
+      headingLevel2FontSize: 40,
+      headingLevel3FontSize: 30,
+      headingLevel4FontSize: 25,
+      headingLevel5FontSize: 20,
+      
+      // 响应式字号（中等屏幕）
+      headingLevel1FontSizeMD: 40,
+      headingLevel2FontSizeMD: 35,
+      headingLevel3FontSizeMD: 25,
+      
+      // 特殊样式颜色
+      markBackgroundColor: '#ffe58f',
+      codeBackgroundColor: 'rgba(0, 0, 0, 0.04)',
+      codeBorderColor: 'rgba(0, 0, 0, 0.06)',
+    }}
+  >
+    <Title level={1}>自定义字号的标题</Title>
+    <Paragraph>自定义样式的段落文本。</Paragraph>
+    <Text mark>高亮文本</Text>
+    <Text code>代码文本</Text>
+  </ConfigProvider>
+);
+```
+
+### 组件级配置
+
+通过 `components.Typography` 对 Typography 组件进行精细控制：
+
+```tsx
+import { ConfigProvider, Typography } from '@soui/ui';
+
+const { Title, Text, Link } = Typography;
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      components: {
+        Typography: {
+          // 颜色配置
+          colorText: '#333',
+          colorTextSecondary: '#666',
+          colorLink: '#1890ff',
+          colorLinkHover: '#40a9ff',
+          
+          // 状态颜色
+          colorSuccess: '#52c41a',
+          colorWarning: '#faad14',
+          colorDanger: '#ff4d4f',
+          
+          // 字号配置
+          fontSize: 14,
+          heading1FontSize: 48,
+          heading2FontSize: 38,
+          
+          // 行高配置
+          lineHeight: 1.6,
+          heading1LineHeight: 1.2,
+          
+          // 字重配置
+          headingFontWeight: 700,
+          strongFontWeight: 600,
+          
+          // 特殊样式
+          markBackgroundColor: '#fff3cd',
+          codeBorderRadius: 4,
+          
+          // 操作按钮配置
+          operationGap: 8,
+          operationHoverBgOpacity: 0.08,
+          
+          // 编辑框配置
+          editableBorderColor: '#1890ff',
+          editableFocusShadowOpacity: 0.25,
+          
+          // 展开按钮配置
+          expandColor: '#1890ff',
+          expandHoverColor: '#40a9ff',
+        },
+      },
+    }}
+  >
+    <Title level={1}>自定义样式的标题</Title>
+    <Text type="success">成功状态文本</Text>
+    <Link href="#">自定义链接</Link>
+  </ConfigProvider>
+);
+```
+
+### 配置项说明
+
+#### 全局配置（ThemeConfig）
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| fontSize | 基础字号 | `number` | `14` |
+| fontSizeSM | 小字号 | `number` | `12` |
+| fontSizeLG | 大字号 | `number` | `16` |
+| fontSizeXL | 超大字号 | `number` | `20` |
+| headingLevel1FontSize | H1 标题字号 | `number` | `50` |
+| headingLevel2FontSize | H2 标题字号 | `number` | `40` |
+| headingLevel3FontSize | H3 标题字号 | `number` | `30` |
+| headingLevel4FontSize | H4 标题字号 | `number` | `25` |
+| headingLevel5FontSize | H5 标题字号 | `number` | `20` |
+| headingLevel1FontSizeMD | H1 标题字号-中等屏幕 | `number` | `40` |
+| headingLevel2FontSizeMD | H2 标题字号-中等屏幕 | `number` | `35` |
+| headingLevel3FontSizeMD | H3 标题字号-中等屏幕 | `number` | `25` |
+| headingLevel1LineHeight | H1 标题行高 | `number` | `1.23` |
+| headingLevel2LineHeight | H2 标题行高 | `number` | `1.25` |
+| headingLevel3LineHeight | H3 标题行高 | `number` | `1.3` |
+| headingLevel4LineHeight | H4 标题行高 | `number` | `1.35` |
+| headingLevel5LineHeight | H5 标题行高 | `number` | `1.4` |
+| markBackgroundColor | 标记背景色 | `string` | `'#ffe58f'` |
+| codeBackgroundColor | 代码块背景色 | `string` | `'rgba(0, 0, 0, 0.04)'` |
+| codeBorderColor | 代码块边框色 | `string` | `'rgba(0, 0, 0, 0.06)'` |
+
+#### 组件级配置（components.Typography）
+
+**颜色配置**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| colorText | 主要文本颜色 | `string` | `'rgba(0, 0, 0, 0.88)'` |
+| colorTextSecondary | 次要文本颜色 | `string` | `'rgba(0, 0, 0, 0.65)'` |
+| colorTextDisabled | 禁用文本颜色 | `string` | `'rgba(0, 0, 0, 0.25)'` |
+| colorLink | 链接颜色 | `string` | `primaryColor` |
+| colorLinkHover | 链接悬停颜色 | `string` | `primaryHoverColor` |
+| colorLinkActive | 链接激活颜色 | `string` | `primaryActiveColor` |
+
+**状态颜色**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| colorSuccess | Success 状态颜色 | `string` | `successColor` |
+| colorWarning | Warning 状态颜色 | `string` | `warningColor` |
+| colorDanger | Danger 状态颜色 | `string` | `errorColor` |
+
+**字号配置**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| fontSize | 基础字号 | `number` | `14` |
+| fontSizeSM | 小字号 | `number` | `12` |
+| fontSizeLG | 大字号 | `number` | `16` |
+| fontSizeXL | 超大字号 | `number` | `20` |
+| heading1FontSize | H1 字号 | `number` | `50` |
+| heading2FontSize | H2 字号 | `number` | `40` |
+| heading3FontSize | H3 字号 | `number` | `30` |
+| heading4FontSize | H4 字号 | `number` | `25` |
+| heading5FontSize | H5 字号 | `number` | `20` |
+
+**行高配置**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| lineHeight | 基础行高 | `number` | `1.5715` |
+| heading1LineHeight | H1 行高 | `number` | `1.23` |
+| heading2LineHeight | H2 行高 | `number` | `1.25` |
+| heading3LineHeight | H3 行高 | `number` | `1.3` |
+| heading4LineHeight | H4 行高 | `number` | `1.35` |
+| heading5LineHeight | H5 行高 | `number` | `1.4` |
+
+**字重配置**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| headingFontWeight | 标题字重 | `number` | `600` |
+| strongFontWeight | 加粗字重 | `number` | `600` |
+
+**特殊样式配置**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| markBackgroundColor | 标记背景色 | `string` | `'#ffe58f'` |
+| codeBackgroundColor | 代码块背景色 | `string` | `'rgba(0, 0, 0, 0.04)'` |
+| codeBorderColor | 代码块边框色 | `string` | `'rgba(0, 0, 0, 0.06)'` |
+| codeBorderRadius | 代码块圆角 | `number` | `2` |
+
+**操作按钮配置**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| operationGap | 操作按钮间距 | `number` | `4` |
+| operationHoverBgOpacity | 操作按钮悬停背景透明度 | `number` | `0.06` |
+
+**编辑框配置**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| editableBorderColor | 编辑框边框颜色 | `string` | `primaryColor` |
+| editableFocusShadowOpacity | 编辑框聚焦阴影透明度 | `number` | `0.2` |
+
+**展开/收起配置**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| expandColor | 展开按钮颜色 | `string` | `primaryColor` |
+| expandHoverColor | 展开按钮悬停颜色 | `string` | `primaryHoverColor` |
+
+### 优先级说明
+
+Typography 组件的样式遵循以下优先级规则：
+
+1. **Props 直接指定**：通过 style 属性传入的样式优先级最高
+2. **组件级配置**：通过 `theme.components.Typography` 配置
+3. **全局配置**：通过 `theme` 的全局配置（如 fontSize、headingLevel1FontSize 等）
+4. **CSS 变量默认值**：ConfigProvider 生成的 CSS 变量
+5. **Less 变量**：作为回退值的 Less 变量
+
+```tsx
+// 最高优先级：style 直接指定
+<Text style={{ color: 'red' }}>红色文本</Text>
+
+// 中等优先级：组件级配置
+<ConfigProvider theme={{
+  components: {
+    Typography: {
+      colorText: 'blue'
+    }
+  }
+}}>
+  <Text>蓝色文本</Text>
+</ConfigProvider>
+
+// 较低优先级：全局配置
+<ConfigProvider theme={{
+  fontSize: 16
+}}>
+  <Text>16px 字号</Text>
+</ConfigProvider>
+```
+
 ## FAQ
 
 ### 如何实现多行省略？

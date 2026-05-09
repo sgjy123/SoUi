@@ -43,12 +43,13 @@ const Space: React.FC<SpaceProps> = ({
     if (typeof s === 'number') {
       return `${s}px`;
     }
+    // 使用 CSS 变量，保留 Less 变量作为回退值
     const sizeMap: Record<string, string> = {
-      small: '8px',
-      middle: '16px',
-      large: '24px',
+      small: 'var(--soui-size-small)',
+      middle: 'var(--soui-size-middle)',
+      large: 'var(--soui-size-large)',
     };
-    return sizeMap[s] || '16px';
+    return sizeMap[s] || 'var(--soui-size-middle)';
   };
 
   const gap = getSizeValue(size);

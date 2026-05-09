@@ -145,3 +145,51 @@ export function isInViewport(element: HTMLElement, offset = 0): boolean {
     rect.right <= (window.innerWidth || document.documentElement.clientWidth) + offset
   );
 }
+
+/**
+ * Convert hex color to rgba
+ * @param hex - Hex color (e.g., '#1890ff' or '#1890ff')
+ * @param opacity - Opacity value (0-1)
+ * @returns Rgba color string (e.g., 'rgba(24, 144, 255, 0.2)')
+ */
+export function hexToRgba(hex: string, opacity: number): string {
+  // Remove '#' if present
+  hex = hex.replace(/^#/, '');
+  
+  // Handle 3-digit hex
+  if (hex.length === 3) {
+    hex = hex.split('').map(char => char + char).join('');
+  }
+  
+  // Parse hex to RGB
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
+/**
+ * Add opacity to color (supports hex and rgba)
+ * @param color - Color string (hex or rgba)
+ * @param opacity - Opacity value (0-1)
+ * @returns Rgba color string
+ */
+export function addOpacityToColor(color: string, opacity: number): string {
+  // If already rgba, replace the opacity
+  if (color.startsWith('rgba(')) {
+    const rgbaMatch = color.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
+    if (rgbaMatch) {
+      const [, r, g, b] = rgbaMatch;
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+  }
+  
+  // If hex, convert to rgba
+  if (color.startsWith('#')) {
+    return hexToRgba(color, opacity);
+  }
+  
+  // Fallback: return as is
+  return color;
+}

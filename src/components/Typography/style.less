@@ -3,9 +3,9 @@
 // ==================== Base Typography ====================
 
 .soui-typography {
-  color: @text-color;
-  font-size: @font-size-base;
-  line-height: @line-height-base;
+  color: var(--soui-typography-color-text, @text-color);
+  font-size: var(--soui-typography-font-size-base, @font-size-base);
+  line-height: var(--soui-typography-line-height-base, @line-height-base);
   word-wrap: break-word;
   word-break: break-word;
 
@@ -18,12 +18,12 @@
 
   // Remove default heading styles
   &-title {
-    font-weight: 600;
-    color: @text-color;
+    font-weight: var(--soui-typography-heading-font-weight, 600);
+    color: var(--soui-typography-color-text, @text-color);
 
     &-1 {
-      font-size: @font-size-xl * 2.5; // 50px
-      line-height: 1.23;
+      font-size: var(--soui-typography-heading-1-font-size, @heading-1-font-size);
+      line-height: var(--soui-typography-heading-1-line-height, @heading-1-line-height);
 
       // 确保内部的 Text 组件继承标题的字体大小
       .soui-typography-text {
@@ -32,8 +32,8 @@
     }
 
     &-2 {
-      font-size: @font-size-xl * 2; // 40px
-      line-height: 1.25;
+      font-size: var(--soui-typography-heading-2-font-size, @heading-2-font-size);
+      line-height: var(--soui-typography-heading-2-line-height, @heading-2-line-height);
 
       .soui-typography-text {
         font-size: inherit;
@@ -41,8 +41,8 @@
     }
 
     &-3 {
-      font-size: @font-size-xl * 1.5; // 30px
-      line-height: 1.3;
+      font-size: var(--soui-typography-heading-3-font-size, @heading-3-font-size);
+      line-height: var(--soui-typography-heading-3-line-height, @heading-3-line-height);
 
       .soui-typography-text {
         font-size: inherit;
@@ -50,8 +50,8 @@
     }
 
     &-4 {
-      font-size: @font-size-xl * 1.25; // 25px
-      line-height: 1.35;
+      font-size: var(--soui-typography-heading-4-font-size, @heading-4-font-size);
+      line-height: var(--soui-typography-heading-4-line-height, @heading-4-line-height);
 
       .soui-typography-text {
         font-size: inherit;
@@ -59,8 +59,8 @@
     }
 
     &-5 {
-      font-size: @font-size-xl; // 20px
-      line-height: 1.4;
+      font-size: var(--soui-typography-heading-5-font-size, @heading-5-font-size);
+      line-height: var(--soui-typography-heading-5-line-height, @heading-5-line-height);
 
       .soui-typography-text {
         font-size: inherit;
@@ -79,21 +79,21 @@
   }
 
   &-link {
-    color: @primary-color;
+    color: var(--soui-typography-color-link, @primary-color);
     text-decoration: none;
     cursor: pointer;
     .transition-color();
 
     &:hover {
-      color: @primary-hover-color;
+      color: var(--soui-typography-color-link-hover, @primary-hover-color);
     }
 
     &:active {
-      color: @primary-active-color;
+      color: var(--soui-typography-color-link-active, @primary-active-color);
     }
 
     &:focus {
-      outline: 2px solid fade(@primary-color, 20%);
+      outline: 2px solid var(--soui-typography-link-focus-color, rgba(24, 144, 255, 0.2));
       outline-offset: 2px;
     }
 
@@ -105,7 +105,7 @@
     }
 
     &.soui-typography-disabled {
-      color: @text-color-disabled;
+      color: var(--soui-typography-color-text-disabled, @text-color-disabled);
       cursor: not-allowed;
       pointer-events: none;
 
@@ -118,22 +118,22 @@
   // ==================== Text Decorations ====================
 
   &-disabled {
-    color: @text-color-disabled !important;
+    color: var(--soui-typography-color-text-disabled, @text-color-disabled) !important;
     cursor: not-allowed;
   }
 
   &-mark {
-    background-color: #ffe58f;
+    background-color: var(--soui-typography-mark-bg-color, #ffe58f);
     padding: 0 2px;
   }
 
   &-code {
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    background-color: rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    border-radius: @border-radius-sm;
+    background-color: var(--soui-typography-code-bg-color, rgba(0, 0, 0, 0.04));
+    border: 1px solid var(--soui-typography-code-border-color, rgba(0, 0, 0, 0.06));
+    border-radius: var(--soui-typography-code-border-radius, @border-radius-sm);
     padding: 0 4px;
-    font-size: @font-size-sm;
+    font-size: var(--soui-typography-font-size-sm, @font-size-sm);
   }
 
   &-underline {
@@ -156,19 +156,19 @@
   // ==================== Text Types ====================
 
   &-secondary {
-    color: @text-color-secondary;
+    color: var(--soui-typography-color-text-secondary, @text-color-secondary);
   }
 
   &-success {
-    color: @success-color;
+    color: var(--soui-typography-color-success, @success-color);
   }
 
   &-warning {
-    color: @warning-color;
+    color: var(--soui-typography-color-warning, @warning-color);
   }
 
   &-danger {
-    color: @error-color;
+    color: var(--soui-typography-color-danger, @error-color);
   }
 
   // ==================== Ellipsis ====================
@@ -180,20 +180,20 @@
 
   &-expand {
     display: inline-block;
-    color: @primary-color;
+    color: var(--soui-typography-expand-color, @primary-color);
     cursor: pointer;
     margin-left: 4px;
-    font-size: @font-size-base;
+    font-size: var(--soui-typography-font-size-base, @font-size-base);
     white-space: nowrap;
     flex-shrink: 0;
     .transition-color();
 
     &:hover {
-      color: @primary-hover-color;
+      color: var(--soui-typography-expand-hover-color, @primary-hover-color);
     }
 
     &:active {
-      color: @primary-active-color;
+      color: var(--soui-typography-color-link-active, @primary-active-color);
     }
   }
 
@@ -229,28 +229,28 @@
   &-operations {
     display: inline-flex;
     align-items: center;
-    gap: @margin-xs;
-    margin-left: @margin-xs;
+    gap: var(--soui-typography-operation-gap, @margin-xs);
+    margin-left: var(--soui-typography-operation-gap, @margin-xs);
   }
 
   &-operation {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: @text-color-secondary;
+    color: var(--soui-typography-color-text-secondary, @text-color-secondary);
     cursor: pointer;
     padding: 2px;
-    border-radius: @border-radius-sm;
+    border-radius: var(--soui-typography-code-border-radius, @border-radius-sm);
     position: relative;
     .transition-color();
 
     &:hover {
-      color: @primary-color;
-      background-color: fade(@primary-color, 6%);
+      color: var(--soui-typography-color-link, @primary-color);
+      background-color: var(--soui-typography-operation-hover-bg, rgba(24, 144, 255, 0.06));
     }
 
     &:active {
-      color: @primary-active-color;
+      color: var(--soui-typography-color-link-active, @primary-active-color);
     }
 
     &-tooltip {
@@ -284,11 +284,11 @@
   &-editable {
     display: inline-flex;
     align-items: center;
-    gap: @margin-xs;
+    gap: var(--soui-typography-operation-gap, @margin-xs);
 
     &-input {
-      border: 1px solid @primary-color;
-      border-radius: @border-radius-sm;
+      border: 1px solid var(--soui-typography-editable-border-color, @primary-color);
+      border-radius: var(--soui-typography-code-border-radius, @border-radius-sm);
       padding: 2px @padding-xs;
       font-size: inherit;
       font-family: inherit;
@@ -298,14 +298,14 @@
       .transition-all();
 
       &:focus {
-        box-shadow: 0 0 0 2px fade(@primary-color, 20%);
+        box-shadow: 0 0 0 2px var(--soui-typography-editable-focus-shadow, rgba(24, 144, 255, 0.2));
       }
     }
 
     &-actions {
       display: inline-flex;
       align-items: center;
-      gap: @margin-xs;
+      gap: var(--soui-typography-operation-gap, @margin-xs);
     }
   }
 
@@ -313,7 +313,7 @@
 
   &-copied {
     .soui-typography-operation {
-      color: @success-color;
+      color: var(--soui-typography-color-success, @success-color);
     }
   }
 }
@@ -324,15 +324,15 @@
   .soui-typography {
     &-title {
       &-1 {
-        font-size: @font-size-xl * 2; // 40px
+        font-size: var(--soui-typography-heading-1-font-size-md, @heading-1-font-size-md);
       }
 
       &-2 {
-        font-size: @font-size-xl * 1.75; // 35px
+        font-size: var(--soui-typography-heading-2-font-size-md, @heading-2-font-size-md);
       }
 
       &-3 {
-        font-size: @font-size-xl * 1.25; // 25px
+        font-size: var(--soui-typography-heading-3-font-size-md, @heading-3-font-size-md);
       }
     }
   }

@@ -47,6 +47,102 @@ export interface ComponentThemeConfig {
     /** 激活透明度 */
     activeOpacity?: number;
   };
+  /** 排版组件配置 */
+  Typography?: {
+    // === 颜色配置 ===
+    /** 主要文本颜色 */
+    colorText?: string;
+    /** 次要文本颜色 */
+    colorTextSecondary?: string;
+    /** 禁用文本颜色 */
+    colorTextDisabled?: string;
+    /** 链接颜色 */
+    colorLink?: string;
+    /** 链接悬停颜色 */
+    colorLinkHover?: string;
+    /** 链接激活颜色 */
+    colorLinkActive?: string;
+    
+    // === 类型状态颜色 ===
+    /** Success 状态颜色 */
+    colorSuccess?: string;
+    /** Warning 状态颜色 */
+    colorWarning?: string;
+    /** Danger 状态颜色 */
+    colorDanger?: string;
+    
+    // === 字号配置 ===
+    /** 基础字号（像素） */
+    fontSize?: number;
+    /** 小字号（像素） */
+    fontSizeSM?: number;
+    /** 大字号（像素） */
+    fontSizeLG?: number;
+    /** 超大字号（像素） */
+    fontSizeXL?: number;
+    
+    // === 标题字号配置 ===
+    /** H1 字号（像素） */
+    heading1FontSize?: number;
+    /** H2 字号（像素） */
+    heading2FontSize?: number;
+    /** H3 字号（像素） */
+    heading3FontSize?: number;
+    /** H4 字号（像素） */
+    heading4FontSize?: number;
+    /** H5 字号（像素） */
+    heading5FontSize?: number;
+    
+    // === 行高配置 ===
+    /** 基础行高 */
+    lineHeight?: number;
+    /** H1 行高 */
+    heading1LineHeight?: number;
+    /** H2 行高 */
+    heading2LineHeight?: number;
+    /** H3 行高 */
+    heading3LineHeight?: number;
+    /** H4 行高 */
+    heading4LineHeight?: number;
+    /** H5 行高 */
+    heading5LineHeight?: number;
+    
+    // === 字重配置 ===
+    /** 标题字重 */
+    headingFontWeight?: number;
+    /** 加粗字重 */
+    strongFontWeight?: number;
+    
+    // === 特殊样式配置 ===
+    /** 标记背景色 */
+    markBackgroundColor?: string;
+    /** 代码块背景色 */
+    codeBackgroundColor?: string;
+    /** 代码块边框色 */
+    codeBorderColor?: string;
+    /** 代码块圆角 */
+    codeBorderRadius?: number;
+    
+    // === 操作按钮配置 ===
+    /** 操作按钮间距（像素） */
+    operationGap?: number;
+    /** 操作按钮悬停背景色透明度 */
+    operationHoverBgOpacity?: number;
+    /** 链接聚焦轮廓颜色透明度 */
+    linkFocusOpacity?: number;
+    
+    // === 编辑输入框配置 ===
+    /** 编辑框边框颜色 */
+    editableBorderColor?: string;
+    /** 编辑框聚焦阴影颜色透明度 */
+    editableFocusShadowOpacity?: number;
+    
+    // === 展开/收起配置 ===
+    /** 展开按钮颜色 */
+    expandColor?: string;
+    /** 展开按钮悬停颜色 */
+    expandHoverColor?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 
@@ -74,6 +170,53 @@ export interface ThemeConfig {
   fontSize?: number;
   /** 行高 */
   lineHeight?: number;
+  /** 小间距（像素） */
+  paddingSM?: number;
+  /** 中间距（像素） */
+  paddingMD?: number;
+  /** 大间距（像素） */
+  paddingLG?: number;
+  
+  // Typography 全局配置
+  /** 小字号（像素） */
+  fontSizeSM?: number;
+  /** 大字号（像素） */
+  fontSizeLG?: number;
+  /** 超大字号（像素） */
+  fontSizeXL?: number;
+  /** H1 标题字号（像素） */
+  headingLevel1FontSize?: number;
+  /** H2 标题字号（像素） */
+  headingLevel2FontSize?: number;
+  /** H3 标题字号（像素） */
+  headingLevel3FontSize?: number;
+  /** H4 标题字号（像素） */
+  headingLevel4FontSize?: number;
+  /** H5 标题字号（像素） */
+  headingLevel5FontSize?: number;
+  /** H1 标题字号-中等屏幕（像素） */
+  headingLevel1FontSizeMD?: number;
+  /** H2 标题字号-中等屏幕（像素） */
+  headingLevel2FontSizeMD?: number;
+  /** H3 标题字号-中等屏幕（像素） */
+  headingLevel3FontSizeMD?: number;
+  /** H1 标题行高 */
+  headingLevel1LineHeight?: number;
+  /** H2 标题行高 */
+  headingLevel2LineHeight?: number;
+  /** H3 标题行高 */
+  headingLevel3LineHeight?: number;
+  /** H4 标题行高 */
+  headingLevel4LineHeight?: number;
+  /** H5 标题行高 */
+  headingLevel5LineHeight?: number;
+  /** 标记背景色 */
+  markBackgroundColor?: string;
+  /** 代码块背景色 */
+  codeBackgroundColor?: string;
+  /** 代码块边框色 */
+  codeBorderColor?: string;
+  
   /** 组件级配置 */
   components?: ComponentThemeConfig;
 }
@@ -118,4 +261,28 @@ export const defaultTheme: ThemeConfig = {
   borderRadius: 6,
   fontSize: 14,
   lineHeight: 1.5715,
+  paddingSM: 8,
+  paddingMD: 16,
+  paddingLG: 24,
+  
+  // Typography 全局默认值
+  fontSizeSM: 12,
+  fontSizeLG: 16,
+  fontSizeXL: 20,
+  headingLevel1FontSize: 50,
+  headingLevel2FontSize: 40,
+  headingLevel3FontSize: 30,
+  headingLevel4FontSize: 25,
+  headingLevel5FontSize: 20,
+  headingLevel1FontSizeMD: 40,
+  headingLevel2FontSizeMD: 35,
+  headingLevel3FontSizeMD: 25,
+  headingLevel1LineHeight: 1.23,
+  headingLevel2LineHeight: 1.25,
+  headingLevel3LineHeight: 1.3,
+  headingLevel4LineHeight: 1.35,
+  headingLevel5LineHeight: 1.4,
+  markBackgroundColor: '#ffe58f',
+  codeBackgroundColor: 'rgba(0, 0, 0, 0.04)',
+  codeBorderColor: 'rgba(0, 0, 0, 0.06)',
 };
