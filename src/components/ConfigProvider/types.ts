@@ -188,6 +188,16 @@ export interface ComponentThemeConfig {
     /** 字体大小（像素） */
     fontSize?: number;
   };
+  /** Grid 栅格组件配置 */
+  Grid?: {
+    // 响应式断点配置（像素）
+    screenXS?: number;           // xs 断点（默认 480px）
+    screenSM?: number;           // sm 断点（默认 576px）
+    screenMD?: number;           // md 断点（默认 768px）
+    screenLG?: number;           // lg 断点（默认 992px）
+    screenXL?: number;           // xl 断点（默认 1200px）
+    screenXXL?: number;          // xxl 断点（默认 1600px）
+  };
   // 可以继续添加其他组件的配置
 }
 

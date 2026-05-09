@@ -46,7 +46,7 @@ export interface ColProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'of
 // ==================== Main Component ====================
 
 const Col: React.FC<ColProps> = ({
-  span = 24,
+  span,
   offset = 0,
   push,
   pull,
@@ -64,12 +64,12 @@ const Col: React.FC<ColProps> = ({
   // 构建类名
   const colClassName = classNames(
     'soui-col',
-    `soui-col-${span}`,
     {
+      [`soui-col-${span}`]: span !== undefined,
       [`soui-col-offset-${offset}`]: offset && offset > 0,
       [`soui-col-push-${push}`]: push !== undefined && push >= 0,
       [`soui-col-pull-${pull}`]: pull !== undefined && pull >= 0,
-      // 响应式类名
+      // 响应式类名（注意：样式文件中使用的是 -xs、-sm 等前缀）
       ...(typeof xs === 'number' ? { [`soui-col-xs-${xs}`]: true } : {}),
       ...(typeof sm === 'number' ? { [`soui-col-sm-${sm}`]: true } : {}),
       ...(typeof md === 'number' ? { [`soui-col-md-${md}`]: true } : {}),

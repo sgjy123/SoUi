@@ -2,13 +2,13 @@
 
 // ==================== Grid System Styles ====================
 
-// 响应式断点
-@soui-screen-xs: @screen-xs;   // 480px
-@soui-screen-sm: @screen-sm;   // 576px
-@soui-screen-md: @screen-md;   // 768px
-@soui-screen-lg: @screen-lg;   // 992px
-@soui-screen-xl: @screen-xl;   // 1200px
-@soui-screen-xxl: @screen-xxl; // 1600px
+// 响应式断点 - 使用 Less 变量（用于编译时 media query）
+@soui-screen-xs: @screen-xs;
+@soui-screen-sm: @screen-sm;
+@soui-screen-md: @screen-md;
+@soui-screen-lg: @screen-lg;
+@soui-screen-xl: @screen-xl;
+@soui-screen-xxl: @screen-xxl;
 
 // ==================== Row Styles ====================
 
@@ -75,59 +75,59 @@
   padding-left: calc(var(--soui-row-gutter-horizontal, 0) / 2);
   padding-right: calc(var(--soui-row-gutter-horizontal, 0) / 2);
   box-sizing: border-box;
+}
 
-  // 基础栅格 (1-24)
-  .generate-grid-columns(24);
+// 基础栅格 (1-24)
+.generate-grid-columns(24);
 
-  // 偏移
-  .generate-offset-columns(24);
+// 偏移
+.generate-offset-columns(24);
 
-  // 排序 (push/pull)
-  .generate-order-columns(24);
+// 排序 (push/pull)
+.generate-order-columns(24);
 
-  // ==================== 响应式栅格 ====================
+// ==================== 响应式栅格 ====================
 
-  // xs (<576px)
-  @media (max-width: (@soui-screen-sm - 1)) {
-    .generate-grid-columns(24, xs);
-    .generate-offset-columns(24, xs);
-    .generate-order-columns(24, xs);
-  }
+// xs (<576px)
+@media (max-width: (@soui-screen-sm - 1px)) {
+  .generate-grid-columns(24, -xs);
+  .generate-offset-columns(24, -xs);
+  .generate-order-columns(24, -xs);
+}
 
-  // sm (≥576px)
-  @media (min-width: @soui-screen-sm) {
-    .generate-grid-columns(24, sm);
-    .generate-offset-columns(24, sm);
-    .generate-order-columns(24, sm);
-  }
+// sm (≥576px)
+@media (min-width: @soui-screen-sm) {
+  .generate-grid-columns(24, -sm);
+  .generate-offset-columns(24, -sm);
+  .generate-order-columns(24, -sm);
+}
 
-  // md (≥768px)
-  @media (min-width: @soui-screen-md) {
-    .generate-grid-columns(24, md);
-    .generate-offset-columns(24, md);
-    .generate-order-columns(24, md);
-  }
+// md (≥768px)
+@media (min-width: @soui-screen-md) {
+  .generate-grid-columns(24, -md);
+  .generate-offset-columns(24, -md);
+  .generate-order-columns(24, -md);
+}
 
-  // lg (≥992px)
-  @media (min-width: @soui-screen-lg) {
-    .generate-grid-columns(24, lg);
-    .generate-offset-columns(24, lg);
-    .generate-order-columns(24, lg);
-  }
+// lg (≥992px)
+@media (min-width: @soui-screen-lg) {
+  .generate-grid-columns(24, -lg);
+  .generate-offset-columns(24, -lg);
+  .generate-order-columns(24, -lg);
+}
 
-  // xl (≥1200px)
-  @media (min-width: @soui-screen-xl) {
-    .generate-grid-columns(24, xl);
-    .generate-offset-columns(24, xl);
-    .generate-order-columns(24, xl);
-  }
+// xl (≥1200px)
+@media (min-width: @soui-screen-xl) {
+  .generate-grid-columns(24, -xl);
+  .generate-offset-columns(24, -xl);
+  .generate-order-columns(24, -xl);
+}
 
-  // xxl (≥1600px)
-  @media (min-width: @soui-screen-xxl) {
-    .generate-grid-columns(24, xxl);
-    .generate-offset-columns(24, xxl);
-    .generate-order-columns(24, xxl);
-  }
+// xxl (≥1600px)
+@media (min-width: @soui-screen-xxl) {
+  .generate-grid-columns(24, -xxl);
+  .generate-offset-columns(24, -xxl);
+  .generate-order-columns(24, -xxl);
 }
 
 // ==================== Mixins ====================
@@ -137,7 +137,6 @@
   .loop(@index) when (@index > 0) {
     @class: ~'.soui-col@{breakpoint}-@{index}';
     @{class} {
-      display: block;
       flex: 0 0 percentage((@index / @columns));
       max-width: percentage((@index / @columns));
     }

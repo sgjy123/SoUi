@@ -203,6 +203,21 @@ interface ThemeConfig {
       animationDuration?: number;  // 动画时长（秒）
       animationTimingFunction?: string; // 动画缓动函数
     };
+    /** Divider 分割线组件配置 */
+    Divider?: {
+      colorBorder?: string;        // 边框颜色
+      fontSize?: number;           // 字体大小（像素）
+    };
+    /** Grid 栅格组件配置 */
+    Grid?: {
+      // 响应式断点配置（像素）
+      screenXS?: number;           // xs 断点（默认 480px）
+      screenSM?: number;           // sm 断点（默认 576px）
+      screenMD?: number;           // md 断点（默认 768px）
+      screenLG?: number;           // lg 断点（默认 992px）
+      screenXL?: number;           // xl 断点（默认 1200px）
+      screenXXL?: number;          // xxl 断点（默认 1600px）
+    };
     // ... 其他组件
   };
 }
@@ -492,6 +507,14 @@ ConfigProvider 会自动生成 CSS 变量，您可以在任何地方使用：
   --soui-icon-color-default: #1677ff;
   --soui-icon-hover-opacity: 0.7;
   --soui-icon-active-opacity: 0.5;
+  
+  /* 响应式断点令牌 */
+  --soui-screen-xs: 480px;
+  --soui-screen-sm: 576px;
+  --soui-screen-md: 768px;
+  --soui-screen-lg: 992px;
+  --soui-screen-xl: 1200px;
+  --soui-screen-xxl: 1600px;
   
   /* 设计令牌 (Design Tokens) - 真正的全局变量 */
   --soui-color-bg-default: rgba(0, 0, 0, 0.88);        // 默认深色背景
