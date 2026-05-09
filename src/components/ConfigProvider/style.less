@@ -19,11 +19,17 @@
   --soui-size-middle: 16px;
   --soui-size-large: 24px;
   
-  // Typography 全局变量默认值
-  --soui-typography-font-size-sm: 12px;
-  --soui-typography-font-size-base: 14px;
-  --soui-typography-font-size-lg: 16px;
-  --soui-typography-font-size-xl: 20px;
+  // === 第2层: Typography 组件配置点 (引用设计令牌) ===
+  // 基础字号和行高 - 引用第1层设计令牌
+  --soui-typography-font-size-sm: var(--soui-font-size-sm);
+  --soui-typography-font-size-base: var(--soui-font-size);
+  --soui-typography-font-size-lg: var(--soui-font-size-lg);
+  --soui-typography-font-size-xl: var(--soui-font-size-xl);
+  --soui-typography-line-height-base: var(--soui-line-height);
+  --soui-typography-line-height-sm: var(--soui-line-height-sm);
+  --soui-typography-line-height-lg: var(--soui-line-height-lg);
+  
+  // Typography专属变量 - 标题字号、特殊样式等
   --soui-typography-heading-1-font-size: 50px;
   --soui-typography-heading-2-font-size: 40px;
   --soui-typography-heading-3-font-size: 30px;

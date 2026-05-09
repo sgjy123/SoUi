@@ -42,11 +42,13 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-size-middle': `${mergedTheme.paddingMD}px`,
       '--soui-size-large': `${mergedTheme.paddingLG}px`,
       
-      // Typography 全局变量
+      // === 第2层: Typography 组件配置点 (引用设计令牌) ===
+      // 基础字号和行高 - 引用第1层设计令牌
       '--soui-typography-font-size-sm': `${mergedTheme.fontSizeSM}px`,
       '--soui-typography-font-size-base': `${mergedTheme.fontSize}px`,
       '--soui-typography-font-size-lg': `${mergedTheme.fontSizeLG}px`,
       '--soui-typography-font-size-xl': `${mergedTheme.fontSizeXL}px`,
+      '--soui-typography-line-height-base': mergedTheme.lineHeight?.toString(),
       '--soui-typography-heading-1-font-size': `${mergedTheme.headingLevel1FontSize}px`,
       '--soui-typography-heading-2-font-size': `${mergedTheme.headingLevel2FontSize}px`,
       '--soui-typography-heading-3-font-size': `${mergedTheme.headingLevel3FontSize}px`,

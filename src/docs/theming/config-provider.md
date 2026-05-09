@@ -451,10 +451,14 @@ ConfigProvider 会自动生成 CSS 变量，您可以在任何地方使用：
   --soui-size-large: 24px;
   
   /* Typography 排版变量 */
-  --soui-typography-font-size-sm: 12px;
-  --soui-typography-font-size-base: 14px;
-  --soui-typography-font-size-lg: 16px;
-  --soui-typography-font-size-xl: 20px;
+  /* 第2层: Typography 组件配置点 (引用第1层设计令牌) */
+  --soui-typography-font-size-sm: var(--soui-font-size-sm);      // 引用全局小字号
+  --soui-typography-font-size-base: var(--soui-font-size);       // 引用全局基础字号
+  --soui-typography-font-size-lg: var(--soui-font-size-lg);      // 引用全局大字号
+  --soui-typography-font-size-xl: var(--soui-font-size-xl);      // 引用全局超大字号
+  --soui-typography-line-height-base: var(--soui-line-height);   // 引用全局行高
+  
+  /* Typography专属变量 - 标题字号、特殊样式等 */
   --soui-typography-heading-1-font-size: 50px;
   --soui-typography-heading-2-font-size: 40px;
   --soui-typography-heading-3-font-size: 30px;

@@ -482,8 +482,11 @@ const { Title, Paragraph, Text } = Typography;
 export default () => (
   <ConfigProvider
     theme={{
-      // 字号配置
+      // 基础字号和行高
       fontSize: 14,
+      lineHeight: 1.5715,
+      
+      // 响应式字号
       fontSizeSM: 12,
       fontSizeLG: 16,
       fontSizeXL: 20,
@@ -593,6 +596,7 @@ export default () => (
 | 配置项 | 说明 | 类型 | 默认值 |
 |--------|------|------|--------|
 | fontSize | 基础字号 | `number` | `14` |
+| lineHeight | 基础行高 | `number` | `1.5715` |
 | fontSizeSM | 小字号 | `number` | `12` |
 | fontSizeLG | 大字号 | `number` | `16` |
 | fontSizeXL | 超大字号 | `number` | `20` |
@@ -701,15 +705,15 @@ export default () => (
 
 Typography 组件的样式遵循以下优先级规则：
 
-1. **Props 直接指定**：通过 style 属性传入的样式优先级最高
-2. **组件级配置**：通过 `theme.components.Typography` 配置
+1. **Props 属性**（如 `type`、`strong`、`disabled`）- 最高优先级
+2. **组件级配置**：通过 `components.Typography` 配置
 3. **全局配置**：通过 `theme` 的全局配置（如 fontSize、headingLevel1FontSize 等）
 4. **CSS 变量默认值**：ConfigProvider 生成的 CSS 变量
-5. **Less 变量**：作为回退值的 Less 变量
+5. **Less 变量**：作为回退值的 Less 变量 - 最低优先级
 
 ```tsx
-// 最高优先级：style 直接指定
-<Text style={{ color: 'red' }}>红色文本</Text>
+// 最高优先级：Props 属性
+<Text type="success">成功文本</Text>
 
 // 中等优先级：组件级配置
 <ConfigProvider theme={{
