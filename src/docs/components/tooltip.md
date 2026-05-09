@@ -391,31 +391,6 @@ type TooltipTrigger = 'hover' | 'click' | 'focus' | 'contextMenu';
 
 Tooltip 组件支持通过 ConfigProvider 进行全局或组件级的主题定制。
 
-### 设计令牌 (Design Tokens)
-
-Tooltip 使用了一套分层的设计令牌系统:
-
-**第1层 - 全局设计令牌**: 真正的全局变量,可被多个组件复用
-```less
---soui-color-bg-default      // 默认深色背景
---soui-color-text-inverse    // 反色文本(白色)
---soui-font-size-sm          // 小字号
---soui-line-height-sm        // 小行高
---soui-border-radius         // 基础圆角
---soui-box-shadow-secondary  // 次级阴影
---soui-z-index-popover       // 浮层层级
---soui-transition-duration   // 动画时长
-```
-
-**第2层 - Tooltip配置点**: 引用设计令牌,允许统一修改所有Tooltip
-```less
---soui-tooltip-bg-color: var(--soui-color-bg-default);
---soui-tooltip-text-color: var(--soui-color-text-inverse);
-// ... 其他配置
-```
-
-**第3层 - 组件级覆盖**: 通过 `components.Tooltip` 自定义
-
 ### 全局配置
 
 通过 `theme` 属性对所有 Tooltip 组件进行统一配置：
