@@ -386,3 +386,158 @@ type TooltipTrigger = 'hover' | 'click' | 'focus' | 'contextMenu';
 
 - [Popover 气泡卡片](/components/popover)
 - [Typography 排版](/components/typography)
+
+## 主题配置
+
+Tooltip 组件支持通过 ConfigProvider 进行全局或组件级的主题定制。
+
+### 设计令牌 (Design Tokens)
+
+Tooltip 使用了一套分层的设计令牌系统:
+
+**第1层 - 全局设计令牌**: 真正的全局变量,可被多个组件复用
+```less
+--soui-color-bg-default      // 默认深色背景
+--soui-color-text-inverse    // 反色文本(白色)
+--soui-font-size-sm          // 小字号
+--soui-line-height-sm        // 小行高
+--soui-border-radius         // 基础圆角
+--soui-box-shadow-secondary  // 次级阴影
+--soui-z-index-popover       // 浮层层级
+--soui-transition-duration   // 动画时长
+```
+
+**第2层 - Tooltip配置点**: 引用设计令牌,允许统一修改所有Tooltip
+```less
+--soui-tooltip-bg-color: var(--soui-color-bg-default);
+--soui-tooltip-text-color: var(--soui-color-text-inverse);
+// ... 其他配置
+```
+
+**第3层 - 组件级覆盖**: 通过 `components.Tooltip` 自定义
+
+### 全局配置
+
+通过 `theme` 属性对所有 Tooltip 组件进行统一配置：
+
+```tsx
+import { ConfigProvider, Tooltip, Button } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      // Tooltip 全局配置
+      tooltipBgColor: 'rgba(0, 0, 0, 0.85)',
+      tooltipTextColor: '#fff',
+      tooltipFontSize: 13,
+      tooltipLineHeight: 1.6,
+      tooltipMaxWidth: 280,
+      tooltipMinHeight: 34,
+      tooltipPadding: '8px 14px',
+      tooltipBorderRadius: 8,
+      tooltipBoxShadow: '0 4px 8px rgba(0, 0, 0, 0.15)',
+      tooltipArrowSize: 9,
+      tooltipZIndex: 1050,
+      tooltipAnimationDuration: 0.25,
+    }}
+  >
+    <Tooltip title="使用全局配置的提示框">
+      <Button>悬停查看效果</Button>
+    </Tooltip>
+  </ConfigProvider>
+);
+```
+
+### 组件级配置
+
+通过 `components.Tooltip` 对 Tooltip 组件进行精细控制：
+
+```tsx
+import { ConfigProvider, Tooltip, Button } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      components: {
+        Tooltip: {
+          // 颜色配置
+          colorBgDefault: '#1f1f1f',
+          colorText: '#ffffff',
+          
+          // 尺寸配置
+          fontSize: 14,
+          lineHeight: 1.7,
+          maxWidth: 300,
+          minHeight: 36,
+          padding: '10px 16px',
+          borderRadius: 10,
+          
+          // 视觉效果
+          boxShadow: '0 6px 12px rgba(0, 0, 0, 0.2)',
+          arrowSize: 10,
+          arrowOffset: 18,
+          
+          // 层级与动画
+          zIndex: 1060,
+          animationDuration: 0.3,
+          animationTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        },
+      },
+    }}
+  >
+    <Tooltip title="使用组件级配置的提示框">
+      <Button type="primary">自定义样式</Button>
+    </Tooltip>
+  </ConfigProvider>
+);
+```
+
+### 配置项说明
+
+**全局配置（ThemeConfig）**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| tooltipBgColor | 默认背景色 | `string` | `'rgba(0, 0, 0, 0.88)'` |
+| tooltipTextColor | 文本颜色 | `string` | `'#fff'` |
+| tooltipFontSize | 字体大小（像素） | `number` | `12` |
+| tooltipLineHeight | 行高 | `number` | `1.6667` |
+| tooltipMaxWidth | 最大宽度（像素） | `number` | `250` |
+| tooltipMinHeight | 最小高度（像素） | `number` | `32` |
+| tooltipPadding | 内边距 | `string` | `'6px 12px'` |
+| tooltipBorderRadius | 圆角（像素） | `number` | `6` |
+| tooltipBoxShadow | 阴影 | `string` | `'0 3px 6px -4px ...'` |
+| tooltipArrowSize | 箭头尺寸（像素） | `number` | `8` |
+| tooltipZIndex | z-index | `number` | `1030` |
+| tooltipAnimationDuration | 动画时长（秒） | `number` | `0.2` |
+
+**组件级配置（components.Tooltip）**
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| colorBgDefault | 默认背景色 | `string` | 继承全局配置 |
+| colorText | 文本颜色 | `string` | 继承全局配置 |
+| fontSize | 字体大小（像素） | `number` | 继承全局配置 |
+| lineHeight | 行高 | `number` | 继承全局配置 |
+| maxWidth | 最大宽度（像素） | `number` | 继承全局配置 |
+| minHeight | 最小高度（像素） | `number` | 继承全局配置 |
+| padding | 内边距 | `string` | 继承全局配置 |
+| borderRadius | 圆角（像素） | `number` | 继承全局配置 |
+| boxShadow | 阴影 | `string` | 继承全局配置 |
+| arrowSize | 箭头尺寸（像素） | `number` | 继承全局配置 |
+| arrowOffset | 箭头偏移量（像素） | `number` | - |
+| zIndex | z-index | `number` | 继承全局配置 |
+| animationDuration | 动画时长（秒） | `number` | 继承全局配置 |
+| animationTimingFunction | 动画缓动函数 | `string` | - |
+
+### 优先级说明
+
+Tooltip 样式的优先级从高到低为：
+
+1. **Props 属性**（如 `color`、`zIndex`）- 最高优先级
+2. **组件级配置**（`components.Tooltip`）
+3. **全局配置**（`theme.tooltip*`）
+4. **CSS 变量**（`:root` 中定义）
+5. **Less 变量**（`variables.less` 中定义）- 最低优先级
+
+**注意：** Props 中的 `color` 属性会直接覆盖所有主题配置的背景色。

@@ -17,23 +17,23 @@
 
 .soui-tooltip {
   position: fixed;
-  max-width: 250px;
+  max-width: var(--soui-tooltip-max-width, 250px);
   box-sizing: border-box;
-  font-size: @font-size-sm;
-  line-height: @line-height-sm;
-  color: @text-color-inverse;
+  font-size: var(--soui-tooltip-font-size-component, var(--soui-tooltip-font-size));
+  line-height: var(--soui-tooltip-line-height-component, var(--soui-tooltip-line-height));
+  color: var(--soui-tooltip-color-text, var(--soui-tooltip-text-color));
   word-wrap: break-word;
-  animation: soui-tooltip-fade-in @transition-duration @transition-timing-function;
-  z-index: @z-index-popover;
+  animation: soui-tooltip-fade-in var(--soui-tooltip-animation-duration-component, var(--soui-tooltip-animation-duration)) var(--soui-tooltip-animation-timing-function, var(--soui-transition-timing-function));
+  z-index: var(--soui-tooltip-z-index-component, var(--soui-tooltip-z-index));
 }
 
 .soui-tooltip-inner {
   min-width: 30px;
-  min-height: @control-height-sm + 8px;
-  padding: @padding-xs + 2px @padding-sm;
-  border-radius: @border-radius-base;
-  background: rgba(0, 0, 0, 0.88);
-  box-shadow: @box-shadow-secondary;
+  min-height: var(--soui-tooltip-min-height-component, var(--soui-tooltip-min-height, @control-height-sm + 8px));
+  padding: var(--soui-tooltip-padding-component, var(--soui-tooltip-padding, @padding-xs + 2px @padding-sm));
+  border-radius: var(--soui-tooltip-border-radius-component, var(--soui-tooltip-border-radius));
+  background: var(--soui-tooltip-color-bg-default, var(--soui-tooltip-bg-color));
+  box-shadow: var(--soui-tooltip-box-shadow-component, var(--soui-tooltip-box-shadow));
   box-sizing: border-box;
 }
 
@@ -41,9 +41,9 @@
 
 .soui-tooltip-arrow {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  background: rgba(0, 0, 0, 0.88);
+  width: var(--soui-tooltip-arrow-size-component, var(--soui-tooltip-arrow-size, 8px));
+  height: var(--soui-tooltip-arrow-size-component, var(--soui-tooltip-arrow-size, 8px));
+  background: var(--soui-tooltip-color-bg-default, var(--soui-tooltip-bg-color));
   transform: rotate(45deg);
 }
 

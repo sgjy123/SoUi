@@ -143,6 +143,44 @@ export interface ComponentThemeConfig {
     /** 展开按钮悬停颜色 */
     expandHoverColor?: string;
   };
+  /** Tooltip 组件配置 */
+  Tooltip?: {
+    // === 颜色配置 ===
+    /** 默认背景色 */
+    colorBgDefault?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    
+    // === 尺寸配置 ===
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 行高 */
+    lineHeight?: number;
+    /** 最大宽度（像素） */
+    maxWidth?: number;
+    /** 最小高度（像素） */
+    minHeight?: number;
+    /** 内边距 */
+    padding?: string;
+    /** 圆角（像素） */
+    borderRadius?: number;
+    
+    // === 视觉效果 ===
+    /** 阴影 */
+    boxShadow?: string;
+    /** 箭头尺寸（像素） */
+    arrowSize?: number;
+    /** 箭头偏移量（像素） */
+    arrowOffset?: number;
+    
+    // === 层级与动画 ===
+    /** z-index */
+    zIndex?: number;
+    /** 动画时长（秒） */
+    animationDuration?: number;
+    /** 动画缓动函数 */
+    animationTimingFunction?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 
@@ -217,6 +255,32 @@ export interface ThemeConfig {
   /** 代码块边框色 */
   codeBorderColor?: string;
   
+  // Tooltip 全局配置
+  /** Tooltip 默认背景色 */
+  tooltipBgColor?: string;
+  /** Tooltip 文本颜色 */
+  tooltipTextColor?: string;
+  /** Tooltip 字体大小（像素） */
+  tooltipFontSize?: number;
+  /** Tooltip 行高 */
+  tooltipLineHeight?: number;
+  /** Tooltip 最大宽度（像素） */
+  tooltipMaxWidth?: number;
+  /** Tooltip 最小高度（像素） */
+  tooltipMinHeight?: number;
+  /** Tooltip 内边距 */
+  tooltipPadding?: string;
+  /** Tooltip 圆角（像素） */
+  tooltipBorderRadius?: number;
+  /** Tooltip 阴影 */
+  tooltipBoxShadow?: string;
+  /** Tooltip 箭头尺寸（像素） */
+  tooltipArrowSize?: number;
+  /** Tooltip 默认 z-index */
+  tooltipZIndex?: number;
+  /** Tooltip 动画时长（秒） */
+  tooltipAnimationDuration?: number;
+  
   /** 组件级配置 */
   components?: ComponentThemeConfig;
 }
@@ -285,4 +349,18 @@ export const defaultTheme: ThemeConfig = {
   markBackgroundColor: '#ffe58f',
   codeBackgroundColor: 'rgba(0, 0, 0, 0.04)',
   codeBorderColor: 'rgba(0, 0, 0, 0.06)',
+  
+  // Tooltip 全局默认值
+  tooltipBgColor: 'rgba(0, 0, 0, 0.88)',
+  tooltipTextColor: '#fff',
+  tooltipFontSize: 12,
+  tooltipLineHeight: 1.6667,
+  tooltipMaxWidth: 250,
+  tooltipMinHeight: 32,
+  tooltipPadding: '6px 12px',
+  tooltipBorderRadius: 6,
+  tooltipBoxShadow: '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+  tooltipArrowSize: 8,
+  tooltipZIndex: 1030,
+  tooltipAnimationDuration: 0.2,
 };

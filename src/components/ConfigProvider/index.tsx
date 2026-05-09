@@ -22,6 +22,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const iconTheme = mergedTheme.components?.Icon || {};
     // 获取 Typography 组件级配置
     const typographyTheme = mergedTheme.components?.Typography || {};
+    // 获取 Tooltip 组件级配置
+    const tooltipTheme = mergedTheme.components?.Tooltip || {};
     
     return {
       '--soui-primary-color': mergedTheme.primaryColor,
@@ -106,6 +108,49 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-icon-color-default': iconTheme.colorDefault || mergedTheme.primaryColor,
       '--soui-icon-hover-opacity': iconTheme.hoverOpacity?.toString() || '0.7',
       '--soui-icon-active-opacity': iconTheme.activeOpacity?.toString() || '0.5',
+      
+      // === 第1层: 设计令牌 (Design Tokens) ===
+      // 这些是真正的全局变量,可以被多个组件复用
+      // 注意: --soui-border-radius, --soui-font-size, --soui-line-height 已在前面定义
+      '--soui-color-bg-default': mergedTheme.tooltipBgColor,
+      '--soui-color-text-inverse': mergedTheme.tooltipTextColor,
+      '--soui-font-size-sm': `${mergedTheme.tooltipFontSize}px`,
+      '--soui-line-height-sm': mergedTheme.tooltipLineHeight?.toString(),
+      '--soui-box-shadow-secondary': mergedTheme.tooltipBoxShadow,
+      '--soui-z-index-popover': mergedTheme.tooltipZIndex?.toString(),
+      '--soui-transition-duration': `${mergedTheme.tooltipAnimationDuration}s`,
+      
+      // === 第2层: Tooltip 配置点 (引用设计令牌) ===
+      // 这些是 ConfigProvider 的配置接口,允许用户统一修改所有 Tooltip
+      '--soui-tooltip-bg-color': mergedTheme.tooltipBgColor,
+      '--soui-tooltip-text-color': mergedTheme.tooltipTextColor,
+      '--soui-tooltip-font-size': `${mergedTheme.tooltipFontSize}px`,
+      '--soui-tooltip-line-height': mergedTheme.tooltipLineHeight?.toString(),
+      '--soui-tooltip-max-width': `${mergedTheme.tooltipMaxWidth}px`,
+      '--soui-tooltip-min-height': `${mergedTheme.tooltipMinHeight}px`,
+      '--soui-tooltip-padding': mergedTheme.tooltipPadding,
+      '--soui-tooltip-border-radius': `${mergedTheme.tooltipBorderRadius}px`,
+      '--soui-tooltip-box-shadow': mergedTheme.tooltipBoxShadow,
+      '--soui-tooltip-arrow-size': `${mergedTheme.tooltipArrowSize}px`,
+      '--soui-tooltip-z-index': mergedTheme.tooltipZIndex?.toString(),
+      '--soui-tooltip-animation-duration': `${mergedTheme.tooltipAnimationDuration}s`,
+      
+      // === 第3层: Tooltip 组件级覆盖 (优先级最高) ===
+      // 用户可以通过 components.Tooltip 覆盖特定配置
+      '--soui-tooltip-color-bg-default': tooltipTheme.colorBgDefault || mergedTheme.tooltipBgColor,
+      '--soui-tooltip-color-text': tooltipTheme.colorText || mergedTheme.tooltipTextColor,
+      '--soui-tooltip-font-size-component': tooltipTheme.fontSize ? `${tooltipTheme.fontSize}px` : undefined,
+      '--soui-tooltip-line-height-component': tooltipTheme.lineHeight?.toString(),
+      '--soui-tooltip-max-width-component': tooltipTheme.maxWidth ? `${tooltipTheme.maxWidth}px` : undefined,
+      '--soui-tooltip-min-height-component': tooltipTheme.minHeight ? `${tooltipTheme.minHeight}px` : undefined,
+      '--soui-tooltip-padding-component': tooltipTheme.padding,
+      '--soui-tooltip-border-radius-component': tooltipTheme.borderRadius ? `${tooltipTheme.borderRadius}px` : undefined,
+      '--soui-tooltip-box-shadow-component': tooltipTheme.boxShadow,
+      '--soui-tooltip-arrow-size-component': tooltipTheme.arrowSize ? `${tooltipTheme.arrowSize}px` : undefined,
+      '--soui-tooltip-arrow-offset-component': tooltipTheme.arrowOffset ? `${tooltipTheme.arrowOffset}px` : undefined,
+      '--soui-tooltip-z-index-component': tooltipTheme.zIndex?.toString(),
+      '--soui-tooltip-animation-duration-component': tooltipTheme.animationDuration ? `${tooltipTheme.animationDuration}s` : undefined,
+      '--soui-tooltip-animation-timing-function': tooltipTheme.animationTimingFunction,
     } as any;
   }, [mergedTheme]);
 

@@ -4,6 +4,7 @@
 // ==================== CSS Variables Root ====================
 // 这些变量可以通过 ConfigProvider 动态配置
 :root {
+  // === 第1层: 设计令牌 (Design Tokens) - 真正的全局变量 ===
   --soui-primary-color: @primary-color;
   --soui-primary-hover-color: @primary-hover-color;
   --soui-primary-active-color: @primary-active-color;
@@ -11,9 +12,30 @@
   --soui-warning-color: @warning-color;
   --soui-error-color: @error-color;
   --soui-info-color: @info-color;
+  
+  // 颜色令牌
+  --soui-color-bg-default: rgba(0, 0, 0, 0.88);      // 默认深色背景
+  --soui-color-text-inverse: #fff;                    // 反色文本(白色)
+  --soui-color-text: @text-color;                     // 主要文本色
+  --soui-color-text-secondary: @text-color-secondary; // 次要文本色
+  
+  // 尺寸令牌
   --soui-border-radius: @border-radius-base;
+  --soui-border-radius-sm: @border-radius-sm;
+  --soui-border-radius-lg: @border-radius-lg;
   --soui-font-size: @font-size-base;
+  --soui-font-size-sm: @font-size-sm;
+  --soui-font-size-lg: @font-size-lg;
+  --soui-font-size-xl: @font-size-xl;
   --soui-line-height: @line-height-base;
+  --soui-line-height-sm: @line-height-sm;
+  --soui-line-height-lg: @line-height-lg;
+  
+  // 视觉效果令牌
+  --soui-box-shadow-secondary: @box-shadow-secondary;
+  --soui-z-index-popover: @z-index-popover;
+  --soui-transition-duration: @transition-duration;
+  --soui-transition-timing-function: @transition-timing-function;
   
   // Space 间距变量默认值
   --soui-size-small: @padding-sm;
@@ -57,6 +79,21 @@
   --soui-icon-color-disabled: @icon-color-disabled;
   --soui-icon-hover-opacity: @icon-hover-opacity;
   --soui-icon-active-opacity: @icon-active-opacity;
+  
+  // === 第2层: Tooltip 组件配置点 (引用设计令牌) ===
+  // 这些是 ConfigProvider 的配置接口,允许用户统一修改所有 Tooltip
+  --soui-tooltip-bg-color: var(--soui-color-bg-default);           // 引用全局背景色
+  --soui-tooltip-text-color: var(--soui-color-text-inverse);       // 引用全局文本色
+  --soui-tooltip-font-size: var(--soui-font-size-sm);              // 引用全局小字号
+  --soui-tooltip-line-height: var(--soui-line-height-sm);          // 引用全局小行高
+  --soui-tooltip-max-width: 250px;                                 // Tooltip专属:最大宽度
+  --soui-tooltip-min-height: 32px;                                 // Tooltip专属:最小高度
+  --soui-tooltip-padding: "6px 12px";                             // Tooltip专属:内边距
+  --soui-tooltip-border-radius: var(--soui-border-radius);         // 引用全局圆角
+  --soui-tooltip-box-shadow: var(--soui-box-shadow-secondary);     // 引用全局阴影
+  --soui-tooltip-arrow-size: 8px;                                  // Tooltip专属:箭头尺寸
+  --soui-tooltip-z-index: var(--soui-z-index-popover);             // 引用全局z-index
+  --soui-tooltip-animation-duration: var(--soui-transition-duration); // 引用全局动画时长
 }
 
 // ==================== Global Styles ====================

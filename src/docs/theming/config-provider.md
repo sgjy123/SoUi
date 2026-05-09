@@ -84,6 +84,20 @@ interface ThemeConfig {
   codeBackgroundColor?: string;    // 代码块背景色
   codeBorderColor?: string;        // 代码块边框色
   
+  // Tooltip 全局配置
+  tooltipBgColor?: string;         // Tooltip 默认背景色
+  tooltipTextColor?: string;       // Tooltip 文本颜色
+  tooltipFontSize?: number;        // Tooltip 字体大小（像素）
+  tooltipLineHeight?: number;      // Tooltip 行高
+  tooltipMaxWidth?: number;        // Tooltip 最大宽度（像素）
+  tooltipMinHeight?: number;       // Tooltip 最小高度（像素）
+  tooltipPadding?: string;         // Tooltip 内边距
+  tooltipBorderRadius?: number;    // Tooltip 圆角（像素）
+  tooltipBoxShadow?: string;       // Tooltip 阴影
+  tooltipArrowSize?: number;       // Tooltip 箭头尺寸（像素）
+  tooltipZIndex?: number;          // Tooltip 默认 z-index
+  tooltipAnimationDuration?: number; // Tooltip 动画时长（秒）
+  
   // 组件级配置
   components?: {
     Button?: {
@@ -164,6 +178,30 @@ interface ThemeConfig {
       // 展开/收起
       expandColor?: string;        // 展开按钮颜色
       expandHoverColor?: string;   // 展开按钮悬停颜色
+    };
+    /** Tooltip 组件配置 */
+    Tooltip?: {
+      // 颜色配置
+      colorBgDefault?: string;     // 默认背景色
+      colorText?: string;          // 文本颜色
+      
+      // 尺寸配置
+      fontSize?: number;           // 字体大小（像素）
+      lineHeight?: number;         // 行高
+      maxWidth?: number;           // 最大宽度（像素）
+      minHeight?: number;          // 最小高度（像素）
+      padding?: string;            // 内边距
+      borderRadius?: number;       // 圆角（像素）
+      
+      // 视觉效果
+      boxShadow?: string;          // 阴影
+      arrowSize?: number;          // 箭头尺寸（像素）
+      arrowOffset?: number;        // 箭头偏移量（像素）
+      
+      // 层级与动画
+      zIndex?: number;             // z-index
+      animationDuration?: number;  // 动画时长（秒）
+      animationTimingFunction?: string; // 动画缓动函数
     };
     // ... 其他组件
   };
@@ -450,6 +488,29 @@ ConfigProvider 会自动生成 CSS 变量，您可以在任何地方使用：
   --soui-icon-color-default: #1677ff;
   --soui-icon-hover-opacity: 0.7;
   --soui-icon-active-opacity: 0.5;
+  
+  /* 设计令牌 (Design Tokens) - 真正的全局变量 */
+  --soui-color-bg-default: rgba(0, 0, 0, 0.88);        // 默认深色背景
+  --soui-color-text-inverse: #fff;                      // 反色文本(白色)
+  --soui-font-size-sm: 12px;                            // 小字号
+  --soui-line-height-sm: 1.6667;                        // 小行高
+  --soui-box-shadow-secondary: 0 3px 6px ...;          // 次级阴影
+  --soui-z-index-popover: 1030;                         // 浮层层级
+  --soui-transition-duration: 0.2s;                     // 动画时长
+  
+  /* Tooltip 组件配置点 (引用设计令牌) */
+  --soui-tooltip-bg-color: var(--soui-color-bg-default);
+  --soui-tooltip-text-color: var(--soui-color-text-inverse);
+  --soui-tooltip-font-size: var(--soui-font-size-sm);
+  --soui-tooltip-line-height: var(--soui-line-height-sm);
+  --soui-tooltip-max-width: 250px;
+  --soui-tooltip-min-height: 32px;
+  --soui-tooltip-padding: 6px 12px;
+  --soui-tooltip-border-radius: var(--soui-border-radius);
+  --soui-tooltip-box-shadow: var(--soui-box-shadow-secondary);
+  --soui-tooltip-arrow-size: 8px;
+  --soui-tooltip-z-index: var(--soui-z-index-popover);
+  --soui-tooltip-animation-duration: var(--soui-transition-duration);
 }
 ```
 

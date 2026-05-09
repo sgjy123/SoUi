@@ -56,4 +56,28 @@
   --soui-icon-color-disabled: rgba(0, 0, 0, 0.25);
   --soui-icon-hover-opacity: 0.7;
   --soui-icon-active-opacity: 0.5;
+  
+  // === 第1层: 设计令牌回退值 ===
+  --soui-color-bg-default: rgba(0, 0, 0, 0.88);
+  --soui-color-text-inverse: #fff;
+  --soui-font-size-sm: 12px;
+  --soui-line-height-sm: 1.6667;
+  --soui-border-radius: 6px;
+  --soui-box-shadow-secondary: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  --soui-z-index-popover: 1030;
+  --soui-transition-duration: 0.2s;
+  
+  // === 第2层: Tooltip 配置点回退值 (引用设计令牌) ===
+  --soui-tooltip-bg-color: var(--soui-color-bg-default);
+  --soui-tooltip-text-color: var(--soui-color-text-inverse);
+  --soui-tooltip-font-size: var(--soui-font-size-sm);
+  --soui-tooltip-line-height: var(--soui-line-height-sm);
+  --soui-tooltip-max-width: 250px;
+  --soui-tooltip-min-height: 32px;
+  --soui-tooltip-padding: 6px 12px;
+  --soui-tooltip-border-radius: var(--soui-border-radius);
+  --soui-tooltip-box-shadow: var(--soui-box-shadow-secondary);
+  --soui-tooltip-arrow-size: 8px;
+  --soui-tooltip-z-index: var(--soui-z-index-popover);
+  --soui-tooltip-animation-duration: var(--soui-transition-duration);
 }
