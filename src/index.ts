@@ -40,6 +40,11 @@ export type { TooltipProps, TooltipPlacement, TooltipTrigger } from './component
 export { default as Divider } from './components/Divider';
 export type { DividerProps, DividerType, DividerOrientation } from './components/Divider';
 
+// Grid Component
+export { Row, Col } from './components/Grid';
+export type { RowProps, RowJustify, RowAlign } from './components/Grid';
+export type { ColProps, BreakpointObject } from './components/Grid';
+
 // Utils
 export * from './utils';
 

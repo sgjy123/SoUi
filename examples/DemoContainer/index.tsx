@@ -6,6 +6,7 @@ import Icon from '../../src/components/Icon';
 import Typography from '../../src/components/Typography';
 import Tooltip from '../../src/components/Tooltip';
 import Divider from '../../src/components/Divider';
+import { Row, Col } from '../../src/components/Grid';
 import './style.less';
 
 interface DemoContainerProps {
@@ -38,6 +39,8 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Link: Typography.Link,
     Tooltip,
     Divider,
+    Row,
+    Col,
     ...scope,
   };
 

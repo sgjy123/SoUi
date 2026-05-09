@@ -37,13 +37,11 @@ SoUi/
 │       │   └── component-name.md   # 组件文档文件
 │       └── .vitepress/
 │           └── config.ts           # 文档配置（侧边栏）
-├── examples/                       # 示例代码目录
+── examples/                       # 示例代码目录
 │   ├── DemoContainer/              # 演示容器组件
 │   │   └── index.tsx               # DemoContainer 主文件
 │   └── ComponentName/
-│       ├── Basic.tsx               # 基础示例
-│       ├── codes.ts                # 示例代码字符串
-│       └── ...                     # 其他示例文件
+│       └── codes.ts                # 示例代码字符串（唯一需要的文件）
 └── package.json
 ```
 
@@ -623,40 +621,21 @@ function sidebarComponents() {
 
 ### 步骤 4: 创建示例代码
 
-#### 4.1 创建示例目录
+**⚠️ 重要提醒：DemoContainer 使用 codes.ts 中的代码字符串，不创建多余的 .tsx 文件！**
+
+SoUi 项目中，`demo.tsx` 使用 `DemoContainer` 组件通过 `react-live` 渲染示例代码，`DemoContainer` 接收的是 `codes.ts` 中的代码字符串，**不是**直接导入 `.tsx` 组件文件。
+
+**关键事实：**
+- ❌ **不要创建** `Basic.tsx`、`Gutter.tsx`、`Offset.tsx` 等示例组件文件
+- ✅ **只需创建** `codes.ts` 文件，包含所有示例的代码字符串
+- `DemoContainer` 通过 `LiveProvider` 渲染 `codes.ts` 中的代码字符串
+- 示例组件文件（如 Basic.tsx）完全不会被使用，是多余的
+
+#### 4.1 创建 codes.ts（唯一需要的文件）
+
 ```bash
 mkdir -p SoUi/examples/ComponentName
 ```
-
-#### 4.2 创建示例文件
-
-每个示例是一个独立的 `.tsx` 文件：
-
-```tsx
-// examples/ComponentName/Basic.tsx
-import React from 'react';
-import ComponentName from '../../src/components/ComponentName';
-import Space from '../../src/components/Space';
-
-const Basic: React.FC = () => {
-  return (
-    <Space wrap>
-      <ComponentName>内容</ComponentName>
-    </Space>
-  );
-};
-
-export default Basic;
-```
-
-**常见示例类型：**
-- `Basic.tsx` - 基础用法
-- `Size.tsx` - 不同尺寸
-- `Status.tsx` - 不同状态
-- `Variant.tsx` - 不同变体
-- `Advanced.tsx` - 高级用法
-
-#### 4.3 创建 codes.ts
 
 ```typescript
 // examples/ComponentName/codes.ts
@@ -983,8 +962,8 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 - [ ] 文档文件 `src/docs/components/component-name.md` 已创建
 - [ ] 已在 `.vitepress/config.ts` 中添加侧边栏配置
 - [ ] 示例目录 `examples/ComponentName/` 已创建
-- [ ] 至少创建了 `Basic.tsx` 示例
-- [ ] 创建了 `codes.ts` 代码字符串文件
+- [ ] **只创建了 `codes.ts`，没有创建多余的 `.tsx` 文件**（重要！）
+- [ ] 示例代码字符串包含美观的样式（背景色、边框、圆角等）
 - [ ] **已在 `examples/DemoContainer/index.tsx` 中添加组件到 scope**（重要！）
 - [ ] **已在 `src/demo.tsx` 中添加演示区块**（重要！）
 - [ ] **文档已添加高级用法示例**（推荐）

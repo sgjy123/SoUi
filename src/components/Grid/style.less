@@ -1,0 +1,186 @@
+@import '../../styles/variables.less';
+
+// ==================== Grid System Styles ====================
+
+// 响应式断点
+@soui-screen-xs: @screen-xs;   // 480px
+@soui-screen-sm: @screen-sm;   // 576px
+@soui-screen-md: @screen-md;   // 768px
+@soui-screen-lg: @screen-lg;   // 992px
+@soui-screen-xl: @screen-xl;   // 1200px
+@soui-screen-xxl: @screen-xxl; // 1600px
+
+// ==================== Row Styles ====================
+
+.soui-row {
+  display: flex;
+  flex-flow: row wrap;
+  min-width: 0;
+
+  // 水平对齐
+  &-justify-start {
+    justify-content: flex-start;
+  }
+
+  &-justify-end {
+    justify-content: flex-end;
+  }
+
+  &-justify-center {
+    justify-content: center;
+  }
+
+  &-justify-space-around {
+    justify-content: space-around;
+  }
+
+  &-justify-space-between {
+    justify-content: space-between;
+  }
+
+  &-justify-space-evenly {
+    justify-content: space-evenly;
+  }
+
+  // 垂直对齐
+  &-align-top {
+    align-items: flex-start;
+  }
+
+  &-align-middle {
+    align-items: center;
+  }
+
+  &-align-bottom {
+    align-items: flex-end;
+  }
+
+  &-align-stretch {
+    align-items: stretch;
+  }
+
+  // 间距处理
+  &.soui-row-gutter {
+    margin-top: calc(var(--soui-row-gutter-vertical, 0) / -2);
+    margin-bottom: calc(var(--soui-row-gutter-vertical, 0) / -2);
+  }
+}
+
+// ==================== Col Styles ====================
+
+.soui-col {
+  position: relative;
+  max-width: 100%;
+  min-height: 1px;
+  padding-left: calc(var(--soui-row-gutter-horizontal, 0) / 2);
+  padding-right: calc(var(--soui-row-gutter-horizontal, 0) / 2);
+  box-sizing: border-box;
+
+  // 基础栅格 (1-24)
+  .generate-grid-columns(24);
+
+  // 偏移
+  .generate-offset-columns(24);
+
+  // 排序 (push/pull)
+  .generate-order-columns(24);
+
+  // ==================== 响应式栅格 ====================
+
+  // xs (<576px)
+  @media (max-width: (@soui-screen-sm - 1)) {
+    .generate-grid-columns(24, xs);
+    .generate-offset-columns(24, xs);
+    .generate-order-columns(24, xs);
+  }
+
+  // sm (≥576px)
+  @media (min-width: @soui-screen-sm) {
+    .generate-grid-columns(24, sm);
+    .generate-offset-columns(24, sm);
+    .generate-order-columns(24, sm);
+  }
+
+  // md (≥768px)
+  @media (min-width: @soui-screen-md) {
+    .generate-grid-columns(24, md);
+    .generate-offset-columns(24, md);
+    .generate-order-columns(24, md);
+  }
+
+  // lg (≥992px)
+  @media (min-width: @soui-screen-lg) {
+    .generate-grid-columns(24, lg);
+    .generate-offset-columns(24, lg);
+    .generate-order-columns(24, lg);
+  }
+
+  // xl (≥1200px)
+  @media (min-width: @soui-screen-xl) {
+    .generate-grid-columns(24, xl);
+    .generate-offset-columns(24, xl);
+    .generate-order-columns(24, xl);
+  }
+
+  // xxl (≥1600px)
+  @media (min-width: @soui-screen-xxl) {
+    .generate-grid-columns(24, xxl);
+    .generate-offset-columns(24, xxl);
+    .generate-order-columns(24, xxl);
+  }
+}
+
+// ==================== Mixins ====================
+
+// 生成栅格列宽度
+.generate-grid-columns(@columns, @breakpoint: '') {
+  .loop(@index) when (@index > 0) {
+    @class: ~'.soui-col@{breakpoint}-@{index}';
+    @{class} {
+      display: block;
+      flex: 0 0 percentage((@index / @columns));
+      max-width: percentage((@index / @columns));
+    }
+    .loop((@index - 1));
+  }
+  .loop(@columns);
+
+  // span 为 0 时隐藏
+  @class-zero: ~'.soui-col@{breakpoint}-0';
+  @{class-zero} {
+    display: none;
+  }
+}
+
+// 生成偏移列
+.generate-offset-columns(@columns, @breakpoint: '') {
+  .loop(@index) when (@index > 0) {
+    @class: ~'.soui-col@{breakpoint}-offset-@{index}';
+    @{class} {
+      margin-left: percentage((@index / @columns));
+    }
+    .loop((@index - 1));
+  }
+  .loop(@columns);
+}
+
+// 生成排序列 (push/pull)
+.generate-order-columns(@columns, @breakpoint: '') {
+  .loop-push(@index) when (@index > 0) {
+    @class: ~'.soui-col@{breakpoint}-push-@{index}';
+    @{class} {
+      left: percentage((@index / @columns));
+    }
+    .loop-push((@index - 1));
+  }
+  .loop-push(@columns);
+
+  .loop-pull(@index) when (@index > 0) {
+    @class: ~'.soui-col@{breakpoint}-pull-@{index}';
+    @{class} {
+      right: percentage((@index / @columns));
+    }
+    .loop-pull((@index - 1));
+  }
+  .loop-pull(@columns);
+}
