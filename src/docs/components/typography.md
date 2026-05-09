@@ -500,6 +500,13 @@ export default () => (
       headingLevel2FontSizeMD: 35,
       headingLevel3FontSizeMD: 25,
       
+      // 标题行高配置
+      headingLevel1LineHeight: 1.23,
+      headingLevel2LineHeight: 1.25,
+      headingLevel3LineHeight: 1.3,
+      headingLevel4LineHeight: 1.35,
+      headingLevel5LineHeight: 1.4,
+      
       // 特殊样式颜色
       markBackgroundColor: '#ffe58f',
       codeBackgroundColor: 'rgba(0, 0, 0, 0.04)',
@@ -559,6 +566,7 @@ export default () => (
           // 操作按钮配置
           operationGap: 8,
           operationHoverBgOpacity: 0.08,
+          linkFocusOpacity: 0.2,
           
           // 编辑框配置
           editableBorderColor: '#1890ff',
@@ -673,6 +681,7 @@ export default () => (
 |--------|------|------|--------|
 | operationGap | 操作按钮间距 | `number` | `4` |
 | operationHoverBgOpacity | 操作按钮悬停背景透明度 | `number` | `0.06` |
+| linkFocusOpacity | 链接聚焦轮廓透明度 | `number` | `0.2` |
 
 **编辑框配置**
 

@@ -155,6 +155,7 @@ interface ThemeConfig {
       // 操作按钮
       operationGap?: number;           // 操作按钮间距
       operationHoverBgOpacity?: number;// 操作按钮悬停背景透明度
+      linkFocusOpacity?: number;       // 链接聚焦轮廓透明度
       
       // 编辑框
       editableBorderColor?: string;    // 编辑框边框颜色
@@ -435,6 +436,9 @@ ConfigProvider 会自动生成 CSS 变量，您可以在任何地方使用：
   --soui-typography-mark-bg-color: #ffe58f;
   --soui-typography-code-bg-color: rgba(0, 0, 0, 0.04);
   --soui-typography-code-border-color: rgba(0, 0, 0, 0.06);
+  --soui-typography-link-focus-color: rgba(24, 144, 255, 0.2);
+  --soui-typography-operation-hover-bg: rgba(24, 144, 255, 0.06);
+  --soui-typography-editable-focus-shadow: rgba(24, 144, 255, 0.2);
   
   /* Icon 变量 */
   --soui-icon-size: 24px;
