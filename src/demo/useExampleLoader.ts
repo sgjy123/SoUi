@@ -9,11 +9,8 @@ export const useExampleLoader = (componentPath: string, exampleName: string) => 
   return useMemo(() => {
     // 构造路径匹配键
     const compKey = `../../examples/${componentPath}/${exampleName}.tsx`;
-    const codeKey = `${compKey}?raw`;
-
     const Component = (componentModules[compKey] as any)?.default;
     const code = codeModules[compKey] as string || '// 源码加载中...';
-
     return { Component, code };
   }, [componentPath, exampleName]);
 };

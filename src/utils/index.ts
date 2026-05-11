@@ -3,9 +3,7 @@
  * Combines class names conditionally
  */
 import classNames from 'classnames';
-
 export { classNames };
-
 /**
  * Merge class names with conditional logic
  */
@@ -25,35 +23,6 @@ export function isEmpty(value: any): boolean {
 }
 
 /**
- * Deep merge objects
- */
-export function deepMerge<T extends object>(target: T, source: Partial<T>): T {
-  const result = { ...target };
-  
-  for (const key in source) {
-    if (source.hasOwnProperty(key)) {
-      const targetValue = result[key];
-      const sourceValue = source[key];
-      
-      if (
-        typeof targetValue === 'object' &&
-        typeof sourceValue === 'object' &&
-        targetValue !== null &&
-        sourceValue !== null &&
-        !Array.isArray(targetValue) &&
-        !Array.isArray(sourceValue)
-      ) {
-        result[key] = deepMerge(targetValue as any, sourceValue as any);
-      } else if (sourceValue !== undefined) {
-        result[key] = sourceValue as any;
-      }
-    }
-  }
-  
-  return result;
-}
-
-/**
  * Generate unique ID
  */
 let uuidCounter = 0;
@@ -69,13 +38,13 @@ export function debounce<T extends (...args: any[]) => any>(
   wait: number
 ): (...args: Parameters<T>) => void {
   let timeout: ReturnType<typeof setTimeout> | null = null;
-  
+
   return function executedFunction(...args: Parameters<T>) {
     const later = () => {
       timeout = null;
       func(...args);
     };
-    
+
     if (timeout) {
       clearTimeout(timeout);
     }
@@ -91,7 +60,7 @@ export function throttle<T extends (...args: any[]) => any>(
   limit: number
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
-  
+
   return function executedFunction(...args: Parameters<T>) {
     if (!inThrottle) {
       func(...args);
@@ -106,9 +75,9 @@ export function throttle<T extends (...args: any[]) => any>(
  */
 export function getScrollParent(element: HTMLElement | null): HTMLElement | Document {
   if (!element) return document.documentElement;
-  
+
   const overflowPattern = /(auto|scroll|overlay)/;
-  
+
   let parent = element.parentElement;
   while (parent) {
     const style = window.getComputedStyle(parent);
@@ -117,7 +86,7 @@ export function getScrollParent(element: HTMLElement | null): HTMLElement | Docu
     }
     parent = parent.parentElement;
   }
-  
+
   return document.documentElement;
 }
 
@@ -155,17 +124,17 @@ export function isInViewport(element: HTMLElement, offset = 0): boolean {
 export function hexToRgba(hex: string, opacity: number): string {
   // Remove '#' if present
   hex = hex.replace(/^#/, '');
-  
+
   // Handle 3-digit hex
   if (hex.length === 3) {
     hex = hex.split('').map(char => char + char).join('');
   }
-  
+
   // Parse hex to RGB
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
-  
+
   return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
@@ -184,12 +153,12 @@ export function addOpacityToColor(color: string, opacity: number): string {
       return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     }
   }
-  
+
   // If hex, convert to rgba
   if (color.startsWith('#')) {
     return hexToRgba(color, opacity);
   }
-  
+
   // Fallback: return as is
   return color;
 }
