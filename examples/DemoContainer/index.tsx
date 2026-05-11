@@ -12,7 +12,8 @@ import './style.less';
 interface DemoContainerProps {
   title: string;
   description?: string;
-  code: string;
+  code: string; // 通过 ?raw 导入的源码字符串
+  component?: React.FC; // 可选：传入真实组件用于预览（性能更好）
   scope?: Record<string, any>;
 }
 
@@ -20,6 +21,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
   title,
   description,
   code,
+  component: Component,
   scope = {},
 }) => {
   const [showCode, setShowCode] = useState(false);
@@ -56,27 +58,36 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
         </div>
       )}
 
-      <LiveProvider code={code} scope={defaultScope}>
+      {/* 如果传入了真实组件，优先渲染真实组件以获得更好的 HMR 体验 */}
+      {Component ? (
         <div className="soui-demo-preview">
-          <LivePreview />
-          <LiveError />
+          <Component />
         </div>
+      ) : (
+        <LiveProvider code={code} scope={defaultScope}>
+          <div className="soui-demo-preview">
+            <LivePreview />
+            <LiveError />
+          </div>
+        </LiveProvider>
+      )}
 
-        <div className="soui-demo-actions">
-          <button
-            className={`soui-demo-code-toggle ${showCode ? 'active' : ''}`}
-            onClick={() => setShowCode(!showCode)}
-          >
-            {showCode ? '隐藏代码' : '查看代码'}
-          </button>
-        </div>
+      <div className="soui-demo-actions">
+        <button
+          className={`soui-demo-code-toggle ${showCode ? 'active' : ''}`}
+          onClick={() => setShowCode(!showCode)}
+        >
+          {showCode ? '隐藏代码' : '查看代码'}
+        </button>
+      </div>
 
-        {showCode && (
+      {showCode && (
+        <LiveProvider code={code} scope={defaultScope}>
           <div className="soui-demo-code">
             <LiveEditor />
           </div>
-        )}
-      </LiveProvider>
+        </LiveProvider>
+      )}
     </div>
   );
 };
