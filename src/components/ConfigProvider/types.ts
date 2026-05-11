@@ -198,6 +198,46 @@ export interface ComponentThemeConfig {
     screenXL?: number;           // xl 断点（默认 1200px）
     screenXXL?: number;          // xxl 断点（默认 1600px）
   };
+  /** Layout 布局组件配置 */
+  Layout?: {
+    // === 高度配置 ===
+    /** Header 高度（像素） */
+    headerHeight?: number;
+    /** Footer 高度（像素） */
+    footerHeight?: number;
+    
+    // === Sider 配置 ===
+    /** Sider 宽度（像素） */
+    siderWidth?: number;
+    /** Sider 收起宽度（像素） */
+    siderCollapsedWidth?: number;
+    
+    // === 颜色配置 ===
+    /** 布局背景色 */
+    colorBg?: string;
+    /** Header 背景色 */
+    headerColorBg?: string;
+    /** Header 文本色 */
+    headerColorText?: string;
+    /** Sider 背景色 */
+    siderColorBg?: string;
+    /** Content 背景色 */
+    contentColorBg?: string;
+    /** Footer 背景色 */
+    footerColorBg?: string;
+    /** Footer 文本色 */
+    footerColorText?: string;
+    /** Sider 触发器文本色 */
+    siderTriggerColorText?: string;
+    /** Sider 触发器背景色 */
+    siderTriggerColorBg?: string;
+    /** Sider 触发器悬停背景色 */
+    siderTriggerColorBgHover?: string;
+    
+    // === 间距配置 ===
+    /** 内容区域内边距 */
+    contentPadding?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

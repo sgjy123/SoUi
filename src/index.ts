@@ -45,6 +45,16 @@ export { Row, Col } from './components/Grid';
 export type { RowProps, RowJustify, RowAlign } from './components/Grid';
 export type { ColProps, BreakpointObject } from './components/Grid';
 
+// Layout Component
+export { default as Layout } from './components/Layout';
+export type {
+  LayoutProps,
+  HeaderProps,
+  SiderProps,
+  ContentProps,
+  FooterProps,
+} from './components/Layout';
+
 // Utils
 export * from './utils';
 

@@ -36,6 +36,12 @@ export const docsConfig: MenuGroup[] = [
       { key: 'grid-responsive', label: 'Grid 响应式', componentPath: 'Grid', exampleName: 'Responsive', description: '六种屏幕尺寸适配。' },
       { key: 'grid-alignment', label: 'Grid 对齐方式', componentPath: 'Grid', exampleName: 'Alignment', description: '水平和垂直对齐。' },
 
+      { key: 'layout-basic', label: 'Layout 基础布局', componentPath: 'Layout', exampleName: 'Basic', description: '最基本的上-中-下布局。' },
+      { key: 'layout-with-sider', label: 'Layout 带侧边栏', componentPath: 'Layout', exampleName: 'WithSider', description: '带有侧边栏的布局。' },
+      { key: 'layout-top-sider', label: 'Layout 顶部-侧边', componentPath: 'Layout', exampleName: 'TopSider', description: '顶部导航加侧边栏。' },
+      { key: 'layout-collapsible', label: 'Layout 可收起侧边栏', componentPath: 'Layout', exampleName: 'Collapsible', description: '侧边栏可以收起和展开。' },
+      { key: 'layout-custom-width', label: 'Layout 自定义宽度', componentPath: 'Layout', exampleName: 'CustomWidth', description: '自定义侧边栏宽度。' },
+
       { key: 'space-basic', label: 'Space 基本用法', componentPath: 'Space', exampleName: 'Basic', description: '设置子元素之间的间距。' },
       { key: 'space-size', label: 'Space 间距尺寸', componentPath: 'Space', exampleName: 'Size', description: '预设尺寸或自定义数值。' },
       { key: 'space-direction', label: 'Space 排列方向', componentPath: 'Space', exampleName: 'Direction', description: '水平和垂直排列。' },

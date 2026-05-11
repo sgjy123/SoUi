@@ -1,0 +1,117 @@
+@import '../../styles/variables.less';
+
+// ==================== Layout Styles ====================
+
+.soui-layout {
+  display: flex;
+  flex: auto;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--soui-layout-color-bg, @bg-color-layout);
+
+  // 有侧边栏时的布局
+  &.soui-layout-has-sider {
+    flex-direction: row;
+
+    > .soui-layout,
+    > .soui-layout-content {
+      overflow-x: hidden;
+    }
+  }
+
+  // ==================== Header ====================
+  &-header {
+    height: var(--soui-layout-header-height, 64px);
+    padding: 0 var(--soui-layout-padding-md, @padding-md);
+    color: var(--soui-layout-header-color-text, @text-color);
+    line-height: var(--soui-layout-header-height, 64px);
+    background: var(--soui-layout-header-color-bg, @bg-color-base);
+    flex: 0 0 auto;
+  }
+
+  // ==================== Sider ====================
+  &-sider {
+    position: relative;
+    min-width: 0;
+    background: var(--soui-layout-sider-color-bg, #001529);
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &-children {
+      height: 100%;
+      margin-top: -0.1px;
+      padding-top: 0.1px;
+    }
+
+    &-trigger {
+      position: sticky;
+      bottom: 0;
+      z-index: 1;
+      height: 42px;
+      color: var(--soui-layout-sider-trigger-color-text, #fff);
+      line-height: 42px;
+      text-align: center;
+      background: var(--soui-layout-sider-trigger-color-bg, rgba(255, 255, 255, 0.1));
+      cursor: pointer;
+      transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+      &:hover {
+        background: var(--soui-layout-sider-trigger-color-bg-hover, rgba(255, 255, 255, 0.2));
+      }
+    }
+
+    // 收起状态
+    &-collapsed {
+      width: var(--soui-layout-sider-collapsed-width, 80px) !important;
+      min-width: var(--soui-layout-sider-collapsed-width, 80px) !important;
+      max-width: var(--soui-layout-sider-collapsed-width, 80px) !important;
+      flex: 0 0 var(--soui-layout-sider-collapsed-width, 80px) !important;
+    }
+
+    // 可收起但未收起
+    &:not(&-collapsed) {
+      width: var(--soui-layout-sider-width, 200px);
+      min-width: var(--soui-layout-sider-width, 200px);
+      max-width: var(--soui-layout-sider-width, 200px);
+      flex: 0 0 var(--soui-layout-sider-width, 200px);
+    }
+  }
+
+  // ==================== Content ====================
+  &-content {
+    flex: auto;
+    padding: var(--soui-layout-content-padding, @padding-md);
+    background: var(--soui-layout-content-color-bg, @bg-color-base);
+  }
+
+  // ==================== Footer ====================
+  &-footer {
+    height: var(--soui-layout-footer-height, 64px);
+    padding: 0 var(--soui-layout-padding-md, @padding-md);
+    color: var(--soui-layout-footer-color-text, @text-color-secondary);
+    line-height: var(--soui-layout-footer-height, 64px);
+    background: var(--soui-layout-footer-color-bg, @bg-color-layout);
+    flex: 0 0 auto;
+  }
+}
+
+// ==================== Responsive ====================
+
+// 小屏幕适配
+@media (max-width: @screen-sm) {
+  .soui-layout {
+    &.soui-layout-has-sider {
+      flex-direction: column;
+    }
+
+    &-sider {
+      width: 100% !important;
+      min-width: 100% !important;
+      max-width: 100% !important;
+      flex: 0 0 auto !important;
+
+      &-collapsed {
+        display: none;
+      }
+    }
+  }
+}

@@ -196,6 +196,7 @@ function sidebarComponents() {
       collapsed: false,
       items: [
         { text: 'Grid 栅格', link: 'grid' },
+        { text: 'Layout 布局', link: 'layout' },
         { text: 'Space 间距', link: 'space' },
         { text: 'Divider 分割线', link: 'divider' },
       ],

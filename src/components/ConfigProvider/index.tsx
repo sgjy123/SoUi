@@ -26,6 +26,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const tooltipTheme = mergedTheme.components?.Tooltip || {};
     // 获取 Divider 组件级配置
     const dividerTheme = mergedTheme.components?.Divider || {};
+    // 获取 Layout 组件级配置
+    const layoutTheme = mergedTheme.components?.Layout || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -164,6 +166,24 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       // 第2层: Divider 配置点 (引用设计令牌)
       '--soui-divider-color': dividerTheme.colorBorder || mergedTheme.borderColorBase,
       '--soui-divider-font-size': dividerTheme.fontSize ? `${dividerTheme.fontSize}px` : undefined,
+      
+      // ==================== Layout 组件配置 ====================
+      // 第2层: Layout 配置点 (引用设计令牌)
+      '--soui-layout-color-bg': layoutTheme.colorBg || '@bg-color-layout',
+      '--soui-layout-header-height': layoutTheme.headerHeight ? `${layoutTheme.headerHeight}px` : '64px',
+      '--soui-layout-footer-height': layoutTheme.footerHeight ? `${layoutTheme.footerHeight}px` : '64px',
+      '--soui-layout-sider-width': layoutTheme.siderWidth ? `${layoutTheme.siderWidth}px` : '200px',
+      '--soui-layout-sider-collapsed-width': layoutTheme.siderCollapsedWidth ? `${layoutTheme.siderCollapsedWidth}px` : '80px',
+      '--soui-layout-header-color-bg': layoutTheme.headerColorBg || '@bg-color-base',
+      '--soui-layout-header-color-text': layoutTheme.headerColorText || '@text-color',
+      '--soui-layout-sider-color-bg': layoutTheme.siderColorBg || '#001529',
+      '--soui-layout-content-color-bg': layoutTheme.contentColorBg || '@bg-color-base',
+      '--soui-layout-content-padding': layoutTheme.contentPadding || '@padding-md',
+      '--soui-layout-footer-color-bg': layoutTheme.footerColorBg || '@bg-color-layout',
+      '--soui-layout-footer-color-text': layoutTheme.footerColorText || '@text-color-secondary',
+      '--soui-layout-sider-trigger-color-text': layoutTheme.siderTriggerColorText || '#fff',
+      '--soui-layout-sider-trigger-color-bg': layoutTheme.siderTriggerColorBg || 'rgba(255, 255, 255, 0.1)',
+      '--soui-layout-sider-trigger-color-bg-hover': layoutTheme.siderTriggerColorBgHover || 'rgba(255, 255, 255, 0.2)',
     } as any;
   }, [mergedTheme]);
 

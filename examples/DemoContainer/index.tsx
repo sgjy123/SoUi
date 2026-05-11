@@ -7,6 +7,7 @@ import Typography from '../../src/components/Typography';
 import Tooltip from '../../src/components/Tooltip';
 import Divider from '../../src/components/Divider';
 import { Row, Col } from '../../src/components/Grid';
+import Layout from '../../src/components/Layout';
 import './style.less';
 
 interface DemoContainerProps {
@@ -43,6 +44,11 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Divider,
     Row,
     Col,
+    Layout,
+    Header: Layout.Header,
+    Sider: Layout.Sider,
+    Content: Layout.Content,
+    Footer: Layout.Footer,
     ...scope,
   };
 
