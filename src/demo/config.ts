@@ -46,6 +46,13 @@ export const docsConfig: MenuGroup[] = [
       { key: 'layout-blog', label: 'Layout 博客布局', componentPath: 'Layout', exampleName: 'BlogLayout', description: '博客平台布局，包含文章列表和分页。' },
       { key: 'layout-app', label: 'Layout 应用布局', componentPath: 'Layout', exampleName: 'AppLayout', description: '音乐/社交应用布局，分组菜单和徽章提示。' },
 
+      { key: 'menu-basic', label: 'Menu 基础用法', componentPath: 'Menu', exampleName: 'Basic', description: '垂直菜单的基本用法。' },
+      { key: 'menu-horizontal', label: 'Menu 水平菜单', componentPath: 'Menu', exampleName: 'Horizontal', description: '水平方向的导航菜单。' },
+      { key: 'menu-dark-theme', label: 'Menu 深色主题', componentPath: 'Menu', exampleName: 'DarkTheme', description: '深色主题的菜单样式。' },
+      { key: 'menu-collapsed', label: 'Menu 折叠菜单', componentPath: 'Menu', exampleName: 'Collapsed', description: '可折叠的侧边栏菜单。' },
+      { key: 'menu-controlled', label: 'Menu 受控模式', componentPath: 'Menu', exampleName: 'Controlled', description: '完全受控的菜单状态管理。' },
+      { key: 'menu-group', label: 'Menu 分组菜单', componentPath: 'Menu', exampleName: 'Group', description: '使用 Menu.Group 对菜单项进行分组。' },
+
       { key: 'space-basic', label: 'Space 基本用法', componentPath: 'Space', exampleName: 'Basic', description: '设置子元素之间的间距。' },
       { key: 'space-size', label: 'Space 间距尺寸', componentPath: 'Space', exampleName: 'Size', description: '预设尺寸或自定义数值。' },
       { key: 'space-direction', label: 'Space 排列方向', componentPath: 'Space', exampleName: 'Direction', description: '水平和垂直排列。' },

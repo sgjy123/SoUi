@@ -238,6 +238,29 @@ export interface ComponentThemeConfig {
     /** 内容区域内边距 */
     contentPadding?: string;
   };
+  /** Menu 菜单组件配置 */
+  Menu?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 主色 */
+    colorPrimary?: string;
+    /** 主色悬停 */
+    colorPrimaryHover?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 次要文本颜色 */
+    colorTextSecondary?: string;
+    /** 选中项背景色 */
+    itemSelectedBg?: string;
+    /** 选中项文本颜色 */
+    itemSelectedColor?: string;
+    /** 悬停背景色 */
+    itemHoverBg?: string;
+    /** 激活背景色 */
+    itemActiveBg?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

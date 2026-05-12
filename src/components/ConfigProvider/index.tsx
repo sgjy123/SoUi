@@ -28,6 +28,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const dividerTheme = mergedTheme.components?.Divider || {};
     // 获取 Layout 组件级配置
     const layoutTheme = mergedTheme.components?.Layout || {};
+    // 获取 Menu 组件级配置
+    const menuTheme = mergedTheme.components?.Menu || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -184,6 +186,26 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-layout-sider-trigger-color-text': layoutTheme.siderTriggerColorText || '#fff',
       '--soui-layout-sider-trigger-color-bg': layoutTheme.siderTriggerColorBg || 'rgba(255, 255, 255, 0.1)',
       '--soui-layout-sider-trigger-color-bg-hover': layoutTheme.siderTriggerColorBgHover || 'rgba(255, 255, 255, 0.2)',
+      
+      // ==================== Menu 组件配置 ====================
+      // 第2层: Menu 配置点 (引用设计令牌)
+      '--soui-menu-color-text': menuTheme.colorText || '@text-color',
+      '--soui-menu-color-primary': menuTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-menu-color-primary-hover': menuTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-menu-item-hover-bg': menuTheme.itemHoverBg || 'rgba(0, 0, 0, 0.04)',
+      '--soui-menu-item-active-bg': menuTheme.itemActiveBg || 'rgba(0, 0, 0, 0.06)',
+      '--soui-menu-item-selected-bg': menuTheme.itemSelectedBg || 'rgba(24, 144, 255, 0.1)',
+      '--soui-menu-item-selected-color': menuTheme.itemSelectedColor || mergedTheme.primaryColor,
+      '--soui-menu-border-radius': menuTheme.borderRadius ? `${menuTheme.borderRadius}px` : undefined,
+      '--soui-menu-font-size': menuTheme.fontSize ? `${menuTheme.fontSize}px` : undefined,
+      
+      // 第3层: Menu 组件级覆盖 (优先级最高)
+      '--soui-menu-color-text-component': menuTheme.colorText,
+      '--soui-menu-color-primary-component': menuTheme.colorPrimary,
+      '--soui-menu-item-selected-bg-component': menuTheme.itemSelectedBg,
+      '--soui-menu-item-selected-color-component': menuTheme.itemSelectedColor,
+      '--soui-menu-border-radius-component': menuTheme.borderRadius ? `${menuTheme.borderRadius}px` : undefined,
+      '--soui-menu-font-size-component': menuTheme.fontSize ? `${menuTheme.fontSize}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

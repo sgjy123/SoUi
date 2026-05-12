@@ -129,6 +129,17 @@
   --soui-layout-sider-trigger-color-text: #fff;                    // Sider触发器文本色
   --soui-layout-sider-trigger-color-bg: rgba(255, 255, 255, 0.1); // Sider触发器背景色
   --soui-layout-sider-trigger-color-bg-hover: rgba(255, 255, 255, 0.2); // Sider触发器悬停背景色
+  
+  // === 第2层: Menu 组件配置点 (引用设计令牌) ===
+  --soui-menu-color-text: @text-color;                             // 引用全局文本色
+  --soui-menu-color-primary: var(--soui-primary-color);            // 引用全局主色
+  --soui-menu-color-primary-hover: var(--soui-primary-hover-color); // 引用全局主色悬停
+  --soui-menu-item-selected-bg: rgba(24, 144, 255, 0.1);           // Menu专属:选中项背景色
+  --soui-menu-item-selected-color: var(--soui-primary-color);      // Menu专属:选中项文本色
+  --soui-menu-item-hover-bg: rgba(0, 0, 0, 0.04);                  // Menu专属:悬停背景色
+  --soui-menu-item-active-bg: rgba(0, 0, 0, 0.06);                 // Menu专属:激活背景色
+  --soui-menu-border-radius: var(--soui-border-radius);            // 引用全局圆角
+  --soui-menu-font-size: var(--soui-font-size);                    // 引用全局字体大小
 }
 
 // ==================== Global Styles ====================
