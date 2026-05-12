@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, useEffect } from 'react';
+import React, { useState, useContext, useCallback, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import Icon from '../Icon';
 import Tooltip from '../Tooltip';
@@ -11,8 +11,10 @@ export type MenuMode = 'horizontal' | 'vertical';
 export type MenuTheme = 'light' | 'dark';
 
 export interface MenuItemProps {
-  /** 菜单项唯一标识 */
+  /** 菜单项唯一标识（必需） */
   key: string;
+  /** 菜单项唯一标识（与 key 相同，用于组件内部识别） */
+  menuKey?: string;
   /** 菜单项文本 */
   label?: React.ReactNode;
   /** 菜单项图标 */
@@ -20,7 +22,7 @@ export interface MenuItemProps {
   /** 是否禁用 */
   disabled?: boolean;
   /** 点击回调 */
-  onClick?: (key: string) => void;
+  onClick?: (menuKey: string) => void;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
@@ -110,6 +112,7 @@ const useMenuContext = () => {
 
 const MenuItem: React.FC<MenuItemProps & { keyPath?: string[] }> = ({
   key,
+  menuKey,
   label,
   icon,
   disabled = false,
@@ -119,14 +122,16 @@ const MenuItem: React.FC<MenuItemProps & { keyPath?: string[] }> = ({
   children,
   keyPath = [],
 }) => {
+  // 使用 menuKey 或 key 作为菜单项标识
+  const itemKey = menuKey || key;
   const { mode, theme, selectedKeys, inlineCollapsed, onSelect } = useMenuContext();
-  const isSelected = selectedKeys.includes(key);
+  const isSelected = selectedKeys.includes(itemKey);
 
   const handleClick = useCallback(() => {
     if (disabled) return;
-    onSelect(key, [...keyPath, key]);
-    onClick?.(key);
-  }, [disabled, key, keyPath, onSelect, onClick]);
+    onSelect(itemKey, [...keyPath, itemKey]);
+    onClick?.(itemKey);
+  }, [disabled, itemKey, keyPath, onSelect, onClick]);
 
   const itemClassName = classNames(
     'soui-menu-item',
@@ -182,11 +187,39 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
 }) => {
   const { mode, theme, openKeys, inlineCollapsed, onOpenChange } = useMenuContext();
   const isOpen = openKeys.includes(key);
+  const closeTimerRef = useRef<number | null>(null);
 
   const handleToggle = useCallback(() => {
     if (disabled) return;
     onOpenChange(key);
   }, [disabled, key, onOpenChange]);
+
+  // 延迟关闭，给鼠标移动留出时间
+  const handleMouseEnter = useCallback(() => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+    }
+    if (!disabled && !isOpen) {
+      onOpenChange(key);
+    }
+  }, [disabled, isOpen, key, onOpenChange]);
+
+  const handleMouseLeave = useCallback(() => {
+    closeTimerRef.current = window.setTimeout(() => {
+      if (isOpen) {
+        onOpenChange(key);
+      }
+    }, 100); // 100ms 延迟
+  }, [isOpen, key, onOpenChange]);
+
+  // 组件卸载时清理定时器
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
 
   const submenuClassName = classNames(
     'soui-submenu',
@@ -202,23 +235,41 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
     `soui-submenu-popup-${theme}`
   );
 
-  // 渲染子菜单内容
-  const renderChildren = () => {
+  // 渲染子菜单内容（递归处理嵌套 SubMenu）
+  const renderChildren = useCallback(() => {
     if (!children) return null;
     
-    return React.Children.map(children, (child) => {
+    const processChild = (child: React.ReactElement<any>, parentKeyPath: string[]): React.ReactElement<any> => {
       if (!React.isValidElement(child)) return child;
       
-      // 为子菜单项添加 keyPath
+      // 为 MenuItem 和 SubMenu 添加 menuKey 和 keyPath
       if (child.type === MenuItem || child.type === SubMenu) {
+        const childKey = child.key as string;
         return React.cloneElement(child as any, {
-          keyPath: [...keyPath, key],
+          menuKey: childKey,
+          keyPath: parentKeyPath,
+        });
+      }
+      
+      // 如果是 MenuGroup，也需要处理其子元素
+      if (child.type === MenuGroup) {
+        const childChildren = (child.props as any).children;
+        if (!childChildren) return child;
+        
+        const processedGroupChildren = React.Children.map(childChildren, (c: any) => 
+          processChild(c, parentKeyPath)
+        );
+        
+        return React.cloneElement(child as any, {
+          children: processedGroupChildren,
         });
       }
       
       return child;
-    });
-  };
+    };
+    
+    return React.Children.map(children, (child) => processChild(child as React.ReactElement<any>, [...keyPath, key]));
+  }, [children, keyPath, key]);
 
   // 垂直模式下的子菜单
   if (mode === 'vertical') {
@@ -258,32 +309,43 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
 
   // 水平模式下的子菜单（使用 Popup）
   return (
-    <div className={submenuClassName} style={style}>
-      <Tooltip
-        title={
-          <div className={popupClassName}>
-            {renderChildren()}
-          </div>
-        }
-        trigger="hover"
-        placement="bottomLeft"
+    <div 
+      className={submenuClassName} 
+      style={{ ...style, position: 'relative' }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div
+        className="soui-submenu-title"
+        role="menuitem"
+        aria-haspopup="true"
+        aria-disabled={disabled}
+        aria-expanded={isOpen}
+        tabIndex={disabled ? -1 : 0}
       >
-        <div
-          className="soui-submenu-title"
-          role="menuitem"
-          aria-haspopup="true"
-          aria-disabled={disabled}
-          tabIndex={disabled ? -1 : 0}
+        {icon && (
+          <span className="soui-submenu-icon">
+            {typeof icon === 'string' ? <Icon name={icon} size={16} /> : icon}
+          </span>
+        )}
+        <span className="soui-submenu-title-text">{title}</span>
+        <Icon name="Down" size={12} className="soui-submenu-arrow" />
+      </div>
+      
+      {isOpen && (
+        <div 
+          className={popupClassName}
+          role="menu"
+          style={{
+            position: 'absolute',
+            top: '100%',
+            left: 0,
+            zIndex: 1000,
+          }}
         >
-          {icon && (
-            <span className="soui-submenu-icon">
-              {typeof icon === 'string' ? <Icon name={icon} size={16} /> : icon}
-            </span>
-          )}
-          <span className="soui-submenu-title-text">{title}</span>
-          <Icon name="Down" size={12} className="soui-submenu-arrow" />
+          {renderChildren()}
         </div>
-      </Tooltip>
+      )}
     </div>
   );
 };
@@ -296,13 +358,34 @@ const MenuGroup: React.FC<MenuGroupProps> = ({
   className,
   style,
 }) => {
+  const { mode } = useMenuContext();
   const groupClassName = classNames('soui-menu-group', className);
+
+  // 为子元素添加 menuKey
+  const renderChildren = () => {
+    if (!children) return null;
+    
+    return React.Children.map(children, (child) => {
+      if (!React.isValidElement(child)) return child;
+      
+      // 为 MenuItem 和 SubMenu 添加 menuKey
+      if (child.type === MenuItem || child.type === SubMenu) {
+        const childKey = child.key as string;
+        return React.cloneElement(child as any, {
+          menuKey: childKey,
+          keyPath: [],
+        });
+      }
+      
+      return child;
+    });
+  };
 
   return (
     <div className={groupClassName} style={style} role="group">
       {title && <div className="soui-menu-group-title">{title}</div>}
       <div className="soui-menu-group-content" role="menu">
-        {children}
+        {renderChildren()}
       </div>
     </div>
   );
@@ -416,9 +499,11 @@ const Menu: React.FC<MenuProps> & {
     return React.Children.map(children, (child) => {
       if (!React.isValidElement(child)) return child;
       
-      // 为 MenuItem 和 SubMenu 添加 keyPath
+      // 为 MenuItem 和 SubMenu 添加 menuKey 和 keyPath
       if (child.type === MenuItem || child.type === SubMenu) {
+        const childKey = child.key as string;
         return React.cloneElement(child as any, {
+          menuKey: childKey, // ✅ 使用 menuKey 而不是 key（React 的 key 不会传递到 props）
           keyPath: [],
         });
       }

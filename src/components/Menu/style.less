@@ -109,16 +109,34 @@
     color: var(--soui-menu-item-selected-color);
     font-weight: 500;
     
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 3px;
-      height: 60%;
-      background-color: var(--soui-menu-color-primary);
-      border-radius: 0 2px 2px 0;
+    // 垂直模式：选中指示器在左边
+    .soui-menu-vertical & {
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 60%;
+        background-color: var(--soui-menu-color-primary);
+        border-radius: 0 2px 2px 0;
+      }
+    }
+    
+    // 水平模式：选中指示器在底部
+    .soui-menu-horizontal & {
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 2px;
+        background-color: var(--soui-menu-color-primary);
+        border-radius: 2px 2px 0 0;
+      }
     }
   }
   
@@ -205,6 +223,7 @@
     background-color: var(--soui-menu-bg-color);
     border-radius: var(--soui-menu-border-radius);
     box-shadow: @box-shadow-secondary;
+    margin-top: 4px;
     
     &-light {
       background-color: #fff;
@@ -217,9 +236,21 @@
     .soui-menu-item {
       margin: 0;
       border-radius: 0;
+      padding: 8px 16px;
       
       &:hover {
         background-color: var(--soui-menu-item-hover-bg);
+      }
+      
+      // Popup 中的选中样式
+      &.soui-menu-item-selected {
+        background-color: var(--soui-menu-item-selected-bg);
+        color: var(--soui-menu-item-selected-color);
+        font-weight: 500;
+        
+        &::after {
+          display: none; // Popup 中不显示底部边框
+        }
       }
     }
   }
