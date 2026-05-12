@@ -15,6 +15,8 @@
   --soui-menu-item-selected-color: @primary-color;
   --soui-menu-border-radius: @border-radius-base;
   --soui-menu-font-size: @font-size-base;
+  --soui-menu-collapsed-width: 64px;
+  --soui-menu-collapsed-width: 80px;
   
   list-style: none;
   margin: 0;
@@ -27,6 +29,36 @@
   // ==================== Vertical Mode ====================
   &-vertical {
     width: 256px;
+    
+    // 折叠模式
+    &.soui-menu-inline-collapsed {
+      width: var(--soui-menu-collapsed-width, 80px);
+      
+      .soui-menu-item,
+      .soui-submenu-title {
+        padding: 0 16px;
+        justify-content: center;
+      }
+      
+      .soui-menu-item-icon,
+      .soui-submenu-icon {
+        margin-right: 0;
+        margin-left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      // 折叠模式下隐藏子菜单内容
+      .soui-submenu-content {
+        display: none;
+      }
+      
+      // 折叠模式下隐藏选中指示器
+      .soui-menu-item-selected::before {
+        display: none;
+      }
+    }
     
     .soui-menu-item,
     .soui-submenu-title {
@@ -69,17 +101,23 @@
   
   // ==================== Inline Collapsed ====================
   &-inline-collapsed {
-    width: 80px;
+    width: var(--soui-menu-collapsed-width, 80px);
     
-    .soui-menu-item-label,
-    .soui-submenu-title-text,
-    .soui-menu-group-title {
-      display: none;
+    .soui-menu-item,
+    .soui-submenu-title {
+      padding: 0 16px;
+      justify-content: center;
     }
     
     .soui-menu-item-icon,
     .soui-submenu-icon {
       margin-right: 0;
+      margin-left: 0;
+    }
+    
+    // 折叠模式下隐藏选中指示器
+    .soui-menu-item-selected::before {
+      display: none;
     }
   }
 }
@@ -152,6 +190,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: inherit; // 图标颜色跟随父元素
+    transition: color @transition-duration @transition-timing-function;
   }
   
   .soui-menu-item-label {
@@ -216,7 +256,7 @@
     animation: soui-menu-slide-down @transition-duration @transition-timing-function;
   }
   
-  // Popup for horizontal mode
+  // Popup for horizontal mode and collapsed mode
   &-popup {
     min-width: 160px;
     padding: 4px 0;
@@ -224,6 +264,30 @@
     border-radius: var(--soui-menu-border-radius);
     box-shadow: @box-shadow-secondary;
     margin-top: 4px;
+    opacity: 0;
+    transform-origin: top center;
+    animation: soui-menu-popup-enter 0.2s @transition-timing-function forwards;
+    
+    // 从顶部弹出时的动画
+    &[style*="bottom: 100%"] {
+      transform-origin: bottom center;
+      animation-name: soui-menu-popup-enter-top;
+    }
+    
+    // 折叠模式下的 Popup 样式
+    &-collapsed {
+      margin-top: 0;
+      margin-left: 4px;
+      
+      .soui-submenu-popup-title {
+        padding: 8px 16px;
+        font-size: @font-size-sm;
+        color: @text-color-secondary;
+        font-weight: 500;
+        border-bottom: 1px solid @border-color-split;
+        margin-bottom: 4px;
+      }
+    }
     
     &-light {
       background-color: #fff;
@@ -271,7 +335,7 @@
   }
   
   &-content {
-    // Content styles
+    padding: 4px 0;
   }
 }
 
@@ -285,6 +349,30 @@
   to {
     opacity: 1;
     max-height: 500px;
+  }
+}
+
+// Popup 动画 - 从顶部向下
+@keyframes soui-menu-popup-enter {
+  from {
+    opacity: 0;
+    transform: scaleY(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+// Popup 动画 - 从底部向上
+@keyframes soui-menu-popup-enter-top {
+  from {
+    opacity: 0;
+    transform: scaleY(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
   }
 }
 

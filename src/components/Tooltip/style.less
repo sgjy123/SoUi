@@ -19,21 +19,21 @@
   position: fixed;
   max-width: var(--soui-tooltip-max-width, 250px);
   box-sizing: border-box;
-  font-size: var(--soui-tooltip-font-size-component, var(--soui-tooltip-font-size));
-  line-height: var(--soui-tooltip-line-height-component, var(--soui-tooltip-line-height));
-  color: var(--soui-tooltip-color-text, var(--soui-tooltip-text-color));
+  font-size: var(--soui-tooltip-font-size, var(--soui-font-size-sm, 12px));
+  line-height: var(--soui-tooltip-line-height, var(--soui-line-height-sm, 1.6667));
+  color: var(--soui-tooltip-text-color, #fff);
   word-wrap: break-word;
-  animation: soui-tooltip-fade-in var(--soui-tooltip-animation-duration-component, var(--soui-tooltip-animation-duration)) var(--soui-tooltip-animation-timing-function, var(--soui-transition-timing-function));
-  z-index: var(--soui-tooltip-z-index-component, var(--soui-tooltip-z-index));
+  animation: soui-tooltip-fade-in var(--soui-tooltip-animation-duration, var(--soui-transition-duration, 0.3s)) ease-in-out;
+  z-index: var(--soui-tooltip-z-index, var(--soui-z-index-popover, 1030));
 }
 
 .soui-tooltip-inner {
   min-width: 30px;
-  min-height: var(--soui-tooltip-min-height-component, var(--soui-tooltip-min-height, @control-height-sm + 8px));
-  padding: var(--soui-tooltip-padding-component, var(--soui-tooltip-padding, @padding-xs + 2px @padding-sm));
-  border-radius: var(--soui-tooltip-border-radius-component, var(--soui-tooltip-border-radius));
-  background: var(--soui-tooltip-color-bg-default, var(--soui-tooltip-bg-color));
-  box-shadow: var(--soui-tooltip-box-shadow-component, var(--soui-tooltip-box-shadow));
+  min-height: var(--soui-tooltip-min-height, 32px);
+  padding: var(--soui-tooltip-padding, 6px 12px);
+  border-radius: var(--soui-tooltip-border-radius, var(--soui-border-radius-sm, 2px));
+  background: var(--soui-tooltip-bg-color, rgba(0, 0, 0, 0.88));
+  box-shadow: var(--soui-tooltip-box-shadow, 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05));
   box-sizing: border-box;
 }
 
@@ -41,9 +41,9 @@
 
 .soui-tooltip-arrow {
   position: absolute;
-  width: var(--soui-tooltip-arrow-size-component, var(--soui-tooltip-arrow-size, 8px));
-  height: var(--soui-tooltip-arrow-size-component, var(--soui-tooltip-arrow-size, 8px));
-  background: var(--soui-tooltip-color-bg-default, var(--soui-tooltip-bg-color));
+  width: var(--soui-tooltip-arrow-size, 8px);
+  height: var(--soui-tooltip-arrow-size, 8px);
+  background: var(--soui-tooltip-bg-color, rgba(0, 0, 0, 0.88));
   transform: rotate(45deg);
 }
 

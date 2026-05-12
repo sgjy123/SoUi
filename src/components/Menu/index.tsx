@@ -74,6 +74,12 @@ export interface MenuProps {
   defaultOpenKeys?: string[];
   /** 是否内嵌菜单（仅 vertical 模式有效） */
   inlineCollapsed?: boolean;
+  /** 折叠模式下的菜单宽度 */
+  collapsedWidth?: number;
+  /** Popup 弹出层的 zIndex */
+  popupZIndex?: number;
+  /** 是否开启手风琴模式（每次只展开一个子菜单） */
+  accordion?: boolean;
   /** 菜单项点击回调 */
   onClick?: (info: { key: string; keyPath: string[] }) => void;
   /** 子菜单展开/收起回调 */
@@ -94,6 +100,7 @@ interface MenuContextType {
   selectedKeys: string[];
   openKeys: string[];
   inlineCollapsed: boolean;
+  popupZIndex: number;
   onSelect: (key: string, keyPath: string[]) => void;
   onOpenChange: (key: string) => void;
 }
@@ -127,7 +134,8 @@ const MenuItem: React.FC<MenuItemProps & { keyPath?: string[] }> = ({
   const { mode, theme, selectedKeys, inlineCollapsed, onSelect } = useMenuContext();
   const isSelected = selectedKeys.includes(itemKey);
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation(); // 阻止事件冒泡
     if (disabled) return;
     onSelect(itemKey, [...keyPath, itemKey]);
     onClick?.(itemKey);
@@ -147,6 +155,12 @@ const MenuItem: React.FC<MenuItemProps & { keyPath?: string[] }> = ({
       className={itemClassName}
       style={style}
       onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleClick(e as any);
+        }
+      }}
       role="menuitem"
       aria-selected={isSelected}
       aria-disabled={disabled}
@@ -154,17 +168,31 @@ const MenuItem: React.FC<MenuItemProps & { keyPath?: string[] }> = ({
     >
       {icon && (
         <span className="soui-menu-item-icon">
-          {typeof icon === 'string' ? <Icon name={icon} size={16} /> : icon}
+          {typeof icon === 'string' ? (
+            <Icon 
+              name={icon} 
+              size={16}
+              fill={
+                isSelected 
+                  ? 'var(--soui-menu-item-selected-color)' 
+                  : theme === 'dark'
+                    ? 'rgba(255, 255, 255, 0.65)'
+                    : 'rgba(0, 0, 0, 0.85)'
+              }
+            />
+          ) : icon}
         </span>
       )}
-      <span className="soui-menu-item-label">{label || children}</span>
+      {!inlineCollapsed && (
+        <span className="soui-menu-item-label">{label || children}</span>
+      )}
     </div>
   );
 
   // 折叠模式下显示 Tooltip
   if (inlineCollapsed && mode === 'vertical') {
     return (
-      <Tooltip title={label} placement="right">
+      <Tooltip title={label || children} placement="right" mouseEnterDelay={0.1}>
         {renderContent()}
       </Tooltip>
     );
@@ -185,9 +213,12 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
   style,
   keyPath = [],
 }) => {
-  const { mode, theme, openKeys, inlineCollapsed, onOpenChange } = useMenuContext();
+  const { mode, theme, openKeys, inlineCollapsed, onOpenChange, popupZIndex } = useMenuContext();
   const isOpen = openKeys.includes(key);
   const closeTimerRef = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [popupPosition, setPopupPosition] = useState<'bottom' | 'top'>('bottom');
+  const [popupVisible, setPopupVisible] = useState(false);
 
   const handleToggle = useCallback(() => {
     if (disabled) return;
@@ -199,18 +230,35 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
     if (closeTimerRef.current) {
       clearTimeout(closeTimerRef.current);
     }
+    
+    // 折叠模式下，使用popupVisible控制显示
+    if (inlineCollapsed && mode === 'vertical') {
+      if (!disabled) {
+        setPopupVisible(true);
+      }
+      return;
+    }
+    
+    // 水平模式下，使用openKeys控制显示
     if (!disabled && !isOpen) {
       onOpenChange(key);
     }
-  }, [disabled, isOpen, key, onOpenChange]);
+  }, [disabled, isOpen, key, onOpenChange, inlineCollapsed, mode]);
 
   const handleMouseLeave = useCallback(() => {
     closeTimerRef.current = window.setTimeout(() => {
-      if (isOpen) {
+      // 折叠模式下，关闭popup
+      if (inlineCollapsed && mode === 'vertical') {
+        setPopupVisible(false);
+        return;
+      }
+      
+      // 垂直模式下，关闭子菜单
+      if (mode === 'vertical' && isOpen) {
         onOpenChange(key);
       }
     }, 100); // 100ms 延迟
-  }, [isOpen, key, onOpenChange]);
+  }, [isOpen, key, onOpenChange, inlineCollapsed, mode]);
 
   // 组件卸载时清理定时器
   useEffect(() => {
@@ -221,11 +269,30 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
     };
   }, []);
 
+  // 检测 Popup 位置，避免超出屏幕边界
+  useEffect(() => {
+    if ((popupVisible || isOpen) && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      const popupHeight = 300; // 预估 Popup 高度
+      const popupWidth = 160; // 预估 Popup 宽度
+      
+      // 垂直方向检测
+      if (rect.bottom + popupHeight > viewportHeight) {
+        setPopupPosition('top');
+      } else {
+        setPopupPosition('bottom');
+      }
+    }
+  }, [popupVisible, isOpen]);
+
   const submenuClassName = classNames(
     'soui-submenu',
     {
-      'soui-submenu-open': isOpen,
+      'soui-submenu-open': isOpen || popupVisible,
       'soui-submenu-disabled': disabled,
+      'soui-submenu-inline-collapsed': inlineCollapsed && mode === 'vertical',
     },
     className
   );
@@ -273,6 +340,75 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
 
   // 垂直模式下的子菜单
   if (mode === 'vertical') {
+    // 折叠模式：显示图标和 Popup
+    if (inlineCollapsed) {
+      return (
+        <div 
+          ref={containerRef}
+          className={submenuClassName} 
+          style={{ ...style, position: 'relative' }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <div
+            className="soui-submenu-title"
+            onClick={() => !disabled && setPopupVisible(!popupVisible)}
+            role="menuitem"
+            aria-haspopup="true"
+            aria-expanded={popupVisible}
+            aria-disabled={disabled}
+            tabIndex={disabled ? -1 : 0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                if (!disabled) setPopupVisible(!popupVisible);
+              }
+            }}
+          >
+            {icon && (
+              <span className="soui-submenu-icon">
+                {typeof icon === 'string' ? (
+                  <Icon 
+                    name={icon} 
+                    size={16}
+                    fill={theme === 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.85)'}
+                  />
+                ) : icon}
+              </span>
+            )}
+          </div>
+          
+          {popupVisible && (
+            <div 
+              className={`${popupClassName} soui-submenu-popup-animated soui-submenu-popup-collapsed`}
+              role="menu"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: '100%',
+                marginLeft: '4px',
+                zIndex: popupZIndex,
+              }}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+                if (closeTimerRef.current) {
+                  clearTimeout(closeTimerRef.current);
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation();
+                handleMouseLeave();
+              }}
+            >
+              <div className="soui-submenu-popup-title">{title}</div>
+              {renderChildren()}
+            </div>
+          )}
+        </div>
+      );
+    }
+    
+    // 正常模式
     return (
       <div className={submenuClassName} style={style}>
         <div
@@ -286,13 +422,20 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
         >
           {icon && (
             <span className="soui-submenu-icon">
-              {typeof icon === 'string' ? <Icon name={icon} size={16} /> : icon}
+              {typeof icon === 'string' ? (
+                <Icon 
+                  name={icon} 
+                  size={16}
+                  fill={theme === 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.85)'}
+                />
+              ) : icon}
             </span>
           )}
           <span className="soui-submenu-title-text">{title}</span>
           <Icon
             name="Down"
             size={12}
+            fill={theme === 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.85)'}
             className={classNames('soui-submenu-arrow', {
               'soui-submenu-arrow-open': isOpen,
             })}
@@ -310,6 +453,7 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
   // 水平模式下的子菜单（使用 Popup）
   return (
     <div 
+      ref={containerRef}
       className={submenuClassName} 
       style={{ ...style, position: 'relative' }}
       onMouseEnter={handleMouseEnter}
@@ -317,11 +461,18 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
     >
       <div
         className="soui-submenu-title"
+        onClick={() => !disabled && onOpenChange(key)}
         role="menuitem"
         aria-haspopup="true"
         aria-disabled={disabled}
         aria-expanded={isOpen}
         tabIndex={disabled ? -1 : 0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (!disabled) onOpenChange(key);
+          }
+        }}
       >
         {icon && (
           <span className="soui-submenu-icon">
@@ -334,13 +485,15 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
       
       {isOpen && (
         <div 
-          className={popupClassName}
+          className={`${popupClassName} soui-submenu-popup-animated`}
           role="menu"
           style={{
             position: 'absolute',
-            top: '100%',
+            [popupPosition === 'bottom' ? 'top' : 'bottom']: '100%',
             left: 0,
-            zIndex: 1000,
+            zIndex: popupZIndex,
+            marginTop: popupPosition === 'bottom' ? '4px' : '0',
+            marginBottom: popupPosition === 'top' ? '4px' : '0',
           }}
         >
           {renderChildren()}
@@ -405,6 +558,9 @@ const Menu: React.FC<MenuProps> & {
   openKeys: controlledOpenKeys,
   defaultOpenKeys = [],
   inlineCollapsed = false,
+  collapsedWidth = 80, // 默认折叠宽度
+  popupZIndex = 1050, // 默认 Popup zIndex
+  accordion = true, // 默认开启手风琴模式
   onClick,
   onOpenChange,
   className,
@@ -443,14 +599,20 @@ const Menu: React.FC<MenuProps> & {
       newOpenKeys = openKeys.filter(k => k !== key);
     } else {
       // 展开
-      newOpenKeys = [...openKeys, key];
+      if (accordion) {
+        // 手风琴模式：关闭其他，只展开当前
+        newOpenKeys = [key];
+      } else {
+        // 非手风琴模式：可以同时展开多个
+        newOpenKeys = [...openKeys, key];
+      }
     }
 
     if (controlledOpenKeys === undefined) {
       setInternalOpenKeys(newOpenKeys);
     }
     onOpenChange?.(newOpenKeys);
-  }, [openKeys, controlledOpenKeys, onOpenChange]);
+  }, [openKeys, controlledOpenKeys, onOpenChange, accordion]);
 
   // 生成 CSS 变量
   const menuStyle: React.CSSProperties = {
@@ -520,6 +682,7 @@ const Menu: React.FC<MenuProps> & {
         selectedKeys,
         openKeys,
         inlineCollapsed,
+        popupZIndex,
         onSelect: handleSelect,
         onOpenChange: handleOpenChange,
       }}
