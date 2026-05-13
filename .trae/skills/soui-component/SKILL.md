@@ -1,6 +1,6 @@
 ---
 name: soui-component
-description: "SoUi 组件库开发指南。用于创建新组件、编写组件文档和示例。当用户要求\"创建一个组件\"、\"添加新组件\"或\"实现 xxx 组件\"时使用此 Skill。**重要：在开始开发前，必须询问用户是否希望参考主流 UI 框架（Ant Design、MUI、Chakra UI、Tailwind UI 或不参考）**。"
+description: SoUi 组件库开发指南。用于创建新组件、编写组件文档和示例。当用户要求"创建一个组件"、"添加新组件"或"实现 xxx 组件"时使用此 Skill。**重要：在开始开发前，必须询问用户是否希望参考主流 UI 框架（Ant Design、MUI、Chakra UI、Tailwind UI 或不参考）**。
 ---
 
 # SoUi 组件开发 Skill
@@ -37,13 +37,13 @@ SoUi/
 │       │   └── component-name.md   # 组件文档文件
 │       └── .vitepress/
 │           └── config.ts           # 文档配置（侧边栏）
-├── examples/                       # 示例代码目录
+── examples/                       # 示例代码目录
 │   ├── DemoContainer/              # 演示容器组件
 │   │   └── index.tsx               # DemoContainer 主文件
 │   └── ComponentName/
-│       ├── Basic.tsx               # 基础示例
-│       ├── codes.ts                # 示例代码字符串
-│       └── ...                     # 其他示例文件
+│       ├── Basic.tsx               # 基础用法示例
+│       ├── Variant.tsx             # 变体示例
+│       └── codes.ts                # 示例代码字符串（用于 react-live）
 └── package.json
 ```
 
@@ -72,7 +72,6 @@ SoUi/
 1. 研究选定框架的对应组件 API 设计
 2. 分析其 Props 接口、默认值、变体等
 3. 在保持 SoUi 设计风格的前提下，借鉴合理的 API 设计
-4. 在文档中注明参考来源
 
 **如果用户选择不参考：**
 - 完全按照 SoUi 的设计规范和现有组件模式进行开发
@@ -129,9 +128,67 @@ SoUi/
   - 查看 `:root` 中定义的 CSS 变量
   - 了解全局样式的设置方式
 
-#### 2. 查看设计变量
+#### 2. 查看设计变量和设计令牌系统
 
-阅读 **`src/styles/variables.less`** 了解所有可用的 Less 变量：
+SoUi 采用**三层设计令牌系统**，这是理解主题变量的关键：
+
+##### **第1层: 设计令牌 (Design Tokens) - 真正的全局变量**
+
+这些是不带组件前缀的全局变量，可被多个组件复用：
+
+```less
+/* 在 :root 中定义 */
+--soui-color-bg-default: rgba(0, 0, 0, 0.88);      // 默认深色背景
+--soui-color-text-inverse: #fff;                    // 反色文本(白色)
+--soui-font-size-sm: 12px;                          // 小字号
+--soui-line-height-sm: 1.6667;                      // 小行高
+--soui-border-radius: 6px;                          // 基础圆角
+--soui-box-shadow-secondary: 0 3px 6px ...;        // 次级阴影
+--soui-z-index-popover: 1030;                       // 浮层层级
+--soui-transition-duration: 0.2s;                   // 动画时长
+```
+
+**特点:**
+- ✅ 不带组件前缀，是真正的全局变量
+- ✅ 可以被 Button、Card、Tooltip 等多个组件复用
+- ✅ 修改一个变量，所有使用该令牌的组件都会更新
+- ✅ 符合 DRY 原则，避免重复定义
+
+##### **第2层: 组件配置点 (Component Configuration Points)**
+
+这些是引用设计令牌的配置接口，允许通过 ConfigProvider 统一修改组件：
+
+```less
+/* 在 :root 中定义，引用第1层 */
+--soui-tooltip-bg-color: var(--soui-color-bg-default);
+--soui-tooltip-text-color: var(--soui-color-text-inverse);
+--soui-tooltip-font-size: var(--soui-font-size-sm);
+--soui-tooltip-max-width: 250px;              // Tooltip专属
+--soui-tooltip-arrow-size: 8px;               // Tooltip专属
+```
+
+**特点:**
+- ✅ 大部分属性引用全局令牌，保持统一
+- ✅ 少数专属属性（如 maxWidth、arrowSize）独立定义
+- ✅ 用户可以通过 `theme.tooltipBgColor` 统一修改
+- ✅ 作为 ConfigProvider 的配置接口
+
+##### **第3层: 组件级覆盖 (Component-Level Override)**
+
+通过 `components.Tooltip` 自定义特定配置，优先级最高：
+
+```less
+/* 在 ConfigProvider 中生成 */
+--soui-tooltip-color-bg-default: #333;       // 用户自定义
+--soui-tooltip-font-size-component: 14px;    // 用户自定义
+```
+
+**优先级规则:**
+```
+Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
+```
+
+阅读 **`src/styles/variables.less`** 了解所有可用的 Less 变量（作为最终回退）：
 
 ```less
 // 颜色变量
@@ -184,9 +241,34 @@ SoUi/
    ```
 
 2. **CSS 变量命名规范**
-   - 全局变量：`--soui-{variable-name}`（如 `--soui-primary-color`）
-   - 组件变量：`--soui-{component}-{variable}`（如 `--soui-button-color-primary`）
-   - 尺寸变量：根据尺寸添加后缀（如 `--soui-button-control-height-large`）
+
+   SoUi 采用分层命名策略：
+   
+   **第1层 - 设计令牌（不带组件前缀）:**
+   ```less
+   --soui-color-bg-default      // 全局背景色
+   --soui-font-size-sm          // 全局小字号
+   --soui-border-radius         // 全局圆角
+   --soui-box-shadow-secondary  // 全局阴影
+   ```
+   
+   **第2层 - 组件配置点（带组件前缀）:**
+   ```less
+   --soui-tooltip-bg-color      // Tooltip背景色配置点
+   --soui-tooltip-max-width     // Tooltip最大宽度
+   --soui-button-color-primary  // Button主色配置点
+   ```
+   
+   **第3层 - 组件级覆盖（带-component后缀）:**
+   ```less
+   --soui-tooltip-color-bg-default-component  // Tooltip背景色覆盖
+   --soui-tooltip-font-size-component         // Tooltip字号覆盖
+   ```
+   
+   **命名原则:**
+   - ✅ 能通用的变量 → 不带组件前缀，作为设计令牌
+   - ✅ 不能通用的变量 → 带组件前缀，作为组件配置点
+   - ✅ 组件级覆盖 → 添加 `-component` 后缀
 
 3. **样式优先级规则**
    - 组件级配置 > 全局主题配置 > CSS 默认值 > Less 默认值
@@ -220,7 +302,7 @@ SoUi/
 - [ ] 导出完整的 Props 类型
 - [ ] 为枚举类型添加 JSDoc 注释
 
-**示例：主题集成的完整流程**
+**示例：主题集成的完整流程（分层设计）**
 
 ```tsx
 // 1. 在组件中获取主题配置
@@ -231,30 +313,45 @@ const globalTheme = useTheme();
 const borderRadiusValue = componentTheme?.borderRadius || globalTheme?.borderRadius;
 const fontSizeValue = componentTheme?.fontSize || globalTheme?.fontSize;
 
-// 3. 应用到样式
+// 3. 应用到样式 - 生成第1层和第2层CSS变量
 const componentStyle: React.CSSProperties = {
-  ...(componentTheme?.colorPrimary ? {
-    '--soui-component-color-primary': componentTheme.colorPrimary,
-  } : globalTheme?.primaryColor ? {
-    '--soui-component-color-primary': globalTheme.primaryColor,
-  } : {}),
-  ...(borderRadiusValue && {
-    '--soui-component-border-radius': `${borderRadiusValue}px`,
-  }),
-  ...(fontSizeValue && {
-    '--soui-component-font-size': `${fontSizeValue}px`,
-  }),
+  // === 第1层: 设计令牌 (如果该组件需要定义新的全局令牌) ===
+  '--soui-color-bg-default': globalTheme?.tooltipBgColor,
+  '--soui-font-size-sm': `${globalTheme?.tooltipFontSize}px`,
+  
+  // === 第2层: 组件配置点 (引用设计令牌或自定义) ===
+  '--soui-component-bg-color': componentTheme?.colorBgDefault || globalTheme?.tooltipBgColor,
+  '--soui-component-font-size': componentTheme?.fontSize ? `${componentTheme.fontSize}px` : undefined,
+  '--soui-component-border-radius': borderRadiusValue ? `${borderRadiusValue}px` : undefined,
+  
+  // === 第3层: 组件级覆盖 (优先级最高) ===
+  '--soui-component-bg-color-component': componentTheme?.colorBgDefault,
+  '--soui-component-font-size-component': componentTheme?.fontSize ? `${componentTheme.fontSize}px` : undefined,
 } as any;
 
-// 4. 在 style.less 中使用 CSS 变量
+// 4. 在 style.less 中使用 CSS 变量（三层回退）
 .soui-component {
-  --soui-component-color-primary: var(--soui-primary-color, @primary-color);
-  --soui-component-border-radius: @border-radius-base;
+  // 第1层: 引用全局设计令牌
+  --soui-color-bg-default: var(--soui-color-bg-default, @bg-color-base);
+  --soui-font-size-sm: var(--soui-font-size-sm, @font-size-sm);
   
-  border-radius: var(--soui-component-border-radius);
-  color: var(--soui-component-color-primary);
+  // 第2层: 组件配置点（引用设计令牌）
+  --soui-component-bg-color: var(--soui-color-bg-default);
+  --soui-component-font-size: var(--soui-font-size-sm);
+  --soui-component-border-radius: var(--soui-border-radius, @border-radius-base);
+  
+  // 实际样式使用（三层回退：组件级 > 全局 > Less）
+  background: var(--soui-component-bg-color-component, var(--soui-component-bg-color));
+  font-size: var(--soui-component-font-size-component, var(--soui-component-font-size));
+  border-radius: var(--soui-component-border-radius-component, var(--soui-component-border-radius));
 }
 ```
+
+**关键要点:**
+- ✅ **第1层**: 定义真正的全局变量，不带组件前缀
+- ✅ **第2层**: 组件配置点引用第1层，大部分属性复用设计令牌
+- ✅ **第3层**: 组件级覆盖添加 `-component` 后缀
+- ✅ **样式文件**: 使用 `var()` 实现三层回退机制
 
 ### 步骤 1: 创建组件文件
 
@@ -410,10 +507,6 @@ export type { ComponentNameProps, OtherType } from './components/ComponentName';
 
 简短描述组件用途。
 
-## 参考来源（如果参考了某个框架）
-
-本组件参考了 [Ant Design](https://ant.design/) 的 XXX 组件设计，在保持 SoUi 设计风格的前提下，借鉴了其 API 设计思路。
-
 ## 何时使用
 
 - 使用场景1
@@ -497,14 +590,13 @@ export default () => (
 
 **文档要点：**
 1. 标题格式：`# ComponentName 中文名称`
-2. **如果参考了框架，必须添加“参考来源”章节**
-3. 必须有“何时使用”章节
-4. 代码演示要有说明文字
-5. API 表格要完整
-6. 包含设计原则（推荐/避免）
-7. 包含无障碍访问说明
-8. 包含 FAQ
-9. 链接到相关组件
+2. 必须有"何时使用"章节
+3. 代码演示要有说明文字
+4. API 表格要完整
+5. 包含设计原则（推荐/避免）
+6. 包含无障碍访问说明
+7. 包含 FAQ
+8. 链接到相关组件
 
 #### 3.2 更新侧边栏配置
 
@@ -525,84 +617,122 @@ function sidebarComponents() {
 
 ### 步骤 4: 创建示例代码
 
-#### 4.1 创建示例目录
+**⚠️ 重要提醒：需要同时创建 .tsx 实例文件和 codes.ts！**
+
+SoUi 项目中，`demo.tsx` 使用 `DemoContainer` 组件通过 `react-live` 渲染示例代码。为了支持更复杂的示例（如使用 state、hooks 等），需要同时创建：
+
+1. **`.tsx` 实例文件** - 包含完整的 React 组件实现，用于复杂逻辑
+2. **`codes.ts`** - 包含代码字符串，用于 react-live 实时预览
+
+#### 4.1 创建示例目录和实例文件
+
 ```bash
 mkdir -p SoUi/examples/ComponentName
 ```
 
-#### 4.2 创建示例文件
+为每个示例创建一个 `.tsx` 文件：
 
-每个示例是一个独立的 `.tsx` 文件：
-
-```tsx
+**Basic.tsx 示例：**
+```typescript
 // examples/ComponentName/Basic.tsx
 import React from 'react';
-import ComponentName from '../../src/components/ComponentName';
-import Space from '../../src/components/Space';
+import { ComponentName } from '../../src';
 
-const Basic: React.FC = () => {
-  return (
-    <Space wrap>
-      <ComponentName>内容</ComponentName>
-    </Space>
-  );
-};
-
-export default Basic;
+export default () => (
+  <ComponentName prop="value">
+    内容
+  </ComponentName>
+);
 ```
 
-**常见示例类型：**
-- `Basic.tsx` - 基础用法
-- `Size.tsx` - 不同尺寸
-- `Status.tsx` - 不同状态
-- `Variant.tsx` - 不同变体
-- `Advanced.tsx` - 高级用法
+**WithState.tsx 示例（展示如何使用 state）：**
+```typescript
+// examples/ComponentName/WithState.tsx
+import React, { useState } from 'react';
+import { ComponentName, Button } from '../../src';
 
-#### 4.3 创建 codes.ts
+export default () => {
+  const [visible, setVisible] = useState(false);
+
+  return (
+    <div>
+      <Button onClick={() => setVisible(!visible)}>Toggle</Button>
+      <ComponentName visible={visible}>
+        动态内容
+      </ComponentName>
+    </div>
+  );
+};
+```
+
+**实例文件规范：**
+1. 每个示例对应一个独立的 `.tsx` 文件
+2. 文件名采用 PascalCase 命名（如 `Basic.tsx`, `WithSider.tsx`）
+3. 必须正确导入所需的组件和 hooks
+4. 导出默认函数组件
+5. 保持代码简洁清晰
+
+#### 4.2 创建 codes.ts（代码字符串文件）
+
+在创建了所有 `.tsx` 实例文件后，创建对应的 `codes.ts` 文件：
 
 ```typescript
 // examples/ComponentName/codes.ts
 
-export const basicCode = `<ComponentName>
+export const basicCode = `<ComponentName prop="value">
   内容
 </ComponentName>`;
 
-export const sizeCode = `<Space>
-  <ComponentName size="small">小</ComponentName>
-  <ComponentName size="middle">中</ComponentName>
-  <ComponentName size="large">大</ComponentName>
-</Space>`;
+export const withStateCode = `const [visible, setVisible] = useState(false);
+
+<div>
+  <Button onClick={() => setVisible(!visible)}>Toggle</Button>
+  <ComponentName visible={visible}>
+    动态内容
+  </ComponentName>
+</div>`;
 
 // ... 其他示例代码字符串
 ```
 
 **codes.ts 规范：**
 1. 每个示例对应一个导出的字符串常量
-2. 命名格式：`{exampleName}Code`
+2. 命名格式：`{exampleName}Code`（与 `.tsx` 文件名对应）
 3. 字符串内容是可直接运行的 JSX 代码
-4. 保持与示例文件同步
+4. 保持与 `.tsx` 实例文件同步
+5. 如果示例使用了 state/hooks，需要在代码字符串中包含相关声明
 
-**️ react-live 代码格式重要限制：**
+**⚠️ react-live 代码格式重要限制：**
 
 由于 `react-live` 将代码字符串作为组件渲染，必须遵守以下规则：
 
-✅ **正确写法** - 直接写 JSX 表达式：
+✅ **正确写法** - 直接写 JSX 表达式或包含必要的声明：
 ```typescript
+// 简单示例
 export const exampleCode = `<ComponentName>
-  直接写内容，不要用变量
+  直接写内容
 </ComponentName>`;
+
+// 带 state 的示例
+export const withStateCode = `const [count, setCount] = useState(0);
+
+<Button onClick={() => setCount(count + 1)}>
+  Count: {count}
+</Button>`;
 ```
 
-❌ **错误写法** - 不要使用变量声明：
+❌ **错误写法** - 不要使用 import 语句或复杂的模块语法：
 ```typescript
-// ❌ 这会导致 SyntaxError
-export const exampleCode = `const text = 'some text';
-<ComponentName>{text}</ComponentName>`;
+// ❌ 这会导致错误
+export const exampleCode = `import React from 'react';
+import { ComponentName } from '@soui/ui';
+<ComponentName />`;
 ```
 
-**替代方案：**
-- 直接内联值，不使用变量
-- 如果需要复杂逻辑，在示例组件文件（Basic.tsx）中实现，codes.ts 只展示简化的 JSX
+**最佳实践：**
+- 对于简单示例，直接在 codes.ts 中编写简化的 JSX
+- 对于复杂示例，先在 `.tsx` 文件中实现完整逻辑，然后在 codes.ts 中提取核心代码
+- 确保 codes.ts 中的代码可以在 react-live 环境中运行
 
 ### 步骤 5: 更新 DemoContainer（重要！）
 
@@ -724,6 +854,32 @@ cd SoUi && npm run build
 
 **注意**：即使参考了其他框架的设计，也必须使用 SoUi 的设计变量，保持项目一致性。
 
+### 三层设计令牌系统
+
+SoUi 采用分层设计，新组件开发时应遵循以下原则：
+
+1. **第1层 - 设计令牌**: 如果组件需要新的全局变量（如颜色、字号），在 `global.less` 的 `:root` 中添加不带组件前缀的变量
+2. **第2层 - 组件配置点**: 在 `global.less` 和 `ConfigProvider/style.less` 中添加带组件前缀的配置点，引用第1层的设计令牌
+3. **第3层 - 组件级覆盖**: 在 `ConfigProvider/index.tsx` 中生成带 `-component` 后缀的覆盖变量
+
+**示例:**
+```less
+/* global.less - 第1层和第2层 */
+:root {
+  /* 第1层: 设计令牌 */
+  --soui-color-bg-default: rgba(0, 0, 0, 0.88);
+  
+  /* 第2层: 组件配置点 */
+  --soui-tooltip-bg-color: var(--soui-color-bg-default);
+}
+
+/* ConfigProvider/style.less - 回退值 */
+.soui-config-provider {
+  --soui-color-bg-default: rgba(0, 0, 0, 0.88);
+  --soui-tooltip-bg-color: var(--soui-color-bg-default);
+}
+```
+
 ### 颜色
 ```less
 @primary-color: #1677ff;
@@ -772,7 +928,8 @@ cd SoUi && npm run build
 | CSS 类名 | kebab-case with prefix | `.soui-button`, `.soui-button-primary` |
 | 文档文件 | kebab-case | `button.md`, `config-provider.md` |
 | 示例目录 | PascalCase | `Button`, `ConfigProvider` |
-| 示例文件 | PascalCase | `Basic.tsx`, `Size.tsx` |
+| 示例实例文件 | PascalCase | `Basic.tsx`, `Size.tsx`, `WithSider.tsx` |
+| 示例代码字符串文件 | codes.ts | `codes.ts` |
 
 **注意**：即使参考了其他框架，也必须遵循 SoUi 的命名规范，保持项目一致性。
 
@@ -809,21 +966,22 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 - **何时参考**：当用户对 API 设计有特定偏好，或需要与某个生态系统兼容时
 - **如何参考**：研究目标框架的 Props 接口、默认值、变体等，但保持 SoUi 的设计风格
 - **何时不参考**：基础组件或 SoUi 已有明确设计规范时，建议独立实现以保持一致性
-- **文档注明**：如果参考了某个框架，在文档中应注明参考来源
 
 ### 样式设计
 1. **即使参考了其他框架，也必须使用 SoUi 的设计变量**
-2. 使用设计变量，避免硬编码
-3. 支持主题定制（CSS 变量）
+2. **遵循三层设计令牌系统**（重要！）
+   - 能通用的变量 → 定义为第1层设计令牌（不带组件前缀）
+   - 组件专属变量 → 定义为第2层配置点（带组件前缀）
+   - 用户可覆盖的变量 → 生成第3层覆盖变量（带 `-component` 后缀）
+3. 使用 CSS 变量支持主题定制
 4. 考虑响应式适配
 5. 添加过渡动画提升体验
 
 ### 文档编写
-1. **如果参考了框架，必须在文档中添加“参考来源”章节**
-2. 示例代码要可运行
-3. API 文档要完整准确
-4. 提供正反示例对比
-5. 包含常见问题解答
+1. 示例代码要可运行
+2. API 文档要完整准确
+3. 提供正反示例对比
+4. 包含常见问题解答
 
 ## 检查清单
 
@@ -839,13 +997,14 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   - [ ] 支持圆角配置（borderRadius）
   - [ ] 支持字体大小配置（fontSize）
   - [ ] 支持主色配置（colorPrimary / primaryColor）
-  - [ ] 使用 CSS 变量而非硬编码颜色值
+  - [ ] **使用三层设计令牌系统**（重要！）
+    - [ ] 第1层：定义全局设计令牌（不带组件前缀）
+    - [ ] 第2层：组件配置点引用设计令牌
+    - [ ] 第3层：组件级覆盖添加 `-component` 后缀
   - [ ] 正确处理配置优先级（组件级 > 全局 > CSS 默认 > Less 默认）
-  - [ ] 在 style.less 中使用 `var()` 函数引用 CSS 变量
+  - [ ] 在 style.less 中使用 `var()` 实现三层回退
   - [ ] 在 `ConfigProvider/types.ts` 中添加了组件级配置类型
 - [ ] 如果用户选择参考框架，已研究该框架的 API 设计
-- [ ] 如果参考了框架，已在文档中添加“参考来源”章节
-- [ ] 如果参考了框架，已在文档中注明参考来源
 - [ ] 即使参考了其他框架，也使用了 SoUi 的设计变量和命名规范
 - [ ] 组件文件 `src/components/ComponentName/index.tsx` 已创建
 - [ ] 样式文件 `src/components/ComponentName/style.less` 已创建
@@ -853,8 +1012,12 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 - [ ] 文档文件 `src/docs/components/component-name.md` 已创建
 - [ ] 已在 `.vitepress/config.ts` 中添加侧边栏配置
 - [ ] 示例目录 `examples/ComponentName/` 已创建
-- [ ] 至少创建了 `Basic.tsx` 示例
-- [ ] 创建了 `codes.ts` 代码字符串文件
+- [ ] **已为每个示例创建对应的 `.tsx` 实例文件**（重要！）
+  - [ ] Basic.tsx - 基础用法示例
+  - [ ] 其他示例文件根据组件特性创建
+- [ ] **已创建 `codes.ts` 文件，包含所有示例的代码字符串**（重要！）
+  - [ ] 代码字符串与 `.tsx` 实例文件保持同步
+  - [ ] 示例代码字符串包含美观的样式（背景色、边框、圆角等）
 - [ ] **已在 `examples/DemoContainer/index.tsx` 中添加组件到 scope**（重要！）
 - [ ] **已在 `src/demo.tsx` 中添加演示区块**（重要！）
 - [ ] **文档已添加高级用法示例**（推荐）
