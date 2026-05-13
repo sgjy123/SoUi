@@ -15,7 +15,6 @@
   --soui-menu-item-selected-color: @primary-color;
   --soui-menu-border-radius: @border-radius-base;
   --soui-menu-font-size: @font-size-base;
-  --soui-menu-collapsed-width: 64px;
   --soui-menu-collapsed-width: 80px;
   
   list-style: none;
@@ -36,7 +35,7 @@
       
       .soui-menu-item,
       .soui-submenu-title {
-        padding: 0 16px;
+        padding: 0 calc(var(--soui-menu-collapsed-width, 80px) / 2 - 12px);
         justify-content: center;
       }
       
@@ -62,7 +61,6 @@
     
     .soui-menu-item,
     .soui-submenu-title {
-      padding: 0 16px;
       height: 40px;
       line-height: 40px;
     }
@@ -93,9 +91,10 @@
     --soui-menu-item-hover-bg: rgba(255, 255, 255, 0.08);
     --soui-menu-item-active-bg: rgba(255, 255, 255, 0.12);
     --soui-menu-item-selected-color: #fff;
+    --soui-menu-border-color: rgba(255, 255, 255, 0.1);
     
     &.soui-menu-vertical {
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      border-right: 1px solid var(--soui-menu-border-color);
     }
   }
   
@@ -103,9 +102,9 @@
   &-inline-collapsed {
     width: var(--soui-menu-collapsed-width, 80px);
     
-    .soui-menu-item,
+    .soui-m-enu-item,
     .soui-submenu-title {
-      padding: 0 16px;
+     padding: 0 calc(var(--soui-menu-collapsed-width, 80px) / 2 - 12px);
       justify-content: center;
     }
     
@@ -254,6 +253,7 @@
   &-content {
     overflow: hidden;
     animation: soui-menu-slide-down @transition-duration @transition-timing-function;
+    padding-left: 0;
   }
   
   // Popup for horizontal mode and collapsed mode
@@ -335,7 +335,7 @@
   }
   
   &-content {
-    padding: 4px 0;
+    padding: 4px 8px;
   }
 }
 
@@ -344,11 +344,13 @@
 @keyframes soui-menu-slide-down {
   from {
     opacity: 0;
-    max-height: 0;
+    transform: scaleY(0.95);
+    transform-origin: top center;
   }
   to {
     opacity: 1;
-    max-height: 500px;
+    transform: scaleY(1);
+    transform-origin: top center;
   }
 }
 

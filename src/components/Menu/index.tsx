@@ -213,8 +213,13 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
   style,
   keyPath = [],
 }) => {
-  const { mode, theme, openKeys, inlineCollapsed, onOpenChange, popupZIndex } = useMenuContext();
+  const { mode, theme, selectedKeys, openKeys, inlineCollapsed, onOpenChange, popupZIndex } = useMenuContext();
   const isOpen = openKeys.includes(key);
+  const isSubMenuSelected = React.Children.toArray(children).some((child) => {
+    if (!React.isValidElement(child)) return false;
+    const childKey = (child.props as any)?.menuKey || (child.props as any)?.key;
+    return selectedKeys.includes(childKey);
+  });
   const closeTimerRef = useRef<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [popupPosition, setPopupPosition] = useState<'bottom' | 'top'>('bottom');
@@ -272,20 +277,36 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
   // 检测 Popup 位置，避免超出屏幕边界
   useEffect(() => {
     if ((popupVisible || isOpen) && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
-      const popupHeight = 300; // 预估 Popup 高度
-      const popupWidth = 160; // 预估 Popup 宽度
-      
-      // 垂直方向检测
-      if (rect.bottom + popupHeight > viewportHeight) {
-        setPopupPosition('top');
-      } else {
-        setPopupPosition('bottom');
-      }
+      requestAnimationFrame(() => {
+        const containerRect = containerRef.current!.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
+        
+        // 获取实际的 Popup 元素尺寸
+        const popupElement = containerRef.current.querySelector('.soui-submenu-popup');
+        const popupRect = popupElement?.getBoundingClientRect();
+        const popupHeight = popupRect?.height || 300;
+        const popupWidth = popupRect?.width || 160;
+        
+        // 垂直方向检测
+        if (mode === 'horizontal') {
+          if (containerRect.bottom + popupHeight > viewportHeight && containerRect.top > popupHeight) {
+            setPopupPosition('top');
+          } else {
+            setPopupPosition('bottom');
+          }
+        }
+        
+        // 水平方向检测（折叠模式）
+        if (inlineCollapsed && mode === 'vertical') {
+          if (containerRect.right + popupWidth > viewportWidth) {
+            // 如果右侧空间不足，且左侧空间足够，可以考虑从左侧弹出
+            // 这里简化处理，保持右侧弹出
+          }
+        }
+      });
     }
-  }, [popupVisible, isOpen]);
+  }, [popupVisible, isOpen, mode, inlineCollapsed]);
 
   const submenuClassName = classNames(
     'soui-submenu',
@@ -312,9 +333,12 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
       // 为 MenuItem 和 SubMenu 添加 menuKey 和 keyPath
       if (child.type === MenuItem || child.type === SubMenu) {
         const childKey = child.key as string;
+        const childProps = child.props as any;
         return React.cloneElement(child as any, {
           menuKey: childKey,
           keyPath: parentKeyPath,
+          // 保持原有的 props，除了 keyPath 和 menuKey
+          ...childProps,
         });
       }
       
@@ -426,7 +450,13 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
                 <Icon 
                   name={icon} 
                   size={16}
-                  fill={theme === 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.85)'}
+                  fill={
+                    isSubMenuSelected || isOpen
+                      ? 'var(--soui-menu-item-selected-color)' 
+                      : theme === 'dark'
+                        ? 'rgba(255, 255, 255, 0.65)'
+                        : 'rgba(0, 0, 0, 0.85)'
+                  }
                 />
               ) : icon}
             </span>
@@ -435,7 +465,13 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
           <Icon
             name="Down"
             size={12}
-            fill={theme === 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.85)'}
+            fill={
+              isSubMenuSelected || isOpen
+                ? 'var(--soui-menu-item-selected-color)'
+                : theme === 'dark'
+                  ? 'rgba(255, 255, 255, 0.65)'
+                  : 'rgba(0, 0, 0, 0.85)'
+            }
             className={classNames('soui-submenu-arrow', {
               'soui-submenu-arrow-open': isOpen,
             })}
@@ -476,11 +512,22 @@ const SubMenu: React.FC<SubMenuProps & { keyPath?: string[] }> = ({
       >
         {icon && (
           <span className="soui-submenu-icon">
-            {typeof icon === 'string' ? <Icon name={icon} size={16} /> : icon}
+            {typeof icon === 'string' ? (
+              <Icon 
+                name={icon} 
+                size={16}
+                fill={theme === 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.85)'}
+              />
+            ) : icon}
           </span>
         )}
         <span className="soui-submenu-title-text">{title}</span>
-        <Icon name="Down" size={12} className="soui-submenu-arrow" />
+        <Icon 
+          name="Down" 
+          size={12} 
+          className="soui-submenu-arrow"
+          fill={theme === 'dark' ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.85)'}
+        />
       </div>
       
       {isOpen && (
@@ -601,7 +648,15 @@ const Menu: React.FC<MenuProps> & {
       // 展开
       if (accordion) {
         // 手风琴模式：关闭其他，只展开当前
-        newOpenKeys = [key];
+        // 找到与当前 key 同级的其他 key 并关闭
+        const parentKey = key.split('/').slice(0, -1).join('/');
+        newOpenKeys = openKeys.filter(k => {
+          const kParent = k.split('/').slice(0, -1).join('/');
+          return kParent !== parentKey || k === key;
+        });
+        if (!newOpenKeys.includes(key)) {
+          newOpenKeys = [...newOpenKeys, key];
+        }
       } else {
         // 非手风琴模式：可以同时展开多个
         newOpenKeys = [...openKeys, key];
@@ -626,14 +681,23 @@ const Menu: React.FC<MenuProps> & {
     // 背景色配置
     ...(theme === 'light' ? {
       '--soui-menu-bg-color': '#fff',
+      '--soui-menu-color-text': 'rgba(0, 0, 0, 0.85)',
       '--soui-menu-item-hover-bg': 'rgba(0, 0, 0, 0.04)',
       '--soui-menu-item-active-bg': 'rgba(0, 0, 0, 0.06)',
+      '--soui-menu-item-selected-bg': 'rgba(24, 144, 255, 0.1)',
+      '--soui-menu-item-selected-color': globalTheme?.primaryColor || '#1677ff',
+      '--soui-menu-border-color': 'rgba(0, 0, 0, 0.06)',
     } : {
       '--soui-menu-bg-color': '#001529',
       '--soui-menu-color-text': 'rgba(255, 255, 255, 0.65)',
       '--soui-menu-item-hover-bg': 'rgba(255, 255, 255, 0.08)',
       '--soui-menu-item-active-bg': 'rgba(255, 255, 255, 0.12)',
+      '--soui-menu-item-selected-bg': 'rgba(24, 144, 255, 0.2)',
+      '--soui-menu-item-selected-color': '#fff',
+      '--soui-menu-border-color': 'rgba(255, 255, 255, 0.1)',
     }),
+    // 折叠宽度配置
+    '--soui-menu-collapsed-width': `${collapsedWidth}px`,
     // 圆角配置
     ...((menuTheme?.borderRadius || globalTheme?.borderRadius) && {
       '--soui-menu-border-radius': `${menuTheme?.borderRadius || globalTheme?.borderRadius}px`,
@@ -641,6 +705,14 @@ const Menu: React.FC<MenuProps> & {
     // 字体大小配置
     ...((menuTheme?.fontSize || globalTheme?.fontSize) && {
       '--soui-menu-font-size': `${menuTheme?.fontSize || globalTheme?.fontSize}px`,
+    }),
+    // 选中背景色配置
+    ...(menuTheme?.itemSelectedBg && {
+      '--soui-menu-item-selected-bg': menuTheme.itemSelectedBg,
+    }),
+    // 选中文字颜色配置
+    ...(menuTheme?.itemSelectedColor && {
+      '--soui-menu-item-selected-color': menuTheme.itemSelectedColor,
     }),
   } as any;
 
