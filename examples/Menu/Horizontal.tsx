@@ -8,7 +8,7 @@ export default () => (
     <Menu.SubMenu key="3" title="服务" icon="Setting">
       <Menu.Item key="3-1" label="云服务" />
       <Menu.Item key="3-2" label="数据库" />
-      <Menu.Item key="3-3" label="存储" />
+      <Menu.Item key="3-3" label="存储服务" />
     </Menu.SubMenu>
     <Menu.Item key="4" label="关于" icon="Info" />
   </Menu>

@@ -35,8 +35,11 @@
       
       .soui-menu-item,
       .soui-submenu-title {
-        padding: 0 calc(var(--soui-menu-collapsed-width, 80px) / 2 - 12px);
+        padding: 0;
+        margin: 4px 0;
         justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
       }
       
       .soui-menu-item-icon,
@@ -46,6 +49,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        width: 100%;
       }
       
       // 折叠模式下隐藏子菜单内容
@@ -55,6 +59,11 @@
       
       // 折叠模式下隐藏选中指示器
       .soui-menu-item-selected::before {
+        display: none;
+      }
+      
+      // 确保折叠模式下内容不溢出
+      .soui-menu-item-label {
         display: none;
       }
     }
@@ -102,16 +111,20 @@
   &-inline-collapsed {
     width: var(--soui-menu-collapsed-width, 80px);
     
-    .soui-m-enu-item,
+    .soui-menu-item,
     .soui-submenu-title {
-     padding: 0 calc(var(--soui-menu-collapsed-width, 80px) / 2 - 12px);
+      padding: 0;
+      margin: 4px 0;
       justify-content: center;
+      width: 100%;
+      box-sizing: border-box;
     }
     
     .soui-menu-item-icon,
     .soui-submenu-icon {
       margin-right: 0;
       margin-left: 0;
+      width: 100%;
     }
     
     // 折叠模式下隐藏选中指示器
@@ -267,6 +280,7 @@
     opacity: 0;
     transform-origin: top center;
     animation: soui-menu-popup-enter 0.2s @transition-timing-function forwards;
+    color: var(--soui-menu-color-text); // 确保文字颜色跟随主题
     
     // 从顶部弹出时的动画
     &[style*="bottom: 100%"] {
@@ -282,25 +296,28 @@
       .soui-submenu-popup-title {
         padding: 8px 16px;
         font-size: @font-size-sm;
-        color: @text-color-secondary;
+        color: var(--soui-menu-color-text); // 使用主题文字颜色
         font-weight: 500;
-        border-bottom: 1px solid @border-color-split;
+        border-bottom: 1px solid var(--soui-menu-border-color);
         margin-bottom: 4px;
       }
     }
     
     &-light {
       background-color: #fff;
+      color: rgba(0, 0, 0, 0.85);
     }
     
     &-dark {
       background-color: #001529;
+      color: rgba(255, 255, 255, 0.65);
     }
     
     .soui-menu-item {
       margin: 0;
       border-radius: 0;
       padding: 8px 16px;
+      color: inherit; // 继承Popup的颜色
       
       &:hover {
         background-color: var(--soui-menu-item-hover-bg);
@@ -315,6 +332,30 @@
         &::after {
           display: none; // Popup 中不显示底部边框
         }
+        
+        .soui-menu-item-icon {
+          color: var(--soui-menu-item-selected-color); // 选中时图标颜色
+        }
+      }
+      
+      .soui-menu-item-icon {
+        color: inherit; // 图标颜色跟随父元素
+      }
+    }
+    
+    // Popup 中的 SubMenu 样式
+    .soui-submenu-title {
+      color: inherit;
+      margin: 0;
+      padding: 8px 16px;
+      border-radius: 0;
+      
+      &:hover {
+        background-color: var(--soui-menu-item-hover-bg);
+      }
+      
+      .soui-submenu-icon {
+        color: inherit;
       }
     }
   }

@@ -19,7 +19,7 @@ export const docsConfig: MenuGroup[] = [
       { key: 'button-size', label: 'Button 尺寸', componentPath: 'Button', exampleName: 'Size', description: '按钮有大、中、小三种尺寸。' },
       { key: 'button-status', label: 'Button 状态', componentPath: 'Button', exampleName: 'Status', description: '加载中、禁用或危险状态。' },
       { key: 'button-shape', label: 'Button 形状', componentPath: 'Button', exampleName: 'Shape', description: '圆形、椭圆形以及带图标的按钮。' },
-      
+
       { key: 'icon-basic', label: 'Icon 基本图标', componentPath: 'Icon', exampleName: 'Basic', description: '展示不同类型的图标。' },
       { key: 'icon-theme', label: 'Icon 主题样式', componentPath: 'Icon', exampleName: 'Theme', description: '轮廓和填充两种主题样式。' },
       { key: 'icon-color', label: 'Icon 颜色配置', componentPath: 'Icon', exampleName: 'Color', description: '预设颜色和自定义颜色。' },
@@ -52,6 +52,7 @@ export const docsConfig: MenuGroup[] = [
       { key: 'menu-collapsed', label: 'Menu 折叠菜单', componentPath: 'Menu', exampleName: 'Collapsed', description: '可折叠的侧边栏菜单。' },
       { key: 'menu-controlled', label: 'Menu 受控模式', componentPath: 'Menu', exampleName: 'Controlled', description: '完全受控的菜单状态管理。' },
       { key: 'menu-group', label: 'Menu 分组菜单', componentPath: 'Menu', exampleName: 'Group', description: '使用 Menu.Group 对菜单项进行分组。' },
+      { key: 'nested-sub-menu', label: 'Menu 嵌套子菜单菜单', componentPath: 'Menu', exampleName: 'NestedSubMenu', description: '使用 Menu.SubMenu 对子菜单进行嵌套。' },
 
       { key: 'space-basic', label: 'Space 基本用法', componentPath: 'Space', exampleName: 'Basic', description: '设置子元素之间的间距。' },
       { key: 'space-size', label: 'Space 间距尺寸', componentPath: 'Space', exampleName: 'Size', description: '预设尺寸或自定义数值。' },
