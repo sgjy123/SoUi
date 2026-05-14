@@ -1,84 +1,98 @@
-# Menu 菜单
+# Menu 导航菜单
 
 为页面和功能提供导航的菜单列表。
 
 ## 何时使用
 
-- 需要为用户提供导航功能时
-- 需要在侧边栏或顶部展示多级菜单结构时
-- 需要实现折叠菜单以节省空间时
+导航菜单是一个网站的灵魂，用户依赖导航在各个页面中进行跳转。一般分为顶部导航和侧边导航：
+- **顶部导航**：提供全局性的类目和功能
+- **侧边导航**：提供多级结构来收纳和排列网站架构
+
+更多布局和导航的使用可以参考：[Layout 布局](/components/layout)
 
 ## 代码演示
 
 ### 基础用法
 
-最简单的垂直菜单，支持单选模式。
+最简单的菜单用法，包含几个基本的菜单项。
 
 ```tsx
 import { Menu } from '@soui/ui';
 
 export default () => (
   <Menu mode="vertical" theme="light" defaultSelectedKeys={['1']}>
-    <Menu.Item key="1" label="菜单项 1" icon="Home" />
-    <Menu.Item key="2" label="菜单项 2" icon="Setting" />
-    <Menu.Item key="3" label="菜单项 3" icon="User" />
+    <Menu.Item key="1" icon="Home">首页</Menu.Item>
+    <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+    <Menu.Item key="3" icon="Setting">系统设置</Menu.Item>
+  </Menu>
+);
+```
+
+### 垂直菜单
+
+垂直方向的菜单，支持子菜单、分组和分割线。
+
+```tsx
+import { Menu } from '@soui/ui';
+
+export default () => (
+  <Menu mode="vertical" theme="light" defaultSelectedKeys={['1']} style={{ width: 256 }}>
+    <Menu.Item key="1" icon="Home">首页</Menu.Item>
+    <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+    
+    <Menu.SubMenu key="sub1" icon="Folder" title="文件管理">
+      <Menu.Item key="3">我的文档</Menu.Item>
+      <Menu.Item key="4">下载内容</Menu.Item>
+      <Menu.Item key="5">图片库</Menu.Item>
+    </Menu.SubMenu>
+    
+    <Menu.SubMenu key="sub2" icon="Chart" title="数据分析">
+      <Menu.Item key="6">访问统计</Menu.Item>
+      <Menu.Item key="7">用户行为</Menu.Item>
+    </Menu.SubMenu>
+    
+    <Menu.Divider />
+    <Menu.Item key="8" icon="Setting">系统设置</Menu.Item>
   </Menu>
 );
 ```
 
 ### 水平菜单
 
-水平方向的菜单，常用于页面顶部导航。
+水平方向的菜单，适合用于顶部导航栏。
 
 ```tsx
 import { Menu } from '@soui/ui';
 
 export default () => (
   <Menu mode="horizontal" theme="light" defaultSelectedKeys={['1']}>
-    <Menu.Item key="1" label="首页" icon="Home" />
-    <Menu.Item key="2" label="产品" icon="Apps" />
-    <Menu.SubMenu key="3" title="服务" icon="Setting">
-      <Menu.Item key="3-1" label="云服务" />
-      <Menu.Item key="3-2" label="数据库" />
-      <Menu.Item key="3-3" label="存储" />
+    <Menu.Item key="1" icon="Home">首页</Menu.Item>
+    <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+    
+    <Menu.SubMenu key="sub1" title="产品">
+      <Menu.Item key="3">产品列表</Menu.Item>
+      <Menu.Item key="4">产品分类</Menu.Item>
+      <Menu.Item key="5">库存管理</Menu.Item>
     </Menu.SubMenu>
-    <Menu.Item key="4" label="关于" icon="Info" />
-  </Menu>
-);
-```
-
-### 深色主题
-
-使用深色主题的菜单，适合管理后台的侧边栏。
-
-```tsx
-import { Menu } from '@soui/ui';
-
-export default () => (
-  <Menu mode="vertical" theme="dark" defaultSelectedKeys={['1']}>
-    <Menu.Item key="1" label="仪表盘" icon="Home" />
-    <Menu.SubMenu key="2" title="用户管理" icon="User">
-      <Menu.Item key="2-1" label="用户列表" />
-      <Menu.Item key="2-2" label="角色管理" />
-      <Menu.Item key="2-3" label="权限设置" />
+    
+    <Menu.SubMenu key="sub2" title="订单">
+      <Menu.Item key="6">全部订单</Menu.Item>
+      <Menu.Item key="7">待处理</Menu.Item>
+      <Menu.Item key="8">已完成</Menu.Item>
     </Menu.SubMenu>
-    <Menu.SubMenu key="3" title="系统设置" icon="Setting">
-      <Menu.Item key="3-1" label="基础设置" />
-      <Menu.Item key="3-2" label="安全设置" />
-      <Menu.Item key="3-3" label="通知设置" />
-    </Menu.SubMenu>
-    <Menu.Item key="4" label="帮助中心" icon="QuestionCircle" />
+    
+    <Menu.Item key="9" icon="Setting">设置</Menu.Item>
   </Menu>
 );
 ```
 
 ### 折叠菜单
 
-通过 `inlineCollapsed` 属性可以折叠菜单，只显示图标，鼠标悬停时显示 Tooltip。
+支持收起和展开状态，适合空间有限的场景。
 
 ```tsx
-import { Menu, Button, Space } from '@soui/ui';
 import { useState } from 'react';
+import { Menu, Button, Space } from '@soui/ui';
 
 export default () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -91,22 +105,26 @@ export default () => {
         </Button>
       </Space>
       
-      <Menu 
-        mode="vertical" 
-        theme="dark" 
+      <Menu
+        mode="vertical"
+        theme="light"
         inlineCollapsed={collapsed}
         defaultSelectedKeys={['1']}
-        defaultOpenKeys={['2']}
+        defaultOpenKeys={['sub1']}
+        style={{ width: collapsed ? 80 : 256 }}
       >
-        <Menu.Item key="1" label="仪表盘" icon="Home" />
-        <Menu.SubMenu key="2" title="用户管理" icon="User">
-          <Menu.Item key="2-1" label="用户列表" />
-          <Menu.Item key="2-2" label="角色管理" />
-          <Menu.Item key="2-3" label="权限设置" />
+        <Menu.Item key="1" icon="Home">首页</Menu.Item>
+        <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+        
+        <Menu.SubMenu key="sub1" icon="Folder" title="文件管理">
+          <Menu.Item key="3">我的文档</Menu.Item>
+          <Menu.Item key="4">下载内容</Menu.Item>
+          <Menu.Item key="5">图片库</Menu.Item>
         </Menu.SubMenu>
-        <Menu.SubMenu key="3" title="系统设置" icon="Setting">
-          <Menu.Item key="3-1" label="基础设置" />
-          <Menu.Item key="3-2" label="安全设置" />
+        
+        <Menu.SubMenu key="sub2" icon="Chart" title="数据分析">
+          <Menu.Item key="6">访问统计</Menu.Item>
+          <Menu.Item key="7">用户行为</Menu.Item>
         </Menu.SubMenu>
       </Menu>
     </div>
@@ -114,70 +132,72 @@ export default () => {
 };
 ```
 
-### 受控模式
+### 主题切换
 
-通过 `selectedKeys` 和 `openKeys` 可以实现完全受控的菜单状态管理。
+支持亮色和暗色两种主题。
 
 ```tsx
 import { Menu, Space } from '@soui/ui';
-import { useState } from 'react';
 
-export default () => {
-  const [selectedKeys, setSelectedKeys] = useState<string[]>(['1']);
-  const [openKeys, setOpenKeys] = useState<string[]>(['2']);
-
-  return (
+export default () => (
+  <Space direction="vertical" size="large" style={{ width: '100%' }}>
     <div>
-      <Space direction="vertical" style={{ width: '100%' }}>
-        <div>当前选中: {selectedKeys.join(', ')}</div>
-        <div>当前展开: {openKeys.join(', ')}</div>
-        
-        <Menu
-          mode="vertical"
-          theme="light"
-          selectedKeys={selectedKeys}
-          openKeys={openKeys}
-          onClick={({ key }) => setSelectedKeys([key])}
-          onOpenChange={(keys) => setOpenKeys(keys)}
-        >
-          <Menu.Item key="1" label="首页" icon="Home" />
-          <Menu.SubMenu key="2" title="产品管理" icon="Apps">
-            <Menu.Item key="2-1" label="产品列表" />
-            <Menu.Item key="2-2" label="产品分类" />
-            <Menu.Item key="2-3" label="产品标签" />
-          </Menu.SubMenu>
-          <Menu.SubMenu key="3" title="订单管理" icon="FileText">
-            <Menu.Item key="3-1" label="订单列表" />
-            <Menu.Item key="3-2" label="退款管理" />
-          </Menu.SubMenu>
-          <Menu.Item key="4" label="数据统计" icon="ChartBar" />
-        </Menu>
-      </Space>
+      <h4>Light Theme</h4>
+      <Menu mode="vertical" theme="light" defaultSelectedKeys={['1']} style={{ width: 256 }}>
+        <Menu.Item key="1" icon="Home">首页</Menu.Item>
+        <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+        <Menu.Item key="3" icon="Setting">系统设置</Menu.Item>
+      </Menu>
     </div>
-  );
-};
+    
+    <div>
+      <h4>Dark Theme</h4>
+      <Menu mode="vertical" theme="dark" defaultSelectedKeys={['1']} style={{ width: 256 }}>
+        <Menu.Item key="1" icon="Home">首页</Menu.Item>
+        <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+        <Menu.Item key="3" icon="Setting">系统设置</Menu.Item>
+      </Menu>
+    </div>
+  </Space>
+);
 ```
 
 ### 分组菜单
 
-使用 `Menu.Group` 对菜单项进行分组。
+使用 Menu.Group 对菜单项进行分组。
 
 ```tsx
 import { Menu } from '@soui/ui';
 
 export default () => (
-  <Menu mode="vertical" theme="light" defaultSelectedKeys={['1']}>
+  <Menu mode="vertical" theme="light" defaultSelectedKeys={['1']} style={{ width: 256 }}>
     <Menu.Group title="导航菜单">
-      <Menu.Item key="1" label="首页" icon="Home" />
-      <Menu.Item key="2" label="产品" icon="Apps" />
-      <Menu.Item key="3" label="服务" icon="Setting" />
+      <Menu.Item key="1" icon="Home">首页</Menu.Item>
+      <Menu.Item key="2" icon="User">用户管理</Menu.Item>
     </Menu.Group>
     
-    <Menu.Group title="管理菜单">
-      <Menu.Item key="4" label="用户管理" icon="User" />
-      <Menu.Item key="5" label="系统设置" icon="Setting" />
-      <Menu.Item key="6" label="数据统计" icon="ChartBar" />
+    <Menu.Divider />
+    
+    <Menu.Group title="系统管理">
+      <Menu.Item key="3" icon="Setting">系统设置</Menu.Item>
+      <Menu.Item key="4" icon="Security">安全管理</Menu.Item>
     </Menu.Group>
+  </Menu>
+);
+```
+
+### 菜单状态
+
+展示不同状态的菜单项：正常、禁用、危险操作。
+
+```tsx
+import { Menu } from '@soui/ui';
+
+export default () => (
+  <Menu mode="vertical" theme="light" defaultSelectedKeys={['1']} style={{ width: 256 }}>
+    <Menu.Item key="1" icon="Home">正常菜单项</Menu.Item>
+    <Menu.Item key="2" icon="User" disabled>禁用菜单项</Menu.Item>
+    <Menu.Item key="3" icon="Delete" danger>危险操作</Menu.Item>
   </Menu>
 );
 ```
@@ -188,42 +208,63 @@ export default () => (
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|--------|------|
-| mode | 菜单类型，现在支持垂直、水平两种模式 | `vertical` \| `horizontal` | `vertical` | - |
+| mode | 菜单类型，现在支持垂直、水平、和内嵌模式三种 | `vertical` \| `horizontal` \| `inline` | `vertical` | - |
 | theme | 主题颜色 | `light` \| `dark` | `light` | - |
-| selectedKeys | 当前选中的菜单项 key 数组 | `string[]` | - | - |
-| defaultSelectedKeys | 默认选中的菜单项 key 数组 | `string[]` | - | - |
-| openKeys | 当前展开的子菜单 key 数组 | `string[]` | - | - |
-| defaultOpenKeys | 默认展开的子菜单 key 数组 | `string[]` | - | - |
-| inlineCollapsed | 是否内嵌菜单（仅 vertical 模式有效） | `boolean` | `false` | - |
-| onClick | 点击菜单项的回调函数 | `(info: { key: string; keyPath: string[] }) => void` | - | - |
-| onOpenChange | 子菜单展开/收起的回调函数 | `(openKeys: string[]) => void` | - | - |
+| selectedKeys | 当前选中的菜单项 key 数组 | string[] | - | - |
+| defaultSelectedKeys | 初始选中的菜单项 key 数组 | string[] | - | - |
+| openKeys | 当前展开的 SubMenu 菜单项 key 数组 | string[] | - | - |
+| defaultOpenKeys | 初始展开的 SubMenu 菜单项 key 数组 | string[] | - | - |
+| inlineCollapsed | inline 时菜单是否收起状态 | boolean | - | - |
+| collapsedWidth | 折叠模式下的菜单宽度（像素） | number | 80 | - |
+| popupZIndex | Popup 弹出层的 zIndex | number | 1050 | - |
+| accordion | 是否开启手风琴模式（每次只展开一个子菜单） | boolean | true | - |
+| triggerSubMenuAction | SubMenu 展开/关闭的触发行为 | `hover` \| `click` | `hover` | - |
+| onClick | 点击 MenuItem 调用此函数 | function({ key, keyPath }) | - | - |
+| onOpenChange | SubMenu 展开/收起的回调 | function(openKeys: string[]) | - | - |
+| className | 自定义类名 | string | - | - |
+| style | 根节点样式 | CSSProperties | - | - |
 
 ### Menu.Item
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|--------|------|
-| key | 唯一标识 | `string` | - | - |
-| label | 菜单项文本 | `ReactNode` | - | - |
-| icon | 菜单项图标 | `string` \| `ReactNode` | - | - |
-| disabled | 是否禁用 | `boolean` | `false` | - |
-| onClick | 点击回调 | `(key: string) => void` | - | - |
+| key | item 的唯一标志（必需） | string | - | - |
+| label | 菜单项标题 | ReactNode | - | - |
+| icon | 菜单图标 | string \| ReactNode | - | - |
+| disabled | 是否禁用 | boolean | false | - |
+| danger | 展示错误状态样式 | boolean | false | - |
+| onClick | 点击回调 | function(key: string) | - | - |
+| className | 自定义类名 | string | - | - |
+| style | 自定义样式 | CSSProperties | - | - |
 
 ### Menu.SubMenu
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|--------|------|
-| key | 唯一标识 | `string` | - | - |
-| title | 子菜单标题 | `ReactNode` | - | - |
-| icon | 子菜单图标 | `string` \| `ReactNode` | - | - |
-| disabled | 是否禁用 | `boolean` | `false` | - |
-| children | 子菜单内容 | `ReactNode` | - | - |
+| key | 唯一标志（必需） | string | - | - |
+| title | 子菜单标题 | ReactNode | - | - |
+| icon | 菜单图标 | string \| ReactNode | - | - |
+| disabled | 是否禁用 | boolean | false | - |
+| children | 子菜单的菜单项 | ReactNode | - | - |
+| className | 自定义类名 | string | - | - |
+| style | 自定义样式 | CSSProperties | - | - |
 
 ### Menu.Group
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|--------|------|
-| title | 分组标题 | `ReactNode` | - | - |
-| children | 分组内容 | `ReactNode` | - | - |
+| title | 分组标题 | ReactNode | - | - |
+| children | 分组的菜单项 | ReactNode | - | - |
+| className | 自定义类名 | string | - | - |
+| style | 自定义样式 | CSSProperties | - | - |
+
+### Menu.Divider
+
+| 参数 | 说明 | 类型 | 默认值 | 版本 |
+|------|------|------|--------|------|
+| dashed | 是否为虚线 | boolean | false | - |
+| className | 自定义类名 | string | - | - |
+| style | 自定义样式 | CSSProperties | - | - |
 
 ## 设计原则
 
@@ -231,81 +272,106 @@ export default () => (
 
 ```tsx
 // 使用语义化的 key
-<Menu.Item key="dashboard" label="仪表盘" icon="Home" />
+<Menu.Item key="user-management">用户管理</Menu.Item>
 
-// 合理使用子菜单层级（建议不超过 3 层）
-<Menu.SubMenu key="settings" title="系统设置">
-  <Menu.Item key="basic" label="基础设置" />
-  <Menu.Item key="security" label="安全设置" />
+// 合理使用子菜单层级
+<Menu.SubMenu key="system" title="系统管理">
+  <Menu.Item key="settings">系统设置</Menu.Item>
+  <Menu.Item key="security">安全管理</Menu.Item>
 </Menu.SubMenu>
+
+// 配合 Layout 使用
+<Layout.Sider>
+  <Menu mode="vertical" theme="dark">
+    {/* ... */}
+  </Menu>
+</Layout.Sider>
 ```
 
 ### ❌ 避免使用
 
 ```tsx
-// 避免使用无意义的 key
-<Menu.Item key="1" label="菜单项" />
+// 不要使用无意义的 key
+<Menu.Item key="1">菜单项</Menu.Item>
 
-// 避免过深的嵌套层级
+// 避免过深的嵌套层级（建议不超过 3 层）
 <Menu.SubMenu key="a">
   <Menu.SubMenu key="b">
     <Menu.SubMenu key="c">
-      <Menu.SubMenu key="d">
-        {/* 太深了 */}
-      </Menu.SubMenu>
+      <Menu.SubMenu key="d">...</Menu.SubMenu>
     </Menu.SubMenu>
   </Menu.SubMenu>
 </Menu.SubMenu>
+
+// 不要在 MenuItem 中放置过多内容
+<Menu.Item key="item">
+  <div>复杂的 HTML 结构</div>
+  <span>多个元素</span>
+</Menu.Item>
 ```
 
 ## 无障碍访问
 
-- 菜单组件遵循 WAI-ARIA Menu Pattern 规范
-- 支持键盘导航：↑↓ 键切换菜单项，←→ 键展开/收起子菜单
-- 所有交互元素都有适当的 ARIA 属性（role、aria-selected、aria-expanded 等）
-- 禁用状态的菜单项不可聚焦
+- 所有菜单项都支持键盘导航（Tab、Enter、Space）
+- 使用 ARIA 属性标注菜单状态（aria-selected、aria-expanded、aria-disabled）
+- 禁用的菜单项无法通过键盘聚焦
+- 折叠模式下，菜单项会显示 Tooltip 提示完整文本
 
 ## FAQ
+
+### 如何控制菜单的选中状态？
+
+使用受控模式，通过 `selectedKeys` 和 `onClick` 回调来控制：
+
+```tsx
+const [selectedKeys, setSelectedKeys] = useState(['home']);
+
+<Menu
+  mode="vertical"
+  selectedKeys={selectedKeys}
+  onClick={({ key }) => setSelectedKeys([key])}
+>
+  <Menu.Item key="home">首页</Menu.Item>
+  <Menu.Item key="about">关于</Menu.Item>
+</Menu>
+```
 
 ### 如何实现路由跳转？
 
 在 `onClick` 回调中处理路由跳转：
 
 ```tsx
+import { useNavigate } from 'react-router-dom';
+
+const navigate = useNavigate();
+
 <Menu
   onClick={({ key }) => {
-    // 使用 react-router 或其他路由库
-    history.push(key);
+    navigate(key); // key 可以是路由路径
   }}
 >
-  <Menu.Item key="/dashboard" label="仪表盘" />
-  <Menu.Item key="/users" label="用户管理" />
+  <Menu.Item key="/home">首页</Menu.Item>
+  <Menu.Item key="/about">关于</Menu.Item>
 </Menu>
 ```
 
-### 如何动态生成菜单？
+### 折叠模式下为什么看不到文字？
 
-可以通过遍历数据动态生成菜单项：
+这是预期行为。折叠模式下只显示图标，鼠标悬停时会通过 Tooltip 显示完整文本。如果需要显示文字，请将 `inlineCollapsed` 设置为 `false`。
+
+### 如何自定义菜单项的图标？
+
+可以使用字符串（Icon 组件的图标名称）或自定义 React 节点：
 
 ```tsx
-const menuData = [
-  { key: '1', label: '首页', icon: 'Home' },
-  { key: '2', label: '产品', icon: 'Apps' },
-];
+// 使用字符串
+<Menu.Item key="home" icon="Home">首页</Menu.Item>
 
-<Menu>
-  {menuData.map(item => (
-    <Menu.Item key={item.key} label={item.label} icon={item.icon} />
-  ))}
-</Menu>
+// 使用自定义图标
+<Menu.Item key="home" icon={<CustomIcon />}>首页</Menu.Item>
 ```
-
-### 折叠模式下如何自定义 Tooltip 位置？
-
-折叠模式下的 Tooltip 默认显示在右侧，这是最佳实践，不建议修改。如果需要调整，可以通过 CSS 覆盖样式。
 
 ## 相关资源
 
-- [Layout 布局](/components/layout) - 与 Menu 配合使用构建完整的管理后台布局
-- [Icon 图标](/components/icon) - 为菜单项添加图标
-- [Tooltip 文字提示](/components/tooltip) - 折叠菜单时显示的提示信息
+- [Layout 布局](/components/layout) - 与 Menu 配合使用的布局组件
+- [Icon 图标](/components/icon) - 菜单项中使用的图标

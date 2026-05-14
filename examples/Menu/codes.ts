@@ -1,37 +1,51 @@
-// Menu 示例代码字符串
-
+// Menu Basic Example
 export const basicCode = `<Menu mode="vertical" theme="light" defaultSelectedKeys={['1']}>
-  <Menu.Item key="1" label="仪表盘" icon="Home" />
-  <Menu.Item key="2" label="数据管理" icon="Database" />
-  <Menu.Item key="3" label="用户中心" icon="User" />
+  <Menu.Item key="1" icon="Home">首页</Menu.Item>
+  <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+  <Menu.Item key="3" icon="Setting">系统设置</Menu.Item>
 </Menu>`;
 
+// Menu Vertical Example
+export const verticalCode = `<Menu mode="vertical" theme="light" defaultSelectedKeys={['1']} style={{ width: 256 }}>
+  <Menu.Item key="1" icon="Home">首页</Menu.Item>
+  <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+  
+  <Menu.SubMenu key="sub1" icon="Folder" title="文件管理">
+    <Menu.Item key="3">我的文档</Menu.Item>
+    <Menu.Item key="4">下载内容</Menu.Item>
+    <Menu.Item key="5">图片库</Menu.Item>
+  </Menu.SubMenu>
+  
+  <Menu.SubMenu key="sub2" icon="Chart" title="数据分析">
+    <Menu.Item key="6">访问统计</Menu.Item>
+    <Menu.Item key="7">用户行为</Menu.Item>
+  </Menu.SubMenu>
+  
+  <Menu.Divider />
+  <Menu.Item key="8" icon="Setting">系统设置</Menu.Item>
+</Menu>`;
+
+// Menu Horizontal Example
 export const horizontalCode = `<Menu mode="horizontal" theme="light" defaultSelectedKeys={['1']}>
-  <Menu.Item key="1" label="首页" icon="Home" />
-  <Menu.Item key="2" label="产品" icon="Apps" />
-  <Menu.SubMenu key="3" title="服务" icon="Setting">
-    <Menu.Item key="3-1" label="云服务" />
-    <Menu.Item key="3-2" label="数据库" />
-    <Menu.Item key="3-3" label="存储服务" />
+  <Menu.Item key="1" icon="Home">首页</Menu.Item>
+  <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+  
+  <Menu.SubMenu key="sub1" title="产品">
+    <Menu.Item key="3">产品列表</Menu.Item>
+    <Menu.Item key="4">产品分类</Menu.Item>
+    <Menu.Item key="5">库存管理</Menu.Item>
   </Menu.SubMenu>
-  <Menu.Item key="4" label="关于" icon="Info" />
+  
+  <Menu.SubMenu key="sub2" title="订单">
+    <Menu.Item key="6">全部订单</Menu.Item>
+    <Menu.Item key="7">待处理</Menu.Item>
+    <Menu.Item key="8">已完成</Menu.Item>
+  </Menu.SubMenu>
+  
+  <Menu.Item key="9" icon="Setting">设置</Menu.Item>
 </Menu>`;
 
-export const darkThemeCode = `<Menu mode="vertical" theme="dark" defaultSelectedKeys={['1']}>
-  <Menu.Item key="1" label="仪表盘" icon="Home" />
-  <Menu.SubMenu key="2" title="用户管理" icon="User">
-    <Menu.Item key="2-1" label="用户列表" />
-    <Menu.Item key="2-2" label="角色管理" />
-    <Menu.Item key="2-3" label="权限设置" />
-  </Menu.SubMenu>
-  <Menu.SubMenu key="3" title="系统设置" icon="Setting">
-    <Menu.Item key="3-1" label="基础设置" />
-    <Menu.Item key="3-2" label="安全设置" />
-    <Menu.Item key="3-3" label="通知设置" />
-  </Menu.SubMenu>
-  <Menu.Item key="4" label="帮助中心" icon="QuestionCircle" />
-</Menu>`;
-
+// Menu Collapsed Example
 export const collapsedCode = `const [collapsed, setCollapsed] = useState(false);
 
 <div>
@@ -41,104 +55,69 @@ export const collapsedCode = `const [collapsed, setCollapsed] = useState(false);
     </Button>
   </Space>
   
-  <Menu 
-    mode="vertical" 
-    theme="dark" 
+  <Menu
+    mode="vertical"
+    theme="light"
     inlineCollapsed={collapsed}
     defaultSelectedKeys={['1']}
-    defaultOpenKeys={['2']}
+    defaultOpenKeys={['sub1']}
+    style={{ width: collapsed ? 80 : 256 }}
   >
-    <Menu.Item key="1" label="仪表盘" icon="Home" />
-    <Menu.SubMenu key="2" title="用户管理" icon="User">
-      <Menu.Item key="2-1" label="用户列表" />
-      <Menu.Item key="2-2" label="角色管理" />
-      <Menu.Item key="2-3" label="权限设置" />
+    <Menu.Item key="1" icon="Home">首页</Menu.Item>
+    <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+    
+    <Menu.SubMenu key="sub1" icon="Folder" title="文件管理">
+      <Menu.Item key="3">我的文档</Menu.Item>
+      <Menu.Item key="4">下载内容</Menu.Item>
+      <Menu.Item key="5">图片库</Menu.Item>
     </Menu.SubMenu>
-    <Menu.SubMenu key="3" title="系统设置" icon="Setting">
-      <Menu.Item key="3-1" label="基础设置" />
-      <Menu.Item key="3-2" label="安全设置" />
+    
+    <Menu.SubMenu key="sub2" icon="InternalData" title="数据分析">
+      <Menu.Item key="6">访问统计</Menu.Item>
+      <Menu.Item key="7">用户行为</Menu.Item>
     </Menu.SubMenu>
   </Menu>
 </div>`;
 
-export const controlledCode = `const [selectedKeys, setSelectedKeys] = useState<string[]>(['1']);
-const [openKeys, setOpenKeys] = useState<string[]>(['2']);
-
-<div>
-  <Space direction="vertical" style={{ width: '100%' }}>
-    <div>当前选中: {selectedKeys.join(', ')}</div>
-    <div>当前展开: {openKeys.join(', ')}</div>
-    
-    <Menu
-      mode="vertical"
-      theme="light"
-      selectedKeys={selectedKeys}
-      openKeys={openKeys}
-      onClick={({ key }) => setSelectedKeys([key])}
-      onOpenChange={(keys) => setOpenKeys(keys)}
-    >
-      <Menu.Item key="1" label="首页" icon="Home" />
-      <Menu.SubMenu key="2" title="产品管理" icon="Apps">
-        <Menu.Item key="2-1" label="产品列表" />
-        <Menu.Item key="2-2" label="产品分类" />
-        <Menu.Item key="2-3" label="产品标签" />
-      </Menu.SubMenu>
-      <Menu.SubMenu key="3" title="订单管理" icon="FileText">
-        <Menu.Item key="3-1" label="订单列表" />
-        <Menu.Item key="3-2" label="退款管理" />
-      </Menu.SubMenu>
-      <Menu.Item key="4" label="数据统计" icon="ChartBar" />
+// Menu Theme Example
+export const themeCode = `<Space direction="vertical" size="large" style={{ width: '100%' }}>
+  <div>
+    <h4>Light Theme</h4>
+    <Menu mode="vertical" theme="light" defaultSelectedKeys={['1']} style={{ width: 256 }}>
+      <Menu.Item key="1" icon="Home">首页</Menu.Item>
+      <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+      <Menu.Item key="3" icon="Setting">系统设置</Menu.Item>
     </Menu>
-  </Space>
-</div>`;
+  </div>
+  
+  <div>
+    <h4>Dark Theme</h4>
+    <Menu mode="vertical" theme="dark" defaultSelectedKeys={['1']} style={{ width: 256 }}>
+      <Menu.Item key="1" icon="Home">首页</Menu.Item>
+      <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+      <Menu.Item key="3" icon="Setting">系统设置</Menu.Item>
+    </Menu>
+  </div>
+</Space>`;
 
-export const groupCode = `<Menu mode="vertical" theme="light" defaultSelectedKeys={['1']}>
+// Menu Group Example
+export const groupCode = `<Menu mode="vertical" theme="light" defaultSelectedKeys={['1']} style={{ width: 256 }}>
   <Menu.Group title="导航菜单">
-    <Menu.Item key="1" label="首页" icon="Home" />
-    <Menu.Item key="2" label="产品" icon="Apps" />
-    <Menu.Item key="3" label="服务" icon="Setting" />
+    <Menu.Item key="1" icon="Home">首页</Menu.Item>
+    <Menu.Item key="2" icon="User">用户管理</Menu.Item>
   </Menu.Group>
   
-  <Menu.Group title="管理菜单">
-    <Menu.Item key="4" label="用户管理" icon="User" />
-    <Menu.Item key="5" label="系统设置" icon="Setting" />
-    <Menu.Item key="6" label="数据统计" icon="ChartBar" />
+  <Menu.Divider />
+  
+  <Menu.Group title="系统管理">
+    <Menu.Item key="3" icon="Setting">系统设置</Menu.Item>
+    <Menu.Item key="4" icon="Security">安全管理</Menu.Item>
   </Menu.Group>
 </Menu>`;
 
-export const nestedSubMenuCode = `const [collapsed, setCollapsed] = useState(false);
-
-<div>
-  <Space style={{ marginBottom: 16 }}>
-    <Button onClick={() => setCollapsed(!collapsed)}>
-      {collapsed ? '展开' : '收起'}
-    </Button>
-  </Space>
-  
-  <Menu 
-    mode="vertical" 
-    theme="dark" 
-    inlineCollapsed={collapsed}
-    defaultSelectedKeys={['1-1']}
-    defaultOpenKeys={['1']}
-  >
-    <Menu.Item key="1-1" label="仪表盘" icon="Home" />
-    <Menu.SubMenu key="1" title="用户管理" icon="User">
-      <Menu.Item key="1-1-1" label="用户列表" />
-      <Menu.SubMenu key="1-2" title="权限管理">
-        <Menu.Item key="1-2-1" label="角色列表" />
-        <Menu.Item key="1-2-2" label="权限设置" />
-      </Menu.SubMenu>
-      <Menu.Item key="1-3" label="组织架构" />
-    </Menu.SubMenu>
-    <Menu.SubMenu key="2" title="系统设置" icon="Setting">
-      <Menu.Item key="2-1" label="基础设置" />
-      <Menu.Item key="2-2" label="安全设置" />
-      <Menu.SubMenu key="2-3" title="高级设置">
-        <Menu.Item key="2-3-1" label="数据备份" />
-        <Menu.Item key="2-3-2" label="日志管理" />
-      </Menu.SubMenu>
-    </Menu.SubMenu>
-    <Menu.Item key="3" label="帮助中心" icon="QuestionCircle" />
-  </Menu>
-</div>`;
+// Menu Status Example
+export const statusCode = `<Menu mode="vertical" theme="light" defaultSelectedKeys={['1']} style={{ width: 256 }}>
+  <Menu.Item key="1" icon="Home">正常菜单项</Menu.Item>
+  <Menu.Item key="2" icon="User" disabled>禁用菜单项</Menu.Item>
+  <Menu.Item key="3" icon="Delete" danger>危险操作</Menu.Item>
+</Menu>`;

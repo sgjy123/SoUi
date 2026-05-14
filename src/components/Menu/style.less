@@ -16,7 +16,7 @@
   --soui-menu-border-radius: @border-radius-base;
   --soui-menu-font-size: @font-size-base;
   --soui-menu-collapsed-width: 80px;
-  
+
   list-style: none;
   margin: 0;
   padding: 0;
@@ -24,15 +24,15 @@
   background-color: var(--soui-menu-bg-color);
   color: var(--soui-menu-color-text);
   transition: all @transition-duration @transition-timing-function;
-  
+
   // ==================== Vertical Mode ====================
   &-vertical {
     width: 256px;
-    
+
     // 折叠模式
     &.soui-menu-inline-collapsed {
       width: var(--soui-menu-collapsed-width, 80px);
-      
+
       .soui-menu-item,
       .soui-submenu-title {
         padding: 0;
@@ -41,7 +41,7 @@
         width: 100%;
         box-sizing: border-box;
       }
-      
+
       .soui-menu-item-icon,
       .soui-submenu-icon {
         margin-right: 0;
@@ -51,40 +51,153 @@
         align-items: center;
         width: 100%;
       }
-      
+
       // 折叠模式下隐藏子菜单内容
       .soui-submenu-content {
         display: none;
       }
-      
+
       // 折叠模式下隐藏选中指示器
       .soui-menu-item-selected::before {
         display: none;
       }
-      
+
       // 确保折叠模式下内容不溢出
       .soui-menu-item-label {
         display: none;
       }
-    }
     
+      // 折叠模式下 Menu 中使用的 Tooltip trigger 样式
+      .soui-menu-tooltip-trigger {
+        display: block;
+        width: 100%;
+      }
+
+      // 折叠模式下的子菜单弹出面板不受折叠样式影响
+      .soui-submenu-popup {
+        .soui-menu-item-label {
+          display: flex;
+        }
+
+        .soui-menu-item,
+        .soui-submenu-title {
+          padding: 8px 16px;
+          margin: 0;
+          justify-content: flex-start;
+          width: auto;
+        }
+
+        .soui-menu-item-icon,
+        .soui-submenu-icon {
+          margin-right: 8px;
+          margin-left: 0;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          width: auto;
+        }
+      }
+    }
+
     .soui-menu-item,
     .soui-submenu-title {
       height: 40px;
       line-height: 40px;
     }
-    
+
     .soui-submenu-content {
       padding-left: 24px;
     }
   }
-  
+
+  // ==================== Inline Mode ====================
+  &-inline {
+    width: 256px;
+
+    // 折叠模式
+    &.soui-menu-inline-collapsed {
+      width: var(--soui-menu-collapsed-width, 80px);
+
+      .soui-menu-item,
+      .soui-submenu-title {
+        padding: 0;
+        margin: 4px 0;
+        justify-content: center;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .soui-menu-item-icon,
+      .soui-submenu-icon {
+        margin-right: 0;
+        margin-left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      }
+
+      .soui-submenu-content {
+        display: none;
+      }
+
+      .soui-menu-item-selected::before {
+        display: none;
+      }
+
+      .soui-menu-item-label {
+        display: none;
+      }
+
+      // 折叠模式下 Menu 中使用的 Tooltip trigger 样式
+      .soui-menu-tooltip-trigger {
+        display: block;
+        width: 100%;
+      }
+
+      // 折叠模式下的子菜单弹出面板不受折叠样式影响
+      .soui-submenu-popup {
+        .soui-menu-item-label {
+          display: flex;
+        }
+
+        .soui-menu-item,
+        .soui-submenu-title {
+          padding: 8px 16px;
+          margin: 0;
+          justify-content: flex-start;
+          width: auto;
+        }
+
+        .soui-menu-item-icon,
+        .soui-submenu-icon {
+          margin-right: 8px;
+          margin-left: 0;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          width: auto;
+        }
+      }
+    }
+
+    .soui-menu-item,
+    .soui-submenu-title {
+      height: 40px;
+      line-height: 40px;
+    }
+
+    .soui-submenu-content {
+      padding-left: 24px;
+    }
+  }
+
   // ==================== Horizontal Mode ====================
   &-horizontal {
     display: flex;
     align-items: center;
-    border-bottom: 1px solid @border-color-split;
-    
+    border-bottom: 1px solid var(--soui-menu-border-color);
+
     .soui-menu-item,
     .soui-submenu-title {
       padding: 0 20px;
@@ -92,7 +205,7 @@
       line-height: 40px;
     }
   }
-  
+
   // ==================== Dark Theme ====================
   &-dark {
     --soui-menu-bg-color: #001529;
@@ -101,35 +214,10 @@
     --soui-menu-item-active-bg: rgba(255, 255, 255, 0.12);
     --soui-menu-item-selected-color: #fff;
     --soui-menu-border-color: rgba(255, 255, 255, 0.1);
-    
-    &.soui-menu-vertical {
+
+    &.soui-menu-vertical,
+    &.soui-menu-inline {
       border-right: 1px solid var(--soui-menu-border-color);
-    }
-  }
-  
-  // ==================== Inline Collapsed ====================
-  &-inline-collapsed {
-    width: var(--soui-menu-collapsed-width, 80px);
-    
-    .soui-menu-item,
-    .soui-submenu-title {
-      padding: 0;
-      margin: 4px 0;
-      justify-content: center;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    
-    .soui-menu-item-icon,
-    .soui-submenu-icon {
-      margin-right: 0;
-      margin-left: 0;
-      width: 100%;
-    }
-    
-    // 折叠模式下隐藏选中指示器
-    .soui-menu-item-selected::before {
-      display: none;
     }
   }
 }
@@ -145,22 +233,23 @@
   border-radius: var(--soui-menu-border-radius);
   margin: 4px 8px;
   padding: 0 12px;
-  
+
   &:hover:not(.soui-menu-item-disabled) {
     background-color: var(--soui-menu-item-hover-bg);
   }
-  
+
   &:active:not(.soui-menu-item-disabled) {
     background-color: var(--soui-menu-item-active-bg);
   }
-  
+
   &-selected {
     background-color: var(--soui-menu-item-selected-bg);
     color: var(--soui-menu-item-selected-color);
     font-weight: 500;
-    
+
     // 垂直模式：选中指示器在左边
-    .soui-menu-vertical & {
+    .soui-menu-vertical &,
+    .soui-menu-inline & {
       &::before {
         content: '';
         position: absolute;
@@ -173,7 +262,7 @@
         border-radius: 0 2px 2px 0;
       }
     }
-    
+
     // 水平模式：选中指示器在底部
     .soui-menu-horizontal & {
       &::after {
@@ -189,23 +278,36 @@
       }
     }
   }
-  
+
   &-disabled {
     opacity: 0.5;
     cursor: not-allowed;
     color: @text-color-disabled;
   }
-  
+
+  &-danger {
+    color: @error-color;
+
+    &:hover:not(.soui-menu-item-disabled) {
+      color: @error-hover-color;
+    }
+
+    &.soui-menu-item-selected {
+      background-color: fade(@error-color, 10%);
+      color: @error-color;
+    }
+  }
+
   .soui-menu-item-icon {
     margin-right: 10px;
     font-size: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: inherit; // 图标颜色跟随父元素
+    color: inherit;
     transition: color @transition-duration @transition-timing-function;
   }
-  
+
   .soui-menu-item-label {
     flex: 1;
     overflow: hidden;
@@ -214,11 +316,20 @@
   }
 }
 
+// 折叠模式下第一个字符显示
+.soui-menu-inline-collapsed-noicon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: var(--soui-menu-font-size);
+}
+
 // ==================== SubMenu ====================
 
 .soui-submenu {
   position: relative;
-  
+
   &-title {
     display: flex;
     align-items: center;
@@ -227,17 +338,17 @@
     border-radius: var(--soui-menu-border-radius);
     margin: 4px 8px;
     padding: 0 12px;
-    
+
     &:hover:not(.soui-submenu-disabled) {
       background-color: var(--soui-menu-item-hover-bg);
     }
   }
-  
+
   &-disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   &-icon {
     margin-right: 10px;
     font-size: 16px;
@@ -245,30 +356,30 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   &-title-text {
     flex: 1;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  
+
   &-arrow {
     margin-left: 8px;
     transition: transform @transition-duration @transition-timing-function;
     font-size: 12px;
-    
+
     &-open {
       transform: rotate(180deg);
     }
   }
-  
+
   &-content {
     overflow: hidden;
     animation: soui-menu-slide-down @transition-duration @transition-timing-function;
     padding-left: 0;
   }
-  
+
   // Popup for horizontal mode and collapsed mode
   &-popup {
     min-width: 160px;
@@ -280,83 +391,93 @@
     opacity: 0;
     transform-origin: top center;
     animation: soui-menu-popup-enter 0.2s @transition-timing-function forwards;
-    color: var(--soui-menu-color-text); // 确保文字颜色跟随主题
-    
+    color: var(--soui-menu-color-text);
+
     // 从顶部弹出时的动画
-    &[style*="bottom: 100%"] {
+    &[style*='bottom: 100%'] {
       transform-origin: bottom center;
       animation-name: soui-menu-popup-enter-top;
     }
-    
+
     // 折叠模式下的 Popup 样式
     &-collapsed {
       margin-top: 0;
       margin-left: 4px;
-      
+
       .soui-submenu-popup-title {
         padding: 8px 16px;
         font-size: @font-size-sm;
-        color: var(--soui-menu-color-text); // 使用主题文字颜色
+        color: var(--soui-menu-color-text);
         font-weight: 500;
         border-bottom: 1px solid var(--soui-menu-border-color);
         margin-bottom: 4px;
       }
     }
-    
+
     &-light {
       background-color: #fff;
       color: rgba(0, 0, 0, 0.85);
     }
-    
+
     &-dark {
       background-color: #001529;
       color: rgba(255, 255, 255, 0.65);
     }
-    
+
     .soui-menu-item {
       margin: 0;
       border-radius: 0;
       padding: 8px 16px;
-      color: inherit; // 继承Popup的颜色
-      
+      // 弹出面板中的菜单项使用固定颜色，不继承
+      color: var(--soui-menu-color-text);
+
       &:hover {
         background-color: var(--soui-menu-item-hover-bg);
       }
-      
+
       // Popup 中的选中样式
       &.soui-menu-item-selected {
         background-color: var(--soui-menu-item-selected-bg);
         color: var(--soui-menu-item-selected-color);
         font-weight: 500;
-        
+
         &::after {
-          display: none; // Popup 中不显示底部边框
+          display: none;
         }
-        
+
         .soui-menu-item-icon {
-          color: var(--soui-menu-item-selected-color); // 选中时图标颜色
+          color: var(--soui-menu-item-selected-color);
         }
       }
-      
+
       .soui-menu-item-icon {
-        color: inherit; // 图标颜色跟随父元素
+        color: var(--soui-menu-color-text);
       }
     }
-    
+
     // Popup 中的 SubMenu 样式
     .soui-submenu-title {
-      color: inherit;
+      color: var(--soui-menu-color-text);
       margin: 0;
       padding: 8px 16px;
       border-radius: 0;
-      
+      // 在弹出面板中，SubMenu 使用右箭头表示有子菜单
+      .soui-submenu-arrow {
+        transform: rotate(-90deg);
+      }
+
       &:hover {
         background-color: var(--soui-menu-item-hover-bg);
       }
-      
+
       .soui-submenu-icon {
-        color: inherit;
+        color: var(--soui-menu-color-text);
       }
+    }
+
+    // 弹出面板中的嵌套 SubMenu 应该向右弹出
+    .soui-submenu {
+      position: relative;
     }
   }
 }
@@ -365,7 +486,7 @@
 
 .soui-menu-group {
   padding: 8px 0;
-  
+
   &-title {
     padding: 8px 16px;
     font-size: @font-size-sm;
@@ -374,9 +495,23 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
-  
+
   &-content {
     padding: 4px 8px;
+  }
+}
+
+// ==================== Menu Divider ====================
+
+.soui-menu-divider {
+  height: 1px;
+  margin: 8px 0;
+  background-color: var(--soui-menu-border-color);
+  overflow: hidden;
+
+  &-dashed {
+    background: none;
+    border-top: 1px dashed var(--soui-menu-border-color);
   }
 }
 
@@ -430,7 +565,8 @@
 // ==================== Responsive ====================
 
 @media (max-width: @screen-md) {
-  .soui-menu.soui-menu-vertical {
+  .soui-menu.soui-menu-vertical,
+  .soui-menu.soui-menu-inline {
     width: 100%;
   }
 }

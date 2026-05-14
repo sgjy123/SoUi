@@ -12,31 +12,52 @@ export default () => {
         </Button>
       </Space>
       
-      <Menu 
-        mode="vertical" 
-        theme="dark" 
+      <Menu
+        mode="vertical"
+        theme="dark"
         inlineCollapsed={collapsed}
-        defaultSelectedKeys={['1-1']}
-        defaultOpenKeys={['1']}
+        defaultSelectedKeys={['1']}
+        defaultOpenKeys={['sub1']}
+        style={{ width: collapsed ? 80 : 256 }}
       >
-        <Menu.Item key="1-1" label="仪表盘" icon="Home" />
-        <Menu.SubMenu key="1" title="用户管理" icon="User">
-          <Menu.Item key="1-1-1" label="用户列表" />
-          <Menu.SubMenu key="1-2" title="权限管理">
-            <Menu.Item key="1-2-1" label="角色列表" />
-            <Menu.Item key="1-2-2" label="权限设置" />
+        <Menu.Item key="1" icon="Home">首页</Menu.Item>
+        <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+        
+        {/* 一级子菜单 */}
+        <Menu.SubMenu key="sub1" icon="Folder" title="文件管理">
+          <Menu.Item key="3">我的文档</Menu.Item>
+          <Menu.Item key="4">下载内容</Menu.Item>
+          
+          {/* 二级子菜单 */}
+          <Menu.SubMenu key="sub1-1" title="图片库">
+            <Menu.Item key="5">相册管理</Menu.Item>
+            <Menu.Item key="6">图片上传</Menu.Item>
+            
+            {/* 三级子菜单 */}
+            <Menu.SubMenu key="sub1-1-1" title="图片分类">
+              <Menu.Item key="7">风景图</Menu.Item>
+              <Menu.Item key="8">人物图</Menu.Item>
+              <Menu.Item key="9">建筑图</Menu.Item>
+            </Menu.SubMenu>
           </Menu.SubMenu>
-          <Menu.Item key="1-3" label="组织架构" />
         </Menu.SubMenu>
-        <Menu.SubMenu key="2" title="系统设置" icon="Setting">
-          <Menu.Item key="2-1" label="基础设置" />
-          <Menu.Item key="2-2" label="安全设置" />
-          <Menu.SubMenu key="2-3" title="高级设置">
-            <Menu.Item key="2-3-1" label="数据备份" />
-            <Menu.Item key="2-3-2" label="日志管理" />
+        
+        {/* 一级子菜单 - 数据分析 */}
+        <Menu.SubMenu key="sub2" icon="InternalData" title="数据分析">
+          <Menu.Item key="10">访问统计</Menu.Item>
+          
+          {/* 二级子菜单 */}
+          <Menu.SubMenu key="sub2-1" title="用户行为">
+            <Menu.Item key="11">登录记录</Menu.Item>
+            
+            {/* 三级子菜单 */}
+            <Menu.SubMenu key="sub2-1-1" title="操作日志">
+              <Menu.Item key="12">页面访问</Menu.Item>
+              <Menu.Item key="13">按钮点击</Menu.Item>
+              <Menu.Item key="14">表单提交</Menu.Item>
+            </Menu.SubMenu>
           </Menu.SubMenu>
         </Menu.SubMenu>
-        <Menu.Item key="3" label="帮助中心" icon="QuestionCircle" />
       </Menu>
     </div>
   );

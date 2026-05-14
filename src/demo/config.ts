@@ -47,12 +47,12 @@ export const docsConfig: MenuGroup[] = [
       { key: 'layout-app', label: 'Layout 应用布局', componentPath: 'Layout', exampleName: 'AppLayout', description: '音乐/社交应用布局，分组菜单和徽章提示。' },
 
       { key: 'menu-basic', label: 'Menu 基础用法', componentPath: 'Menu', exampleName: 'Basic', description: '垂直菜单的基本用法。' },
+      { key: 'menu-vertical', label: 'Menu 垂直菜单', componentPath: 'Menu', exampleName: 'Vertical', description: '包含子菜单的垂直导航菜单。' },
       { key: 'menu-horizontal', label: 'Menu 水平菜单', componentPath: 'Menu', exampleName: 'Horizontal', description: '水平方向的导航菜单。' },
-      { key: 'menu-dark-theme', label: 'Menu 深色主题', componentPath: 'Menu', exampleName: 'DarkTheme', description: '深色主题的菜单样式。' },
       { key: 'menu-collapsed', label: 'Menu 折叠菜单', componentPath: 'Menu', exampleName: 'Collapsed', description: '可折叠的侧边栏菜单。' },
-      { key: 'menu-controlled', label: 'Menu 受控模式', componentPath: 'Menu', exampleName: 'Controlled', description: '完全受控的菜单状态管理。' },
+      { key: 'menu-theme', label: 'Menu 主题切换', componentPath: 'Menu', exampleName: 'Theme', description: '亮色和暗色主题的切换。' },
       { key: 'menu-group', label: 'Menu 分组菜单', componentPath: 'Menu', exampleName: 'Group', description: '使用 Menu.Group 对菜单项进行分组。' },
-      { key: 'nested-sub-menu', label: 'Menu 嵌套子菜单菜单', componentPath: 'Menu', exampleName: 'NestedSubMenu', description: '使用 Menu.SubMenu 对子菜单进行嵌套。' },
+      { key: 'menu-status', label: 'Menu 状态测试', componentPath: 'Menu', exampleName: 'Status', description: '禁用、危险和选中状态的测试。' },
 
       { key: 'space-basic', label: 'Space 基本用法', componentPath: 'Space', exampleName: 'Basic', description: '设置子元素之间的间距。' },
       { key: 'space-size', label: 'Space 间距尺寸', componentPath: 'Space', exampleName: 'Size', description: '预设尺寸或自定义数值。' },
