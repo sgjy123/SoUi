@@ -3,21 +3,21 @@ import { Menu } from '../../src';
 
 export default () => (
   <Menu mode="horizontal" theme="light" defaultSelectedKeys={['1']}>
-    <Menu.Item key="1" icon="Home">首页</Menu.Item>
-    <Menu.Item key="2" icon="User">用户管理</Menu.Item>
+    <Menu.Item itemKey="1" icon="Home" label="首页" />
+    <Menu.Item itemKey="2" icon="User" label="用户管理" />
     
-    <Menu.SubMenu key="sub1" title="产品">
-      <Menu.Item key="3">产品列表</Menu.Item>
-      <Menu.Item key="4">产品分类</Menu.Item>
-      <Menu.Item key="5">库存管理</Menu.Item>
+    <Menu.SubMenu itemKey="sub1" title="产品">
+      <Menu.Item itemKey="3" label="产品列表" />
+      <Menu.Item itemKey="4" label="产品分类" />
+      <Menu.Item itemKey="5" label="库存管理" />
     </Menu.SubMenu>
     
-    <Menu.SubMenu key="sub2" title="订单">
-      <Menu.Item key="6">全部订单</Menu.Item>
-      <Menu.Item key="7">待处理</Menu.Item>
-      <Menu.Item key="8">已完成</Menu.Item>
+    <Menu.SubMenu itemKey="sub2" title="订单">
+      <Menu.Item itemKey="6" label="全部订单" />
+      <Menu.Item itemKey="7" label="待处理" />
+      <Menu.Item itemKey="8" label="已完成" />
     </Menu.SubMenu>
     
-    <Menu.Item key="9" icon="Setting">设置</Menu.Item>
+    <Menu.Item itemKey="9" icon="Setting" label="设置" />
   </Menu>
 );
