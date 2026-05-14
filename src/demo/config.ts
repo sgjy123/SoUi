@@ -46,14 +46,6 @@ export const docsConfig: MenuGroup[] = [
       { key: 'layout-blog', label: 'Layout 博客布局', componentPath: 'Layout', exampleName: 'BlogLayout', description: '博客平台布局，包含文章列表和分页。' },
       { key: 'layout-app', label: 'Layout 应用布局', componentPath: 'Layout', exampleName: 'AppLayout', description: '音乐/社交应用布局，分组菜单和徽章提示。' },
 
-      { key: 'menu-basic', label: 'Menu 基础用法', componentPath: 'Menu', exampleName: 'Basic', description: '垂直菜单的基本用法。' },
-      { key: 'menu-vertical', label: 'Menu 垂直菜单', componentPath: 'Menu', exampleName: 'Vertical', description: '包含子菜单的垂直导航菜单。' },
-      { key: 'menu-horizontal', label: 'Menu 水平菜单', componentPath: 'Menu', exampleName: 'Horizontal', description: '水平方向的导航菜单。' },
-      { key: 'menu-collapsed', label: 'Menu 折叠菜单', componentPath: 'Menu', exampleName: 'Collapsed', description: '可折叠的侧边栏菜单。' },
-      { key: 'menu-theme', label: 'Menu 主题切换', componentPath: 'Menu', exampleName: 'Theme', description: '亮色和暗色主题的切换。' },
-      { key: 'menu-group', label: 'Menu 分组菜单', componentPath: 'Menu', exampleName: 'Group', description: '使用 Menu.Group 对菜单项进行分组。' },
-      { key: 'menu-status', label: 'Menu 状态测试', componentPath: 'Menu', exampleName: 'Status', description: '禁用、危险和选中状态的测试。' },
-
       { key: 'space-basic', label: 'Space 基本用法', componentPath: 'Space', exampleName: 'Basic', description: '设置子元素之间的间距。' },
       { key: 'space-size', label: 'Space 间距尺寸', componentPath: 'Space', exampleName: 'Size', description: '预设尺寸或自定义数值。' },
       { key: 'space-direction', label: 'Space 排列方向', componentPath: 'Space', exampleName: 'Direction', description: '水平和垂直排列。' },
