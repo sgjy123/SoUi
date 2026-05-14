@@ -3,10 +3,10 @@ import { Icon, Space } from '../../src';
 
 export default () => (
   <Space wrap>
-    <Icon name="CheckCircle" color="primary" />
-    <Icon name="InfoCircle" color="success" />
-    <Icon name="ExclamationCircle" color="warning" />
-    <Icon name="CloseCircle" color="error" />
-    <Icon name="QuestionCircle" color="info" />
+    <Icon name="Camera" color="primary" />
+    <Icon name="Lightning" color="success" />
+    <Icon name="Power" color="warning" />
+    <Icon name="SettingConfig" color="error" />
+    <Icon name="Sleep" color="info" />
   </Space>
 );

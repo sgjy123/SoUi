@@ -55,17 +55,6 @@ export type {
   FooterProps,
 } from './components/Layout';
 
-// Menu Component
-export { default as Menu } from './components/Menu';
-export type {
-  MenuProps,
-  MenuItemProps,
-  SubMenuProps,
-  MenuGroupProps,
-  MenuMode,
-  MenuTheme,
-} from './components/Menu';
-
 // Utils
 export * from './utils';
 
