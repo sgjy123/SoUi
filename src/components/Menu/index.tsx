@@ -136,7 +136,7 @@ const MenuItem = React.memo(
     );
     if (inlineCollapsed && level === 0 && !isPopup) {
       return (
-        <Tooltip placement="right" title={item.label}>
+        <Tooltip placement="right" title={item.label} className="soui-menu-tooltip-trigger">
           {content}
         </Tooltip>
       );
@@ -343,24 +343,6 @@ const SubMenu = React.memo(
             </div>
           </Popup>
         )}
-          <Popup
-              visible={true}
-              anchor={popupRect}
-              zIndex={popupZIndex + level}
-              mode={mode}
-              popupTheme={popupTheme}
-          >
-              <div
-                  onMouseEnter={() => {
-                      clearTimer();
-                  }}
-                  onMouseLeave={() => {
-                      hidePopup();
-                  }}
-              >
-                  {renderChildren()}
-              </div>
-          </Popup>
       </div>
     );
   },

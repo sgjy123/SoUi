@@ -37,7 +37,6 @@ export default () => {
         {collapsed ? "展开菜单" : "折叠菜单"}
       </button>
       <Menu
-        mode="inline"
         items={items}
         inlineCollapsed={collapsed}
         defaultSelectedKeys={["home"]}
