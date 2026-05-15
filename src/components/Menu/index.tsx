@@ -37,6 +37,7 @@ export interface MenuProps {
   style?: React.CSSProperties;
   onClick?: (info: { key: string; keyPath: string[] }) => void;
   onOpenChange?: (keys: string[]) => void;
+  popupTheme?: "light" | "dark";
 }
 /* =========================
  * Context
@@ -51,6 +52,7 @@ interface MenuContextProps {
   popupZIndex: number;
   level: number;
   isPopup: boolean;
+  popupTheme: "light" | "dark";
   onSelect: (key: string, keyPath: string[]) => void;
   onToggleOpen: (key: string) => void;
 }
@@ -152,23 +154,28 @@ const Popup = ({
   children,
   zIndex,
   mode,
+  popupTheme,
 }: {
   visible: boolean;
   anchor: DOMRect | null;
   children: React.ReactNode;
   zIndex: number;
   mode: MenuMode;
+  popupTheme: "light" | "dark";
 }) => {
   if (!visible || !anchor) {
     return null;
   }
-  
+
   // 水平菜单从下方弹出，其他模式从右侧弹出
   const isHorizontal = mode === "horizontal";
-  
+
   return createPortal(
     <div
-      className="soui-submenu-popup"
+      className={classNames("soui-submenu-popup", {
+        "soui-submenu-popup-dark": popupTheme === "dark",
+        "soui-submenu-popup-light": popupTheme === "light",
+      })}
       style={{
         position: "fixed",
         top: isHorizontal ? anchor.bottom : anchor.top,
@@ -196,6 +203,7 @@ const SubMenu = React.memo(
       popupZIndex,
       level,
       isPopup,
+      popupTheme,
       onToggleOpen,
     } = useMenuContext();
     const open = openKeys.includes(item.key);
@@ -244,6 +252,7 @@ const SubMenu = React.memo(
           popupZIndex,
           level: level + 1,
           isPopup: popupMode,
+          popupTheme,
           onSelect: useMenuContext().onSelect,
           onToggleOpen,
         }}
@@ -320,6 +329,7 @@ const SubMenu = React.memo(
             anchor={popupRect}
             zIndex={popupZIndex + level}
             mode={mode}
+            popupTheme={popupTheme}
           >
             <div
               onMouseEnter={() => {
@@ -333,6 +343,24 @@ const SubMenu = React.memo(
             </div>
           </Popup>
         )}
+          <Popup
+              visible={true}
+              anchor={popupRect}
+              zIndex={popupZIndex + level}
+              mode={mode}
+              popupTheme={popupTheme}
+          >
+              <div
+                  onMouseEnter={() => {
+                      clearTimer();
+                  }}
+                  onMouseLeave={() => {
+                      hidePopup();
+                  }}
+              >
+                  {renderChildren()}
+              </div>
+          </Popup>
       </div>
     );
   },
@@ -382,6 +410,7 @@ const Menu: React.FC<MenuProps> = ({
   style,
   onClick,
   onOpenChange,
+  popupTheme = "light",
 }) => {
   const [innerSelectedKeys, setInnerSelectedKeys] =
     useState(defaultSelectedKeys);
@@ -425,6 +454,7 @@ const Menu: React.FC<MenuProps> = ({
       popupZIndex,
       level: 0,
       isPopup: false,
+      popupTheme,
       onSelect,
       onToggleOpen,
     }),
@@ -435,6 +465,7 @@ const Menu: React.FC<MenuProps> = ({
       openKeys,
       triggerSubMenuAction,
       popupZIndex,
+      popupTheme,
       onSelect,
       onToggleOpen,
     ],

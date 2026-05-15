@@ -67,7 +67,7 @@
       .soui-menu-item-label {
         display: none;
       }
-    
+
       // 折叠模式下 Menu 中使用的 Tooltip trigger 样式
       .soui-menu-tooltip-trigger {
         display: block;
@@ -402,7 +402,7 @@
   &-popup {
     min-width: 160px;
     padding: 4px 0;
-    background-color: var(--soui-menu-bg-color);
+    background-color: #fff;
     border-radius: var(--soui-menu-border-radius);
     box-shadow: @box-shadow-secondary;
     margin-top: 4px;
@@ -432,22 +432,10 @@
       }
     }
 
-    &-light {
-      background-color: #fff;
-      color: rgba(0, 0, 0, 0.85);
-    }
-
-    &-dark {
-      background-color: #001529;
-      color: rgba(255, 255, 255, 0.65);
-    }
-
     .soui-menu-item {
       margin: 0;
       border-radius: 0;
       padding: 8px 16px;
-      // 弹出面板中的菜单项使用固定颜色，不继承
-      color: var(--soui-menu-color-text);
 
       &:hover {
         background-color: var(--soui-menu-item-hover-bg);
@@ -456,20 +444,11 @@
       // Popup 中的选中样式
       &.soui-menu-item-selected {
         background-color: var(--soui-menu-item-selected-bg);
-        color: var(--soui-menu-item-selected-color);
         font-weight: 500;
 
         &::after {
           display: none;
         }
-
-        .soui-menu-item-icon {
-          color: var(--soui-menu-item-selected-color);
-        }
-      }
-
-      .soui-menu-item-icon {
-        color: var(--soui-menu-color-text);
       }
     }
 
@@ -496,6 +475,45 @@
     // 弹出面板中的嵌套 SubMenu 应该向右弹出
     .soui-submenu {
       position: relative;
+    }
+
+    &-light {
+      .soui-menu-item {
+        &:hover {
+          color: var(--soui-menu-item-selected-color);
+          background-color: rgba(0, 0, 0, 0.04);
+        }
+
+        &.soui-menu-item-selected {
+          background-color: rgba(24, 144, 255, 0.1);
+          font-weight: 500;
+
+          .soui-menu-item-label, .soui-menu-item-icon {
+            color: var(--soui-menu-item-selected-color);
+          }
+        }
+      }
+    }
+
+    &-dark {
+      background-color: #001529;
+      color: rgba(255, 255, 255, 0.65);
+
+      .soui-menu-item {
+        &:hover {
+          color: #fff;
+          background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        &.soui-menu-item-selected {
+          background-color: rgba(24, 144, 255, 0.15);
+          font-weight: 500;
+
+          .soui-menu-item-label, .soui-menu-item-icon {
+            color: #fff;
+          }
+        }
+      }
     }
   }
 }

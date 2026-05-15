@@ -30,6 +30,7 @@ export default () => {
         items={items}
         className="soui-menu-dark"
         defaultSelectedKeys={["home"]}
+        popupTheme="dark"
       />
     </div>
   );
