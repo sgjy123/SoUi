@@ -155,6 +155,7 @@ const Popup = ({
   zIndex,
   mode,
   popupTheme,
+  level,
 }: {
   visible: boolean;
   anchor: DOMRect | null;
@@ -162,13 +163,15 @@ const Popup = ({
   zIndex: number;
   mode: MenuMode;
   popupTheme: "light" | "dark";
+  level: number;
 }) => {
   if (!visible || !anchor) {
     return null;
   }
 
-  // 水平菜单从下方弹出，其他模式从右侧弹出
+  // 水平菜单的第一层和第二层从下方弹出，第三层及以上从右侧弹出
   const isHorizontal = mode === "horizontal";
+  const shouldPopupFromBottom = isHorizontal && level < 2;
 
   return createPortal(
     <div
@@ -178,8 +181,8 @@ const Popup = ({
       })}
       style={{
         position: "fixed",
-        top: isHorizontal ? anchor.bottom : anchor.top,
-        left: isHorizontal ? anchor.left : anchor.right + 4,
+        top: shouldPopupFromBottom ? anchor.bottom : anchor.top,
+        left: shouldPopupFromBottom ? anchor.left : anchor.right + 4,
         zIndex,
       }}
     >
@@ -310,7 +313,7 @@ const SubMenu = React.memo(
           )}
           {!collapsed && (
             <Icon
-              name={mode === "horizontal" ? "Down" : popupMode ? "Right" : "Down"}
+              name={mode === "horizontal" && level === 0 ? "Down" : "Right"}
               size={12}
               className={classNames("soui-submenu-arrow", {
                 "soui-submenu-arrow-open": popupOpen && !popupMode,
@@ -323,13 +326,14 @@ const SubMenu = React.memo(
           <div className="soui-submenu-content">{renderChildren()}</div>
         )}
         {/* popup mode */}
-        {popupMode && (
+        {/* {popupMode && (
           <Popup
             visible={popupOpen}
             anchor={popupRect}
             zIndex={popupZIndex + level}
             mode={mode}
             popupTheme={popupTheme}
+            level={level + 1}
           >
             <div
               onMouseEnter={() => {
@@ -342,7 +346,26 @@ const SubMenu = React.memo(
               {renderChildren()}
             </div>
           </Popup>
-        )}
+        )} */}
+                  <Popup
+            visible={true}
+            anchor={popupRect}
+            zIndex={popupZIndex + level}
+            mode={mode}
+            popupTheme={popupTheme}
+            level={level + 1}
+          >
+            <div
+              onMouseEnter={() => {
+                clearTimer();
+              }}
+              onMouseLeave={() => {
+                hidePopup();
+              }}
+            >
+              {renderChildren()}
+            </div>
+          </Popup>
       </div>
     );
   },

@@ -9,17 +9,31 @@ export default () => {
   const items = [
     {
       key: "nav",
-      type: "group",
       label: "导航",
       children: [
-        { key: "home", label: "首页" },
-        { key: "about", label: "关于我们" },
+        {
+          key: "basic-nav",
+          type: "group" as const,
+          label: "基础导航",
+          children: [
+            {
+              key: "home",
+              label: "首页",
+              children: [{ key: "home-dashboard", label: "仪表盘" }],
+            },
+            {
+              key: "about",
+              label: "关于我们",
+              children: [{ key: "about-team", label: "团队" }],
+            },
+          ],
+        },
         { key: "contact", label: "联系我们" },
       ],
     },
     {
       key: "dashboard",
-      type: "group",
+      type: "group" as const,
       label: "控制台",
       children: [
         { key: "analytics", label: "数据分析" },
@@ -28,7 +42,7 @@ export default () => {
     },
     {
       key: "system",
-      type: "group",
+      type: "group" as const,
       label: "系统",
       children: [
         { key: "users", label: "用户管理" },

@@ -15,7 +15,11 @@ export default () => {
       label: "更多",
       children: [
         { key: "github", label: "GitHub" },
-        { key: "changelog", label: "更新日志" },
+        {
+          key: "changelog",
+          label: "更新日志",
+          children: [{ key: "changelog", label: "更新日志" }],
+        },
         { key: "faq", label: "常见问题" },
       ],
     },

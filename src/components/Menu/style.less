@@ -393,7 +393,8 @@
     font-size: 12px;
 
     &-open {
-      transform: rotate(180deg);
+      // inline 模式：从右转向下（顺时针旋转 90 度）
+      transform: rotate(90deg);
     }
   }
 
@@ -463,10 +464,6 @@
       margin: 0;
       padding: 8px 16px;
       border-radius: 0;
-      // 在弹出面板中，SubMenu 使用右箭头表示有子菜单
-      .soui-submenu-arrow {
-        transform: rotate(-90deg);
-      }
 
       &:hover {
         background-color: var(--soui-menu-item-hover-bg);

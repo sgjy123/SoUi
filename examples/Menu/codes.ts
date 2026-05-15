@@ -74,11 +74,7 @@ return (
     <button onClick={() => setCollapsed(!collapsed)}>
       {collapsed ? "展开菜单" : "折叠菜单"}
     </button>
-    <Menu
-      items={items}
-      inlineCollapsed={collapsed}
-      defaultSelectedKeys={["home"]}
-    />
+    <Menu mode="inline" items={items} inlineCollapsed={collapsed} defaultSelectedKeys={["home"]} />
   </div>
 );`;
 
