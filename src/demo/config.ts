@@ -52,6 +52,15 @@ export const docsConfig: MenuGroup[] = [
       { key: 'space-block', label: 'Space 块级显示', componentPath: 'Space', exampleName: 'Block', description: '控制是否为块级元素。' },
       { key: 'space-split', label: 'Space 分隔符', componentPath: 'Space', exampleName: 'Split', description: '添加分隔符。' },
       { key: 'space-align', label: 'Space 对齐方式', componentPath: 'Space', exampleName: 'Align', description: '多种对齐方式。' },
+
+      { key: 'menu-basic', label: 'Menu 基础用法', componentPath: 'Menu', exampleName: 'Basic', description: '最简单的菜单用法，展示垂直菜单的基本结构。' },
+      { key: 'menu-icon', label: 'Menu 图标菜单', componentPath: 'Menu', exampleName: 'IconMenu', description: '为菜单项添加图标，增强视觉识别度。' },
+      { key: 'menu-horizontal', label: 'Menu 水平菜单', componentPath: 'Menu', exampleName: 'Horizontal', description: '顶部导航栏式的水平菜单布局。' },
+      { key: 'menu-collapsed', label: 'Menu 折叠菜单', componentPath: 'Menu', exampleName: 'Collapsed', description: '侧边栏收起时只显示图标。' },
+      { key: 'menu-accordion', label: 'Menu 手风琴模式', componentPath: 'Menu', exampleName: 'Accordion', description: '同一时刻只能展开一个子菜单。' },
+      { key: 'menu-grouped', label: 'Menu 分组菜单', componentPath: 'Menu', exampleName: 'Grouped', description: '带有分组的菜单结构。' },
+      { key: 'menu-dark', label: 'Menu 暗色主题', componentPath: 'Menu', exampleName: 'DarkTheme', description: '深色背景下的菜单样式。' },
+      { key: 'menu-controlled', label: 'Menu 受控菜单', componentPath: 'Menu', exampleName: 'Controlled', description: '完全控制菜单的选中状态和展开状态。' },
     ],
   },
   {

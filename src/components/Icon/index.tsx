@@ -64,10 +64,10 @@ const Icon: React.FC<IconProps> = ({
       warning: iconTheme?.colorWarning || globalTheme.warningColor,
       error: iconTheme?.colorError || globalTheme.errorColor,
       info: iconTheme?.colorInfo || globalTheme.infoColor,
-      default: iconTheme?.colorDefault || 'rgba(0, 0, 0, 0.88)',
+      default: undefined, // 使用 currentColor 继承父元素颜色
     };
 
-    return colorMap[color] || '#000000';
+    return colorMap[color];
   }, [fill, color, iconTheme, globalTheme]);
 
   // 根据 name 动态获取图标组件
@@ -96,7 +96,7 @@ const Icon: React.FC<IconProps> = ({
       <IconComponent
         theme={theme}
         size={iconSize}
-        fill={iconFill}
+        fill={iconFill || 'currentColor'}
       />
     </span>
   );
