@@ -326,7 +326,7 @@ const SubMenu = React.memo(
           <div className="soui-submenu-content">{renderChildren()}</div>
         )}
         {/* popup mode */}
-        {/* {popupMode && (
+        {popupMode && (
           <Popup
             visible={popupOpen}
             anchor={popupRect}
@@ -346,26 +346,7 @@ const SubMenu = React.memo(
               {renderChildren()}
             </div>
           </Popup>
-        )} */}
-                  <Popup
-            visible={true}
-            anchor={popupRect}
-            zIndex={popupZIndex + level}
-            mode={mode}
-            popupTheme={popupTheme}
-            level={level + 1}
-          >
-            <div
-              onMouseEnter={() => {
-                clearTimer();
-              }}
-              onMouseLeave={() => {
-                hidePopup();
-              }}
-            >
-              {renderChildren()}
-            </div>
-          </Popup>
+        )}
       </div>
     );
   },

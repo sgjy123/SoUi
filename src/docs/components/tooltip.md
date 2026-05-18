@@ -387,7 +387,7 @@ type TooltipTrigger = 'hover' | 'click' | 'focus' | 'contextMenu';
 - [Popover 气泡卡片](/components/popover)
 - [Typography 排版](/components/typography)
 
-## 主题配置
+## 主题定制
 
 Tooltip 组件支持通过 ConfigProvider 进行全局或组件级的主题定制。
 

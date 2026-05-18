@@ -1,569 +1,298 @@
 # Menu 菜单
 
-导航菜单，提供站点内部不同页面或功能模块之间的跳转。采用数据驱动的方式配置菜单项。
+为页面和功能提供导航的菜单列表。
 
 ## 何时使用
 
-- 网站顶部导航栏，用于在不同页面之间切换
-- 侧边栏导航，用于在页面内部不同模块间切换
-- 展示具有层级关系的内容，便于用户快速查找
-- 移动端底部标签页导航
+- 需要为用户提供导航功能时
+- 需要在侧边栏或顶部展示多级菜单结构时
+- 需要支持折叠、分组、图标等高级功能的菜单场景
+- 后台管理系统、应用导航等需要清晰层级结构的场景
 
 ## 代码演示
 
 ### 基础用法
 
-使用 `items` 数组配置菜单项，支持嵌套子菜单。
+最简单的垂直菜单，包含普通菜单项和子菜单。
 
 ```tsx
-import { Menu } from '@soui/ui';
+const items = [
+  { key: "home", label: "首页" },
+  { key: "profile", label: "个人中心" },
+  {
+    key: "settings",
+    label: "设置",
+    children: [
+      { key: "account", label: "账户设置" },
+      { key: "security", label: "安全设置" },
+    ],
+  },
+  { key: "about", label: "关于我们" },
+];
 
-export default () => {
-  const items = [
-    { key: 'home', label: '首页' },
-    { key: 'profile', label: '个人中心', icon: 'User' },
-    {
-      key: 'settings',
-      label: '设置',
-      icon: 'Setting',
-      children: [
-        { key: 'account', label: '账户设置' },
-        { key: 'security', label: '安全设置' },
-      ],
-    },
-    { key: 'about', label: '关于我们' },
-  ];
+return <Menu mode="vertical" items={items} />;
+```
 
-  return <Menu mode="vertical" items={items} />;
-};
+### 图标菜单
+
+为菜单项添加图标，增强视觉识别度和用户体验。
+
+```tsx
+const items = [
+  { key: "home", label: "首页", icon: "Home" },
+  { key: "user", label: "用户管理", icon: "User" },
+  { key: "order", label: "订单管理", icon: "ShoppingBag" },
+  { key: "product", label: "商品管理", icon: "Box" },
+  { key: "analysis", label: "数据分析", icon: "ChartLine" },
+  {
+    key: "settings",
+    label: "系统设置",
+    icon: "Setting",
+    children: [
+      { key: "basic", label: "基础设置", icon: "Tool" },
+      { key: "notify", label: "通知设置", icon: "Notification" },
+    ],
+  },
+  { key: "logout", label: "退出登录", icon: "Power" },
+];
+
+return <Menu mode="vertical" items={items} />;
 ```
 
 ### 水平菜单
 
-水平排列的菜单，适用于顶部导航栏。
+顶部导航栏式的水平菜单布局，适合网站主导航。
 
 ```tsx
-import { Menu } from '@soui/ui';
+const items = [
+  { key: "home", label: "首页" },
+  { key: "docs", label: "文档" },
+  { key: "components", label: "组件库" },
+  {
+    key: "more",
+    label: "更多",
+    children: [
+      { key: "github", label: "GitHub" },
+      {
+        key: "changelog",
+        label: "更新日志",
+        children: [{ key: "changelog", label: "更新日志" }],
+      },
+      { key: "faq", label: "常见问题" },
+    ],
+  },
+];
 
-export default () => {
-  const items = [
-    { key: 'home', label: '首页' },
-    { key: 'products', label: '产品' },
-    { key: 'about', label: '关于' },
-    { key: 'contact', label: '联系' },
-  ];
-
-  return <Menu mode="horizontal" items={items} />;
-};
+return <Menu mode="horizontal" items={items} />;
 ```
 
-### 内嵌菜单
+### 折叠菜单
 
-子菜单内嵌在菜单中，适用于有层级关系的导航。
-
-```tsx
-import { Menu } from '@soui/ui';
-
-export default () => {
-  const items = [
-    { key: 'mail', label: '邮件', icon: 'Mail' },
-    {
-      key: 'app',
-      label: '应用',
-      icon: 'Appstore',
-      children: [
-        { key: 'calendar', label: '日历' },
-        { key: 'project', label: '项目' },
-      ],
-    },
-    {
-      key: 'setting',
-      label: '设置',
-      icon: 'Setting',
-      children: [
-        { key: 'account', label: '账户' },
-        { key: 'system', label: '系统' },
-      ],
-    },
-  ];
-
-  return <Menu mode="inline" items={items} />;
-};
-```
-
-### 暗色主题
-
-深色背景的菜单，适用于深色主题的应用。
+侧边栏收起时只显示图标，节省空间。鼠标悬停时会显示完整标签的 Tooltip。
 
 ```tsx
-import { Menu, ConfigProvider } from '@soui/ui';
+const [collapsed, setCollapsed] = React.useState(false);
 
-export default () => {
-  const items = [
-    { key: 'home', label: '首页', icon: 'Home' },
-    { key: 'profile', label: '个人中心', icon: 'User' },
-    {
-      key: 'settings',
-      label: '设置',
-      icon: 'Setting',
-      children: [
-        { key: 'account', label: '账户设置' },
-        { key: 'security', label: '安全设置' },
-      ],
-    },
-    { key: 'about', label: '关于我们' },
-  ];
+const items = [
+  { key: "home", label: "首页", icon: "Home" },
+  { key: "user", label: "用户管理", icon: "User" },
+  { key: "order", label: "订单管理", icon: "ShoppingBag" },
+  { key: "product", label: "商品管理", icon: "Box" },
+  {
+    key: "settings",
+    label: "系统设置",
+    icon: "Setting",
+    children: [
+      { key: "basic", label: "基础设置" },
+      { key: "notify", label: "通知设置" },
+    ],
+  },
+];
 
-  return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Menu: {
-            colorText: 'rgba(255, 255, 255, 0.65)',
-            itemHoverBg: 'rgba(255, 255, 255, 0.08)',
-            itemSelectedColor: '#fff',
-            itemSelectedBg: 'rgba(24, 144, 255, 0.15)',
-          },
-        },
+return (
+  <div>
+    <button
+      onClick={() => setCollapsed(!collapsed)}
+      style={{
+        marginBottom: 16,
+        padding: "6px 12px",
+        cursor: "pointer",
       }}
     >
-      <Menu mode="vertical" popupTheme="dark" items={items} />
-    </ConfigProvider>
-  );
-};
-```
-
-::: tip 提示
-暗色主题需要同时设置：
-- `ConfigProvider` 中配置 Menu 组件的颜色变量
-- `popupTheme="dark"` - 设置弹出子菜单为暗色主题
-:::
-
-### 内联折叠
-
-内联菜单可以折叠，节省侧边栏空间。
-
-```tsx
-import { Menu, Button } from '@soui/ui';
-import { useState } from 'react';
-
-export default () => {
-  const [collapsed, setCollapsed] = useState(false);
-
-  const items = [
-    { key: 'home', label: '首页', icon: 'Home' },
-    { key: 'profile', label: '个人中心', icon: 'User' },
-    {
-      key: 'settings',
-      label: '设置',
-      icon: 'Setting',
-      children: [
-        { key: 'account', label: '账户设置' },
-        { key: 'security', label: '安全设置' },
-      ],
-    },
-    { key: 'about', label: '关于我们', icon: 'InfoCircle' },
-  ];
-
-  return (
-    <>
-      <Button onClick={() => setCollapsed(!collapsed)}>
-        {collapsed ? '展开' : '折叠'}
-      </Button>
-      <br />
-      <br />
-      <Menu mode="inline" inlineCollapsed={collapsed} items={items} />
-    </>
-  );
-};
+      {collapsed ? "展开菜单" : "折叠菜单"}
+    </button>
+    <Menu
+      mode="inline"
+      items={items}
+      inlineCollapsed={collapsed}
+      defaultSelectedKeys={["home"]}
+    />
+  </div>
+);
 ```
 
 ### 手风琴模式
 
-一次只展开一个子菜单，其他子菜单会自动关闭。
+同一时刻只能展开一个子菜单，自动关闭其他已展开的子菜单。
 
 ```tsx
-import { Menu } from '@soui/ui';
-
-export default () => {
-  const items = [
-    {
-      key: 'mail',
-      label: '邮件',
-      icon: 'Mail',
-      children: [
-        { key: 'inbox', label: '收件箱' },
-        { key: 'sent', label: '已发送' },
-      ],
-    },
-    {
-      key: 'app',
-      label: '应用',
-      icon: 'Appstore',
-      children: [
-        { key: 'calendar', label: '日历' },
-        { key: 'project', label: '项目' },
-      ],
-    },
-    {
-      key: 'setting',
-      label: '设置',
-      icon: 'Setting',
-      children: [
-        { key: 'account', label: '账户' },
-        { key: 'system', label: '系统' },
-      ],
-    },
-  ];
-
-  return <Menu mode="inline" accordion items={items} />;
-};
-```
-
-### 点击触发子菜单
-
-通过点击而非悬停来展开子菜单。
-
-```tsx
-import { Menu } from '@soui/ui';
-
-export default () => {
-  const items = [
-    {
-      key: 'mail',
-      label: '邮件',
-      icon: 'Mail',
-      children: [
-        { key: 'inbox', label: '收件箱' },
-        { key: 'sent', label: '已发送' },
-      ],
-    },
-    {
-      key: 'app',
-      label: '应用',
-      icon: 'Appstore',
-      children: [
-        { key: 'calendar', label: '日历' },
-        { key: 'project', label: '项目' },
-      ],
-    },
-  ];
-
-  return (
-    <Menu mode="inline" triggerSubMenuAction="click" items={items} />
-  );
-};
-```
-
-### 危险操作菜单项
-
-使用红色标识危险操作的菜单项。
-
-```tsx
-import { Menu } from '@soui/ui';
-
-export default () => {
-  const items = [
-    { key: 'edit', label: '编辑', icon: 'Edit' },
-    { key: 'delete', label: '删除', icon: 'Delete', danger: true },
-  ];
-
-  return <Menu mode="vertical" items={items} />;
-};
-```
-
-### 菜单分组和分割线
-
-使用分组和分割线组织菜单项。
-
-```tsx
-import { Menu } from '@soui/ui';
-
-export default () => {
-  const items = [
-    {
-      key: 'group1',
-      type: 'group',
-      label: '用户管理',
-      children: [
-        { key: 'user-list', label: '用户列表' },
-        { key: 'role-list', label: '角色列表' },
-      ],
-    },
-    {
-      key: 'divider1',
-      type: 'divider',
-    },
-    {
-      key: 'group2',
-      type: 'group',
-      label: '系统设置',
-      children: [
-        { key: 'basic-setting', label: '基础设置' },
-        { key: 'advanced-setting', label: '高级设置' },
-      ],
-    },
-  ];
-
-  return <Menu mode="inline" items={items} />;
-};
-```
-
-### 受控模式
-
-通过 `selectedKeys` 和 `openKeys` 完全控制菜单的选中和展开状态。
-
-```tsx
-import { Menu } from '@soui/ui';
-import { useState } from 'react';
-
-export default () => {
-  const [selectedKeys, setSelectedKeys] = useState<string[]>(['home']);
-  const [openKeys, setOpenKeys] = useState<string[]>([]);
-
-  const items = [
-    { key: 'home', label: '首页', icon: 'Home' },
-    {
-      key: 'settings',
-      label: '设置',
-      icon: 'Setting',
-      children: [
-        { key: 'account', label: '账户设置' },
-        { key: 'security', label: '安全设置' },
-      ],
-    },
-  ];
-
-  return (
-    <Menu
-      mode="inline"
-      selectedKeys={selectedKeys}
-      openKeys={openKeys}
-      onClick={({ key }) => setSelectedKeys([key])}
-      onOpenChange={setOpenKeys}
-      items={items}
-    />
-  );
-};
-```
-
-### 事件处理
-
-监听菜单点击和展开/关闭事件。
-
-```tsx
-import { Menu, Message } from '@soui/ui';
-
-export default () => {
-  const items = [
-    { key: 'home', label: '首页', icon: 'Home' },
-    {
-      key: 'settings',
-      label: '设置',
-      icon: 'Setting',
-      children: [
-        { key: 'account', label: '账户设置' },
-        { key: 'security', label: '安全设置' },
-      ],
-    },
-  ];
-
-  return (
-    <Menu
-      mode="inline"
-      onClick={({ key, keyPath }) => {
-        Message.success(`点击了: ${key}, 路径: ${keyPath.join(' > ')}`);
-      }}
-      onOpenChange={(keys) => {
-        console.log('展开的菜单:', keys);
-      }}
-      items={items}
-    />
-  );
-};
-```
-
-## 特性说明
-
-### 折叠模式
-
-当 `inlineCollapsed` 为 `true` 时：
-- 菜单宽度收缩为 80px
-- 只显示图标或标签的第一个字符
-- 鼠标悬停时自动显示完整标签的 Tooltip 提示
-- 子菜单以弹出面板形式展示
-
-### 子菜单弹出方向
-
-- **水平菜单**：第一层和第二层子菜单从下方弹出，第三层及以上从右侧弹出
-- **内联菜单**：子菜单在内部展开
-- **垂直菜单**：子菜单以弹出面板形式从右侧弹出
-
-### 自动高亮父级菜单
-
-当子菜单项被选中时，其所有父级 SubMenu 会自动显示为选中状态，方便用户了解当前位置。
-
-## 主题定制
-
-Menu 组件支持全局主题和组件级主题定制。
-
-### 全局主题
-
-通过 ConfigProvider 的 `theme.primaryColor` 配置全局主色，会影响菜单的选中颜色：
-
-```tsx
-import { ConfigProvider, Menu } from '@soui/ui';
-
-export default () => {
-  const items = [
-    { key: 'home', label: '首页' },
-    { key: 'profile', label: '个人中心' },
-  ];
-
-  return (
-    <ConfigProvider
-      theme={{
-        primaryColor: '#722ed1',
-        primaryHoverColor: '#9254de',
-      }}
-    >
-      <Menu mode="inline" items={items} />
-    </ConfigProvider>
-  );
-};
-```
-
-### 组件级主题（推荐）
-
-通过 `theme.components.Menu` 配置菜单的专属样式：
-
-```tsx
-import { ConfigProvider, Menu } from '@soui/ui';
-
-export default () => {
-  const items = [
-    { key: 'home', label: '首页', icon: 'Home' },
-    { key: 'user', label: '用户管理', icon: 'User' },
-    {
-      key: 'settings',
-      label: '系统设置',
-      icon: 'Setting',
-      children: [
-        { key: 'basic', label: '基础设置' },
-        { key: 'notify', label: '通知设置' },
-      ],
-    },
-  ];
-
-  return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Menu: {
-            colorText: '#333',                    // 文本颜色
-            colorPrimary: '#1890ff',              // 主色调
-            itemSelectedBg: 'rgba(24, 144, 255, 0.1)',  // 选中背景
-            itemSelectedColor: '#1890ff',         // 选中文本颜色
-            itemHoverBg: 'rgba(0, 0, 0, 0.04)',   // 悬停背景
-            borderRadius: 4,                      // 圆角
-            fontSize: 14,                         // 字体大小
-          },
-        },
-      }}
-    >
-      <Menu mode="inline" items={items} />
-    </ConfigProvider>
-  );
-};
-```
-
-### 组件级主题配置项
-
-| 配置项 | 说明 | 类型 | 默认值 | 版本 |
-|--------|------|------|--------|------|
-| colorText | 文本颜色 | `string` | `@text-color` | - |
-| colorTextSecondary | 次要文本颜色 | `string` | `@text-color-secondary` | - |
-| colorPrimary | 主色调 | `string` | 继承全局 `primaryColor` | - |
-| colorPrimaryHover | 主色调悬停 | `string` | 继承全局 `primaryHoverColor` | - |
-| itemSelectedBg | 选中项背景色 | `string` | `rgba(24, 144, 255, 0.1)` | - |
-| itemSelectedColor | 选中项文本颜色 | `string` | 继承全局 `primaryColor` | - |
-| itemHoverBg | 悬停背景色 | `string` | `rgba(0, 0, 0, 0.04)` | - |
-| itemActiveBg | 激活背景色 | `string` | `rgba(0, 0, 0, 0.06)` | - |
-| borderRadius | 圆角大小（像素） | `number` | 继承全局 `borderRadius` | - |
-| fontSize | 字体大小（像素） | `number` | 继承全局 `fontSize` | - |
-
-### 暗色主题示例
-
-完整的暗色主题配置：
-
-```tsx
-import { ConfigProvider, Menu } from '@soui/ui';
-
-export default () => {
-  const items = [
-    { key: 'home', label: '首页', icon: 'Home' },
-    { key: 'user', label: '用户管理', icon: 'User' },
-    {
-      key: 'settings',
-      label: '系统设置',
-      icon: 'Setting',
-      children: [
-        { key: 'basic', label: '基础设置' },
-        { key: 'notify', label: '通知设置' },
-      ],
-    },
-  ];
-
-  return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Menu: {
-            colorText: 'rgba(255, 255, 255, 0.65)',
-            colorPrimary: '#1890ff',
-            colorPrimaryHover: '#40a9ff',
-            itemHoverBg: 'rgba(255, 255, 255, 0.08)',
-            itemActiveBg: 'rgba(255, 255, 255, 0.12)',
-            itemSelectedBg: 'rgba(24, 144, 255, 0.15)',
-            itemSelectedColor: '#fff',
-          },
-        },
-      }}
-    >
-      <div style={{ background: '#001529', padding: 16 }}>
-        <Menu mode="vertical" popupTheme="dark" items={items} />
-      </div>
-    </ConfigProvider>
-  );
-};
-```
-
-::: tip 提示
-暗色主题需要同时设置：
-- `ConfigProvider` 中配置 Menu 组件的颜色变量
-- `popupTheme="dark"` - 设置弹出子菜单为暗色主题
-- 外层容器使用深色背景（如 `#001529`）
-:::
-
-### 优先级
-
-CSS 变量的优先级从高到低：
-
-1. **组件级主题** (`theme.components.Menu.*`)
-2. **全局主题** (`theme.*`)
-3. **Less 变量** (`variables.less`)
-
-```tsx
-// 全局主题设置主色为紫色
-theme={{
-  primaryColor: '#722ed1',
-  components: {
-    Menu: {
-      // 菜单级会覆盖全局主题
-      colorPrimary: '#52c41a',  // 菜单主色为绿色
-    },
+const items = [
+  { key: "home", label: "首页" },
+  {
+    key: "user",
+    label: "用户管理",
+    icon: "User",
+    children: [
+      { key: "user-list", label: "用户列表" },
+      { key: "user-group", label: "用户组" },
+    ],
   },
-}}
+  {
+    key: "order",
+    label: "订单管理",
+    icon: "ShoppingBag",
+    children: [
+      { key: "order-list", label: "订单列表" },
+      { key: "order-stat", label: "订单统计" },
+    ],
+  },
+  {
+    key: "settings",
+    label: "系统设置",
+    icon: "Setting",
+    children: [
+      { key: "basic", label: "基础设置" },
+      { key: "notify", label: "通知设置" },
+    ],
+  },
+];
+
+return <Menu mode="inline" items={items} accordion defaultOpenKeys={["user"]} />;
+```
+
+### 分组菜单
+
+将相关菜单项分组展示，提升菜单的可读性和组织性。
+
+```tsx
+const items = [
+  {
+    key: "nav",
+    label: "导航",
+    children: [
+      {
+        key: "basic-nav",
+        type: "group" as const,
+        label: "基础导航",
+        children: [
+          {
+            key: "home",
+            label: "首页",
+            children: [{ key: "home-dashboard", label: "仪表盘" }],
+          },
+          {
+            key: "about",
+            label: "关于我们",
+            children: [{ key: "about-team", label: "团队" }],
+          },
+        ],
+      },
+      { key: "contact", label: "联系我们" },
+    ],
+  },
+  {
+    key: "dashboard",
+    type: "group" as const,
+    label: "控制台",
+    children: [
+      { key: "analytics", label: "数据分析" },
+      { key: "reports", label: "报表管理" },
+    ],
+  },
+  {
+    key: "system",
+    type: "group" as const,
+    label: "系统",
+    children: [
+      { key: "users", label: "用户管理" },
+      { key: "settings", label: "系统设置" },
+    ],
+  },
+];
+
+return <Menu mode="vertical" items={items} />;
+```
+
+### 暗色主题
+
+深色背景下的菜单样式，适合深色主题的后台管理系统。
+
+```tsx
+const items = [
+  { key: "home", label: "首页", icon: "Home" },
+  { key: "user", label: "用户管理", icon: "User" },
+  { key: "order", label: "订单管理", icon: "ShoppingBag" },
+  { key: "product", label: "商品管理", icon: "Box" },
+  {
+    key: "settings",
+    label: "系统设置",
+    icon: "Setting",
+    children: [
+      { key: "basic", label: "基础设置", icon: "Tool" },
+      { key: "notify", label: "通知设置", icon: "Notification" },
+    ],
+  },
+  { key: "logout", label: "退出登录", icon: "Power" },
+];
+
+return (
+  <div style={{ background: "#f5f5f5", padding: 16 }}>
+    <Menu
+      mode="vertical"
+      items={items}
+      className="soui-menu-dark"
+      defaultSelectedKeys={["home"]}
+      popupTheme="dark"
+    />
+  </div>
+);
+```
+
+### 受控菜单
+
+完全控制菜单的选中状态和展开状态，适合需要与路由或其他状态联动的场景。
+
+```tsx
+const [selectedKeys, setSelectedKeys] = React.useState(["home"]);
+const [openKeys, setOpenKeys] = React.useState(["settings"]);
+
+const items = [
+  { key: "home", label: "首页", icon: "Home" },
+  { key: "user", label: "用户管理", icon: "User" },
+  {
+    key: "settings",
+    label: "系统设置",
+    icon: "Setting",
+    children: [
+      { key: "basic", label: "基础设置" },
+      { key: "notify", label: "通知设置" },
+    ],
+  },
+];
+
+return (
+  <Menu
+    mode="inline"
+    items={items}
+    selectedKeys={selectedKeys}
+    openKeys={openKeys}
+    onClick={({ key, keyPath }) => {
+      console.log("Selected:", key, keyPath);
+      setSelectedKeys([key]);
+    }}
+    onOpenChange={(keys) => setOpenKeys(keys)}
+  />
+);
 ```
 
 ## API
@@ -572,117 +301,381 @@ theme={{
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|--------|------|
-| mode | 菜单类型，可选 `vertical` `horizontal` `inline` | `MenuMode` | `inline` | - |
-| inlineCollapsed | inline 模式下是否折叠菜单 | `boolean` | `false` | - |
+| items | 菜单项配置数组 | `MenuItemType[]` | - | - |
+| mode | 菜单模式 | `'inline' \| 'vertical' \| 'horizontal'` | `'inline'` | - |
+| inlineCollapsed | 是否折叠（仅 inline 模式有效） | `boolean` | `false` | - |
 | selectedKeys | 当前选中的菜单项 key 数组（受控） | `string[]` | - | - |
-| defaultSelectedKeys | 初始选中的菜单项 key 数组 | `string[]` | `[]` | - |
-| openKeys | 当前展开的 SubMenu key 数组（受控） | `string[]` | - | - |
-| defaultOpenKeys | 初始展开的 SubMenu key 数组 | `string[]` | `[]` | - |
-| accordion | 是否只保持一个子菜单展开 | `boolean` | `false` | - |
-| triggerSubMenuAction | 子菜单展开/关闭的触发方式，可选 `hover` `click` | `'hover' \| 'click'` | `hover` | - |
-| popupZIndex | 弹出菜单的 z-index | `number` | `1050` | - |
-| popupTheme | 弹出菜单的主题，可选 `light` `dark` | `'light' \| 'dark'` | `light` | - |
-| items | 菜单数据源（数据驱动） | `MenuItemType[]` | `[]` | - |
+| defaultSelectedKeys | 默认选中的菜单项 key 数组 | `string[]` | `[]` | - |
+| openKeys | 当前展开的SubMenu key 数组（受控） | `string[]` | - | - |
+| defaultOpenKeys | 默认展开的SubMenu key 数组 | `string[]` | `[]` | - |
+| accordion | 是否开启手风琴模式 | `boolean` | `false` | - |
+| triggerSubMenuAction | 子菜单触发方式 | `'hover' \| 'click'` | `'hover'` | - |
+| popupZIndex | 弹出层的 zIndex | `number` | `1050` | - |
+| popupTheme | 弹出层主题 | `'light' \| 'dark'` | `'light'` | - |
 | className | 自定义类名 | `string` | - | - |
 | style | 自定义样式 | `React.CSSProperties` | - | - |
-| onClick | 点击菜单项触发的回调函数 | `(info: { key: string; keyPath: string[] }) => void` | - | - |
-| onOpenChange | SubMenu 展开/关闭的回调函数 | `(keys: string[]) => void` | - | - |
+| onClick | 点击菜单项的回调 | `(info: { key: string; keyPath: string[] }) => void` | - | - |
+| onOpenChange | SubMenu 展开/关闭的回调 | `(keys: string[]) => void` | - | - |
 
 ### MenuItemType
 
 | 参数 | 说明 | 类型 | 默认值 | 版本 |
 |------|------|------|--------|------|
-| key | 菜单项唯一标识 | `string` | - | - |
-| label | 菜单项标签 | `ReactNode` | - | - |
-| icon | 菜单项图标，可以是图标名称字符串或 React 节点 | `string \| ReactNode` | - | - |
+| key | 唯一标识 | `string` | - | - |
+| label | 菜单项文本 | `React.ReactNode` | - | - |
+| icon | 菜单项图标（Icon 名称字符串或 ReactNode） | `React.ReactNode \| string` | - | - |
 | disabled | 是否禁用 | `boolean` | `false` | - |
-| danger | 是否为危险操作（显示为红色） | `boolean` | `false` | - |
-| children | 子菜单项（用于嵌套） | `MenuItemType[]` | - | - |
-| type | 菜单项类型，可选 `item`（普通菜单项）、`group`（分组）、`divider`（分割线） | `'item' \| 'group' \| 'divider'` | `item` | - |
+| danger | 是否为危险操作 | `boolean` | `false` | - |
+| children | 子菜单项 | `MenuItemType[]` | - | - |
+| type | 菜单项类型 | `'item' \| 'group' \| 'divider'` | `'item'` | - |
 
 ## 设计原则
 
 ### ✅ 推荐用法
 
+**1. 合理组织菜单层级**
+
 ```tsx
-// 使用数据驱动方式配置菜单
+// 好的示例：清晰的层级结构
 const items = [
-  { key: 'home', label: '首页' },
+  { key: "home", label: "首页", icon: "Home" },
   {
-    key: 'settings',
-    label: '设置',
+    key: "management",
+    label: "管理",
+    icon: "Setting",
     children: [
-      { key: 'account', label: '账户' },
+      { key: "user", label: "用户管理" },
+      { key: "role", label: "角色管理" },
     ],
   },
 ];
-<Menu items={items} />
+```
+
+**2. 为重要菜单项添加图标**
+
+```tsx
+// 好的示例：图标增强识别度
+{ key: "dashboard", label: "数据看板", icon: "Chart" }
+```
+
+**3. 使用分组整理相关菜单**
+
+```tsx
+// 好的示例：分组提升可读性
+{
+  key: "system",
+  type: "group",
+  label: "系统设置",
+  children: [
+    { key: "basic", label: "基础设置" },
+    { key: "security", label: "安全设置" },
+  ]
+}
 ```
 
 ### ❌ 避免使用
 
+**1. 过深的嵌套层级**
+
 ```tsx
-// 过深的嵌套（建议不超过3层）
-const items = [
-  {
-    key: 'level1',
-    label: '一级菜单',
-    children: [
-      {
-        key: 'level2',
-        label: '二级菜单',
-        children: [
-          {
-            key: 'level3',
-            label: '三级菜单',
-            children: [
-              { key: 'level4', label: '四级菜单' }, // 不推荐
-            ],
-          },
-        ],
-      },
-    ],
-  },
-];
+// 不好的示例：超过 3 层嵌套会影响用户体验
+{
+  key: "level1",
+  children: [
+    {
+      key: "level2",
+      children: [
+        {
+          key: "level3",
+          children: [
+            // 避免第4层
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+**2. 过多的顶级菜单项**
+
+```tsx
+// 不好的示例：超过 7 个顶级菜单项会造成认知负担
+// 建议通过分组或二级菜单来组织
+```
+
+**3. 混用不同的菜单模式**
+
+```tsx
+// 不好的示例：不要在同一页面混用多种模式
+<Menu mode="vertical" items={items1} />
+<Menu mode="horizontal" items={items2} />
 ```
 
 ## 无障碍访问
 
-- 菜单使用 `role="menu"`，菜单项使用 `role="menuitem"`，符合 WAI-ARIA 规范
-- 支持键盘导航，可通过 Tab 键切换焦点
-- 选中状态通过 `aria-selected` 属性标记
-- 禁用状态通过 `aria-disabled` 属性标记
+Menu 组件遵循 WAI-ARIA 规范：
+
+- 使用 `role="menu"` 标识菜单容器
+- 菜单项使用 `role="menuitem"`
+- 支持键盘导航（Tab、Enter、Space）
+- 禁用状态设置 `tabIndex={-1}`
+- 焦点可见样式（focus-visible）
+
+## 主题定制
+
+Menu 组件支持通过 ConfigProvider 进行全局或组件级的主题定制。
+
+### 全局主题配置
+
+通过 ConfigProvider 的 `theme` 属性可以统一修改所有 Menu 组件的样式：
+
+```tsx
+import { ConfigProvider, Menu } from '@soui/ui';
+
+const App = () => {
+  return (
+    <ConfigProvider
+      theme={{
+        // 全局主色会影响 Menu 的选中状态颜色
+        primaryColor: '#722ed1',
+        primaryHoverColor: '#9254de',
+        
+        // 字体大小和圆角
+        fontSize: 14,
+        borderRadius: 8,
+      }}
+    >
+      <Menu items={items} />
+    </ConfigProvider>
+  );
+};
+```
+
+### 组件级主题配置
+
+通过 `theme.components.Menu` 可以单独定制 Menu 组件的样式，不影响其他组件：
+
+```tsx
+import { ConfigProvider, Menu } from '@soui/ui';
+
+const App = () => {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Menu: {
+            // 颜色配置
+            colorPrimary: '#52c41a',           // 主色（影响选中状态）
+            colorPrimaryHover: '#73d13d',      // 主色悬停
+            colorText: 'rgba(0, 0, 0, 0.85)',  // 文本颜色
+            colorTextSecondary: 'rgba(0, 0, 0, 0.65)', // 次要文本颜色
+            
+            // 状态背景色
+            itemSelectedBg: 'rgba(82, 196, 26, 0.1)',   // 选中项背景色
+            itemSelectedColor: '#52c41a',               // 选中项文本颜色
+            itemHoverBg: 'rgba(0, 0, 0, 0.06)',         // 悬停背景色
+            itemActiveBg: 'rgba(0, 0, 0, 0.08)',        // 激活背景色
+            
+            // 尺寸配置
+            fontSize: 14,                      // 字体大小（像素）
+            borderRadius: 6,                   // 圆角（像素）
+          },
+        },
+      }}
+    >
+      <Menu items={items} />
+    </ConfigProvider>
+  );
+};
+```
+
+### CSS 变量定制
+
+Menu 组件暴露了以下 CSS 变量，可以通过样式覆盖进行定制：
+
+```less
+.soui-menu {
+  // 基础变量
+  --soui-menu-bg-color: #fff;                    // 菜单背景色
+  --soui-menu-color-text: rgba(0, 0, 0, 0.88);   // 文本颜色
+  --soui-menu-color-text-secondary: rgba(0, 0, 0, 0.65); // 次要文本色
+  --soui-menu-color-primary: #1677ff;            // 主色
+  --soui-menu-color-primary-hover: #4096ff;      // 主色悬停
+  
+  // 状态变量
+  --soui-menu-item-hover-bg: rgba(0, 0, 0, 0.04);     // 悬停背景色
+  --soui-menu-item-active-bg: rgba(0, 0, 0, 0.06);    // 激活背景色
+  --soui-menu-item-selected-bg: rgba(24, 144, 255, 0.1); // 选中背景色
+  --soui-menu-item-selected-color: #1677ff;          // 选中文本色
+  
+  // 尺寸变量
+  --soui-menu-border-radius: 6px;       // 圆角
+  --soui-menu-font-size: 14px;          // 字体大小
+  --soui-menu-collapsed-width: 80px;    // 折叠宽度
+  --soui-menu-border-color: #f0f0f0;    // 边框颜色
+}
+```
+
+**使用示例：**
+
+```tsx
+<Menu
+  items={items}
+  style={{
+    '--soui-menu-bg-color': '#fafafa',
+    '--soui-menu-color-primary': '#eb2f96',
+    '--soui-menu-item-selected-bg': 'rgba(235, 47, 150, 0.1)',
+    '--soui-menu-border-radius': '12px',
+  } as React.CSSProperties}
+/>
+```
+
+### 暗色主题
+
+Menu 组件内置了暗色主题，通过添加 `soui-menu-dark` 类名即可启用：
+
+```tsx
+<Menu
+  mode="vertical"
+  items={items}
+  className="soui-menu-dark"
+  popupTheme="dark"  // 弹出层也使用暗色主题
+/>
+```
+
+暗色主题的默认配色：
+- 背景色：`#001529`
+- 文本色：`rgba(255, 255, 255, 0.65)`
+- 悬停背景：`rgba(255, 255, 255, 0.08)`
+- 选中文本：`#fff`
+
+### 自定义主题示例
+
+#### 示例 1：品牌色主题
+
+```tsx
+<ConfigProvider
+  theme={{
+    components: {
+      Menu: {
+        colorPrimary: '#1890ff',
+        itemSelectedBg: 'rgba(24, 144, 255, 0.15)',
+        itemSelectedColor: '#1890ff',
+        borderRadius: 4,
+      },
+    },
+  }}
+>
+  <Menu items={items} />
+</ConfigProvider>
+```
+
+#### 示例 2：柔和风格
+
+```tsx
+<Menu
+  items={items}
+  style={{
+    '--soui-menu-bg-color': '#f5f5f5',
+    '--soui-menu-item-hover-bg': 'rgba(0, 0, 0, 0.02)',
+    '--soui-menu-item-selected-bg': 'rgba(0, 0, 0, 0.04)',
+    '--soui-menu-border-radius': '12px',
+    '--soui-menu-font-size': '13px',
+  } as React.CSSProperties}
+/>
+```
+
+#### 示例 3：紧凑模式
+
+```tsx
+<Menu
+  items={items}
+  style={{
+    '--soui-menu-font-size': '12px',
+  } as React.CSSProperties}
+/>
+```
 
 ## FAQ
 
-### 如何设置默认选中的菜单项？
+### 如何在折叠模式下显示完整标签？
 
-使用 `defaultSelectedKeys` 属性设置初始选中的菜单项：
+折叠模式下，菜单项会自动隐藏文本，只显示图标。当没有图标时，会显示文本的第一个字符。如果需要显示完整的 Tooltip，可以确保菜单项有图标，或者组件会自动包裹 Tooltip。
+
+### 如何实现与路由联动？
+
+使用受控模式，在 `onClick` 回调中调用路由跳转：
 
 ```tsx
-<Menu defaultSelectedKeys={['home']} items={items} />
+import { useNavigate } from 'react-router-dom';
+
+const navigate = useNavigate();
+const [selectedKeys, setSelectedKeys] = useState([currentPath]);
+
+<Menu
+  items={items}
+  selectedKeys={selectedKeys}
+  onClick={({ key }) => {
+    navigate(key);
+    setSelectedKeys([key]);
+  }}
+/>
 ```
 
-### 如何在水平模式下设置子菜单？
+### 如何自定义菜单宽度？
 
-水平模式下的子菜单会在鼠标悬停时展开，直接在 `children` 中添加子菜单项即可：
+可以通过 CSS 覆盖默认宽度：
+
+```less
+.soui-menu-vertical,
+.soui-menu-inline {
+  width: 200px; // 自定义宽度
+}
+
+.soui-menu-inline-collapsed {
+  --soui-menu-collapsed-width: 60px; // 自定义折叠宽度
+}
+```
+
+### 子菜单为什么无法弹出？
+
+检查以下几点：
+1. 确保 `mode` 设置为 `'vertical'` 或 `'inline'`
+2. 确保子菜单项有 `children` 数组
+3. 检查 `popupZIndex` 是否足够高
+4. 确认父容器没有 `overflow: hidden`
+
+### 如何实现动态菜单？
+
+可以从后端获取菜单数据，然后转换为 `MenuItemType[]` 格式：
 
 ```tsx
-const items = [
-  { key: 'home', label: '首页' },
-  {
-    key: 'products',
-    label: '产品',
-    children: [
-      { key: 'product1', label: '产品1' },
-      { key: 'product2', label: '产品2' },
-    ],
-  },
-];
-<Menu mode="horizontal" items={items} />
+const [menuItems, setMenuItems] = useState<MenuItemType[]>([]);
+
+useEffect(() => {
+  fetch('/api/menu')
+    .then(res => res.json())
+    .then(data => {
+      // 转换数据格式
+      const items = data.map(item => ({
+        key: item.id,
+        label: item.name,
+        icon: item.icon,
+        children: item.children?.map(child => ({
+          key: child.id,
+          label: child.name,
+        }))
+      }));
+      setMenuItems(items);
+    });
+}, []);
+
+return <Menu items={menuItems} />;
 ```
 
 ## 相关资源
 
-- [Button 按钮](/components/button)
-- [Layout 布局](/components/layout)
+- [Layout 布局](/components/layout) - 与 Menu 配合使用构建完整页面布局
+- [Icon 图标](/components/icon) - 为菜单项添加图标
+- [Tooltip 文字提示](/components/tooltip) - 折叠菜单的悬停提示

@@ -101,6 +101,12 @@ export default defineConfig({
       text: '在 GitHub 上编辑此页面',
     },
 
+    // 页面大纲（右侧导航）
+    outline: {
+      level: [2, 3],
+      label: '本页目录',
+    },
+
     // 上次更新时间
     lastUpdated: {
       text: '最后更新于',
