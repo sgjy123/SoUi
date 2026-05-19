@@ -38,6 +38,20 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
+        key: 'float-button',
+        label: 'FloatButton 悬浮按钮',
+        icon: 'Click',
+        items: [
+          { key: 'float-button-basic', label: 'FloatButton 基础用法', componentPath: 'FloatButton', exampleName: 'Basic', description: '最基础的悬浮按钮，默认圆形样式。' },
+          { key: 'float-button-shape', label: 'FloatButton 形状', componentPath: 'FloatButton', exampleName: 'Shape', description: '支持圆形和方形两种形状。' },
+          { key: 'float-button-type', label: 'FloatButton 类型', componentPath: 'FloatButton', exampleName: 'Type', description: '支持默认和主色两种类型，以及危险状态。' },
+          { key: 'float-button-group', label: 'FloatButton 按钮组', componentPath: 'FloatButton', exampleName: 'Group', description: '可以将多个悬浮按钮组合在一起使用。' },
+          { key: 'float-button-group-trigger', label: 'FloatButton 带触发器', componentPath: 'FloatButton', exampleName: 'GroupWithTrigger', description: '支持点击触发展开/收起的按钮组。' },
+          { key: 'float-button-group-controlled', label: 'FloatButton 受控模式', componentPath: 'FloatButton', exampleName: 'GroupControlled', description: '通过 state 控制展开/收起状态。' },
+          { key: 'float-button-group-hover', label: 'FloatButton 悬停触发', componentPath: 'FloatButton', exampleName: 'GroupHover', description: '鼠标悬停自动展开的按钮组。' },
+        ],
+      },
+      {
         key: 'icon',
         label: 'Icon 图标',
         icon: 'HamburgerButton',

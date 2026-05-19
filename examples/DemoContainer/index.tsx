@@ -8,6 +8,7 @@ import Tooltip from '../../src/components/Tooltip';
 import Divider from '../../src/components/Divider';
 import { Row, Col } from '../../src/components/Grid';
 import Layout from '../../src/components/Layout';
+import FloatButton from '../../src/components/FloatButton';
 import './style.less';
 
 interface DemoContainerProps {
@@ -49,6 +50,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Sider: Layout.Sider,
     Content: Layout.Content,
     Footer: Layout.Footer,
+    FloatButton,
     ...scope,
   };
 

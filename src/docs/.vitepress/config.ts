@@ -195,6 +195,7 @@ function sidebarComponents() {
         { text: 'Button 按钮', link: 'button' },
         { text: 'Icon 图标', link: 'icon' },
         { text: 'Typography 排版', link: 'typography' },
+        { text: 'FloatButton 悬浮按钮', link: 'float-button' },
       ],
     },
     {

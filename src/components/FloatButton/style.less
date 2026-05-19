@@ -1,0 +1,218 @@
+// FloatButton Styles
+@import '../../styles/variables.less';
+
+// Size mixins
+.float-button-size(@size, @font-size) {
+  width: @size;
+  height: @size;
+  font-size: @font-size;
+}
+
+// Base float button styles
+.soui-float-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all @transition-duration @transition-timing-function;
+  user-select: none;
+  touch-action: manipulation;
+  outline: none;
+  z-index: 999;
+  border: none;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+
+  // 组件级主题变量（支持覆盖）
+  --soui-float-button-color-primary: var(--soui-primary-color, @primary-color);
+  --soui-float-button-color-primary-hover: var(--soui-primary-hover-color, @primary-hover-color);
+  --soui-float-button-color-primary-active: var(--soui-primary-active-color, @primary-active-color);
+  --soui-float-button-border-radius: 50%;
+  --soui-float-button-font-size: @font-size-base;
+
+  // Inner container
+  &-inner {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  // Content
+  &-content {
+    display: inline-block;
+  }
+
+  // Icon
+  &-icon {
+    display: inline-flex;
+    align-items: center;
+
+    svg {
+      vertical-align: -0.125em;
+    }
+  }
+
+  // Shapes
+  &-shape-circle {
+    border-radius: var(--soui-float-button-border-radius, 50%);
+  }
+
+  &-shape-square {
+    border-radius: var(--soui-float-button-border-radius, @border-radius-base);
+  }
+
+  // Sizes
+  &-large {
+    .float-button-size(56px, var(--soui-float-button-font-size, @font-size-lg));
+  }
+
+  &-middle {
+    .float-button-size(48px, var(--soui-float-button-font-size, @font-size-base));
+  }
+
+  &-small {
+    .float-button-size(40px, var(--soui-float-button-font-size, @font-size-sm));
+  }
+
+  // Icon only button
+  &-icon-only {
+    .soui-float-button-inner {
+      justify-content: center;
+    }
+
+    .soui-float-button-icon {
+      margin: 0;
+    }
+  }
+
+  // Types
+  &-default {
+    color: @text-color;
+    background-color: #fff;
+
+    &:hover {
+      color: var(--soui-float-button-color-primary-hover, var(--soui-primary-hover-color, @primary-hover-color));
+      background-color: #fff;
+    }
+
+    &:active {
+      color: var(--soui-float-button-color-primary-active, var(--soui-primary-active-color, @primary-active-color));
+      background-color: #fff;
+    }
+  }
+
+  &-primary {
+    color: #fff;
+    background-color: var(--soui-float-button-color-primary, var(--soui-primary-color, @primary-color));
+
+    &:hover {
+      color: #fff;
+      background-color: var(--soui-float-button-color-primary-hover, var(--soui-primary-hover-color, @primary-hover-color));
+    }
+
+    &:active {
+      color: #fff;
+      background-color: var(--soui-float-button-color-primary-active, var(--soui-primary-active-color, @primary-active-color));
+    }
+  }
+
+  // Danger button
+  &-danger {
+    &.soui-float-button-default {
+      color: var(--soui-error-color, @error-color);
+
+      &:hover {
+        color: var(--soui-error-color, @error-color);
+        background-color: #fff;
+      }
+
+      &:active {
+        color: var(--soui-error-color, @error-color);
+        background-color: #fff;
+      }
+    }
+
+    &.soui-float-button-primary {
+      color: #fff;
+      background-color: var(--soui-error-color, @error-color);
+
+      &:hover {
+        background-color: lighten(@error-color, 5%);
+      }
+
+      &:active {
+        background-color: darken(@error-color, 5%);
+      }
+    }
+  }
+
+  // Disabled state
+  &-disabled,
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.4;
+    box-shadow: none;
+
+    &:hover,
+    &:active {
+      opacity: 0.4;
+    }
+  }
+}
+
+// FloatButton Group
+.soui-float-button-group {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  flex-direction: column-reverse; // 反转顺序，主按钮在底部
+  gap: 12px;
+  z-index: 999;
+
+  .soui-float-button {
+    position: static;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  // 子按钮列表
+  &-list {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 12px;
+    max-height: 0;
+    opacity: 0;
+    transition: all @transition-duration @transition-timing-function;
+    pointer-events: none;
+
+    .soui-float-button {
+      transform: scale(0.8);
+      transition: all @transition-duration @transition-timing-function;
+    }
+  }
+
+  // 展开状态
+  &-open {
+    .soui-float-button-group-list {
+      max-height: 500px;
+      opacity: 1;
+      pointer-events: auto;
+
+      .soui-float-button {
+        transform: scale(1);
+      }
+    }
+  }
+
+  // 垂直 group（保持兼容）
+  &-vertical {
+    flex-direction: column-reverse;
+  }
+}

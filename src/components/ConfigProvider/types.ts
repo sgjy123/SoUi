@@ -261,6 +261,19 @@ export interface ComponentThemeConfig {
     /** 激活背景色 */
     itemActiveBg?: string;
   };
+  /** FloatButton 悬浮按钮组件配置 */
+  FloatButton?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 主色悬停 */
+    colorPrimaryHover?: string;
+    /** 主色激活 */
+    colorPrimaryActive?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 
