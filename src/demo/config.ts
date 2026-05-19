@@ -49,6 +49,7 @@ export const docsConfig: MenuGroup[] = [
           { key: 'float-button-group-trigger', label: 'FloatButton 带触发器', componentPath: 'FloatButton', exampleName: 'GroupWithTrigger', description: '支持点击触发展开/收起的按钮组。' },
           { key: 'float-button-group-controlled', label: 'FloatButton 受控模式', componentPath: 'FloatButton', exampleName: 'GroupControlled', description: '通过 state 控制展开/收起状态。' },
           { key: 'float-button-group-hover', label: 'FloatButton 悬停触发', componentPath: 'FloatButton', exampleName: 'GroupHover', description: '鼠标悬停自动展开的按钮组。' },
+          { key: 'float-button-Zindex', label: 'FloatButton 层级', componentPath: 'FloatButton', exampleName: 'ZIndex', description: '控制悬浮按钮显示层级。' },
         ],
       },
       {

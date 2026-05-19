@@ -10,11 +10,11 @@ export default () => {
       <FloatButton.Group
         open={open}
         onOpenChange={setOpen}
-        icon="Menu"
+        icon="ApplicationMenu"
         tooltip="菜单"
       >
         <FloatButton icon="Edit" tooltip="编辑" />
-        <FloatButton icon="Delete" tooltip="删除" danger />
+        <FloatButton icon="DeleteOne" tooltip="删除" danger />
         <FloatButton icon="Download" tooltip="下载" />
       </FloatButton.Group>
     </div>

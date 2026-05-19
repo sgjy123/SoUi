@@ -9,6 +9,18 @@ export type FloatButtonType = 'default' | 'primary';
 export type FloatButtonShape = 'circle' | 'square';
 export type FloatButtonSize = 'large' | 'middle' | 'small';
 
+/** 悬浮按钮位置 */
+export type FloatButtonPosition = {
+  /** 距离顶部的距离 */
+  top?: number | string;
+  /** 距离底部的距离 */
+  bottom?: number | string;
+  /** 距离左侧的距离 */
+  left?: number | string;
+  /** 距离右侧的距离 */
+  right?: number | string;
+};
+
 export interface FloatButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
   /** 按钮类型 */
   type?: FloatButtonType;
@@ -24,6 +36,10 @@ export interface FloatButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLBu
   danger?: boolean;
   /** Tooltip 文本 */
   tooltip?: string;
+  /** 自定义位置 */
+  position?: FloatButtonPosition;
+  /** z-index 层级 */
+  zIndex?: number;
 }
 
 // FloatButtonGroup 组件
@@ -46,6 +62,10 @@ interface FloatButtonGroupProps {
   icon?: string | React.ReactNode;
   /** 主按钮 Tooltip */
   tooltip?: string;
+  /** 自定义位置 */
+  position?: FloatButtonPosition;
+  /** z-index 层级 */
+  zIndex?: number;
 }
 
 const FloatButtonGroup: React.FC<FloatButtonGroupProps> = ({
@@ -58,6 +78,8 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = ({
   trigger = 'click',
   icon = 'Plus',
   tooltip,
+  position,
+  zIndex,
 }) => {
   // 内部状态管理
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
@@ -136,10 +158,31 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = ({
     className
   );
 
+  // 应用位置样式
+  const groupStyle: React.CSSProperties = {
+    ...(position?.top !== undefined && {
+      top: typeof position.top === 'number' ? `${position.top}px` : position.top,
+    }),
+    ...(position?.bottom !== undefined && {
+      bottom: typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom,
+    }),
+    ...(position?.left !== undefined && {
+      left: typeof position.left === 'number' ? `${position.left}px` : position.left,
+    }),
+    ...(position?.right !== undefined && {
+      right: typeof position.right === 'number' ? `${position.right}px` : position.right,
+    }),
+    // z-index 层级配置
+    ...(zIndex !== undefined && {
+      zIndex: zIndex,
+    }),
+  };
+
   return (
     <div
       ref={groupRef}
       className={groupClassName}
+      style={groupStyle}
       role="group"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -191,6 +234,8 @@ const FloatButton: React.FC<FloatButtonProps> & {
   className,
   danger = false,
   tooltip,
+  position,
+  zIndex,
   onClick,
   ...props
 }) => {
@@ -231,6 +276,23 @@ const FloatButton: React.FC<FloatButtonProps> & {
     // 字体大小配置
     ...(fontSizeValue && {
       '--soui-float-button-font-size': `${fontSizeValue}px`,
+    }),
+    // 位置配置
+    ...(position?.top !== undefined && {
+      top: typeof position.top === 'number' ? `${position.top}px` : position.top,
+    }),
+    ...(position?.bottom !== undefined && {
+      bottom: typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom,
+    }),
+    ...(position?.left !== undefined && {
+      left: typeof position.left === 'number' ? `${position.left}px` : position.left,
+    }),
+    ...(position?.right !== undefined && {
+      right: typeof position.right === 'number' ? `${position.right}px` : position.right,
+    }),
+    // z-index 层级配置
+    ...(zIndex !== undefined && {
+      zIndex: zIndex,
     }),
   } as any;
 

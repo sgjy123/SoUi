@@ -11,8 +11,6 @@
 // Base float button styles
 .soui-float-button {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -28,6 +26,10 @@
   z-index: 999;
   border: none;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+
+  // 默认位置（右下角）
+  right: 24px;
+  bottom: 24px;
 
   // 组件级主题变量（支持覆盖）
   --soui-float-button-color-primary: var(--soui-primary-color, @primary-color);
@@ -61,7 +63,7 @@
 
   // Shapes
   &-shape-circle {
-    border-radius: var(--soui-float-button-border-radius, 50%);
+    border-radius: 50%;
   }
 
   &-shape-square {
@@ -125,20 +127,6 @@
 
   // Danger button
   &-danger {
-    &.soui-float-button-default {
-      color: var(--soui-error-color, @error-color);
-
-      &:hover {
-        color: var(--soui-error-color, @error-color);
-        background-color: #fff;
-      }
-
-      &:active {
-        color: var(--soui-error-color, @error-color);
-        background-color: #fff;
-      }
-    }
-
     &.soui-float-button-primary {
       color: #fff;
       background-color: var(--soui-error-color, @error-color);
@@ -148,6 +136,23 @@
       }
 
       &:active {
+        background-color: darken(@error-color, 5%);
+      }
+    }
+
+    // danger + default（包括只设置 danger 不设置 type 的情况）
+    &.soui-float-button-default {
+      color: var(--soui-error-color, @error-color);
+      background-color: #fff;
+      border: 1px solid var(--soui-error-color, @error-color);
+
+      &:hover {
+        color: #fff;
+        background-color: var(--soui-error-color, @error-color);
+      }
+
+      &:active {
+        color: #fff;
         background-color: darken(@error-color, 5%);
       }
     }
@@ -170,12 +175,14 @@
 // FloatButton Group
 .soui-float-button-group {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
   display: flex;
   flex-direction: column-reverse; // 反转顺序，主按钮在底部
   gap: 12px;
   z-index: 999;
+
+  // 默认位置（右下角）
+  right: 24px;
+  bottom: 24px;
 
   .soui-float-button {
     position: static;

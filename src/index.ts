@@ -61,7 +61,7 @@ export type { MenuProps, MenuMode, MenuItemType } from './components/Menu';
 
 // FloatButton Component
 export { default as FloatButton } from './components/FloatButton';
-export type { FloatButtonProps, FloatButtonType, FloatButtonShape, FloatButtonSize, FloatButtonTriggerType } from './components/FloatButton';
+export type { FloatButtonProps, FloatButtonType, FloatButtonShape, FloatButtonSize, FloatButtonTriggerType, FloatButtonPosition } from './components/FloatButton';
 
 // Utils
 export * from './utils';
