@@ -140,38 +140,38 @@ export default () => (
 
 ### 自定义位置
 
-通过 `position` 属性可以自定义悬浮按钮的位置。
+通过 `position` 属性可以自定义悬浮按钮的位置（只支持 bottom 和 right）。
 
 ```tsx
 import { FloatButton } from '@soui/ui';
 
 export default () => (
   <div>
-    {/* 左上角 */}
-    <FloatButton 
-      icon="Plus" 
-      position={{ top: 24, left: 24 }}
-      tooltip="左上角"
-    />
-    
     {/* 右上角 */}
     <FloatButton 
       icon="Plus" 
-      position={{ top: 24, right: 24 }}
+      position={{ bottom: 200, right: 24 }}
       tooltip="右上角"
-    />
-    
-    {/* 左下角 */}
-    <FloatButton 
-      icon="Plus" 
-      position={{ bottom: 24, left: 24 }}
-      tooltip="左下角"
     />
     
     {/* 右下角（默认） */}
     <FloatButton 
       icon="Plus" 
       tooltip="右下角"
+    />
+    
+    {/* 自定义 bottom */}
+    <FloatButton 
+      icon="Plus" 
+      position={{ bottom: 100 }}
+      tooltip="bottom: 100px"
+    />
+    
+    {/* 自定义 right */}
+    <FloatButton 
+      icon="Plus" 
+      position={{ right: 100 }}
+      tooltip="right: 100px"
     />
   </div>
 );
@@ -186,9 +186,9 @@ import { FloatButton } from '@soui/ui';
 
 export default () => (
   <FloatButton.Group
-    position={{ top: 100, right: 24 }}
+    position={{ bottom: 100, right: 24 }}
     icon="Menu"
-    tooltip="顶部菜单"
+    tooltip="菜单"
   >
     <FloatButton icon="Edit" tooltip="编辑" />
     <FloatButton icon="Copy" tooltip="复制" />
@@ -209,7 +209,7 @@ export default () => (
     {/* 默认层级（999） */}
     <FloatButton 
       icon="Plus" 
-      position={{ top: 24, right: 24 }}
+      position={{ bottom: 200, right: 24 }}
       tooltip="默认层级"
     />
     
@@ -217,7 +217,7 @@ export default () => (
     <FloatButton 
       icon="Star" 
       type="primary"
-      position={{ top: 100, right: 24 }}
+      position={{ bottom: 100, right: 24 }}
       zIndex={9999}
       tooltip="高层级"
     />
@@ -225,7 +225,7 @@ export default () => (
     {/* 低层级 */}
     <FloatButton 
       icon="Setting" 
-      position={{ top: 176, right: 24 }}
+      position={{ bottom: 24, right: 24 }}
       zIndex={100}
       tooltip="低层级"
     />
@@ -246,7 +246,7 @@ export default () => (
 | icon | 图标 | `string` \| `ReactNode` | - | - |
 | danger | 危险按钮 | `boolean` | `false` | - |
 | tooltip | Tooltip 文本 | `string` | - | - |
-| position | 自定义位置 | `{ top?: number \| string; bottom?: number \| string; left?: number \| string; right?: number \| string }` | - | - |
+| position | 自定义位置 | `{ bottom?: number \| string; right?: number \| string }` | - | - |
 | zIndex | z-index 层级 | `number` | `999` | - |
 
 ### FloatButton.Group
@@ -260,7 +260,7 @@ export default () => (
 | trigger | 触发方式 | `click` \| `hover` | `click` | - |
 | icon | 主按钮图标 | `string` \| `ReactNode` | `Plus` | - |
 | tooltip | 主按钮 Tooltip | `string` | - | - |
-| position | 自定义位置 | `{ top?: number \| string; bottom?: number \| string; left?: number \| string; right?: number \| string }` | - | - |
+| position | 自定义位置 | `{ bottom?: number \| string; right?: number \| string }` | - | - |
 | zIndex | z-index 层级 | `number` | `999` | - |
 
 ## 设计原则
