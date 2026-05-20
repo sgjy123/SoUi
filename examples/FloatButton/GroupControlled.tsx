@@ -13,7 +13,7 @@ export default () => {
         icon="ApplicationMenu"
         tooltip="菜单"
       >
-        <FloatButton icon="Edit" tooltip="编辑" />
+        <FloatButton icon="Edit" tooltip="编辑" danger />
         <FloatButton icon="DeleteOne" tooltip="删除" danger />
         <FloatButton icon="Download" tooltip="下载" />
       </FloatButton.Group>

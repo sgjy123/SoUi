@@ -160,6 +160,10 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = ({
 
   // 应用位置样式
   const groupStyle: React.CSSProperties = {
+    // 默认值（右下角）
+    right: 24,
+    bottom: 24,
+    // 应用用户自定义的位置（覆盖默认值）
     ...(position?.top !== undefined && {
       top: typeof position.top === 'number' ? `${position.top}px` : position.top,
     }),
@@ -249,6 +253,10 @@ const FloatButton: React.FC<FloatButtonProps> & {
   const fontSizeValue = floatButtonTheme?.fontSize || globalTheme?.fontSize;
   
   const buttonStyle: React.CSSProperties = {
+    // 默认为 fixed 定位，右下角
+    position: 'fixed',
+    right: 24,
+    bottom: 24,
     // 颜色配置（组件级优先，否则使用全局主题）
     ...(floatButtonTheme?.colorPrimary ? {
       '--soui-float-button-color-primary': floatButtonTheme.colorPrimary,
@@ -310,24 +318,18 @@ const FloatButton: React.FC<FloatButtonProps> & {
     className
   );
 
-  // 判断是否需要白色图标
-  const needsWhiteIcon = type === 'primary' || (type === 'default' && danger);
-
   // 渲染图标
   const renderIcon = () => {
     if (typeof icon === 'string') {
       // 对于 primary、danger 类型的按钮，图标颜色应该是白色
-      const iconFill = needsWhiteIcon ? '#fff' : undefined;
-      return <span className="soui-float-button-icon"><Icon name={icon} size={16} theme="outline" fill={iconFill} /></span>;
+      return <span className="soui-float-button-icon"><Icon name={icon} size={16} theme="outline" /></span>;
     }
     if (icon) {
       // 如果是 ReactNode，检查是否是 Icon 组件并自动设置颜色
       if (React.isValidElement(icon) && (icon.type as any).name === 'Icon') {
         return (
           <span className="soui-float-button-icon">
-            {React.cloneElement(icon as any, {
-              fill: (icon.props as any).fill || (needsWhiteIcon ? '#fff' : undefined),
-            })}
+            {React.cloneElement(icon as any)}
           </span>
         );
       }
@@ -363,9 +365,54 @@ const FloatButton: React.FC<FloatButtonProps> & {
 
   // 如果有 tooltip，使用 Tooltip 组件包裹
   if (tooltip) {
+    // 提取定位样式用于 Tooltip 容器
+    const tooltipWrapperStyle: React.CSSProperties = {
+      position: 'fixed',
+      // 默认值
+      right: 24,
+      bottom: 24,
+      // 应用用户自定义的位置（覆盖默认值）
+      ...(position?.top !== undefined && {
+        top: typeof position.top === 'number' ? `${position.top}px` : position.top,
+      }),
+      ...(position?.right !== undefined && {
+        right: typeof position.right === 'number' ? `${position.right}px` : position.right,
+      }),
+      ...(position?.bottom !== undefined && {
+        bottom: typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom,
+      }),
+      ...(position?.left !== undefined && {
+        left: typeof position.left === 'number' ? `${position.left}px` : position.left,
+      }),
+      ...(zIndex !== undefined && {
+        zIndex: zIndex,
+      }),
+    };
+
+    // 从 buttonStyle 中移除定位样式
+    const { position: btnPosition, top, right, bottom, left, zIndex: btnZIndex, ...restButtonStyle } = buttonStyle;
+
     return (
-      <Tooltip title={tooltip} placement="left">
-        {renderButton()}
+      <Tooltip 
+        title={tooltip} 
+        placement="left"
+        style={tooltipWrapperStyle}
+      >
+        <button
+          className={buttonClassName}
+          style={restButtonStyle as React.CSSProperties}
+          disabled={disabled}
+          onClick={handleClick}
+          aria-disabled={disabled}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          {...props}
+        >
+          <span className="soui-float-button-inner">
+            {renderIcon()}
+            {children && <span className="soui-float-button-content">{children}</span>}
+          </span>
+        </button>
       </Tooltip>
     );
   }
