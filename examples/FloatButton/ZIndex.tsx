@@ -8,7 +8,7 @@ export default () => (
       <p>默认层级（zIndex: 999）：</p>
       <FloatButton 
         icon="Plus" 
-        position={{ top: 24, right: 24 }}
+        position={{ bottom: 24, right: 24 }}
         tooltip="默认层级"
       />
       
@@ -16,7 +16,7 @@ export default () => (
       <FloatButton 
         icon="Star" 
         type="primary"
-        position={{ top: 100, right: 24 }}
+        position={{ bottom: 100, right: 24 }}
         zIndex={9999}
         tooltip="高层级"
       />
@@ -24,7 +24,7 @@ export default () => (
       <p>低层级（zIndex: 100）：</p>
       <FloatButton 
         icon="Setting" 
-        position={{ top: 176, right: 24 }}
+        position={{ bottom: 176, right: 24 }}
         zIndex={100}
         tooltip="低层级"
       />

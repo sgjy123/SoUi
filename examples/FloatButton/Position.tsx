@@ -5,31 +5,31 @@ export default () => (
   <div style={{ padding: '20px' }}>
     <h3>不同位置的悬浮按钮</h3>
     <Space direction="vertical" size="large">
-      <p>左上角：</p>
-      <FloatButton 
-        icon="Plus" 
-        position={{ top: 24, left: 24 }}
-        tooltip="左上角"
-      />
-      
       <p>右上角：</p>
       <FloatButton 
         icon="Plus" 
-        position={{ top: 24, right: 24 }}
+        position={{ bottom: 200, right: 24 }}
         tooltip="右上角"
-      />
-      
-      <p>左下角：</p>
-      <FloatButton 
-        icon="Plus" 
-        position={{ bottom: 24, left: 24 }}
-        tooltip="左下角"
       />
       
       <p>右下角（默认）：</p>
       <FloatButton 
         icon="Plus" 
         tooltip="右下角"
+      />
+      
+      <p>自定义 bottom：</p>
+      <FloatButton 
+        icon="Plus" 
+        position={{ bottom: 100 }}
+        tooltip="bottom: 100px"
+      />
+      
+      <p>自定义 right：</p>
+      <FloatButton 
+        icon="Plus" 
+        position={{ right: 100 }}
+        tooltip="right: 100px"
       />
     </Space>
   </div>

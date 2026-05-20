@@ -11,12 +11,8 @@ export type FloatButtonSize = 'large' | 'middle' | 'small';
 
 /** 悬浮按钮位置 */
 export type FloatButtonPosition = {
-  /** 距离顶部的距离 */
-  top?: number | string;
   /** 距离底部的距离 */
   bottom?: number | string;
-  /** 距离左侧的距离 */
-  left?: number | string;
   /** 距离右侧的距离 */
   right?: number | string;
 };
@@ -164,14 +160,8 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = ({
     right: 24,
     bottom: 24,
     // 应用用户自定义的位置（覆盖默认值）
-    ...(position?.top !== undefined && {
-      top: typeof position.top === 'number' ? `${position.top}px` : position.top,
-    }),
     ...(position?.bottom !== undefined && {
       bottom: typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom,
-    }),
-    ...(position?.left !== undefined && {
-      left: typeof position.left === 'number' ? `${position.left}px` : position.left,
     }),
     ...(position?.right !== undefined && {
       right: typeof position.right === 'number' ? `${position.right}px` : position.right,
@@ -286,14 +276,8 @@ const FloatButton: React.FC<FloatButtonProps> & {
       '--soui-float-button-font-size': `${fontSizeValue}px`,
     }),
     // 位置配置
-    ...(position?.top !== undefined && {
-      top: typeof position.top === 'number' ? `${position.top}px` : position.top,
-    }),
     ...(position?.bottom !== undefined && {
       bottom: typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom,
-    }),
-    ...(position?.left !== undefined && {
-      left: typeof position.left === 'number' ? `${position.left}px` : position.left,
     }),
     ...(position?.right !== undefined && {
       right: typeof position.right === 'number' ? `${position.right}px` : position.right,
@@ -372,17 +356,11 @@ const FloatButton: React.FC<FloatButtonProps> & {
       right: 24,
       bottom: 24,
       // 应用用户自定义的位置（覆盖默认值）
-      ...(position?.top !== undefined && {
-        top: typeof position.top === 'number' ? `${position.top}px` : position.top,
-      }),
-      ...(position?.right !== undefined && {
-        right: typeof position.right === 'number' ? `${position.right}px` : position.right,
-      }),
       ...(position?.bottom !== undefined && {
         bottom: typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom,
       }),
-      ...(position?.left !== undefined && {
-        left: typeof position.left === 'number' ? `${position.left}px` : position.left,
+      ...(position?.right !== undefined && {
+        right: typeof position.right === 'number' ? `${position.right}px` : position.right,
       }),
       ...(zIndex !== undefined && {
         zIndex: zIndex,
@@ -390,7 +368,7 @@ const FloatButton: React.FC<FloatButtonProps> & {
     };
 
     // 从 buttonStyle 中移除定位样式
-    const { position: btnPosition, top, right, bottom, left, zIndex: btnZIndex, ...restButtonStyle } = buttonStyle;
+    const { position: btnPosition, right, bottom, zIndex: btnZIndex, ...restButtonStyle } = buttonStyle;
 
     return (
       <Tooltip 

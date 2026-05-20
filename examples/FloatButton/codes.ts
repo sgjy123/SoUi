@@ -56,25 +56,11 @@ export const groupHoverCode = `<FloatButton.Group
 </FloatButton.Group>`;
 
 export const positionCode = `<div>
-  {/* 左上角 */}
-  <FloatButton 
-    icon="Plus" 
-    position={{ top: 24, left: 24 }}
-    tooltip="左上角"
-  />
-  
   {/* 右上角 */}
   <FloatButton 
     icon="Plus" 
-    position={{ top: 24, right: 24 }}
+    position={{ bottom: 200, right: 24 }}
     tooltip="右上角"
-  />
-  
-  {/* 左下角 */}
-  <FloatButton 
-    icon="Plus" 
-    position={{ bottom: 24, left: 24 }}
-    tooltip="左下角"
   />
   
   {/* 右下角（默认） */}
@@ -82,12 +68,26 @@ export const positionCode = `<div>
     icon="Plus" 
     tooltip="右下角"
   />
+  
+  {/* 自定义 bottom */}
+  <FloatButton 
+    icon="Plus" 
+    position={{ bottom: 100 }}
+    tooltip="bottom: 100px"
+  />
+  
+  {/* 自定义 right */}
+  <FloatButton 
+    icon="Plus" 
+    position={{ right: 100 }}
+    tooltip="right: 100px"
+  />
 </div>`;
 
 export const groupPositionCode = `<FloatButton.Group
-  position={{ top: 100, right: 24 }}
+  position={{ bottom: 100, right: 24 }}
   icon="Menu"
-  tooltip="顶部菜单"
+  tooltip="菜单"
 >
   <FloatButton icon="Edit" tooltip="编辑" />
   <FloatButton icon="Copy" tooltip="复制" />
@@ -98,7 +98,7 @@ export const zIndexCode = `<div>
   {/* 默认层级 */}
   <FloatButton 
     icon="Plus" 
-    position={{ top: 24, right: 24 }}
+    position={{ bottom: 200, right: 24 }}
     tooltip="默认层级"
   />
   
@@ -106,7 +106,7 @@ export const zIndexCode = `<div>
   <FloatButton 
     icon="Star" 
     type="primary"
-    position={{ top: 100, right: 24 }}
+    position={{ bottom: 100, right: 24 }}
     zIndex={9999}
     tooltip="高层级"
   />
@@ -114,7 +114,7 @@ export const zIndexCode = `<div>
   {/* 低层级 */}
   <FloatButton 
     icon="Setting" 
-    position={{ top: 176, right: 24 }}
+    position={{ bottom: 24, right: 24 }}
     zIndex={100}
     tooltip="低层级"
   />
