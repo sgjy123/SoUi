@@ -302,18 +302,22 @@ export default () => (
 
 ### 如何自定义按钮位置？
 
-可以通过 CSS 覆盖默认位置：
+可以通过 `position` 属性自定义位置：
 
 ```tsx
 <FloatButton 
   icon="Plus" 
-  style={{ right: '40px', bottom: '40px' }}
+  position={{ bottom: 40, right: 40 }}
 />
 ```
 
 ### 按钮组和单个按钮有什么区别？
 
 按钮组会将多个按钮组织在一起，并自动处理间距和布局。单个按钮则独立定位。
+
+**定位行为差异：**
+- **单个按钮**：使用 `position: fixed` 固定定位，独立于文档流
+- **按钮组中的子按钮**：使用 `position: static` 正常排列，跟随 Group 容器定位
 
 ### 如何添加点击事件？
 

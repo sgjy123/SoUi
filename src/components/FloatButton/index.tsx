@@ -36,6 +36,8 @@ export interface FloatButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLBu
   position?: FloatButtonPosition;
   /** z-index 层级 */
   zIndex?: number;
+  /** @internal 是否在 Group 中（内部使用） */
+  __isInGroup?: boolean;
 }
 
 // FloatButtonGroup 组件
@@ -183,7 +185,15 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = ({
     >
       {/* 子按钮列表 - 直接渲染 children，每个 child 都是 FloatButton 组件 */}
       <div className="soui-float-button-group-list">
-        {children}
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            // 给子按钮添加 __isInGroup 标记
+            return React.cloneElement(child, {
+              __isInGroup: true,
+            } as any);
+          }
+          return child;
+        })}
       </div>
       
       {/* 主触发按钮 */}
@@ -231,6 +241,7 @@ const FloatButton: React.FC<FloatButtonProps> & {
   position,
   zIndex,
   onClick,
+  __isInGroup = false,
   ...props
 }) => {
   // 获取组件级主题配置
@@ -243,10 +254,12 @@ const FloatButton: React.FC<FloatButtonProps> & {
   const fontSizeValue = floatButtonTheme?.fontSize || globalTheme?.fontSize;
   
   const buttonStyle: React.CSSProperties = {
-    // 默认为 fixed 定位，右下角
-    position: 'fixed',
-    right: 24,
-    bottom: 24,
+    // 只有在不在 Group 中时才应用定位样式
+    ...(!__isInGroup && {
+      position: 'fixed',
+      right: 24,
+      bottom: 24,
+    }),
     // 颜色配置（组件级优先，否则使用全局主题）
     ...(floatButtonTheme?.colorPrimary ? {
       '--soui-float-button-color-primary': floatButtonTheme.colorPrimary,
@@ -328,7 +341,6 @@ const FloatButton: React.FC<FloatButtonProps> & {
     onClick?.(e);
   };
 
-  // 包装 Tooltip（如果有）
   const renderButton = () => (
     <button
       className={buttonClassName}
@@ -351,19 +363,22 @@ const FloatButton: React.FC<FloatButtonProps> & {
   if (tooltip) {
     // 提取定位样式用于 Tooltip 容器
     const tooltipWrapperStyle: React.CSSProperties = {
-      position: 'fixed',
-      // 默认值
-      right: 24,
-      bottom: 24,
-      // 应用用户自定义的位置（覆盖默认值）
-      ...(position?.bottom !== undefined && {
-        bottom: typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom,
-      }),
-      ...(position?.right !== undefined && {
-        right: typeof position.right === 'number' ? `${position.right}px` : position.right,
-      }),
-      ...(zIndex !== undefined && {
-        zIndex: zIndex,
+      // 只有在不在 Group 中时才应用定位样式
+      ...(!__isInGroup && {
+        position: 'fixed',
+        // 默认值
+        right: 24,
+        bottom: 24,
+        // 应用用户自定义的位置（覆盖默认值）
+        ...(position?.bottom !== undefined && {
+          bottom: typeof position.bottom === 'number' ? `${position.bottom}px` : position.bottom,
+        }),
+        ...(position?.right !== undefined && {
+          right: typeof position.right === 'number' ? `${position.right}px` : position.right,
+        }),
+        ...(zIndex !== undefined && {
+          zIndex: zIndex,
+        }),
       }),
     };
 
