@@ -554,6 +554,120 @@ export default () => (
 |--------|------|------|
 | onClick | 点击事件 | `(e: Event) => void` |
 
+## 主题定制
+
+ComponentName 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。
+
+### 全局配置
+
+通过 `theme` 属性配置全局样式，影响所有使用该组件的实例：
+
+```tsx
+import { ConfigProvider } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      // 全局配置项（根据组件实际支持的配置填写）
+      primaryColor: '#1677ff',     // 主色
+      borderRadius: 6,              // 圆角
+      fontSize: 14,                 // 字体大小
+      // ... 其他全局配置
+    }}
+  >
+    <YourApp />
+  </ConfigProvider>
+);
+```
+
+### 组件级配置
+
+通过 `theme.components.ComponentName` 针对特定组件进行精细化配置：
+
+```tsx
+import { ConfigProvider } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      components: {
+        ComponentName: {
+          // 组件专属配置项（根据组件实际支持的配置填写）
+          colorPrimary: '#1890ff',      // 组件主色
+          borderRadius: 8,              // 组件圆角
+          fontSize: 16,                 // 组件字号
+          // ... 其他组件专属配置
+        },
+      },
+    }}
+  >
+    <YourApp />
+  </ConfigProvider>
+);
+```
+
+### 配置优先级
+
+SoUi 采用以下优先级规则（从高到低）：
+
+```
+Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
+```
+
+**示例：**
+
+```tsx
+// 最高优先级：Props 直接设置
+<ComponentName style={{ color: 'red' }} />
+
+// 第二优先级：组件级配置
+<ConfigProvider theme={{ components: { ComponentName: { colorPrimary: 'blue' } } }}>
+  <ComponentName /> {/* 使用蓝色 */}
+</ConfigProvider>
+
+// 第三优先级：全局配置
+<ConfigProvider theme={{ primaryColor: 'green' }}>
+  <ComponentName /> {/* 使用绿色 */}
+</ConfigProvider>
+```
+
+### 可用的主题配置项
+
+根据组件的不同，可配置的主题项包括：
+
+**颜色相关：**
+- `colorPrimary` - 主色
+- `colorPrimaryHover` - 主色悬停状态
+- `colorPrimaryActive` - 主色激活状态
+- `colorBorder` - 边框颜色
+- `colorText` - 文本颜色
+
+**尺寸相关：**
+- `borderRadius` - 圆角大小（像素）
+- `fontSize` - 字体大小（像素）
+- `controlHeight` - 控件高度（像素）
+
+**其他：**
+- 具体配置项请参考组件 API 文档或 `ConfigProvider/types.ts` 类型定义
+
+### 自定义 CSS 变量
+
+对于更高级的定制需求，可以直接覆盖 CSS 变量：
+
+```tsx
+<ComponentName 
+  style={{
+    '--soui-component-color-primary': '#ff0000',
+    '--soui-component-border-radius': '10px',
+  }}
+/>
+```
+
+**CSS 变量命名规范：**
+- 第1层（设计令牌）：`--soui-{property}` - 不带组件前缀的全局变量
+- 第2层（组件配置点）：`--soui-component-{property}` - 带组件前缀的配置点
+- 第3层（组件级覆盖）：`--soui-component-{property}-component` - 带 `-component` 后缀的覆盖变量
+
 ## 设计原则
 
 ### ✅ 推荐用法
@@ -593,10 +707,16 @@ export default () => (
 2. 必须有"何时使用"章节
 3. 代码演示要有说明文字
 4. API 表格要完整
-5. 包含设计原则（推荐/避免）
-6. 包含无障碍访问说明
-7. 包含 FAQ
-8. 链接到相关组件
+5. **必须包含"主题定制"章节**（重要！）
+   - 全局配置示例
+   - 组件级配置示例
+   - 配置优先级说明
+   - 可用的主题配置项列表
+   - CSS 变量命名规范
+6. 包含设计原则（推荐/避免）
+7. 包含无障碍访问说明
+8. 包含 FAQ
+9. 链接到相关组件
 
 #### 3.2 更新侧边栏配置
 
@@ -980,8 +1100,13 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 ### 文档编写
 1. 示例代码要可运行
 2. API 文档要完整准确
-3. 提供正反示例对比
-4. 包含常见问题解答
+3. **必须包含"主题定制"章节**（重要！）
+   - 全局配置示例
+   - 组件级配置示例
+   - 配置优先级说明
+   - 可用的主题配置项列表
+4. 提供正反示例对比
+5. 包含常见问题解答
 
 ## 检查清单
 
@@ -1010,6 +1135,12 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 - [ ] 样式文件 `src/components/ComponentName/style.less` 已创建
 - [ ] 已在 `src/index.ts` 中导出组件和类型
 - [ ] 文档文件 `src/docs/components/component-name.md` 已创建
+- [ ] **文档包含"主题定制"章节**（重要！）
+  - [ ] 全局配置示例
+  - [ ] 组件级配置示例
+  - [ ] 配置优先级说明
+  - [ ] 可用的主题配置项列表
+  - [ ] CSS 变量命名规范
 - [ ] 已在 `.vitepress/config.ts` 中添加侧边栏配置
 - [ ] 示例目录 `examples/ComponentName/` 已创建
 - [ ] **已为每个示例创建对应的 `.tsx` 实例文件**（重要！）

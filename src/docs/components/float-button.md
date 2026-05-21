@@ -263,6 +263,115 @@ export default () => (
 | position | 自定义位置 | `{ bottom?: number \| string; right?: number \| string }` | - | - |
 | zIndex | z-index 层级 | `number` | `999` | - |
 
+## 主题定制
+
+FloatButton 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。
+
+### 全局配置
+
+通过 `theme` 属性配置全局样式，影响所有悬浮按钮：
+
+```tsx
+import { ConfigProvider } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      primaryColor: '#1677ff',     // 主色
+      borderRadius: 6,              // 圆角
+      fontSize: 14,                 // 字体大小
+    }}
+  >
+    <YourApp />
+  </ConfigProvider>
+);
+```
+
+### 组件级配置
+
+通过 `theme.components.FloatButton` 针对悬浮按钮进行精细化配置：
+
+```tsx
+import { ConfigProvider } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      components: {
+        FloatButton: {
+          colorPrimary: '#1890ff',      // 主按钮颜色
+          colorPrimaryHover: '#40a9ff', // 悬停颜色
+          colorPrimaryActive: '#096dd9',// 激活颜色
+          borderRadius: 8,              // 圆角大小
+          fontSize: 16,                 // 字体大小
+        },
+      },
+    }}
+  >
+    <YourApp />
+  </ConfigProvider>
+);
+```
+
+### 配置优先级
+
+SoUi 采用以下优先级规则（从高到低）：
+
+```
+Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
+```
+
+**示例：**
+
+```tsx
+// 最高优先级：Props 直接设置
+<FloatButton style={{ backgroundColor: 'red' }} />
+
+// 第二优先级：组件级配置
+<ConfigProvider theme={{ components: { FloatButton: { colorPrimary: 'blue' } } }}>
+  <FloatButton type="primary" /> {/* 使用蓝色 */}
+</ConfigProvider>
+
+// 第三优先级：全局配置
+<ConfigProvider theme={{ primaryColor: 'green' }}>
+  <FloatButton type="primary" /> {/* 使用绿色 */}
+</ConfigProvider>
+```
+
+### 可用的主题配置项
+
+FloatButton 组件支持以下主题配置项：
+
+**颜色相关：**
+- `colorPrimary` - 主色（用于 primary 类型按钮）
+- `colorPrimaryHover` - 主色悬停状态
+- `colorPrimaryActive` - 主色激活状态
+
+**尺寸相关：**
+- `borderRadius` - 圆角大小（像素）
+- `fontSize` - 字体大小（像素）
+
+**其他：**
+- 具体配置项请参考 `ConfigProvider/types.ts` 类型定义
+
+### 自定义 CSS 变量
+
+对于更高级的定制需求，可以直接覆盖 CSS 变量：
+
+```tsx
+<FloatButton 
+  style={{
+    '--soui-float-button-color-primary': '#ff0000',
+    '--soui-float-button-border-radius': '10px',
+  }}
+/>
+```
+
+**CSS 变量命名规范：**
+- 第1层（设计令牌）：`--soui-{property}` - 不带组件前缀的全局变量
+- 第2层（组件配置点）：`--soui-float-button-{property}` - 带组件前缀的配置点
+- 第3层（组件级覆盖）：`--soui-float-button-{property}-component` - 带 `-component` 后缀的覆盖变量
+
 ## 设计原则
 
 ### ✅ 推荐用法
