@@ -1,0 +1,522 @@
+@import '../../styles/variables.less';
+
+// ==================== Steps Component Styles ====================
+
+.soui-steps {
+  // === 第2层: 组件配置点（引用第1层设计令牌）===
+  --soui-steps-color-primary: var(--soui-primary-color, @primary-color);
+  --soui-steps-color-success: var(--soui-success-color, @success-color);
+  --soui-steps-color-error: var(--soui-error-color, @error-color);
+  --soui-steps-color-wait: var(--soui-color-text-disabled, @text-color-disabled);
+  --soui-steps-color-border: var(--soui-border-color-base, @border-color);
+  --soui-steps-color-text: var(--soui-color-text, @text-color);
+  --soui-steps-color-text-secondary: var(--soui-color-text-secondary, @text-color-secondary);
+  --soui-steps-font-size: var(--soui-font-size, @font-size-base);
+  --soui-steps-border-radius: var(--soui-border-radius, @border-radius-base);
+  --soui-steps-icon-size: 32px;
+  --soui-steps-dot-size: 8px;
+
+  display: flex;
+  width: 100%;
+  font-size: var(--soui-steps-font-size);
+
+  .soui-steps-items {
+    display: flex;
+    width: 100%;
+    position: relative;
+  }
+}
+
+// ==================== Horizontal Steps ====================
+
+.soui-steps-horizontal {
+  .soui-steps-items {
+    flex-direction: row;
+  }
+
+  // 标签垂直放置时，内容在图标下方（仅在水平方向时生效）
+  &.soui-steps-label-vertical {
+    .soui-steps-item {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .soui-steps-item-icon-wrapper {
+      margin-bottom: 8px;
+    }
+
+    .soui-steps-item-content {
+      padding: 0;
+    }
+
+    .soui-steps-item-tail {
+      top: 16px;
+      left: calc(50% + 20px);
+      right: calc(-50% + 20px);
+    }
+
+    &:not(:last-child) .soui-steps-item-tail {
+      display: block;
+    }
+  }
+
+  .soui-steps-item {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    transition: all @transition-duration @transition-timing-function;
+
+    &:hover:not(.soui-steps-item-disabled) {
+      .soui-steps-item-content {
+        .soui-steps-item-title {
+          color: var(--soui-steps-color-primary);
+        }
+      }
+    }
+
+    &:last-child {
+      flex: none;
+
+      .soui-steps-item-tail {
+        display: none;
+      }
+    }
+  }
+
+  .soui-steps-item-icon-wrapper {
+    flex-shrink: 0;
+  }
+
+  .soui-steps-item-content {
+    position: relative;
+    flex: 1;
+    text-align: left;
+    padding: 0 10px;
+  }
+
+  // 水平方向连接线（在 content 内部）
+  .soui-steps-item-tail {
+    position: absolute;
+    top: 22px;
+    left: 10px;
+    right: 10px;
+    height: 1px;
+    background-color: var(--soui-steps-color-border);
+    transition: all @transition-duration @transition-timing-function;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, var(--soui-steps-color-primary) 0%, var(--soui-steps-color-success) 100%);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform @transition-duration @transition-timing-function;
+    }
+  }
+
+  .soui-steps-item-finish {
+    .soui-steps-item-tail::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+// ==================== Vertical Steps ====================
+
+.soui-steps-vertical {
+  .soui-steps-items {
+    flex-direction: column;
+  }
+
+  .soui-steps-item {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 30px;
+    transition: all @transition-duration @transition-timing-function;
+    position: relative;
+
+    &:hover:not(.soui-steps-item-disabled) {
+      .soui-steps-item-content {
+        .soui-steps-item-title {
+          color: var(--soui-steps-color-primary);
+        }
+      }
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+
+      .soui-steps-item-tail {
+        display: none;
+      }
+    }
+  }
+
+  .soui-steps-item-icon-wrapper {
+    margin-right: @padding-md;
+    flex-shrink: 0;
+  }
+
+  .soui-steps-item-content {
+    flex: 1;
+  }
+
+  // 垂直方向连接线（在 item 内部，从图标底部到步骤项底部）
+  .soui-steps-item-tail {
+    position: absolute;
+    top: calc(50% + 6px);
+    left: calc(var(--soui-steps-icon-size, 32px) / 2);
+    bottom
+    : 0;height: calc(50% - 6px);
+    width: 1px;
+    background-color: var(--soui-steps-color-border);
+    transition: all @transition-duration @transition-timing-function;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, var(--soui-steps-color-primary) 0%, var(--soui-steps-color-success) 100%);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform @transition-duration @transition-timing-function;
+    }
+  }
+
+  .soui-steps-item-finish {
+    .soui-steps-item-tail::after {
+      transform: scaleY(1);
+    }
+  }
+}
+
+// ==================== Step Item ====================
+
+.soui-steps-item {
+  position: relative;
+
+  // === Icon Wrapper ===
+  .soui-steps-item-icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+
+  .soui-steps-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--soui-steps-icon-size);
+    height: var(--soui-steps-icon-size);
+    border-radius: 50%;
+    border: 1px solid var(--soui-steps-color-border);
+    background-color: #fff;
+    color: var(--soui-steps-color-text-secondary);
+    font-size: 14px;
+    transition: all @transition-duration @transition-timing-function;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      transition: all @transition-duration @transition-timing-function;
+    }
+  }
+
+  .soui-steps-icon-number {
+    font-weight: 500;
+  }
+
+  // 进度点样式
+  .soui-steps-icon-progress-dot {
+    width: var(--soui-steps-dot-size);
+    height: var(--soui-steps-dot-size);
+    border: none;
+    background: transparent;
+
+    .soui-steps-icon-dot {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: var(--soui-steps-color-border);
+      transition: all @transition-duration @transition-timing-function;
+    }
+  }
+
+  // === Content ===
+  .soui-steps-item-content {
+    .soui-steps-item-title {
+      color: var(--soui-steps-color-text);
+      font-size: var(--soui-steps-font-size);
+      font-weight: 500;
+      line-height: 1.5;
+      margin-bottom: 4px;
+      transition: all @transition-duration @transition-timing-function;
+    }
+
+    .soui-steps-item-subtitle {
+      color: var(--soui-steps-color-text-secondary);
+      font-size: calc(var(--soui-steps-font-size) - 2px);
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .soui-steps-item-description {
+      color: var(--soui-steps-color-text-secondary);
+      font-size: var(--soui-steps-font-size);
+      line-height: 1.5;
+    }
+  }
+
+  // === Status: Wait ===
+  &-wait {
+    .soui-steps-icon {
+      border-color: var(--soui-steps-color-border);
+      color: var(--soui-steps-color-wait);
+    }
+
+    .soui-steps-item-title {
+      color: var(--soui-steps-color-text-secondary);
+    }
+
+    .soui-steps-icon-progress-dot {
+      .soui-steps-icon-dot {
+        background-color: var(--soui-steps-color-border);
+      }
+    }
+  }
+
+  // === Status: Process ===
+  &-process,
+  &-active {
+    .soui-steps-icon {
+      border-color: var(--soui-steps-color-primary);
+      background-color: var(--soui-steps-color-primary);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
+      animation: soui-steps-pulse 2s ease-in-out infinite;
+
+      &::before {
+        border-color: rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.3);
+      }
+    }
+
+    .soui-steps-item-title {
+      color: var(--soui-steps-color-text);
+      font-weight: 600;
+    }
+
+    .soui-steps-icon-progress-dot {
+      .soui-steps-icon-dot {
+        background-color: var(--soui-steps-color-primary);
+        box-shadow: 0 0 0 4px rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
+      }
+    }
+  }
+
+  // === Status: Finish ===
+  &-finish {
+    .soui-steps-icon {
+      border-color: var(--soui-steps-color-success);
+      background-color: var(--soui-steps-color-success);
+      color: #fff;
+
+      &::before {
+        border-color: rgba(var(--soui-steps-color-success-rgb, 82, 196, 26), 0.3);
+      }
+    }
+
+    .soui-steps-item-title {
+      color: var(--soui-steps-color-text);
+    }
+
+    .soui-steps-icon-progress-dot {
+      .soui-steps-icon-dot {
+        background-color: var(--soui-steps-color-success);
+      }
+    }
+  }
+
+  // === Status: Error ===
+  &-error {
+    .soui-steps-icon {
+      border-color: var(--soui-steps-color-error);
+      background-color: var(--soui-steps-color-error);
+      color: #fff;
+      animation: soui-steps-shake 0.5s ease-in-out;
+
+      &::before {
+        border-color: rgba(var(--soui-steps-color-error-rgb, 255, 77, 79), 0.3);
+      }
+    }
+
+    .soui-steps-item-title {
+      color: var(--soui-steps-color-error);
+    }
+
+    .soui-steps-icon-progress-dot {
+      .soui-steps-icon-dot {
+        background-color: var(--soui-steps-color-error);
+      }
+    }
+  }
+
+  // === Disabled State ===
+  &-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    .soui-steps-icon {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      .soui-steps-item-title {
+        color: var(--soui-steps-color-text-secondary);
+      }
+    }
+  }
+
+  // === With Description ===
+  &-with-description {
+    .soui-steps-icon {
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 16px;
+    }
+
+    .soui-steps-item-content {
+      .soui-steps-item-title {
+        margin-bottom: @padding-xs;
+      }
+    }
+  }
+}
+
+// ==================== Small Size ====================
+
+.soui-steps.soui-steps-small {
+  --soui-steps-icon-size: 24px;
+  --soui-steps-dot-size: 6px;
+
+  .soui-steps-icon {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    border-width: 1px;
+  }
+
+  .soui-steps-icon-number {
+    font-size: 12px;
+  }
+
+  .soui-steps-item-title {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .soui-steps-item-subtitle {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .soui-steps-item-description {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  &.soui-steps-horizontal {
+    .soui-steps-item {
+      align-items: center;
+    }
+
+    .soui-steps-item-icon-wrapper {
+      margin-right: @padding-sm;
+    }
+
+    .soui-steps-item-content {
+      padding: 0 8px;
+    }
+
+    .soui-steps-item-tail {
+      top: 18px;
+      left: 8px;
+      right: 8px;
+    }
+
+    // 标签垂直放置时
+    &.soui-steps-label-vertical {
+      .soui-steps-item-icon-wrapper {
+        margin-bottom: 6px;
+      }
+
+      .soui-steps-item-tail {
+        top: 12px;
+        left: calc(50% + 12px);
+        right: calc(-50% + 12px);
+      }
+    }
+  }
+
+  &.soui-steps-vertical {
+    .soui-steps-item {
+      padding-bottom: @padding-md;
+    }
+
+    .soui-steps-item-icon-wrapper {
+      margin-right: @padding-sm;
+    }
+
+    .soui-steps-item-content {
+      .soui-steps-item-title {
+        margin-bottom: 2px;
+      }
+
+      .soui-steps-item-subtitle {
+        margin-bottom: 2px;
+      }
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+}
+
+// ==================== Animations ====================
+
+@keyframes soui-steps-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.1);
+  }
+}
+
+@keyframes soui-steps-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}

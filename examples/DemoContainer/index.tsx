@@ -9,6 +9,8 @@ import Divider from '../../src/components/Divider';
 import { Row, Col } from '../../src/components/Grid';
 import Layout from '../../src/components/Layout';
 import FloatButton from '../../src/components/FloatButton';
+import Breadcrumb from '../../src/components/Breadcrumb';
+import Steps from '../../src/components/Steps';
 import './style.less';
 
 interface DemoContainerProps {
@@ -51,6 +53,9 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Content: Layout.Content,
     Footer: Layout.Footer,
     FloatButton,
+    Breadcrumb,
+    Steps,
+    Step: Steps.Step,
     ...scope,
   };
 

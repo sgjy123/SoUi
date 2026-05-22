@@ -1,0 +1,86 @@
+@import '../../styles/variables.less';
+
+// Breadcrumb 面包屑组件样式
+.soui-breadcrumb {
+  // CSS 变量定义（第2层：组件配置点）
+  --soui-breadcrumb-color-text: var(--soui-color-text-secondary, @text-color-secondary);
+  --soui-breadcrumb-color-link: var(--soui-primary-color, @primary-color);
+  --soui-breadcrumb-color-link-hover: var(--soui-primary-hover-color, @primary-hover-color);
+  --soui-breadcrumb-separator-color: var(--soui-color-text-disabled, @text-color-disabled);
+  --soui-breadcrumb-font-size: var(--soui-font-size, @font-size-base);
+
+  font-size: var(--soui-breadcrumb-font-size);
+
+  .soui-breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    align-items: center;
+  }
+
+  .soui-breadcrumb-item {
+    color: var(--soui-breadcrumb-color-text);
+    transition: color @transition-duration @transition-timing-function;
+
+    &:last-child {
+      .soui-breadcrumb-link,
+      .soui-breadcrumb-separator-less {
+        color: var(--soui-breadcrumb-color-text);
+        cursor: default;
+
+        &:hover {
+          color: var(--soui-breadcrumb-color-text);
+        }
+      }
+    }
+  }
+
+  .soui-breadcrumb-link {
+    color: var(--soui-breadcrumb-color-link);
+    text-decoration: none;
+    transition: color @transition-duration @transition-timing-function;
+
+    &:hover {
+      color: var(--soui-breadcrumb-color-link-hover);
+    }
+
+    &:active {
+      color: var(--soui-breadcrumb-color-link);
+    }
+
+    .soui-breadcrumb-icon {
+      margin-right: @padding-xs;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+    }
+  }
+
+  .soui-breadcrumb-separator-less {
+    cursor: pointer;
+    transition: color @transition-duration @transition-timing-function;
+
+    &:hover {
+      color: var(--soui-breadcrumb-color-link);
+    }
+
+    .soui-breadcrumb-icon {
+      margin-right: @padding-xs;
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+    }
+  }
+
+  .soui-breadcrumb-separator {
+    margin: 0 @padding-xs;
+    color: var(--soui-breadcrumb-separator-color);
+    user-select: none;
+
+    span {
+      display: inline-block;
+    }
+  }
+}

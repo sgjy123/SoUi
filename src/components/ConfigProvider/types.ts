@@ -274,6 +274,42 @@ export interface ComponentThemeConfig {
     /** 字体大小（像素） */
     fontSize?: number;
   };
+  /** Breadcrumb 面包屑组件配置 */
+  Breadcrumb?: {
+    /** 文本颜色 */
+    colorText?: string;
+    /** 链接颜色 */
+    colorLink?: string;
+    /** 链接悬停颜色 */
+    colorLinkHover?: string;
+    /** 分隔符颜色 */
+    separatorColor?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+  };
+  /** Steps 步骤条组件配置 */
+  Steps?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 成功色 */
+    colorSuccess?: string;
+    /** 错误色 */
+    colorError?: string;
+    /** 等待状态颜色 */
+    colorWait?: string;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 标题颜色 */
+    colorText?: string;
+    /** 描述颜色 */
+    colorTextSecondary?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 图标尺寸（像素） */
+    iconSize?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

@@ -111,6 +111,12 @@ export const docsConfig: MenuGroup[] = [
           { key: 'space-align', label: 'Space 对齐方式', componentPath: 'Space', exampleName: 'Align', description: '多种对齐方式。' },
         ],
       },
+    ],
+  },
+  {
+    title: '导航组件',
+    icon: 'Navigation',
+    components: [
       {
         key: 'menu',
         label: 'Menu 菜单',
@@ -124,6 +130,34 @@ export const docsConfig: MenuGroup[] = [
           { key: 'menu-grouped', label: 'Menu 分组菜单', componentPath: 'Menu', exampleName: 'Grouped', description: '带有分组的菜单结构。' },
           { key: 'menu-dark', label: 'Menu 暗色主题', componentPath: 'Menu', exampleName: 'DarkTheme', description: '深色背景下的菜单样式。' },
           { key: 'menu-controlled', label: 'Menu 受控菜单', componentPath: 'Menu', exampleName: 'Controlled', description: '完全控制菜单的选中状态和展开状态。' },
+        ],
+      },
+      {
+        key: 'breadcrumb',
+        label: 'Breadcrumb 面包屑',
+        icon: 'Bread',
+        items: [
+          { key: 'breadcrumb-basic', label: 'Breadcrumb 基础用法', componentPath: 'Breadcrumb', exampleName: 'Basic', description: '最基础的面包屑导航。' },
+          { key: 'breadcrumb-separator', label: 'Breadcrumb 自定义分隔符', componentPath: 'Breadcrumb', exampleName: 'Separator', description: '通过 separator 属性自定义分隔符。' },
+          { key: 'breadcrumb-icon', label: 'Breadcrumb 带图标', componentPath: 'Breadcrumb', exampleName: 'WithIcon', description: '为面包屑项添加图标，增强视觉识别度。' },
+          { key: 'breadcrumb-items', label: 'Breadcrumb 使用 items', componentPath: 'Breadcrumb', exampleName: 'WithItems', description: '通过 items 属性配置面包屑项。' },
+          { key: 'breadcrumb-custom', label: 'Breadcrumb 主题定制', componentPath: 'Breadcrumb', exampleName: 'CustomStyle', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
+      {
+        key: 'steps',
+        label: 'Steps 步骤条',
+        icon: 'Steps',
+        items: [
+          { key: 'steps-basic', label: 'Steps 基础用法', componentPath: 'Steps', exampleName: 'Basic', description: '最简单的步骤条用法。' },
+          { key: 'steps-vertical', label: 'Steps 垂直方向', componentPath: 'Steps', exampleName: 'Vertical', description: '垂直方向的步骤条。' },
+          { key: 'steps-icon', label: 'Steps 带图标', componentPath: 'Steps', exampleName: 'WithIcon', description: '为步骤添加自定义图标。' },
+          { key: 'steps-small', label: 'Steps 小尺寸', componentPath: 'Steps', exampleName: 'SmallSize', description: '小尺寸的步骤条。' },
+          { key: 'steps-controlled', label: 'Steps 受控模式', componentPath: 'Steps', exampleName: 'Controlled', description: '通过按钮控制步骤切换。' },
+          { key: 'steps-progress-dot', label: 'Steps 进度点模式', componentPath: 'Steps', exampleName: 'ProgressDot', description: '使用小圆点代替数字图标，支持自定义渲染。' },
+          { key: 'steps-subtitle', label: 'Steps 子标题与禁用', componentPath: 'Steps', exampleName: 'WithSubtitle', description: '添加子标题和禁用特定步骤。' },
+          { key: 'steps-label-placement', label: 'Steps 标签位置', componentPath: 'Steps', exampleName: 'LabelPlacement', description: '控制标签水平或垂直放置。' },
+          { key: 'steps-advanced', label: 'Steps 综合示例', componentPath: 'Steps', exampleName: 'Advanced', description: '展示所有功能的完整示例。' },
         ],
       },
     ],
@@ -179,6 +213,7 @@ export const docsConfig: MenuGroup[] = [
           { key: 'divider-color', label: 'Divider 颜色', componentPath: 'Divider', exampleName: 'CustomColor', description: '自定义分割线颜色。' },
         ],
       },
+      
     ],
   },
 ];

@@ -206,7 +206,15 @@ function sidebarComponents() {
         { text: 'Layout 布局', link: 'layout' },
         { text: 'Space 间距', link: 'space' },
         { text: 'Divider 分割线', link: 'divider' },
+      ],
+    },
+    {
+      text: '导航组件',
+      collapsed: false,
+      items: [
         { text: 'Menu 菜单', link: 'menu' },
+        { text: 'Breadcrumb 面包屑', link: 'breadcrumb' },
+        { text: 'Steps 步骤条', link: 'steps' },
       ],
     },
     {

@@ -63,6 +63,14 @@ export type { MenuProps, MenuMode, MenuItemType } from './components/Menu';
 export { default as FloatButton } from './components/FloatButton';
 export type { FloatButtonProps, FloatButtonType, FloatButtonShape, FloatButtonSize, FloatButtonTriggerType, FloatButtonPosition } from './components/FloatButton';
 
+// Breadcrumb Component
+export { default as Breadcrumb } from './components/Breadcrumb';
+export type { BreadcrumbProps, BreadcrumbItemProps } from './components/Breadcrumb';
+
+// Steps Component
+export { default as Steps } from './components/Steps';
+export type { StepsProps, StepItemProps, StepStatus, StepsDirection, StepsSize, StepsLabelPlacement } from './components/Steps';
+
 // Utils
 export * from './utils';
 
