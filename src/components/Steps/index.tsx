@@ -190,11 +190,16 @@ const StepItem: React.FC<StepItemProps & {
           <div className="soui-steps-item-description">{description}</div>
         )}
 
-        {/* 连接线（水平方向） */}
-        {direction === 'horizontal' && (
+        {/* 连接线（水平方向且标签水平放置） */}
+        {direction === 'horizontal' && labelPlacement !== 'vertical' && (
           <div className="soui-steps-item-tail" />
         )}
       </div>
+
+      {/* 连接线 - 水平方向且标签垂直放置时，在 item 级别渲染 */}
+      {direction === 'horizontal' && labelPlacement === 'vertical' && (
+        <div className="soui-steps-item-tail" />
+      )}
 
       {/* 连接线（垂直方向） */}
       {direction === 'vertical' && (

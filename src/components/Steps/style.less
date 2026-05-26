@@ -38,8 +38,7 @@
   &.soui-steps-label-vertical {
     .soui-steps-item {
       flex-direction: column;
-      align-items: center;
-      text-align: center;
+      align-items: flex-start;
     }
 
     .soui-steps-item-icon-wrapper {
@@ -48,12 +47,13 @@
 
     .soui-steps-item-content {
       padding: 0;
+      text-align: left;
     }
 
     .soui-steps-item-tail {
       top: 16px;
-      left: calc(50% + 20px);
-      right: calc(-50% + 20px);
+      left: 40px;
+      right: 8px;
     }
 
     &:not(:last-child) .soui-steps-item-tail {
@@ -461,14 +461,28 @@
 
     // 标签垂直放置时
     &.soui-steps-label-vertical {
+      .soui-steps-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
       .soui-steps-item-icon-wrapper {
         margin-bottom: 6px;
       }
 
+      .soui-steps-item-content {
+        padding: 0;
+        text-align: left;
+      }
+
       .soui-steps-item-tail {
         top: 12px;
-        left: calc(50% + 12px);
-        right: calc(-50% + 12px);
+        left: 30px;
+        right: 6px;
+      }
+
+      &:not(:last-child) .soui-steps-item-tail {
+        display: block;
       }
     }
   }
