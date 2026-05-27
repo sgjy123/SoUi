@@ -176,3 +176,61 @@
 
 // Tooltip 层级
 @tooltip-z-index: @z-index-popup-base + 30;
+
+// ==================== Steps Mixins ====================
+
+// 连接线高亮动画 — 水平方向
+.steps-tail-highlight-h() {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      var(--soui-steps-color-primary) 0%,
+      var(--soui-steps-color-success) 100%
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform @transition-duration @transition-timing-function;
+  }
+}
+
+// 连接线高亮动画 — 垂直方向
+.steps-tail-highlight-v() {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      180deg,
+      var(--soui-steps-color-primary) 0%,
+      var(--soui-steps-color-success) 100%
+    );
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform @transition-duration @transition-timing-function;
+  }
+}
+
+// 步骤项状态（普通：wait/finish/error）
+.step-status(@status, @iconBorder, @iconBg, @titleColor) {
+  &-@{status} {
+    .soui-steps-icon {
+      border-color: @iconBorder;
+      background-color: @iconBg;
+    }
+    .soui-steps-item-title {
+      color: @titleColor;
+    }
+    .soui-steps-icon-progress-dot .soui-steps-icon-dot {
+      background-color: @iconBorder;
+    }
+  }
+}
