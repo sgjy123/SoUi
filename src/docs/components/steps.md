@@ -122,7 +122,7 @@ export default () => {
 
 ### 进度点模式
 
-使用小圆点代替数字图标，适合步骤较多的场景。
+使用小圆点代替数字图标，适合步骤较多的场景，支持自定义渲染。
 
 ```tsx
 import { Steps } from '@soui/ui';
@@ -139,17 +139,26 @@ export default () => (
 
     {/* 自定义进度点 */}
     <Steps 
-      current={2}
+      current={1}
       style={{ marginTop: 40 }}
-      progressDot={(dot, { status }) => (
-        <span style={{ 
+      progressDot={(dot, { index, status }) => {
+        const customStyles: React.CSSProperties = {
           display: 'inline-block',
-          width: '12px',
-          height: '12px',
-          borderRadius: '50%',
-          backgroundColor: status === 'finish' ? '#52c41a' : status === 'process' ? '#1890ff' : '#d9d9d9'
-        }} />
-      )}
+          width: status === 'process' ? '16px' : '10px',
+          height: status === 'process' ? '16px' : '10px',
+          borderRadius: status === 'finish' ? '2px' : '50%',
+          backgroundColor: status === 'finish' ? '#52c41a' : status === 'process' ? '#1890ff' : '#d9d9d9',
+          boxShadow: status === 'process' ? '0 0 0 4px rgba(24, 144, 255, 0.2)' : 'none',
+          transition: 'all 0.3s ease-in-out',
+          fontSize: '10px',
+          color: '#fff',
+          fontWeight: 'bold',
+        };
+
+        const content = status === 'process' ? (index + 1) : (status === 'finish' ? '✓' : '');
+        
+        return <span style={customStyles}>{content}</span>;
+      }}
     >
       <Steps.Step title="登录" description="用户登录系统" />
       <Steps.Step title="验证" description="身份验证过程" />
@@ -346,8 +355,10 @@ Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
 - `iconSize` - 图标尺寸（像素）
 
 **新增 CSS 变量：**
-- `--soui-steps-icon-size` - 图标尺寸（默认 32px）
-- `--soui-steps-dot-size` - 进度点尺寸（默认 8px）
+- `--soui-steps-icon-size` - 图标尺寸（默认 32px，小尺寸 24px）
+- `--soui-steps-dot-size` - 进度点尺寸（默认 12px，小尺寸 6px）
+- `--soui-steps-tail-offset` - 连接线偏移量（默认 10px，小尺寸 8px）
+- `--soui-steps-tail-top-h` - 水平连接线顶部位置（默认 22px，小尺寸 22px）
 
 ### 自定义 CSS 变量
 
@@ -438,22 +449,33 @@ const [current, setCurrent] = useState(0);
   <Steps.Step title="步骤2" />
 </Steps>
 
-// 自定义进度点
+// 自定义进度点 - 根据不同状态显示不同样式
 <Steps 
   current={1}
-  progressDot={(dot, { status }) => (
-    <span style={{ 
-      width: '10px',
-      height: '10px',
-      borderRadius: '50%',
-      backgroundColor: status === 'finish' ? '#52c41a' : '#d9d9d9'
-    }} />
-  )}
+  progressDot={(dot, { index, status }) => {
+    const customStyles = {
+      display: 'inline-block',
+      width: status === 'process' ? '16px' : '10px',
+      height: status === 'process' ? '16px' : '10px',
+      borderRadius: status === 'finish' ? '2px' : '50%',
+      backgroundColor: status === 'finish' ? '#52c41a' : status === 'process' ? '#1890ff' : '#d9d9d9',
+      boxShadow: status === 'process' ? '0 0 0 4px rgba(24, 144, 255, 0.2)' : 'none',
+    };
+
+    const content = status === 'process' ? (index + 1) : (status === 'finish' ? '✓' : '');
+    
+    return <span style={customStyles}>{content}</span>;
+  }}
 >
   <Steps.Step title="步骤1" />
   <Steps.Step title="步骤2" />
 </Steps>
 ```
+
+**自定义进度点说明：**
+- `progressDot` 函数接收两个参数：`dot`（默认节点）和 `info`（包含 `index`、`status`、`title`）
+- 可以根据不同的 `status`（`wait`、`process`、`finish`）返回不同的样式
+- 支持完全自定义节点的外观，包括尺寸、颜色、形状和内容
 
 ### 如何禁用特定步骤？
 

@@ -14,16 +14,29 @@ export default () => (
     <h3 style={{ marginTop: '40px' }}>自定义进度点</h3>
     <Steps 
       current={1}
-      progressDot={(dot, { index, status }) => (
-        <span style={{ 
+      progressDot={(dot, { index, status }) => {
+        // 自定义不同状态的进度点样式
+        const customStyles: React.CSSProperties = {
           display: 'inline-block',
-          width: '12px',
-          height: '12px',
-          borderRadius: '50%',
+          alignItems: 'center',
+          width: status === 'process' ? '16px' : '16px',
+          height: status === 'process' ? '16px' : '16px',
+          borderRadius: status === 'finish' ? '2px' : '50%',
           backgroundColor: status === 'finish' ? '#52c41a' : status === 'process' ? '#1890ff' : '#d9d9d9',
-          border: status === 'process' ? '2px solid #1890ff' : 'none'
-        }} />
-      )}
+          boxShadow: status === 'process' ? '0 0 0 4px rgba(24, 144, 255, 0.2)' : 'none',
+          transition: 'all 0.3s ease-in-out',
+          fontSize: '10px',
+          color: '#fff',
+          fontWeight: 'bold',
+          flexShrink: 0,
+          textAlign: 'center',
+        };
+
+        // 在处理中状态显示数字
+        const content = status === 'process' ? (index + 1) : (status === 'finish' ? '✓' : '');
+        
+        return <span style={customStyles}>{content}</span>;
+      }}
     >
       <Steps.Step title="登录" description="用户登录系统" />
       <Steps.Step title="验证" description="身份验证过程" />

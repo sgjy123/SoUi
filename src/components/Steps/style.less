@@ -20,7 +20,7 @@
   --soui-steps-font-size: var(--soui-font-size, @font-size-base);
   --soui-steps-border-radius: var(--soui-border-radius, @border-radius-base);
   --soui-steps-icon-size: 32px;
-  --soui-steps-dot-size: 8px;
+  --soui-steps-dot-size: 12px;
   // 布局变量 — small 尺寸仅需修改变量，无需重写定位
   --soui-steps-tail-offset: 10px;
   --soui-steps-tail-top-h: 22px;
@@ -118,6 +118,12 @@
       .steps-tail-highlight-h();
     }
 
+    // 进度点模式下，连接线位置需要更靠上，对齐到进度点中心
+    .soui-steps-item-progress-dot .soui-steps-item-tail {
+      top: calc(var(--soui-steps-dot-size, 12px) / 2);
+      left: calc(var(--soui-steps-dot-size, 12px) + 10px);
+    }
+
     &:not(:last-child) > .soui-steps-item-tail {
       display: block;
     }
@@ -150,6 +156,9 @@
 
     &:last-child {
       padding-bottom: 0;
+      .soui-steps-item-tail {
+        display: none;
+      }
     }
   }
 
@@ -370,27 +379,30 @@
 
   // === With Description ===
   &-with-description {
-    .soui-steps-icon {
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      font-size: 16px;
-    }
+    // 进度点模式下不放大图标容器
+    &:not(.soui-steps-item-progress-dot) {
+      .soui-steps-icon {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 16px;
+      }
 
-    .soui-steps-item-content .soui-steps-item-title {
-      margin-bottom: @padding-xs;
+      .soui-steps-item-content .soui-steps-item-title {
+        margin-bottom: @padding-xs;
+      }
     }
   }
 }
 
-// ==================== Small Size ====================
+// =================== Small Size ====================
 
 .soui-steps-small {
   // 覆写 CSS 变量 → 大部分布局自动适配，无需重写定位规则
   --soui-steps-icon-size: 24px;
   --soui-steps-dot-size: 6px;
   --soui-steps-tail-offset: 8px;
-  --soui-steps-tail-top-h: 18px;
+  --soui-steps-tail-top-h: 22px;
 
   .soui-steps-icon {
     width: 24px;
