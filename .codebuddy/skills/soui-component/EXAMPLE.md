@@ -1,0 +1,291 @@
+# SoUi 组件开发示例
+
+本文件展示一个完整的组件开发案例，以 Typography 组件为例。
+
+## 需求分析
+
+**用户需求**：创建一个排版组件，用于展示标题、段落、文本等内容。
+
+**功能需求**：
+- 支持多级标题（h1-h5）
+- 支持段落文本
+- 支持普通文本和链接
+- 支持文本装饰（加粗、斜体、下划线、删除线等）
+- 支持文本复制功能
+- 支持文本编辑功能
+- 支持文本省略显示
+
+### 参考框架选择
+
+在开始开发前，我们询问了用户是否希望参考主流框架：
+
+```
+您希望这个组件参考哪个主流框架的实现方式？
+→ 用户选择：不参考特定框架，按照 SoUi 设计规范独立实现
+```
+
+**决策理由**：
+- Typography 是基础展示类组件，SoUi 已有明确的设计规范
+- 保持与现有组件（Button、Icon 等）的一致性更重要
+- 可以参考 Ant Design 的 API 设计思路，但不直接照搬
+
+**如果用户选择了参考框架：**
+- 需要研究该框架的 Typography 组件 API 设计
+- 借鉴其 Props 接口、默认值、变体等
+- 在保持 SoUi 设计风格的前提下，调整 API 设计
+- 在文档中注明参考来源
+
+### 主题样式查看
+
+在开始编写代码前，我们查看了以下内容：
+
+#### 1. 查看主题配置
+- 阅读 `ConfigProvider/types.ts` 了解可用的主题配置项
+- 阅读 `ConfigProvider/index.tsx` 了解 useTheme 和 useComponentTheme hooks
+
+#### 2. 查看设计变量
+- 阅读 `styles/variables.less` 了解所有可用的 Less 变量
+- 记录需要用到的颜色、尺寸、间距等变量
+
+#### 3. 参考现有组件
+- **Button 组件** - 学习主题变量的应用模式
+- **Typography 不需要复杂的主题配置**，主要使用全局主题色
+
+#### 4. 主题集成决策
+由于 Typography 是展示型组件，决定：
+- 使用全局主题色（primaryColor、successColor 等）
+- 支持 fontSize 配置
+- 不使用组件级特殊配置
+
+## 实施过程
+
+### 0. 研究参考框架（如果用户选择了参考框架）
+
+由于用户选择不参考特定框架，此步骤跳过。
+
+**如果用户选择了参考框架，需要：**
+1. 查阅该框架的官方文档
+2. 分析其 Typography 组件的 API 设计
+3. 提取可借鉴的 Props 接口和默认值
+4. 在保持 SoUi 风格的前提下调整设计
+
+### 1. 创建组件文件
+
+#### index.tsx
+位置：`SoUi/src/components/Typography/index.tsx`
+
+主要实现：
+- Text 组件：基础文本
+- Title 组件：标题（h1-h5）
+- Paragraph 组件：段落
+- Link 组件：链接
+- 辅助组件：OperationButton（操作按钮）
+
+关键设计决策：
+- 使用组合模式，Typography.Text / Typography.Title 等
+- 支持 copyable、editable、ellipsis 等高级功能
+- 使用 ResizeObserver 检测文本溢出
+
+#### style.less
+位置：`SoUi/src/components/Typography/style.less`
+
+样式要点：
+- 导入 variables.less
+- 定义标题层级字体大小
+- 定义文本类型颜色（secondary, success, warning, danger）
+- 定义操作按钮样式和 tooltip
+- 定义编辑输入框样式
+- 响应式适配
+
+### 2. 导出组件
+
+在 `src/index.ts` 中添加：
+```typescript
+export { default as Typography } from './components/Typography';
+export type {
+  TypographyProps,
+  TextType,
+  CopyConfig,
+  EditableConfig,
+  EllipsisConfig,
+  BaseProps,
+  TitleProps,
+  ParagraphProps,
+  LinkProps,
+} from './components/Typography';
+```
+
+### 3. 编写文档
+
+位置：`SoUi/src/docs/components/typography.md`
+
+**如果参考了某个框架，需要在文档开头添加“参考来源”章节：**
+
+```markdown
+## 参考来源
+
+本组件参考了 [Ant Design](https://ant.design/) 的 Typography 组件设计，在保持 SoUi 设计风格的前提下，借鉴了其 API 设计思路。
+```
+
+文档结构：
+- 何时使用
+- 代码演示（8个示例）
+- API 表格（Title, Paragraph, Text, Link, CopyConfig, EditableConfig, EllipsisConfig）
+- 设计原则（推荐/避免）
+- 无障碍访问
+- FAQ
+- 相关资源
+
+更新侧边栏配置：
+```typescript
+// .vitepress/config.ts
+{ text: 'Typography 排版', link: 'typography' }
+```
+
+### 4. 创建示例
+
+目录：`SoUi/examples/Typography/`
+
+创建的示例文件：
+- Basic.tsx - 基础用法
+- TextStyle.tsx - 文本样式
+- TextType.tsx - 文本类型
+- Copyable.tsx - 可复制文本
+- Editable.tsx - 可编辑文本
+- Ellipsis.tsx - 文本省略
+- Links.tsx - 链接组件
+- codes.ts - 代码字符串
+
+### 5. 验证构建
+
+```bash
+cd SoUi && npm run build
+```
+
+结果：构建成功，无错误。
+
+## 遇到的问题及解决方案
+
+### 问题 1: TypeScript 类型错误
+**现象**：HeadingTag 动态标签类型推断错误
+
+**解决**：
+```typescript
+// 错误写法
+const HeadingTag = `h${level}` as keyof JSX.IntrinsicElements;
+
+// 正确写法
+const HeadingTag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
+```
+
+### 问题 2: onClick 事件类型不匹配
+**现象**：子组件 onClick 类型与父组件不兼容
+
+**解决**：使用 `Omit` 排除冲突属性，将 onClick 传递给内部 Text 组件
+
+### 问题 3: 示例文件导入路径错误
+**现象**：`Cannot find module '../../index'`
+
+**解决**：改为直接导入组件文件
+```typescript
+// 错误
+import { Typography } from '../../index';
+
+// 正确
+import Typography from '../../src/components/Typography';
+```
+
+## 最终成果
+
+### 文件清单
+```
+src/components/Typography/
+├── index.tsx (615行)
+└── style.less (230行)
+
+src/docs/components/
+└── typography.md (408行)
+   （如果参考了框架，需添加“参考来源”章节）
+
+examples/Typography/
+├── Basic.tsx
+├── TextStyle.tsx
+├── TextType.tsx
+├── Copyable.tsx
+├── Editable.tsx
+├── Ellipsis.tsx
+├── Links.tsx
+└── codes.ts
+```
+
+### 功能特性
+- ✅ 5级标题
+- ✅ 段落文本
+- ✅ 文本装饰（strong, italic, underline, delete, code, mark）
+- ✅ 文本类型（secondary, success, warning, danger）
+- ✅ 复制功能（自定义内容和提示）
+- ✅ 编辑功能（onStart, onChange, onCancel, onFinish）
+- ✅ 省略功能（单行/多行/展开/tooltip）
+- ✅ 链接组件（新窗口/禁用）
+- ✅ 主题集成
+- ✅ 无障碍支持
+
+### 文档质量
+- ✅ 完整的 API 表格
+- ✅ 8个代码示例
+- ✅ 设计原则对比
+- ✅ FAQ 常见问题
+- ✅ 相关资源链接
+
+## 经验总结
+
+### 成功经验
+1. **先询问参考框架**：在开始开发前，必须询问用户是否希望参考主流框架
+2. **查看主题样式**：在编写代码前，必须查看主题配置和设计变量
+3. **参考现有组件**：选择 2-3 个相似组件学习实现模式
+4. 严格按照项目规范命名
+5. 及时修复 TypeScript 错误
+6. 文档示例要全面且可运行
+7. 构建验证不可省略
+8. **如果参考了框架**：必须在文档中添加“参考来源”章节
+9. **主题集成**：确保组件支持全局和组件级主题配置
+
+### 关于参考框架的经验
+- **何时参考**：当用户对 API 设计有特定偏好，或需要与某个生态系统兼容时
+- **如何参考**：研究目标框架的 Props 接口、默认值、变体等，但保持 SoUi 的设计风格
+- **何时不参考**：基础组件或 SoUi 已有明确设计规范时，建议独立实现以保持一致性
+- **文档注明**：如果参考了某个框架，在文档中应注明参考来源
+
+### 关于主题集成的经验
+- **必须先查看**：ConfigProvider 的类型定义和实现方式
+- **使用 CSS 变量**：避免硬编码颜色值，使用 `var()` 函数
+- **优先级规则**：组件级配置 > 全局配置 > CSS 默认值 > Less 默认值
+- **完整支持**：borderRadius、fontSize、colorPrimary、controlHeight 等常用配置
+- **类型定义**：在 ConfigProvider/types.ts 中添加组件级配置类型
+
+### 改进建议
+1. 可以先创建简单的 MVP 版本
+2. 逐步添加高级功能
+3. 每个功能都要有对应示例
+4. 考虑添加单元测试
+
+## 复用指南
+
+基于此案例，创建新组件时：
+
+1. **第一步：询问参考框架**：必须询问用户是否希望参考主流框架（Ant Design、MUI、Chakra UI、Tailwind UI 或不参考）
+2. **第二步：查看主题样式**：阅读 ConfigProvider 和 styles 相关文件，了解主题系统设计
+3. **第三步：参考现有组件**：选择 2-3 个相似组件学习实现模式
+4. **第四步：主题集成设计**：确定组件需要支持哪些主题配置项
+5. **如果用户选择参考框架**：研究该框架的 API 设计，但保持 SoUi 的设计风格
+6. **遵循命名规范**：类名 `soui-` 前缀，PascalCase 组件名
+7. **完整导出类型**：Props、枚举、配置接口都要导出
+8. **文档要详细**：API、示例、设计原则缺一不可
+9. **如果参考了框架**：必须在文档中添加“参考来源”章节
+10. **示例要实用**：覆盖常见使用场景
+11. **构建要验证**：确保无编译错误
+12. **主题要测试**：验证全局和组件级主题配置都能正常工作
+
+---
+
+此案例可作为后续组件开发的参考模板。

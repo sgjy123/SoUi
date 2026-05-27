@@ -1,4 +1,4 @@
-@import '../../styles/variables.less';
+@import "../../styles/variables.less";
 
 // ==================== Steps Component Styles ====================
 
@@ -7,10 +7,16 @@
   --soui-steps-color-primary: var(--soui-primary-color, @primary-color);
   --soui-steps-color-success: var(--soui-success-color, @success-color);
   --soui-steps-color-error: var(--soui-error-color, @error-color);
-  --soui-steps-color-wait: var(--soui-color-text-disabled, @text-color-disabled);
+  --soui-steps-color-wait: var(
+    --soui-color-text-disabled,
+    @text-color-disabled
+  );
   --soui-steps-color-border: var(--soui-border-color-base, @border-color);
   --soui-steps-color-text: var(--soui-color-text, @text-color);
-  --soui-steps-color-text-secondary: var(--soui-color-text-secondary, @text-color-secondary);
+  --soui-steps-color-text-secondary: var(
+    --soui-color-text-secondary,
+    @text-color-secondary
+  );
   --soui-steps-font-size: var(--soui-font-size, @font-size-base);
   --soui-steps-border-radius: var(--soui-border-radius, @border-radius-base);
   --soui-steps-icon-size: 32px;
@@ -39,10 +45,13 @@
     .soui-steps-item {
       flex-direction: column;
       align-items: flex-start;
+      position: relative;
     }
 
     .soui-steps-item-icon-wrapper {
       margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
     }
 
     .soui-steps-item-content {
@@ -50,14 +59,40 @@
       text-align: left;
     }
 
+    // 连接线在 item 级别，从图标右侧延伸到 item 右边缘
     .soui-steps-item-tail {
-      top: 16px;
-      left: 40px;
-      right: 8px;
+      position: absolute;
+      top: calc(50% - 6px);
+      left: calc(var(--soui-steps-icon-size, 32px) + 10px);
+      right: 10px;
+      transform: translateY(-50%);
+      background-color: var(--soui-steps-color-border);
+      transition: all @transition-duration @transition-timing-function;
+
+       &::after {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+         background: linear-gradient(90deg, var(--soui-steps-color-primary) 0%, var(--soui-steps-color-success) 100%);
+         transform: scaleX(0);
+         transform-origin: left;
+         transition: transform @transition-duration @transition-timing-function;
+       }
     }
 
-    &:not(:last-child) .soui-steps-item-tail {
+    .soui-steps-item-finish > .soui-steps-item-tail::after {
+      transform: scaleX(1);
+    }
+
+    &:not(:last-child) > .soui-steps-item-tail {
       display: block;
+    }
+
+    &:last-child > .soui-steps-item-tail {
+      display: none;
     }
   }
 
@@ -102,17 +137,22 @@
     left: 10px;
     right: 10px;
     height: 1px;
+    transform: translateY(-50%);
     background-color: var(--soui-steps-color-border);
     transition: all @transition-duration @transition-timing-function;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(90deg, var(--soui-steps-color-primary) 0%, var(--soui-steps-color-success) 100%);
+      background: linear-gradient(
+        90deg,
+        var(--soui-steps-color-primary) 0%,
+        var(--soui-steps-color-success) 100%
+      );
       transform: scaleX(0);
       transform-origin: left;
       transition: transform @transition-duration @transition-timing-function;
@@ -150,10 +190,6 @@
 
     &:last-child {
       padding-bottom: 0;
-
-      .soui-steps-item-tail {
-        display: none;
-      }
     }
   }
 
@@ -171,20 +207,25 @@
     position: absolute;
     top: calc(50% + 6px);
     left: calc(var(--soui-steps-icon-size, 32px) / 2);
-    bottom
-    : 0;height: calc(50% - 6px);
+    bottom: 0;
+    height: calc(50% - 6px);
     width: 1px;
+    transform: translateX(-50%);
     background-color: var(--soui-steps-color-border);
     transition: all @transition-duration @transition-timing-function;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(180deg, var(--soui-steps-color-primary) 0%, var(--soui-steps-color-success) 100%);
+      background: linear-gradient(
+        180deg,
+        var(--soui-steps-color-primary) 0%,
+        var(--soui-steps-color-success) 100%
+      );
       transform: scaleY(0);
       transform-origin: top;
       transition: transform @transition-duration @transition-timing-function;
@@ -226,7 +267,7 @@
     position: relative;
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       inset: -2px;
       border-radius: 50%;
@@ -306,11 +347,15 @@
       border-color: var(--soui-steps-color-primary);
       background-color: var(--soui-steps-color-primary);
       color: #fff;
-      box-shadow: 0 0 0 4px rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
+      box-shadow: 0 0 0 4px
+        rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
       animation: soui-steps-pulse 2s ease-in-out infinite;
 
       &::before {
-        border-color: rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.3);
+        border-color: rgba(
+          var(--soui-steps-color-primary-rgb, 24, 144, 255),
+          0.3
+        );
       }
     }
 
@@ -322,7 +367,8 @@
     .soui-steps-icon-progress-dot {
       .soui-steps-icon-dot {
         background-color: var(--soui-steps-color-primary);
-        box-shadow: 0 0 0 4px rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
+        box-shadow: 0 0 0 4px
+          rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
       }
     }
   }
@@ -335,7 +381,10 @@
       color: #fff;
 
       &::before {
-        border-color: rgba(var(--soui-steps-color-success-rgb, 82, 196, 26), 0.3);
+        border-color: rgba(
+          var(--soui-steps-color-success-rgb, 82, 196, 26),
+          0.3
+        );
       }
     }
 
@@ -457,6 +506,7 @@
       top: 18px;
       left: 8px;
       right: 8px;
+      transform: translateY(-50%);
     }
 
     // 标签垂直放置时
@@ -483,8 +533,6 @@
 
       &:not(:last-child) .soui-steps-item-tail {
         display: block;
-      }&:last-child .soui-steps-item-tail {
-        display: none;
       }
     }
   }
@@ -517,22 +565,33 @@
 // ==================== Animations ====================
 
 @keyframes soui-steps-pulse {
-  0%, 100% {
-    box-shadow: 0 0 0 4px rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px
+      rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.2);
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.1);
+    box-shadow: 0 0 0 8px
+      rgba(var(--soui-steps-color-primary-rgb, 24, 144, 255), 0.1);
   }
 }
 
 @keyframes soui-steps-shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
-  10%, 30%, 50%, 70%, 90% {
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
     transform: translateX(-2px);
   }
-  20%, 40%, 60%, 80% {
+  20%,
+  40%,
+  60%,
+  80% {
     transform: translateX(2px);
   }
 }
