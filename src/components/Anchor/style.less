@@ -1,0 +1,223 @@
+@import '../../styles/variables.less';
+
+// ==================== Anchor Wrapper ====================
+
+.soui-anchor-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+// ==================== Anchor Container ====================
+
+.soui-anchor {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+
+  // === 局部默认值（仅在没有父级提供时生效） ===
+  // 使用 var() 的 fallback 链：ConfigProvider 提供 → 全局令牌 → Less 变量
+  // 不在本作用域内声明同名变量，避免覆盖 ConfigProvider 的父级继承值
+
+  // 固定模式
+  &.soui-anchor-fixed {
+    z-index: 10;
+    background-color: var(--soui-anchor-bg, @bg-color-base);
+  }
+
+  // 静态模式
+  &.soui-anchor-static {
+    position: relative;
+  }
+
+  // 非固定模式也显示指示器
+  &.soui-anchor-show-ink {
+    --soui-anchor-ink-ball-display: block;
+  }
+
+  // ==================== 垂直方向 ====================
+
+  &.soui-anchor-vertical {
+    .soui-anchor-list {
+      position: relative;
+    }
+
+    .soui-anchor-link {
+      // padding-block 受主题配置控制，inline-start 预留指示器空间
+      padding: var(--soui-anchor-link-padding-block, 4px)
+               var(--soui-anchor-link-padding-inline-end, 16px)
+               var(--soui-anchor-link-padding-block, 4px)
+               calc(var(--soui-anchor-link-padding-inline-start, 16px) + var(--soui-anchor-ink-width, 3px));
+
+      &-title {
+        display: block;
+        position: relative;
+        font-size: var(--soui-anchor-font-size, var(--soui-font-size, @font-size-base));
+        line-height: 1.5715;
+        color: var(--soui-anchor-color-text, var(--soui-color-text, @text-color));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: color 0.2s ease;
+        cursor: pointer;
+        text-decoration: none;
+        padding: 2px 0;
+
+        &:hover {
+          color: var(--soui-anchor-color-primary, var(--soui-primary-color, @primary-color));
+        }
+      }
+
+      &-children {
+        padding-left: 0;
+      }
+    }
+
+    .soui-anchor-link-active {
+      > .soui-anchor-link-title {
+        color: var(--soui-anchor-color-primary, var(--soui-primary-color, @primary-color));
+        font-weight: 500;
+      }
+    }
+
+    // 嵌套 link 缩进
+    .soui-anchor-link .soui-anchor-link {
+      padding-left: calc(var(--soui-anchor-link-padding-inline-start, 16px) * 1.5);
+    }
+    .soui-anchor-link .soui-anchor-link .soui-anchor-link {
+      padding-left: calc(var(--soui-anchor-link-padding-inline-start, 16px) * 2);
+    }
+
+    // 指示器（垂直方向）
+    .soui-anchor-ink {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--soui-anchor-ink-width, 2px);
+      height: 20px;
+      background: var(--soui-anchor-color-primary, var(--soui-primary-color, @primary-color));
+      border-radius: 1px;
+      opacity: 0;
+      transition: top 0.2s ease-in-out, height 0.2s ease-in-out, opacity 0.2s ease;
+      z-index: 1;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: var(--soui-anchor-ink-ball-size, 8px);
+        height: var(--soui-anchor-ink-ball-size, 8px);
+        background: var(--soui-anchor-color-primary, var(--soui-primary-color, @primary-color));
+        border-radius: 50%;
+        display: var(--soui-anchor-ink-ball-display, none);
+      }
+    }
+  }
+
+  // ==================== 水平方向 ====================
+
+  &.soui-anchor-horizontal {
+    flex-direction: row;
+    padding: 0 4px;
+
+    .soui-anchor-list {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0;
+      position: relative;
+      overflow-x: auto;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    .soui-anchor-link {
+      flex-shrink: 0;
+      padding: var(--soui-anchor-link-padding-block, 12px)
+               var(--soui-anchor-link-padding-inline-start, 16px);
+
+      &-title {
+        display: block;
+        font-size: var(--soui-anchor-font-size, var(--soui-font-size, @font-size-base));
+        line-height: 1.5715;
+        color: var(--soui-anchor-color-text, var(--soui-color-text, @text-color));
+        white-space: nowrap;
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        padding: 4px 0;
+
+        &:hover {
+          color: var(--soui-anchor-color-primary, var(--soui-primary-color, @primary-color));
+        }
+      }
+
+      &-children {
+        display: none; // 水平方向不支持嵌套
+      }
+    }
+
+    .soui-anchor-link-active {
+      > .soui-anchor-link-title {
+        color: var(--soui-anchor-color-primary, var(--soui-primary-color, @primary-color));
+        font-weight: 500;
+      }
+    }
+
+    // 指示器（水平方向）
+    .soui-anchor-ink {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: var(--soui-anchor-ink-width, 2px);
+      width: 20px;
+      background: var(--soui-anchor-color-primary, var(--soui-primary-color, @primary-color));
+      border-radius: 1px;
+      opacity: 0;
+      transition: left 0.2s ease-in-out, width 0.2s ease-in-out, opacity 0.2s ease;
+      z-index: 1;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 50%;
+        transform: translate(-50%, 50%);
+        width: var(--soui-anchor-ink-ball-size, 8px);
+        height: var(--soui-anchor-ink-ball-size, 8px);
+        background: var(--soui-anchor-color-primary, var(--soui-primary-color, @primary-color));
+        border-radius: 50%;
+        display: var(--soui-anchor-ink-ball-display, none);
+      }
+    }
+  }
+
+  // ==================== 固定模式视觉增强 ====================
+
+  &.soui-anchor-fixed {
+    // 左侧添加一条细边框
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: @border-color-split;
+      display: var(--soui-anchor-border-display, block);
+    }
+  }
+}
+
+// ==================== 响应式适配 ====================
+
+@media (max-width: @screen-md) {
+  .soui-anchor-wrapper {
+    display: none; // 小屏幕默认隐藏，由业务决定是否显示
+  }
+}

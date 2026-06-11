@@ -71,6 +71,10 @@ export type { BreadcrumbProps, BreadcrumbItemProps } from './components/Breadcru
 export { default as Steps } from './components/Steps';
 export type { StepsProps, StepItemProps, StepStatus, StepsDirection, StepsSize, StepsLabelPlacement } from './components/Steps';
 
+// Anchor Component
+export { default as Anchor } from './components/Anchor';
+export type { AnchorProps, AnchorItem, AnchorLinkProps, AnchorDirection } from './components/Anchor';
+
 // Utils
 export * from './utils';
 

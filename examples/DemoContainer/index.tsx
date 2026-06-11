@@ -11,6 +11,8 @@ import Layout from '../../src/components/Layout';
 import FloatButton from '../../src/components/FloatButton';
 import Breadcrumb from '../../src/components/Breadcrumb';
 import Steps from '../../src/components/Steps';
+import Anchor from '../../src/components/Anchor';
+import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
 interface DemoContainerProps {
@@ -56,6 +58,9 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Breadcrumb,
     Steps,
     Step: Steps.Step,
+    Anchor,
+    AnchorLink: Anchor.Link,
+    ConfigProvider,
     ...scope,
   };
 

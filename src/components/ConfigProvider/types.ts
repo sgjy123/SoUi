@@ -310,6 +310,19 @@ export interface ComponentThemeConfig {
     /** 图标尺寸（像素） */
     iconSize?: number;
   };
+  /** Anchor 锚点组件配置 */
+  Anchor?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 链接内边距（像素） */
+    linkPadding?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 指示器宽度（像素） */
+    inkWidth?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

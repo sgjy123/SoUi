@@ -30,6 +30,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const layoutTheme = mergedTheme.components?.Layout || {};
     // 获取 Menu 组件级配置
     const menuTheme = mergedTheme.components?.Menu || {};
+    // 获取 Anchor 组件级配置
+    const anchorTheme = mergedTheme.components?.Anchor || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -206,6 +208,14 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-menu-item-selected-color-component': menuTheme.itemSelectedColor,
       '--soui-menu-border-radius-component': menuTheme.borderRadius ? `${menuTheme.borderRadius}px` : undefined,
       '--soui-menu-font-size-component': menuTheme.fontSize ? `${menuTheme.fontSize}px` : undefined,
+      
+      // ==================== Anchor 组件配置 ====================
+      // 第2层: Anchor 配置点 (引用设计令牌)
+      '--soui-anchor-color-primary': anchorTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-anchor-color-text': anchorTheme.colorText || '@text-color',
+      '--soui-anchor-link-padding-block': anchorTheme.linkPadding ? `${anchorTheme.linkPadding}px` : undefined,
+      '--soui-anchor-font-size': anchorTheme.fontSize ? `${anchorTheme.fontSize}px` : undefined,
+      '--soui-anchor-ink-width': anchorTheme.inkWidth ? `${anchorTheme.inkWidth}px` : undefined,
     } as any;
   }, [mergedTheme]);
 
