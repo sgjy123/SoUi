@@ -186,12 +186,15 @@ const Anchor: React.FC<AnchorProps> = (props) => {
   const [inkStyle, setInkStyle] = useState<React.CSSProperties>({});
 
   // Refs
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const inkRef = useRef<HTMLDivElement>(null);
   const linksRef = useRef<Map<string, HTMLElement>>(new Map());
   const scrollRafRef = useRef<number>(0);
   const activeLinkRef = useRef<string>('');
   const isAffixedRef = useRef<boolean>(false);
+  // 缓存 affix 激活前的尺寸，避免 fixed 后测量为 0
+  const preAffixSizeRef = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
 
   const actualTargetOffset = targetOffset ?? offsetTop;
 
@@ -343,18 +346,26 @@ const Anchor: React.FC<AnchorProps> = (props) => {
         updateInkPosition(currentActive);
       }
 
-      // 更新 affix 状态（使用 ref 避免闭包陈旧值）
-      if (affix && rootRef.current) {
+      // 更新 affix 状态：基于 wrapper 在文档流中的原始位置判断
+      // 对齐 antd Affix 组件的行为 —— 使用 placeholder 定位，而非 fixed 元素自身
+      if (affix && wrapperRef.current) {
         const container = getScrollContainer();
-        const rootRect = rootRef.current.getBoundingClientRect();
+        const wrapperRect = wrapperRef.current.getBoundingClientRect();
         const containerTop =
           container === window ? 0 : (container as HTMLElement).getBoundingClientRect().top;
-        const rootTop = rootRect.top - containerTop;
+        const wrapperTop = wrapperRect.top - containerTop;
 
-        if (rootTop <= offsetTop && !isAffixedRef.current) {
+        if (wrapperTop <= offsetTop && !isAffixedRef.current) {
+          // 切换前缓存当前尺寸，防止 fixed 后测量为 0
+          if (rootRef.current) {
+            preAffixSizeRef.current = {
+              width: wrapperRef.current.offsetWidth,
+              height: rootRef.current.offsetHeight,
+            };
+          }
           isAffixedRef.current = true;
           setIsAffixed(true);
-        } else if (rootTop > offsetTop && isAffixedRef.current) {
+        } else if (wrapperTop > offsetTop && isAffixedRef.current) {
           isAffixedRef.current = false;
           setIsAffixed(false);
         }
@@ -560,20 +571,36 @@ const Anchor: React.FC<AnchorProps> = (props) => {
     className
   );
 
-  // affix 固定样式
-  const wrapperStyle: React.CSSProperties = {};
-  if (affix) {
-    if (isAffixed) {
-      wrapperStyle.position = 'fixed';
-      wrapperStyle.top = offsetTop;
-    }
-    // 保留占位空间
-    wrapperStyle.minHeight = rootRef.current ? `${rootRef.current.offsetHeight}px` : undefined;
+  // affix 固定样式（对齐 antd Affix 的 placeholder 占位机制）
+  // 在 render 阶段缓存非 fixed 状态下的尺寸，供 affix 激活后使用
+  if (!isAffixed && wrapperRef.current && rootRef.current) {
+    preAffixSizeRef.current = {
+      width: wrapperRef.current.offsetWidth,
+      height: rootRef.current.offsetHeight,
+    };
   }
 
+  // wrapper 留在文档流中，通过显式尺寸撑住原始空间
+  const wrapperStyle: React.CSSProperties = {};
+  if (affix && isAffixed) {
+    wrapperStyle.width = preAffixSizeRef.current.width;
+    wrapperStyle.height = preAffixSizeRef.current.height;
+  }
+
+  // 内容元素的 fixed 样式：仅在 affix 激活时应用
+  const rootFixedStyle: React.CSSProperties = {};
+  if (affix && isAffixed) {
+    rootFixedStyle.position = 'fixed';
+    rootFixedStyle.top = offsetTop;
+    rootFixedStyle.width = preAffixSizeRef.current.width;
+  }
+
+  // 合并行内样式（anchorStyle + fixed 样式）
+  const mergedRootStyle: React.CSSProperties = { ...anchorStyle, ...rootFixedStyle };
+
   return (
-    <div className="soui-anchor-wrapper" style={wrapperStyle}>
-      <div ref={rootRef} className={anchorClassName} style={anchorStyle} {...rest}>
+    <div ref={wrapperRef} className="soui-anchor-wrapper" style={wrapperStyle}>
+      <div ref={rootRef} className={anchorClassName} style={mergedRootStyle} {...rest}>
         {/* 指示器 */}
         <div
           ref={inkRef}
