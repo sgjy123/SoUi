@@ -36,6 +36,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const alertTheme = mergedTheme.components?.Alert || {};
     // 获取 Message 组件级配置
     const messageTheme = mergedTheme.components?.Message || {};
+    // 获取 Progress 组件级配置
+    const progressTheme = mergedTheme.components?.Progress || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -242,6 +244,15 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-message-border-radius': messageTheme.borderRadius ? `${messageTheme.borderRadius}px` : undefined,
       '--soui-message-font-size': messageTheme.fontSize ? `${messageTheme.fontSize}px` : undefined,
       '--soui-message-max-width': messageTheme.maxWidth ? `${messageTheme.maxWidth}px` : undefined,
+
+      // ==================== Progress 组件配置 ====================
+      // 第2层: Progress 配置点 (引用设计令牌)
+      '--soui-progress-border-radius': progressTheme.borderRadius ? `${progressTheme.borderRadius}px` : undefined,
+      '--soui-progress-font-size': progressTheme.fontSize ? `${progressTheme.fontSize}px` : undefined,
+      '--soui-progress-color-primary': progressTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-progress-color-success': progressTheme.colorSuccess || mergedTheme.successColor,
+      '--soui-progress-color-error': progressTheme.colorError || mergedTheme.errorColor,
+      '--soui-progress-trail-color': progressTheme.colorTrail,
     } as any;
   }, [mergedTheme]);
 

@@ -359,6 +359,21 @@ export interface ComponentThemeConfig {
     /** 最大宽度（像素） */
     maxWidth?: number;
   };
+  /** Progress 进度条组件配置 */
+  Progress?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 主色 */
+    colorPrimary?: string;
+    /** 成功色 */
+    colorSuccess?: string;
+    /** 错误色 */
+    colorError?: string;
+    /** 轨道颜色 */
+    colorTrail?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

@@ -83,6 +83,10 @@ export type { AlertProps, AlertType } from './components/Alert';
 export { default as Message } from './components/Message';
 export type { MessageConfig, MessageType, MessageInstance } from './components/Message';
 
+// Progress Component
+export { default as Progress } from './components/Progress';
+export type { ProgressProps, ProgressType, ProgressStatus, ProgressSize, ProgressGradient, ProgressSuccess } from './components/Progress';
+
 // Utils
 export * from './utils';
 
