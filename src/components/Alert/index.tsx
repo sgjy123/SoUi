@@ -36,10 +36,10 @@ export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
 // ==================== 默认图标映射 ====================
 
 const defaultIconMap: Record<AlertType, string> = {
-  success: 'CheckCircle',
+  success: 'CheckOne',
   info: 'Info',
-  warning: 'AttentionTriangle',
-  error: 'CloseCircle',
+  warning: 'Info',
+  error: 'CloseOne',
 };
 
 // ==================== Component ====================
@@ -64,8 +64,6 @@ const Alert: React.FC<AlertProps> = ({
 
   // 获取主题配置
   const alertTheme = useComponentTheme('Alert');
-  const globalTheme = useTheme();
-
   // banner 模式下默认为 warning 类型
   const effectiveType: AlertType = banner && type === 'info' ? 'warning' : type;
 
