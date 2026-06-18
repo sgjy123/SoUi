@@ -256,6 +256,15 @@ export const docsConfig: MenuGroup[] = [
           { key: 'progress-steps', label: 'Progress 步骤', componentPath: 'Progress', exampleName: 'Steps', description: '步骤进度条。' },
         ],
       },
+      {
+        key: 'notification',
+        label: 'Notification 通知提醒框',
+        icon: 'MessageOne',
+        items: [
+          { key: 'notification-basic', label: 'Notification 基础用法', componentPath: 'Notification', exampleName: 'Basic', description: '四种类型的通知提醒框。' },
+          { key: 'notification-placement', label: 'Notification 位置', componentPath: 'Notification', exampleName: 'Placement', description: '设置通知出现的位置。' },
+        ],
+      },
     ],
   },
   {

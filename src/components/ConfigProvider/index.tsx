@@ -38,6 +38,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const messageTheme = mergedTheme.components?.Message || {};
     // 获取 Progress 组件级配置
     const progressTheme = mergedTheme.components?.Progress || {};
+    // 获取 Notification 组件级配置
+    const notificationTheme = mergedTheme.components?.Notification || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -253,6 +255,17 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-progress-color-success': progressTheme.colorSuccess || mergedTheme.successColor,
       '--soui-progress-color-error': progressTheme.colorError || mergedTheme.errorColor,
       '--soui-progress-trail-color': progressTheme.colorTrail,
+
+      // ==================== Notification 组件配置 ====================
+      // 第2层: Notification 配置点 (引用设计令牌)
+      '--soui-notification-border-radius': notificationTheme.borderRadius ? `${notificationTheme.borderRadius}px` : undefined,
+      '--soui-notification-font-size': notificationTheme.fontSize ? `${notificationTheme.fontSize}px` : undefined,
+      '--soui-notification-description-font-size': notificationTheme.descriptionFontSize ? `${notificationTheme.descriptionFontSize}px` : undefined,
+      '--soui-notification-icon-size': notificationTheme.iconSize ? `${notificationTheme.iconSize}px` : undefined,
+      '--soui-notification-close-icon-size': notificationTheme.closeIconSize ? `${notificationTheme.closeIconSize}px` : undefined,
+      '--soui-notification-padding': notificationTheme.padding,
+      '--soui-notification-z-index': notificationTheme.zIndex?.toString(),
+      '--soui-notification-bg-color': notificationTheme.colorBg,
     } as any;
   }, [mergedTheme]);
 

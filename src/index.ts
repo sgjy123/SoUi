@@ -87,6 +87,10 @@ export type { MessageConfig, MessageType, MessageInstance } from './components/M
 export { default as Progress } from './components/Progress';
 export type { ProgressProps, ProgressType, ProgressStatus, ProgressSize, ProgressGradient, ProgressSuccess } from './components/Progress';
 
+// Notification Component
+export { default as Notification } from './components/Notification';
+export type { NotificationConfig, NotificationPlacement, NotificationType, NotificationApi, NotificationGlobalConfig } from './components/Notification';
+
 // Utils
 export * from './utils';
 

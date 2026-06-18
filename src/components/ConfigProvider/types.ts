@@ -374,6 +374,25 @@ export interface ComponentThemeConfig {
     /** 轨道颜色 */
     colorTrail?: string;
   };
+  /** Notification 通知提醒框组件配置 */
+  Notification?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 描述文字字号（像素） */
+    descriptionFontSize?: number;
+    /** 图标尺寸（像素） */
+    iconSize?: number;
+    /** 关闭按钮尺寸（像素） */
+    closeIconSize?: number;
+    /** 内边距 */
+    padding?: string;
+    /** z-index */
+    zIndex?: number;
+    /** 背景色 */
+    colorBg?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

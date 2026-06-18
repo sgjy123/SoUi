@@ -1,0 +1,138 @@
+@import '../../styles/variables.less';
+
+// ==================== Notification Container ====================
+
+.soui-notification {
+  position: fixed;
+  z-index: var(--soui-z-index-notification, @z-index-notification);
+  max-width: calc(100vw - 32px);
+  
+  &-topLeft {
+    top: var(--soui-notification-top, 24px);
+    left: var(--soui-notification-left, 24px);
+  }
+  
+  &-topRight {
+    top: var(--soui-notification-top, 24px);
+    right: var(--soui-notification-right, 24px);
+  }
+  
+  &-bottomLeft {
+    bottom: var(--soui-notification-bottom, 24px);
+    left: var(--soui-notification-left, 24px);
+  }
+  
+  &-bottomRight {
+    bottom: var(--soui-notification-bottom, 24px);
+    right: var(--soui-notification-right, 24px);
+  }
+}
+
+// ==================== Notice Item ====================
+
+.soui-notification-notice {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--soui-notification-padding, 16px);
+  margin-bottom: var(--soui-margin-sm, @margin-sm);
+  background-color: var(--soui-notification-bg-color, @bg-color-base);
+  border-radius: var(--soui-notification-border-radius, @border-radius-base);
+  box-shadow: var(--soui-box-shadow-secondary, @box-shadow-secondary);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all @transition-duration @transition-timing-function;
+  cursor: pointer;
+  overflow: hidden;
+  
+  &-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  // 状态颜色
+  &-success {
+    .soui-notification-notice-icon {
+      color: var(--soui-success-color, @success-color);
+    }
+  }
+  
+  &-info {
+    .soui-notification-notice-icon {
+      color: var(--soui-primary-color, @primary-color);
+    }
+  }
+  
+  &-warning {
+    .soui-notification-notice-icon {
+      color: var(--soui-warning-color, @warning-color);
+    }
+  }
+  
+  &-error {
+    .soui-notification-notice-icon {
+      color: var(--soui-error-color, @error-color);
+    }
+  }
+  
+  // 内容区域
+  &-content {
+    flex: 1;
+    min-width: 0;
+    margin-right: var(--soui-margin-sm, @margin-sm);
+  }
+  
+  // 图标
+  &-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--soui-notification-icon-size, 20px);
+    margin-right: var(--soui-margin-sm, @margin-sm);
+    vertical-align: middle;
+  }
+  
+  // 标题
+  &-message {
+    font-size: var(--soui-notification-font-size, @font-size-base);
+    font-weight: 500;
+    line-height: var(--soui-line-height-base, @line-height-base);
+    color: var(--soui-text-color, @text-color);
+    word-break: break-word;
+  }
+  
+  // 描述
+  &-description {
+    margin-top: var(--soui-margin-xs, @margin-xs);
+    font-size: var(--soui-notification-description-font-size, @font-size-sm);
+    line-height: var(--soui-line-height-base, @line-height-base);
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    word-break: break-word;
+  }
+  
+  // 关闭按钮
+  &-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-left: var(--soui-margin-sm, @margin-sm);
+    font-size: var(--soui-notification-close-icon-size, 16px);
+    line-height: 1;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: color @transition-duration @transition-timing-function;
+    
+    &:hover {
+      color: var(--soui-text-color, @text-color);
+    }
+    
+    svg {
+      width: 1em;
+      height: 1em;
+    }
+  }
+}

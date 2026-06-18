@@ -15,6 +15,7 @@ import Anchor from '../../src/components/Anchor';
 import Alert from '../../src/components/Alert';
 import Message from '../../src/components/Message';
 import Progress from '../../src/components/Progress';
+import Notification from '../../src/components/Notification';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -66,6 +67,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Alert,
     Message,
     Progress,
+    Notification,
     ConfigProvider,
     ...scope,
   };
