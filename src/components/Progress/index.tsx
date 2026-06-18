@@ -191,6 +191,19 @@ const LineProgress: React.FC<ProgressProps> = ({
     const stepWidth = `calc((100% - ${(steps - 1) * 2}px) / ${steps})`;
     const activeSteps = Math.round((clampedPercent / 100) * steps);
 
+    // 根据 status 确定激活步骤的颜色
+    let activeStepColor: string;
+    if (status === 'success') {
+      activeStepColor = success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)';
+    } else if (status === 'exception') {
+      activeStepColor = typeof strokeColor === 'string' ? strokeColor : parseStrokeColor(strokeColor);
+      if (!activeStepColor) {
+        activeStepColor = 'var(--soui-progress-color-error, #ff4d4f)';
+      }
+    } else {
+      activeStepColor = success?.strokeColor || parseStrokeColor(strokeColor);
+    }
+
     return (
       <div
         className={classNames('soui-progress', 'soui-progress-steps', `soui-progress-status-${status}`, className)}
@@ -201,7 +214,7 @@ const LineProgress: React.FC<ProgressProps> = ({
           {Array.from({ length: steps }).map((_, index) => {
             const isActive = index < activeSteps;
             const stepColor = isActive
-              ? (success?.strokeColor || parseStrokeColor(strokeColor))
+              ? activeStepColor
               : (trailColor || 'var(--soui-progress-trail-color, #f5f5f5)');
 
             return (
@@ -230,7 +243,19 @@ const LineProgress: React.FC<ProgressProps> = ({
   }
 
   // 普通线形模式
-  const barColor = parseStrokeColor(strokeColor);
+  // 根据 status 确定颜色
+  let barColor: string;
+  if (status === 'success') {
+    barColor = success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)';
+  } else if (status === 'exception') {
+    barColor = typeof strokeColor === 'string' ? strokeColor : parseStrokeColor(strokeColor);
+    if (!barColor) {
+      barColor = 'var(--soui-progress-color-error, #ff4d4f)';
+    }
+  } else {
+    barColor = parseStrokeColor(strokeColor);
+  }
+  
   const trackBg = trailColor || 'var(--soui-progress-trail-color, #f5f5f5)';
 
   const barStyle: React.CSSProperties = {
@@ -339,7 +364,19 @@ const CircleProgress: React.FC<ProgressProps> = ({
   const progressDashOffset = arcLength - (clampedPercent / 100) * (totalAngle / 360) * circumference;
   const successDashOffset = arcLength - (clampedSuccessPercent / 100) * (totalAngle / 360) * circumference;
 
-  const barColor = parseStrokeColor(strokeColor);
+  // 根据 status 确定颜色
+  let barColor: string;
+  if (status === 'success') {
+    barColor = success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)';
+  } else if (status === 'exception') {
+    barColor = typeof strokeColor === 'string' ? strokeColor : parseStrokeColor(strokeColor);
+    if (!barColor) {
+      barColor = 'var(--soui-progress-color-error, #ff4d4f)';
+    }
+  } else {
+    barColor = parseStrokeColor(strokeColor);
+  }
+  
   const trackColor = trailColor || 'var(--soui-progress-trail-color, #f5f5f5)';
   const successColor = success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)';
 

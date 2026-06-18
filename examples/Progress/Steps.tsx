@@ -7,7 +7,7 @@ const Steps: React.FC = () => {
       <Progress percent={30} steps={5} />
       <Progress percent={50} steps={5} status="active" />
       <Progress percent={70} steps={5} status="exception" />
-      <Progress percent={100} steps={5} />
+      <Progress percent={100} steps={5} status="success" />
       <Progress percent={60} steps={8} />
     </Space>
   );

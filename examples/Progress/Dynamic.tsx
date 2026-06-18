@@ -3,19 +3,34 @@ import { Progress, Button, Space } from '../../src';
 
 const Dynamic: React.FC = () => {
   const [percent, setPercent] = useState(0);
+  const [status, setStatus] = useState('active');
 
   const increase = () => {
-    setPercent((prev) => Math.min(100, prev + 10));
+    setPercent((prev) => {
+      if (prev + 10 < 100) {
+          setStatus('active');
+      } else {
+          setStatus('success');
+      }
+     return  Math.min(100, prev + 10)
+    });
   };
 
   const decrease = () => {
-    setPercent((prev) => Math.max(0, prev - 10));
+    setPercent((prev) => {
+      if (prev + 10 < 100) {
+          setStatus('active');
+      } else {
+          setStatus('success');
+      }
+     return  Math.max(0, prev - 10)
+    });
   };
 
   return (
     <Space direction="vertical" style={{ width: '100%' }}>
-      <Progress percent={percent} />
-      <Progress type="circle" percent={percent} />
+      <Progress percent={percent} status={status} />
+      <Progress type="circle" percent={percent} status={status} />
       <Space>
         <Button onClick={decrease} disabled={percent === 0}>
           减少
