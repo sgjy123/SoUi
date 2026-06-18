@@ -265,6 +265,16 @@ export const docsConfig: MenuGroup[] = [
           { key: 'notification-placement', label: 'Notification 位置', componentPath: 'Notification', exampleName: 'Placement', description: '设置通知出现的位置。' },
         ],
       },
+      {
+        key: 'loading',
+        label: 'Loading 加载中',
+        icon: 'LoadingThree',
+        items: [
+          { key: 'loading-basic', label: 'Loading 基础用法', componentPath: 'Loading', exampleName: 'Basic', description: '三种尺寸的加载指示器。' },
+          { key: 'loading-nested', label: 'Loading 包裹内容', componentPath: 'Loading', exampleName: 'Nested', description: '将内容包裹在加载中状态。' },
+          { key: 'loading-custom', label: 'Loading 自定义', componentPath: 'Loading', exampleName: 'Custom', description: '自定义加载指示器和描述文案。' },
+        ],
+      },
     ],
   },
   {

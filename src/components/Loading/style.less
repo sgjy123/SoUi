@@ -1,0 +1,165 @@
+@import '../../styles/variables.less';
+
+// ==================== Animations ====================
+@keyframes soui-loading-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes soui-loading-dot-fade {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.75);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ==================== Mixins ====================
+.loading-size(@size) {
+  width: @size;
+  height: @size;
+}
+
+// ==================== Main Styles ====================
+.soui-loading {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--soui-loading-color-primary, @primary-color);
+  font-size: var(--soui-loading-font-size, @font-size-base);
+
+  // === 尺寸 ===
+  &-sm {
+    .soui-loading-dot-spin {
+      .loading-size(var(--soui-loading-dot-size-sm, 14px));
+    }
+  }
+
+  &-lg {
+    .soui-loading-dot-spin {
+      .loading-size(var(--soui-loading-dot-size-lg, 32px));
+    }
+  }
+
+  // === 默认尺寸 ===
+  .soui-loading-dot-spin {
+    .loading-size(var(--soui-loading-dot-size, 20px));
+  }
+
+  // === 带文字 ===
+  &-show-text {
+    .soui-loading-dot-spin {
+      margin-bottom: 8px;
+    }
+  }
+
+  // === 加载文字 ===
+  &-text {
+    color: var(--soui-loading-color-primary, @primary-color);
+    font-size: var(--soui-loading-font-size, @font-size-base);
+    line-height: 1.5;
+  }
+
+  // === 旋转动画容器 ===
+  &-dot-spin {
+    position: relative;
+    display: inline-block;
+    animation: soui-loading-spin 1.2s infinite linear;
+  }
+
+  // === 四个点 ===
+  &-dot-item {
+    position: absolute;
+    display: block;
+    width: 45%;
+    height: 45%;
+    background-color: currentColor;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: soui-loading-dot-fade 1s infinite linear;
+
+    &:nth-child(1) {
+      top: 0;
+      left: 0;
+      animation-delay: 0s;
+    }
+
+    &:nth-child(2) {
+      top: 0;
+      right: 0;
+      animation-delay: 0.4s;
+    }
+
+    &:nth-child(3) {
+      right: 0;
+      bottom: 0;
+      animation-delay: 0.8s;
+    }
+
+    &:nth-child(4) {
+      bottom: 0;
+      left: 0;
+      animation-delay: 1.2s;
+    }
+  }
+
+  // === 自定义指示器 ===
+  &-custom-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// ==================== Nested Loading (包裹模式) ====================
+.soui-loading-nested-loading {
+  position: relative;
+}
+
+.soui-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--soui-loading-z-index, 4);
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: var(--soui-loading-border-radius, @border-radius-base);
+}
+
+.soui-loading-container {
+  position: relative;
+  transition: opacity 0.3s @transition-timing-function;
+
+  &.soui-loading-blur {
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: transparent;
+      pointer-events: all;
+    }
+  }
+}

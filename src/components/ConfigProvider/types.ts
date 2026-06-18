@@ -393,6 +393,19 @@ export interface ComponentThemeConfig {
     /** 背景色 */
     colorBg?: string;
   };
+  /** Loading 加载中组件配置 */
+  Loading?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 默认尺寸加载图标大小（像素） */
+    dotSize?: number;
+    /** 小号加载图标大小（像素） */
+    dotSizeSM?: number;
+    /** 大号加载图标大小（像素） */
+    dotSizeLG?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

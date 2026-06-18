@@ -91,6 +91,10 @@ export type { ProgressProps, ProgressType, ProgressStatus, ProgressSize, Progres
 export { default as Notification } from './components/Notification';
 export type { NotificationConfig, NotificationPlacement, NotificationType, NotificationApi, NotificationGlobalConfig } from './components/Notification';
 
+// Loading Component
+export { default as Loading } from './components/Loading';
+export type { LoadingProps, LoadingSize } from './components/Loading';
+
 // Utils
 export * from './utils';
 

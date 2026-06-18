@@ -40,6 +40,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const progressTheme = mergedTheme.components?.Progress || {};
     // 获取 Notification 组件级配置
     const notificationTheme = mergedTheme.components?.Notification || {};
+    // 获取 Loading 组件级配置
+    const loadingTheme = mergedTheme.components?.Loading || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -266,6 +268,14 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-notification-padding': notificationTheme.padding,
       '--soui-notification-z-index': notificationTheme.zIndex?.toString(),
       '--soui-notification-bg-color': notificationTheme.colorBg,
+
+      // ==================== Loading 组件配置 ====================
+      // 第2层: Loading 配置点 (引用设计令牌)
+      '--soui-loading-color-primary': loadingTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-loading-font-size': loadingTheme.fontSize ? `${loadingTheme.fontSize}px` : undefined,
+      '--soui-loading-dot-size': loadingTheme.dotSize ? `${loadingTheme.dotSize}px` : undefined,
+      '--soui-loading-dot-size-sm': loadingTheme.dotSizeSM ? `${loadingTheme.dotSizeSM}px` : undefined,
+      '--soui-loading-dot-size-lg': loadingTheme.dotSizeLG ? `${loadingTheme.dotSizeLG}px` : undefined,
     } as any;
   }, [mergedTheme]);
 
