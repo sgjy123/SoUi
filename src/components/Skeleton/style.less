@@ -1,0 +1,153 @@
+@import '../../styles/variables.less';
+
+// ==================== Animations ====================
+@keyframes soui-skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+// ==================== Mixins ====================
+.skeleton-bg() {
+  background: var(--soui-skeleton-color-bg, @bg-color-disable);
+}
+
+.skeleton-active() {
+  background: linear-gradient(
+    90deg,
+    var(--soui-skeleton-color-bg, @bg-color-disable) 25%,
+    var(--soui-skeleton-color-highlight, #f0f0f0) 37%,
+    var(--soui-skeleton-color-bg, @bg-color-disable) 63%
+  );
+  background-size: 400% 100%;
+  animation: soui-skeleton-loading 1.5s ease infinite;
+}
+
+// ==================== Main Styles ====================
+.soui-skeleton {
+  display: flex;
+  align-items: flex-start;
+
+  &-with-avatar {
+    .soui-skeleton-header {
+      margin-right: var(--soui-skeleton-avatar-margin, 16px);
+    }
+  }
+
+  // === 头部（头像区域）===
+  &-header {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  // === 内容区域 ===
+  &-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  // === 标题占位 ===
+  &-title {
+    .skeleton-bg();
+    height: var(--soui-skeleton-title-height, 16px);
+    border-radius: var(--soui-skeleton-border-radius, @border-radius-sm);
+    margin-bottom: var(--soui-skeleton-title-margin-bottom, 16px);
+  }
+
+  // === 段落占位 ===
+  &-paragraph {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    &-row {
+      .skeleton-bg();
+      height: var(--soui-skeleton-paragraph-height, 16px);
+      border-radius: var(--soui-skeleton-border-radius, @border-radius-sm);
+      margin-bottom: var(--soui-skeleton-paragraph-gap, 12px);
+
+      &:last-child {
+        margin-bottom: 0;
+        width: 61%;
+      }
+    }
+  }
+
+  // === 圆角模式 ===
+  &-round {
+    .soui-skeleton-title {
+      border-radius: var(--soui-skeleton-border-radius-lg, @border-radius-base);
+    }
+    .soui-skeleton-paragraph-row {
+      border-radius: var(--soui-skeleton-border-radius-lg, @border-radius-base);
+    }
+  }
+
+  // === 动画效果 ===
+  &-active {
+    .soui-skeleton-title,
+    .soui-skeleton-paragraph-row,
+    .soui-skeleton-avatar,
+    .soui-skeleton-button,
+    .soui-skeleton-input,
+    .soui-skeleton-image {
+      .skeleton-active();
+    }
+  }
+}
+
+// ==================== Avatar 占位 ====================
+.soui-skeleton-avatar {
+  .skeleton-bg();
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
+// ==================== Button 占位 ====================
+.soui-skeleton-button {
+  .skeleton-bg();
+  display: inline-block;
+  border-radius: var(--soui-skeleton-border-radius, @border-radius-sm);
+
+  &-block {
+    display: block;
+    width: 100%;
+  }
+
+  &-circle {
+    border-radius: 50%;
+  }
+
+  &-round {
+    border-radius: 100px;
+  }
+}
+
+// ==================== Input 占位 ====================
+.soui-skeleton-input {
+  .skeleton-bg();
+  display: inline-block;
+  border-radius: var(--soui-skeleton-border-radius, @border-radius-sm);
+}
+
+// ==================== Image 占位 ====================
+.soui-skeleton-image {
+  .skeleton-bg();
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--soui-skeleton-image-size, 96px);
+  height: var(--soui-skeleton-image-size, 96px);
+  border-radius: var(--soui-skeleton-border-radius, @border-radius-sm);
+
+  &-icon {
+    width: 48%;
+    height: 48%;
+    fill: rgba(0, 0, 0, 0.15);
+  }
+}

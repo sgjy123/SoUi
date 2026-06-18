@@ -243,6 +243,7 @@ function sidebarComponents() {
         { text: 'Message 全局提示', link: 'message' },
         { text: 'Notification 通知提醒框', link: 'notification' },
         { text: 'Loading 加载中', link: 'loading' },
+        { text: 'Skeleton 占位符', link: 'skeleton' },
         { text: 'Progress 进度条', link: 'progress' },
         { text: 'Alert 警告提示', link: 'alert' },
       ],

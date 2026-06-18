@@ -95,6 +95,10 @@ export type { NotificationConfig, NotificationPlacement, NotificationType, Notif
 export { default as Loading } from './components/Loading';
 export type { LoadingProps, LoadingSize } from './components/Loading';
 
+// Skeleton Component
+export { default as Skeleton } from './components/Skeleton';
+export type { SkeletonProps, SkeletonAvatarProps, SkeletonButtonProps, SkeletonInputProps, SkeletonImageProps, SkeletonTitleProps, SkeletonParagraphProps, SkeletonSize, SkeletonAvatarShape, SkeletonButtonShape } from './components/Skeleton';
+
 // Utils
 export * from './utils';
 

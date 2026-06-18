@@ -42,6 +42,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const notificationTheme = mergedTheme.components?.Notification || {};
     // 获取 Loading 组件级配置
     const loadingTheme = mergedTheme.components?.Loading || {};
+    // 获取 Skeleton 组件级配置
+    const skeletonTheme = mergedTheme.components?.Skeleton || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -276,6 +278,13 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-loading-dot-size': loadingTheme.dotSize ? `${loadingTheme.dotSize}px` : undefined,
       '--soui-loading-dot-size-sm': loadingTheme.dotSizeSM ? `${loadingTheme.dotSizeSM}px` : undefined,
       '--soui-loading-dot-size-lg': loadingTheme.dotSizeLG ? `${loadingTheme.dotSizeLG}px` : undefined,
+
+      // ==================== Skeleton 组件配置 ====================
+      // 第2层: Skeleton 配置点 (引用设计令牌)
+      '--soui-skeleton-color-bg': skeletonTheme.colorBg,
+      '--soui-skeleton-color-highlight': skeletonTheme.colorHighlight,
+      '--soui-skeleton-border-radius': skeletonTheme.borderRadius ? `${skeletonTheme.borderRadius}px` : undefined,
+      '--soui-skeleton-border-radius-lg': skeletonTheme.borderRadius ? `${skeletonTheme.borderRadius}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

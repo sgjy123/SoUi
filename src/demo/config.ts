@@ -275,6 +275,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'loading-custom', label: 'Loading 自定义', componentPath: 'Loading', exampleName: 'Custom', description: '自定义加载指示器和描述文案。' },
         ],
       },
+      {
+        key: 'skeleton',
+        label: 'Skeleton 占位符',
+        icon: 'PageTemplate',
+        items: [
+          { key: 'skeleton-basic', label: 'Skeleton 基础用法', componentPath: 'Skeleton', exampleName: 'Basic', description: '基础的骨架屏占位。' },
+          { key: 'skeleton-active', label: 'Skeleton 动画效果', componentPath: 'Skeleton', exampleName: 'Active', description: '显示动画效果。' },
+          { key: 'skeleton-complex', label: 'Skeleton 复杂组合', componentPath: 'Skeleton', exampleName: 'Complex', description: '带头像的复杂骨架屏组合。' },
+          { key: 'skeleton-sub-components', label: 'Skeleton 子组件', componentPath: 'Skeleton', exampleName: 'SubComponents', description: '按钮、头像、输入框、图片占位。' },
+        ],
+      },
     ],
   },
   {

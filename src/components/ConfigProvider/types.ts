@@ -406,6 +406,15 @@ export interface ComponentThemeConfig {
     /** 大号加载图标大小（像素） */
     dotSizeLG?: number;
   };
+  /** Skeleton 占位符组件配置 */
+  Skeleton?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 占位背景色 */
+    colorBg?: string;
+    /** 高亮色（动画效果） */
+    colorHighlight?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 
