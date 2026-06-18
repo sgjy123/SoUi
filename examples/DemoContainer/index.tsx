@@ -12,6 +12,7 @@ import FloatButton from '../../src/components/FloatButton';
 import Breadcrumb from '../../src/components/Breadcrumb';
 import Steps from '../../src/components/Steps';
 import Anchor from '../../src/components/Anchor';
+import Alert from '../../src/components/Alert';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -60,6 +61,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Step: Steps.Step,
     Anchor,
     AnchorLink: Anchor.Link,
+    Alert,
     ConfigProvider,
     ...scope,
   };

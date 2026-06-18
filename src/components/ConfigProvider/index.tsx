@@ -32,6 +32,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const menuTheme = mergedTheme.components?.Menu || {};
     // 获取 Anchor 组件级配置
     const anchorTheme = mergedTheme.components?.Anchor || {};
+    // 获取 Alert 组件级配置
+    const alertTheme = mergedTheme.components?.Alert || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -216,6 +218,22 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-anchor-link-padding-block': anchorTheme.linkPadding ? `${anchorTheme.linkPadding}px` : undefined,
       '--soui-anchor-font-size': anchorTheme.fontSize ? `${anchorTheme.fontSize}px` : undefined,
       '--soui-anchor-ink-width': anchorTheme.inkWidth ? `${anchorTheme.inkWidth}px` : undefined,
+      
+      // ==================== Alert 组件配置 ====================
+      // 第2层: Alert 配置点 (引用设计令牌)
+      '--soui-alert-border-radius': alertTheme.borderRadius ? `${alertTheme.borderRadius}px` : undefined,
+      '--soui-alert-font-size': alertTheme.fontSize ? `${alertTheme.fontSize}px` : undefined,
+      '--soui-alert-title-font-size': alertTheme.titleFontSize ? `${alertTheme.titleFontSize}px` : undefined,
+      '--soui-alert-icon-size': alertTheme.iconSize ? `${alertTheme.iconSize}px` : undefined,
+      // 第3层: Alert 组件级覆盖 (状态颜色)
+      '--soui-alert-success-bg': alertTheme.colorSuccessBg,
+      '--soui-alert-success-border': alertTheme.colorSuccessBorder,
+      '--soui-alert-info-bg': alertTheme.colorInfoBg,
+      '--soui-alert-info-border': alertTheme.colorInfoBorder,
+      '--soui-alert-warning-bg': alertTheme.colorWarningBg,
+      '--soui-alert-warning-border': alertTheme.colorWarningBorder,
+      '--soui-alert-error-bg': alertTheme.colorErrorBg,
+      '--soui-alert-error-border': alertTheme.colorErrorBorder,
     } as any;
   }, [mergedTheme]);
 

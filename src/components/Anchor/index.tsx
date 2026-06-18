@@ -155,7 +155,11 @@ const AnchorLink: React.FC<AnchorLinkProps> = ({
 
 // ==================== Anchor ====================
 
-const Anchor: React.FC<AnchorProps> = (props) => {
+interface AnchorComponent extends React.FC<AnchorProps> {
+  Link: typeof AnchorLink;
+}
+
+const Anchor: AnchorComponent = (props) => {
   const {
     affix = true,
     bounds,
@@ -490,7 +494,7 @@ const Anchor: React.FC<AnchorProps> = (props) => {
             'soui-anchor-link-active': activeLink === childProps.href,
           }),
           onLinkClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string, title: React.ReactNode, replace?: boolean) => {
-            handleClick(e, href, title, replace);
+            handleClick(e as unknown as React.MouseEvent<HTMLElement>, href, title, replace);
           },
           children: childProps.children ? renderNestedChildren(childProps.children) : undefined,
         } as any);
@@ -511,7 +515,7 @@ const Anchor: React.FC<AnchorProps> = (props) => {
           'soui-anchor-link-active': activeLink === childProps.href,
         }),
         onLinkClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string, title: React.ReactNode, replace?: boolean) => {
-          handleClick(e, href, title, replace);
+          handleClick(e as unknown as React.MouseEvent<HTMLElement>, href, title, replace);
         },
         children: childProps.children ? renderNestedChildren(childProps.children) : undefined,
       } as any);
@@ -619,7 +623,7 @@ const Anchor: React.FC<AnchorProps> = (props) => {
 };
 
 // 附加子组件
-(Anchor as any).Link = AnchorLink;
+Anchor.Link = AnchorLink;
 
 export default Anchor;
 export { AnchorLink };

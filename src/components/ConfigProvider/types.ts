@@ -323,6 +323,33 @@ export interface ComponentThemeConfig {
     /** 指示器宽度（像素） */
     inkWidth?: number;
   };
+  /** Alert 警告提示组件配置 */
+  Alert?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 标题字号（像素） */
+    titleFontSize?: number;
+    /** 图标大小（像素） */
+    iconSize?: number;
+    /** 成功状态背景色 */
+    colorSuccessBg?: string;
+    /** 成功状态边框色 */
+    colorSuccessBorder?: string;
+    /** 信息状态背景色 */
+    colorInfoBg?: string;
+    /** 信息状态边框色 */
+    colorInfoBorder?: string;
+    /** 警告状态背景色 */
+    colorWarningBg?: string;
+    /** 警告状态边框色 */
+    colorWarningBorder?: string;
+    /** 错误状态背景色 */
+    colorErrorBg?: string;
+    /** 错误状态边框色 */
+    colorErrorBorder?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

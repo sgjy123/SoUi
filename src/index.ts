@@ -75,6 +75,10 @@ export type { StepsProps, StepItemProps, StepStatus, StepsDirection, StepsSize, 
 export { default as Anchor } from './components/Anchor';
 export type { AnchorProps, AnchorItem, AnchorLinkProps, AnchorDirection } from './components/Anchor';
 
+// Alert Component
+export { default as Alert } from './components/Alert';
+export type { AlertProps, AlertType } from './components/Alert';
+
 // Utils
 export * from './utils';
 

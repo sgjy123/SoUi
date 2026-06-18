@@ -217,6 +217,26 @@ export const docsConfig: MenuGroup[] = [
     ],
   },
   {
+    title: '反馈组件',
+    icon: 'Remind',
+    components: [
+      {
+        key: 'alert',
+        label: 'Alert 警告提示',
+        icon: 'Attention',
+        items: [
+          { key: 'alert-basic', label: 'Alert 基础用法', componentPath: 'Alert', exampleName: 'Basic', description: '四种类型的警告提示。' },
+          { key: 'alert-description', label: 'Alert 带描述', componentPath: 'Alert', exampleName: 'Description', description: '含有辅助性文字介绍的警告提示。' },
+          { key: 'alert-icon', label: 'Alert 带图标', componentPath: 'Alert', exampleName: 'WithIcon', description: '为警告提示添加图标。' },
+          { key: 'alert-desc-icon', label: 'Alert 描述+图标', componentPath: 'Alert', exampleName: 'DescriptionIcon', description: '带描述和图标的警告提示。' },
+          { key: 'alert-closable', label: 'Alert 可关闭', componentPath: 'Alert', exampleName: 'Closable', description: '可以关闭的警告提示。' },
+          { key: 'alert-action', label: 'Alert 操作按钮', componentPath: 'Alert', exampleName: 'Action', description: '带有自定义操作元素的警告提示。' },
+          { key: 'alert-banner', label: 'Alert Banner 模式', componentPath: 'Alert', exampleName: 'Banner', description: '页面顶部通告形式。' },
+        ],
+      },
+    ],
+  },
+  {
     title: '其他组件',
     icon: 'Box',
     components: [

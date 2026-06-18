@@ -1,0 +1,148 @@
+@import '../../styles/variables.less';
+
+// ==================== Alert 颜色映射 ====================
+
+// 各类型的背景色、边框色、图标色
+@alert-success-bg: #f6ffed;
+@alert-success-border: #b7eb8f;
+@alert-success-icon: @success-color;
+
+@alert-info-bg: #e6f4ff;
+@alert-info-border: #91caff;
+@alert-info-icon: @primary-color;
+
+@alert-warning-bg: #fffbe6;
+@alert-warning-border: #ffe58f;
+@alert-warning-icon: @warning-color;
+
+@alert-error-bg: #fff2f0;
+@alert-error-border: #ffccc7;
+@alert-error-icon: @error-color;
+
+// ==================== Alert 主样式 ====================
+
+.soui-alert {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid;
+  border-radius: var(--soui-alert-border-radius, var(--soui-border-radius, @border-radius-base));
+  font-size: var(--soui-alert-font-size, var(--soui-font-size, @font-size-base));
+  line-height: var(--soui-line-height, @line-height-base);
+  word-break: break-word;
+  transition: opacity @transition-duration @transition-timing-function;
+
+  // === 类型变体 ===
+  &-success {
+    background-color: var(--soui-alert-success-bg, @alert-success-bg);
+    border-color: var(--soui-alert-success-border, @alert-success-border);
+    .soui-alert-icon { color: var(--soui-alert-success-icon, @alert-success-icon); }
+  }
+
+  &-info {
+    background-color: var(--soui-alert-info-bg, @alert-info-bg);
+    border-color: var(--soui-alert-info-border, @alert-info-border);
+    .soui-alert-icon { color: var(--soui-alert-info-icon, @alert-info-icon); }
+  }
+
+  &-warning {
+    background-color: var(--soui-alert-warning-bg, @alert-warning-bg);
+    border-color: var(--soui-alert-warning-border, @alert-warning-border);
+    .soui-alert-icon { color: var(--soui-alert-warning-icon, @alert-warning-icon); }
+  }
+
+  &-error {
+    background-color: var(--soui-alert-error-bg, @alert-error-bg);
+    border-color: var(--soui-alert-error-border, @alert-error-border);
+    .soui-alert-icon { color: var(--soui-alert-error-icon, @alert-error-icon); }
+  }
+
+  // === 带描述（有标题+描述两行） ===
+  &-with-description {
+    padding: 16px;
+    gap: 12px;
+
+    .soui-alert-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .soui-alert-message {
+      font-size: var(--soui-alert-title-font-size, @font-size-lg);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .soui-alert-description {
+      color: @text-color;
+      font-size: var(--soui-alert-font-size, var(--soui-font-size, @font-size-base));
+    }
+  }
+
+  // === Banner 模式 ===
+  &-banner {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  // === 图标 ===
+  &-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+  }
+
+  // === 内容区 ===
+  &-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &-message {
+    color: @text-color;
+  }
+
+  &-description {
+    color: @text-color-secondary;
+    margin-top: 4px;
+  }
+
+  // === 操作区域 ===
+  &-action {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  // === 关闭按钮 ===
+  &-close-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
+    color: @text-color-secondary;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all @transition-duration @transition-timing-function;
+
+    &:hover {
+      color: @text-color;
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+
+    &:active {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
