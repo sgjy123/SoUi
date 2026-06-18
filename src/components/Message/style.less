@@ -1,0 +1,179 @@
+@import '../../styles/variables.less';
+
+// ==================== Message 颜色映射 ====================
+
+@message-success-bg: #f6ffed;
+@message-success-color: @success-color;
+@message-success-border-color: #b7eb8f;
+
+@message-info-bg: #e6f4ff;
+@message-info-color: @primary-color;
+@message-info-border-color: #91caff;
+
+@message-warning-bg: #fffbe6;
+@message-warning-color: @warning-color;
+@message-warning-border-color: #ffe58f;
+
+@message-error-bg: #fff2f0;
+@message-error-color: @error-color;
+@message-error-border-color: #ffccc7;
+
+@message-loading-bg: @bg-color-base;
+@message-loading-color: @primary-color;
+@message-loading-border-color: @border-color;
+
+// ==================== 动画 ====================
+
+@keyframes soui-message-move-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes soui-message-move-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 150px;
+    margin-bottom: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-16px);
+    max-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+// ==================== Message 容器（Portal） ====================
+
+.soui-message-provider,
+.soui-message-wrapper {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--soui-z-index-message, @z-index-message);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: calc(100vw - 48px);
+}
+
+.soui-message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+// ==================== 单条消息样式 ====================
+
+.soui-message-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--soui-message-border-radius, var(--soui-border-radius, @border-radius-base));
+  font-size: var(--soui-message-font-size, var(--soui-font-size, @font-size-base));
+  line-height: 1.5715;
+  white-space: pre-wrap;
+  word-break: break-word;
+  pointer-events: auto;
+  box-shadow: @box-shadow-secondary;
+  border: 1px solid transparent;
+  max-width: var(--soui-message-max-width, 480px);
+  animation: soui-message-move-in 0.3s @transition-timing-function both;
+  transition:
+    max-height 0.3s @transition-timing-function,
+    margin-bottom 0.3s @transition-timing-function,
+    padding 0.3s @transition-timing-function,
+    opacity 0.3s @transition-timing-function;
+
+  // === 类型变体 ===
+  &-success {
+    background-color: @message-success-bg;
+    border-color: @message-success-border-color;
+    
+    .soui-message-content { color: @message-success-color; }
+    .soui-message-icon { color: @message-success-color; }
+  }
+
+  &-info {
+    background-color: @message-info-bg;
+    border-color: @message-info-border-color;
+    
+    .soui-message-content { color: @message-info-color; }
+    .soui-message-icon { color: @message-info-color; }
+  }
+
+  &-warning {
+    background-color: @message-warning-bg;
+    border-color: @message-warning-border-color;
+    
+    .soui-message-content { color: @message-warning-color; }
+    .soui-message-icon { color: @message-warning-color; }
+  }
+
+  &-error {
+    background-color: @message-error-bg;
+    border-color: @message-error-border-color;
+    
+    .soui-message-content { color: @message-error-color; }
+    .soui-message-icon { color: @message-error-color; }
+  }
+
+  &-loading {
+    background-color: @message-loading-bg;
+    border-color: @message-loading-border-color;
+    
+    .soui-message-content { color: @text-color; }
+    .soui-message-icon { color: @message-loading-color; }
+
+    // 加载动画
+    .soui-message-icon svg {
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  // === 移除动画 ===
+  &-removing {
+    animation: soui-message-move-out 0.3s @transition-timing-function both;
+  }
+}
+
+// === 图标 ===
+.soui-message-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+// === 内容 ===
+.soui-message-content {
+  flex: 1;
+  min-width: 0;
+}
+
+// === 加载旋转动画 ===
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

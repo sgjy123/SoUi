@@ -79,6 +79,10 @@ export type { AnchorProps, AnchorItem, AnchorLinkProps, AnchorDirection } from '
 export { default as Alert } from './components/Alert';
 export type { AlertProps, AlertType } from './components/Alert';
 
+// Message Component
+export { default as Message } from './components/Message';
+export type { MessageConfig, MessageType, MessageInstance } from './components/Message';
+
 // Utils
 export * from './utils';
 

@@ -13,6 +13,7 @@ import Breadcrumb from '../../src/components/Breadcrumb';
 import Steps from '../../src/components/Steps';
 import Anchor from '../../src/components/Anchor';
 import Alert from '../../src/components/Alert';
+import Message from '../../src/components/Message';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -62,6 +63,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Anchor,
     AnchorLink: Anchor.Link,
     Alert,
+    Message,
     ConfigProvider,
     ...scope,
   };

@@ -34,6 +34,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const anchorTheme = mergedTheme.components?.Anchor || {};
     // 获取 Alert 组件级配置
     const alertTheme = mergedTheme.components?.Alert || {};
+    // 获取 Message 组件级配置
+    const messageTheme = mergedTheme.components?.Message || {};
     
     return {
       // ==================== 全局基础变量 ====================
@@ -234,6 +236,12 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-alert-warning-border': alertTheme.colorWarningBorder,
       '--soui-alert-error-bg': alertTheme.colorErrorBg,
       '--soui-alert-error-border': alertTheme.colorErrorBorder,
+
+      // ==================== Message 组件配置 ====================
+      // 第2层: Message 配置点 (引用设计令牌)
+      '--soui-message-border-radius': messageTheme.borderRadius ? `${messageTheme.borderRadius}px` : undefined,
+      '--soui-message-font-size': messageTheme.fontSize ? `${messageTheme.fontSize}px` : undefined,
+      '--soui-message-max-width': messageTheme.maxWidth ? `${messageTheme.maxWidth}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

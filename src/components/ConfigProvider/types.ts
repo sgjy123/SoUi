@@ -350,6 +350,15 @@ export interface ComponentThemeConfig {
     /** 错误状态边框色 */
     colorErrorBorder?: string;
   };
+  /** Message 全局提示组件配置 */
+  Message?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 最大宽度（像素） */
+    maxWidth?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

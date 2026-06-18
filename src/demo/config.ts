@@ -234,6 +234,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'alert-banner', label: 'Alert Banner 模式', componentPath: 'Alert', exampleName: 'Banner', description: '页面顶部通告形式。' },
         ],
       },
+      {
+        key: 'message',
+        label: 'Message 全局提示',
+        icon: 'Info',
+        items: [
+          { key: 'message-basic', label: 'Message 基础用法', componentPath: 'Message', exampleName: 'Basic', description: '四种类型的全局提示消息。' },
+          { key: 'message-types', label: 'Message 自定义内容', componentPath: 'Message', exampleName: 'Types', description: '支持自定义内容和图标的消息提示。' },
+          { key: 'message-duration', label: 'Message 持续时间', componentPath: 'Message', exampleName: 'Duration', description: '自定义消息显示的持续时间。' },
+          { key: 'message-loading', label: 'Message 加载状态', componentPath: 'Message', exampleName: 'Loading', description: '展示加载中的全局提示。' },
+        ],
+      },
     ],
   },
   {
