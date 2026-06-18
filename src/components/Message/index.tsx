@@ -115,7 +115,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ config, onRemove, removing }) =
   // 渲染图标（直接使用 @icon-park/react，避免依赖 ConfigContext）
   const renderIcon = () => {
     if (customIcon) return <span className="soui-message-icon">{customIcon}</span>;
-    
+
     const IconComponent = iconComponentMap[type];
     return (
       <span className="soui-message-icon">
@@ -210,7 +210,7 @@ function getInstance(
 
   // 创建容器
   const targetContainer = parentElement || document.body;
-  
+
   if (!container) {
     container = document.createElement('div');
     container.className = 'soui-message-provider';
@@ -291,7 +291,7 @@ function getInstance(
 
 /**
  * Message 全局提示
- * 
+ *
  * 使用静态方法调用：
  * ```tsx
  * Message.success('操作成功');
@@ -299,7 +299,7 @@ function getInstance(
  * Message.info('这是一条信息');
  * Message.warning('请注意');
  * Message.loading('加载中...');
- * 
+ *
  * // 高级用法
  * Message.open({
  *   content: '自定义内容',
@@ -309,7 +309,6 @@ function getInstance(
  * });
  * ```
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 const Message = (() => {
   // 默认配置
   let defaultOptions: {
@@ -367,7 +366,7 @@ const Message = (() => {
           // 创建一个占位 div 用于渲染消息
           const placeholder = document.createElement('div');
           holderRootRef.current = createRoot(placeholder);
-          
+
           let notices: MessageConfig[] = [];
 
           const api: MessageInstance = {
@@ -402,11 +401,13 @@ const Message = (() => {
             },
           };
 
+          // eslint-disable-next-line no-inner-declarations
           function removeNotice(key: React.Key) {
             notices = notices.filter((item) => item.key !== key);
             renderMessages();
           }
 
+          // eslint-disable-next-line no-inner-declarations
           function renderMessages() {
             holderRootRef.current?.render(
               <MessageContainer notices={notices} onRemove={removeNotice} />
