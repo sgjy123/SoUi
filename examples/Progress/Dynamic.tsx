@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Progress, Button, Space } from '../../src';
+import type { ProgressStatus } from 'components/Progress';
 
 const Dynamic: React.FC = () => {
   const [percent, setPercent] = useState(0);
-  const [status, setStatus] = useState('active');
+  const [status, setStatus] = useState<ProgressStatus>('active');
 
   const increase = () => {
     setPercent((prev) => {
