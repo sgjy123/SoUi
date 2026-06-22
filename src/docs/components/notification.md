@@ -78,8 +78,8 @@ export default () => {
 | `success(config)` | 成功通知 | `(config: NotificationConfig) => void` |
 | `info(config)` | 信息通知 | `(config: NotificationConfig) => void` |
 | `warning(config)` | 警告通知 | `(config: NotificationConfig) => void` |
-| `warn(config)` | 警告通知（别名） | `(config: NotificationConfig) => void` |
 | `error(config)` | 错误通知 | `(config: NotificationConfig) => void` |
+| `close(key)` | 关闭指定 key 的通知 | `(key: string) => void` |
 | `destroy()` | 销毁所有通知 | `() => void` |
 | `config(options)` | 全局配置 | `(options: NotificationGlobalConfig) => void` |
 
@@ -89,15 +89,15 @@ export default () => {
 |------|------|------|--------|
 | `message` | 通知标题 | `React.ReactNode` | - |
 | `description` | 通知内容 | `React.ReactNode` | - |
-| `duration` | 自动关闭的延时，单位秒。设为 0 时不自动关闭 | `number` | `4.5` |
+| `duration` | 自动关闭的延时，单位秒。设为 `0` 时不自动关闭 | `number` | `4.5` |
 | `icon` | 自定义图标 | `React.ReactNode` | - |
-| `type` | 通知类型，会覆盖 icon | `'success' \| 'info' \| 'warning' \| 'error'` | - |
-| `key` | 唯一标识符 | `string` | - |
+| `type` | 通知类型，会显示对应图标 | `'success' \| 'info' \| 'warning' \| 'error'` | - |
+| `key` | 唯一标识符，可用于 `close(key)` 手动关闭 | `string` | - |
 | `placement` | 弹出位置 | `'topLeft' \| 'topRight' \| 'bottomLeft' \| 'bottomRight'` | `topRight` |
 | `style` | 自定义样式 | `React.CSSProperties` | - |
 | `className` | 自定义类名 | `string` | - |
 | `onClick` | 点击通知时的回调 | `() => void` | - |
-| `onClose` | 关闭通知时的回调 | `() => void` | - |
+| `onClose` | 关闭时的回调（退出动画开始时触发） | `() => void` | - |
 | `closeIcon` | 自定义关闭按钮 | `React.ReactNode` | - |
 
 ### NotificationGlobalConfig
@@ -114,30 +114,11 @@ export default () => {
 
 Notification 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。
 
-### 全局配置
-
-通过 `theme` 属性配置全局样式，影响所有使用该组件的实例：
-
-```tsx
-import { ConfigProvider } from '@soui/ui';
-
-export default () => (
-  <ConfigProvider
-    theme={{
-      // 全局配置项
-      borderRadius: 6,              // 圆角
-      fontSize: 14,                 // 字体大小
-      // ... 其他全局配置
-    }}
-  >
-    <YourApp />
-  </ConfigProvider>
-);
-```
+**工作原理：** Notification 使用 `createRoot` 渲染在 ConfigProvider 的 DOM 树之外，因此无法直接继承 React Context 中的主题。组件通过 DOM 桥接机制（`getComputedStyle` 读取 `.soui-config-provider` 上的 CSS 变量并复制到通知容器）来实现主题同步。每次打开通知时都会刷新 CSS 变量，以支持动态主题切换。
 
 ### 组件级配置
 
-通过 `theme.components.Notification` 针对特定组件进行精细化配置：
+通过 `theme.components.Notification` 针对 Notification 组件进行精细化配置：
 
 ```tsx
 import { ConfigProvider } from '@soui/ui';
@@ -147,15 +128,14 @@ export default () => (
     theme={{
       components: {
         Notification: {
-          // 组件专属配置项
-          borderRadius: 8,              // 组件圆角
-          fontSize: 14,                 // 组件字号
-          descriptionFontSize: 12,      // 描述文字字号
-          iconSize: 20,                 // 图标尺寸
-          closeIconSize: 16,            // 关闭按钮尺寸
-          padding: '16px',              // 内边距
-          zIndex: 1030,                 // z-index
-          colorBg: '#fff',              // 背景色
+          borderRadius: 8,
+          fontSize: 14,
+          descriptionFontSize: 12,
+          iconSize: 20,
+          closeIconSize: 16,
+          padding: '16px',
+          zIndex: 1030,
+          colorBg: '#fff',
         },
       },
     }}
@@ -167,71 +147,31 @@ export default () => (
 
 ### 配置优先级
 
-SoUi 采用以下优先级规则（从高到低）：
+配置优先级从高到低：
 
-```
-Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
-```
-
-**示例：**
-
-```tsx
-// 最高优先级：Props 直接设置
-<Notification style={{ backgroundColor: 'red' }} />
-
-// 第二优先级：组件级配置
-<ConfigProvider theme={{ components: { Notification: { colorBg: 'blue' } } }}>
-  <YourApp /> {/* 使用蓝色背景 */}
-</ConfigProvider>
-
-// 第三优先级：全局配置
-<ConfigProvider theme={{ primaryColor: 'green' }}>
-  <YourApp /> {/* 使用绿色主色 */}
-</ConfigProvider>
-```
+1. **Config 属性 (style/className)** - 每条通知的 `style`/`className` 属性
+2. **组件级配置** - `theme.components.Notification` 中的配置
+3. **CSS 变量** - 全局 CSS 自定义属性
+4. **Less 变量** - 默认值
 
 ### 可用的主题配置项
 
-根据组件的不同，可配置的主题项包括：
-
-**颜色相关：**
-- `colorBg` - 背景色
-
-**尺寸相关：**
-- `borderRadius` - 圆角大小（像素）
-- `fontSize` - 字体大小（像素）
-- `descriptionFontSize` - 描述文字字号（像素）
-- `iconSize` - 图标尺寸（像素）
-- `closeIconSize` - 关闭按钮尺寸（像素）
-- `padding` - 内边距
-- `zIndex` - z-index
-
-**其他：**
-- 具体配置项请参考组件 API 文档或 `ConfigProvider/types.ts` 类型定义
-
-### 自定义 CSS 变量
-
-对于更高级的定制需求，可以直接覆盖 CSS 变量：
-
-```tsx
-<Notification 
-  style={{
-    '--soui-notification-bg-color': '#f0f0f0',
-    '--soui-notification-border-radius': '10px',
-  }}
-/>
-```
-
-**CSS 变量命名规范：**
-- 第1层（设计令牌）：`--soui-{property}` - 不带组件前缀的全局变量
-- 第2层（组件配置点）：`--soui-notification-{property}` - 带组件前缀的配置点
-- 第3层（组件级覆盖）：`--soui-notification-{property}-component` - 带 `-component` 后缀的覆盖变量
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| borderRadius | 圆角大小（像素） | `number` | `6` |
+| fontSize | 字体大小（像素） | `number` | `14` |
+| descriptionFontSize | 描述文字字号（像素） | `number` | `12` |
+| iconSize | 图标尺寸（像素） | `number` | `20` |
+| closeIconSize | 关闭按钮尺寸（像素） | `number` | `16` |
+| padding | 内边距 | `string` | `16px` |
+| zIndex | z-index | `number` | `1010` |
+| colorBg | 背景色 | `string` | `#fff` |
 
 ## 无障碍访问
 
 组件遵循 WAI-ARIA 规范：
 - 使用 `role="alert"` 标记通知为重要的提示信息
-- 关闭按钮提供 `aria-label="Close notification"` 用于屏幕阅读器
+- 关闭按钮提供 `aria-label="关闭"` 用于屏幕阅读器
 - 支持键盘操作，可以通过 Tab 键聚焦到关闭按钮并按 Enter 键关闭
 
 ## FAQ
@@ -256,7 +196,7 @@ Notification.close(key);
 
 ### 如何设置通知不自动关闭？
 
-将 `duration` 设置为 `0` 或 `null`：
+将 `duration` 设置为 `0`：
 
 ```tsx
 Notification.info({
@@ -274,12 +214,24 @@ Notification.info({
 Notification.config({
   placement: 'bottomRight',
   duration: 3,
+  top: 100,
+  bottom: 50,
 });
 ```
+
+`top` 和 `bottom` 支持数字（自动转为 px）或字符串（如 `'10vh'`）。
 
 ### 通知之间会重叠吗？
 
 不会。每个位置（topLeft、topRight、bottomLeft、bottomRight）都有独立的容器，同一位置的通知会垂直堆叠显示。
+
+### 关闭通知时有动画效果吗？
+
+有。点击关闭按钮或到达 `duration` 后，通知会先触发退出动画（向上平移 + 透明度过渡，持续 300ms），动画结束后再从 DOM 中移除。退出过程中通知不可交互（`pointer-events: none`）。`onClose` 回调在动画开始时立即触发。
+
+### Notification 支持 ConfigProvider 主题吗？
+
+支持。虽然 Notification 使用 `createRoot` 渲染在 ConfigProvider 的 DOM 树之外，但组件通过 DOM 桥接机制自动同步主题。每次打开通知时，会从页面上的 `.soui-config-provider` 元素读取计算样式，将相关 CSS 变量复制到通知容器上。因此动态切换主题后新打开的通知会自动使用新主题。
 
 ## 相关资源
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import classNames from 'classnames';
 import * as Icons from '@icon-park/react';
@@ -19,7 +19,7 @@ export interface NotificationConfig {
   duration?: number;
   /** 自定义图标 */
   icon?: React.ReactNode;
-  /** 通知类型，会覆盖 icon */
+  /** 通知类型，会显示对应图标 */
   type?: NotificationType;
   /** 唯一标识符 */
   key?: string;
@@ -43,6 +43,7 @@ export interface NotificationApi {
   info: (config: NotificationConfig) => void;
   warning: (config: NotificationConfig) => void;
   error: (config: NotificationConfig) => void;
+  close: (key: string) => void;
   destroy: () => void;
   config: (options: NotificationGlobalConfig) => void;
 }
@@ -70,10 +71,39 @@ const setNotificationConfig = (options: NotificationGlobalConfig) => {
   globalConfig = { ...globalConfig, ...options };
 };
 
+// ==================== ConfigProvider DOM Bridge ====================
+
+const CONFIG_PROVIDER_VARS = [
+  '--soui-notification-border-radius',
+  '--soui-notification-font-size',
+  '--soui-notification-description-font-size',
+  '--soui-notification-icon-size',
+  '--soui-notification-close-icon-size',
+  '--soui-notification-padding',
+  '--soui-notification-z-index',
+  '--soui-notification-bg-color',
+  '--soui-primary-color',
+  '--soui-success-color',
+  '--soui-warning-color',
+  '--soui-error-color',
+  '--soui-border-radius',
+  '--soui-font-size',
+];
+
+function applyConfigProviderVars(el: HTMLElement): void {
+  const provider = document.querySelector('.soui-config-provider');
+  if (!provider) return;
+  const cs = getComputedStyle(provider);
+  CONFIG_PROVIDER_VARS.forEach((v) => {
+    const val = cs.getPropertyValue(v).trim();
+    if (val) el.style.setProperty(v, val);
+  });
+}
+
 // ==================== Icon Mapping ====================
 
 const iconMap: Record<NotificationType, React.ComponentType<any>> = {
-  success: Icons.Success,
+  success: Icons.CheckOne,
   info: Icons.Info,
   warning: Icons.Attention,
   error: Icons.CloseOne,
@@ -98,29 +128,24 @@ const NoticeItem: React.FC<NoticeItemProps> = ({
   closeIcon,
   onRemove,
 }) => {
-  const [visible, setVisible] = useState(true);
+  const [closing, setClosing] = useState(false);
 
-  useEffect(() => {
-    if (duration > 0) {
-      const timer = setTimeout(() => {
-        handleClose();
-      }, duration * 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [duration]);
-
-  const handleClose = () => {
-    setVisible(false);
+  const handleClose = useCallback(() => {
+    if (closing) return;
+    setClosing(true);
     onClose?.();
-    // 等待动画结束后再移除 DOM
+    // 等待退出动画结束后再移除 DOM
     setTimeout(() => {
       onRemove();
     }, 300);
-  };
+  }, [closing, onClose, onRemove]);
 
-  const handleClick = () => {
-    onClick?.();
-  };
+  useEffect(() => {
+    if (duration > 0) {
+      const timer = setTimeout(handleClose, duration * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [duration, handleClose]);
 
   // 根据 type 或 icon 确定显示的图标
   let displayIcon: React.ReactNode = null;
@@ -135,14 +160,15 @@ const NoticeItem: React.FC<NoticeItemProps> = ({
     <div
       className={classNames(
         'soui-notification-notice',
-        `soui-notification-notice-${type}`,
+        type && `soui-notification-notice-${type}`,
+        'soui-notification-notice-visible',
         {
-          'soui-notification-notice-visible': visible,
+          'soui-notification-notice-closing': closing,
         },
-        className
+        className,
       )}
       style={style}
-      onClick={handleClick}
+      onClick={onClick}
       role="alert"
     >
       <div className="soui-notification-notice-content">
@@ -160,7 +186,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({
           e.stopPropagation();
           handleClose();
         }}
-        aria-label="Close notification"
+        aria-label="关闭"
       >
         {closeIcon || <Icons.Close />}
       </button>
@@ -170,45 +196,70 @@ const NoticeItem: React.FC<NoticeItemProps> = ({
 
 // ==================== Notification Container ====================
 
-interface NotificationContainerProps {
-  placement: NotificationPlacement;
-  top?: string | number;
-  bottom?: string | number;
-}
-
 class NotificationContainer {
-  private static instances: Map<string, HTMLDivElement> = new Map();
-  private static roots: Map<string, any> = new Map();
+  /** 各 placement 对应的容器 DOM */
+  private static containers: Map<string, HTMLDivElement> = new Map();
+  /** 各 placement 对应的 React root（当前未用于渲染，保留供将来批量渲染） */
+  private static containerRoots: Map<string, ReactDOM.Root> = new Map();
+  /** 各 notice 的 React root，key 为 notice id */
+  private static noticeRoots: Map<string, ReactDOM.Root> = new Map();
 
   static getOrCreateContainer(placement: NotificationPlacement): HTMLDivElement {
     const key = `notification-${placement}`;
-    if (!this.instances.has(key)) {
+    if (!this.containers.has(key)) {
       const container = document.createElement('div');
       container.className = `soui-notification soui-notification-${placement}`;
-      document.body.appendChild(container);
-      this.instances.set(key, container);
-      
-      // 创建 React root
-      const root = ReactDOM.createRoot(container);
-      this.roots.set(key, root);
+
+      // 应用位置样式
+      const posStyle: Record<string, string> = {};
+      if (placement.includes('top')) {
+        posStyle.top = globalConfig.top !== undefined
+          ? (typeof globalConfig.top === 'number' ? `${globalConfig.top}px` : globalConfig.top)
+          : '';
+      }
+      if (placement.includes('bottom')) {
+        posStyle.bottom = globalConfig.bottom !== undefined
+          ? (typeof globalConfig.bottom === 'number' ? `${globalConfig.bottom}px` : globalConfig.bottom)
+          : '';
+      }
+      if (placement.includes('Left')) {
+        posStyle.left = '24px';
+      }
+      if (placement.includes('Right')) {
+        posStyle.right = '24px';
+      }
+      Object.entries(posStyle).forEach(([k, v]) => {
+        if (v) container.style.setProperty(k, v);
+      });
+
+      // DOM 桥接：从 ConfigProvider 复制 CSS 变量
+      applyConfigProviderVars(container);
+
+      const host = globalConfig.getContainer?.() || document.body;
+      host.appendChild(container);
+      this.containers.set(key, container);
     }
-    return this.instances.get(key)!;
+    return this.containers.get(key)!;
   }
 
   static addNotice(config: NotificationConfig & { onRemove: () => void }) {
     const placement = config.placement || globalConfig.placement || defaultPlacement;
     const container = this.getOrCreateContainer(placement);
-    
+
+    // 每次调用时刷新 ConfigProvider CSS 变量（支持动态主题切换）
+    applyConfigProviderVars(container);
+
     // 生成唯一 key
     const noticeKey = config.key || `notice-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    
-    // 获取该 placement 的所有 notices
-    const existingNotices = Array.from(container.children);
-    const noticeElement = document.getElementById(noticeKey);
-    
-    if (noticeElement) {
-      // 如果已存在相同 key，先移除
-      noticeElement.remove();
+
+    // 如果已存在相同 key，先清理
+    if (this.noticeRoots.has(noticeKey)) {
+      const existing = document.getElementById(noticeKey);
+      if (existing) {
+        this.noticeRoots.get(noticeKey)!.unmount();
+        existing.remove();
+      }
+      this.noticeRoots.delete(noticeKey);
     }
 
     const noticeDiv = document.createElement('div');
@@ -216,24 +267,39 @@ class NotificationContainer {
     container.appendChild(noticeDiv);
 
     const root = ReactDOM.createRoot(noticeDiv);
+    this.noticeRoots.set(noticeKey, root);
     root.render(
-      <NoticeItem {...config} onRemove={() => this.removeNotice(noticeKey)} />
+      <NoticeItem
+        {...config}
+        onRemove={() => this.removeNotice(noticeKey)}
+      />,
     );
   }
 
   static removeNotice(key: string) {
+    const root = this.noticeRoots.get(key);
     const element = document.getElementById(key);
+    if (root) {
+      root.unmount();
+      this.noticeRoots.delete(key);
+    }
     if (element) {
       element.remove();
     }
   }
 
   static destroyAll() {
-    this.instances.forEach((container) => {
-      while (container.firstChild) {
-        container.removeChild(container.firstChild);
-      }
-    });
+    // 卸载所有 notice root
+    this.noticeRoots.forEach((root) => root.unmount());
+    this.noticeRoots.clear();
+
+    // 卸载所有 container root（预留）
+    this.containerRoots.forEach((root) => root.unmount());
+    this.containerRoots.clear();
+
+    // 移除所有容器 DOM
+    this.containers.forEach((container) => container.remove());
+    this.containers.clear();
   }
 }
 
@@ -248,7 +314,7 @@ const createNotice = (config: NotificationConfig) => {
 
   NotificationContainer.addNotice({
     ...mergedConfig,
-    onRemove: () => {}, // 实际在 NoticeItem 中处理
+    onRemove: () => {}, // 实际在 NoticeItem 内部处理
   });
 };
 
@@ -268,6 +334,9 @@ const api: NotificationApi = {
   error: (config: NotificationConfig) => {
     createNotice({ ...config, type: 'error' });
   },
+  close: (key: string) => {
+    NotificationContainer.removeNotice(key);
+  },
   destroy: () => {
     NotificationContainer.destroyAll();
   },
@@ -275,8 +344,5 @@ const api: NotificationApi = {
     setNotificationConfig(options);
   },
 };
-
-// 别名
-(api as any).warn = api.warning;
 
 export default api;

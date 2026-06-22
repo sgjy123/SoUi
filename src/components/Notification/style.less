@@ -49,6 +49,13 @@
     opacity: 1;
     transform: translateY(0);
   }
+
+  // 关闭退出动画
+  &-closing {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+  }
   
   // 状态颜色
   &-success {
