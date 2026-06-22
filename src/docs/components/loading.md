@@ -103,29 +103,11 @@ import { Loading, Space, Icon } from '@soui/ui';
 
 Loading 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。
 
-### 全局配置
-
-通过 `theme` 属性配置全局样式，影响所有使用该组件的实例：
-
-```tsx
-import { ConfigProvider } from '@soui/ui';
-
-export default () => (
-  <ConfigProvider
-    theme={{
-      // 全局配置项
-      primaryColor: '#1677ff',     // 主色
-      // ... 其他全局配置
-    }}
-  >
-    <YourApp />
-  </ConfigProvider>
-);
-```
+Loading 作为标准 React 组件渲染在 ConfigProvider 的 DOM 树内，通过 CSS 变量继承自动获取主题配置，无需额外桥接。
 
 ### 组件级配置
 
-通过 `theme.components.Loading` 针对特定组件进行精细化配置：
+通过 `theme.components.Loading` 针对 Loading 组件进行精细化配置：
 
 ```tsx
 import { ConfigProvider } from '@soui/ui';
@@ -135,12 +117,11 @@ export default () => (
     theme={{
       components: {
         Loading: {
-          // 组件专属配置项
-          colorPrimary: '#1677ff',    // 加载指示器颜色
-          fontSize: 14,               // 文字大小
-          dotSize: 20,                // 默认加载图标尺寸
-          dotSizeSM: 14,              // 小号加载图标尺寸
-          dotSizeLG: 32,              // 大号加载图标尺寸
+          colorPrimary: '#1677ff',
+          fontSize: 14,
+          dotSize: 20,
+          dotSizeSM: 14,
+          dotSizeLG: 32,
         },
       },
     }}
@@ -152,39 +133,22 @@ export default () => (
 
 ### 配置优先级
 
-SoUi 采用以下优先级规则（从高到低）：
+配置优先级从高到低：
 
-```
-Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
-```
-
-**示例：**
-
-```tsx
-// 最高优先级：Props 直接设置
-<Loading style={{ color: 'red' }} />
-
-// 第二优先级：组件级配置
-<ConfigProvider theme={{ components: { Loading: { colorPrimary: 'blue' } } }}>
-  <YourApp /> {/* 使用蓝色 */}
-</ConfigProvider>
-
-// 第三优先级：全局配置
-<ConfigProvider theme={{ primaryColor: 'green' }}>
-  <YourApp /> {/* 使用绿色主色 */}
-</ConfigProvider>
-```
+1. **Props (style/className)** - 直接传入的样式属性
+2. **组件级配置** - `theme.components.Loading` 中的配置
+3. **CSS 变量** - 全局 CSS 自定义属性
+4. **Less 变量** - 默认值
 
 ### 可用的主题配置项
 
-**颜色相关：**
-- `colorPrimary` - 加载指示器颜色
-
-**尺寸相关：**
-- `fontSize` - 文字大小（像素）
-- `dotSize` - 默认加载图标尺寸（像素）
-- `dotSizeSM` - 小号加载图标尺寸（像素）
-- `dotSizeLG` - 大号加载图标尺寸（像素）
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| colorPrimary | 加载指示器颜色 | `string` | `#1677ff` |
+| fontSize | 文字大小（像素） | `number` | `14` |
+| dotSize | 默认加载图标尺寸（像素） | `number` | `20` |
+| dotSizeSM | 小号加载图标尺寸（像素） | `number` | `14` |
+| dotSizeLG | 大号加载图标尺寸（像素） | `number` | `32` |
 
 ### 自定义 CSS 变量
 
@@ -195,19 +159,21 @@ Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
   style={{
     '--soui-loading-color-primary': '#ff0000',
     '--soui-loading-dot-size': '24px',
+    '--soui-loading-overlay-bg': 'rgba(0, 0, 0, 0.3)',
   }}
 />
 ```
 
-**CSS 变量命名规范：**
-- 第1层（设计令牌）：`--soui-primary-color` - 不带组件前缀的全局变量
-- 第2层（组件配置点）：`--soui-loading-{property}` - 带组件前缀的配置点
-- 第3层（组件级覆盖）：`--soui-loading-{property}-component` - 带 `-component` 后缀的覆盖变量
+可用的 CSS 变量包括：`--soui-loading-color-primary`、`--soui-loading-font-size`、`--soui-loading-dot-size`、`--soui-loading-dot-size-sm`、`--soui-loading-dot-size-lg`、`--soui-loading-z-index`、`--soui-loading-border-radius`、`--soui-loading-overlay-bg`。
 
 ## 无障碍访问
 
 组件遵循 WAI-ARIA 规范：
-- 加载状态提供了视觉反馈，告知用户系统正在处理
+
+- 加载指示器使用 `role="status"` 和 `aria-live="polite"` 属性，屏幕阅读器会自动播报加载状态变化
+- 未提供 `tip` 时，组件默认使用 `aria-label="加载中"` 作为无障碍标签
+- 提供 `tip` 时，tip 文本作为可播报内容（tip 容器标记 `aria-hidden="true"` 避免重复播报）
+- 包裹模式下，外层容器设置 `aria-busy` 属性反映加载状态
 - 建议配合 `tip` 属性提供文字说明，增强可访问性
 
 ## FAQ

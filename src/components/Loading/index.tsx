@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import * as Icons from '@icon-park/react';
-import ConfigContext from '../ConfigProvider/context';
 import './style.less';
 
 // ==================== Types ====================
@@ -34,19 +32,13 @@ export interface LoadingProps {
 // ==================== Default Indicator ====================
 
 /** 默认加载指示器 */
-const DefaultIndicator: React.FC<{ size: LoadingSize; color?: string }> = ({ size, color }) => {
-  const sizeMap: Record<LoadingSize, number> = {
-    small: 14,
-    default: 20,
-    large: 32,
-  };
-
+const DefaultIndicator: React.FC<{ size: LoadingSize }> = () => {
   return (
     <span className="soui-loading-dot-spin">
-      <i className="soui-loading-dot-item" style={{ color }} />
-      <i className="soui-loading-dot-item" style={{ color }} />
-      <i className="soui-loading-dot-item" style={{ color }} />
-      <i className="soui-loading-dot-item" style={{ color }} />
+      <i className="soui-loading-dot-item" />
+      <i className="soui-loading-dot-item" />
+      <i className="soui-loading-dot-item" />
+      <i className="soui-loading-dot-item" />
     </span>
   );
 };
@@ -64,9 +56,6 @@ const Loading: React.FC<LoadingProps> = ({
   style,
   className,
 }) => {
-  const context = useContext(ConfigContext);
-  const loadingTheme = context?.components?.Loading || {};
-
   // 延迟显示逻辑
   const [shouldShow, setShouldShow] = useState(delay ? false : spinning);
   const delayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -91,9 +80,6 @@ const Loading: React.FC<LoadingProps> = ({
     };
   }, [spinning, delay]);
 
-  // 计算主题色
-  const primaryColor = loadingTheme.colorPrimary || context?.theme?.primaryColor || '#1677ff';
-
   // 判断是否作为包裹元素
   const hasChildren = children !== undefined && children !== null;
 
@@ -109,7 +95,7 @@ const Loading: React.FC<LoadingProps> = ({
       );
     }
 
-    return <DefaultIndicator size={size} color={primaryColor} />;
+    return <DefaultIndicator size={size} />;
   };
 
   // 渲染加载内容
@@ -126,9 +112,15 @@ const Loading: React.FC<LoadingProps> = ({
     );
 
     return (
-      <div className={spinClassName} style={style}>
+      <div
+        className={spinClassName}
+        style={style}
+        role="status"
+        aria-live="polite"
+        aria-label={tip ? undefined : '加载中'}
+      >
         {renderIndicator()}
-        {tip ? <div className="soui-loading-text">{tip}</div> : null}
+        {tip ? <div className="soui-loading-text" aria-hidden="true">{tip}</div> : null}
       </div>
     );
   };
@@ -145,7 +137,7 @@ const Loading: React.FC<LoadingProps> = ({
     const wrapperCls = classNames('soui-loading-nested-loading', wrapperClassName);
 
     return (
-      <div className={wrapperCls}>
+      <div className={wrapperCls} aria-busy={shouldShow}>
         {shouldShow && (
           <div key="loading" className="soui-loading-overlay">
             {renderLoadingElement()}
