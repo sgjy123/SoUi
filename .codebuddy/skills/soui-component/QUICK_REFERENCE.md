@@ -39,17 +39,18 @@
 
 #### 主题集成要点：
 ```tsx
-// 获取主题配置
-const componentTheme = useComponentTheme('ComponentName');
-const globalTheme = useTheme();
+// 使用 ConfigContext 获取主题配置
+import ConfigContext from '../ConfigProvider/context';
 
-// 计算最终值（组件级优先）
-const borderRadiusValue = componentTheme?.borderRadius || globalTheme?.borderRadius;
+const context = useContext(ConfigContext);
+const componentTheme = (context?.components?.ComponentName || {}) as Record<string, any>;
 
-// 应用到样式
-const style = {
-  '--soui-component-border-radius': `${borderRadiusValue}px`,
-} as any;
+// 将主题值注入为 CSS 变量
+const cssVars: React.CSSProperties & Record<string, any> = {};
+if (componentTheme.borderRadius !== undefined) {
+  cssVars['--soui-component-border-radius'] = `${componentTheme.borderRadius}px`;
+}
+const componentStyle = { ...cssVars, ...style } as React.CSSProperties;
 ```
 
 详见 [CONVERSATION_FLOW.md](./CONVERSATION_FLOW.md)
@@ -88,7 +89,7 @@ SoUi/
 - **参考现有组件**：选择 2-3 个相似组件学习实现模式
 - **支持配置项**：borderRadius、fontSize、colorPrimary、controlHeight
 - **使用 CSS 变量**：避免硬编码颜色值，使用 `var()` 函数
-- **优先级规则**：组件级 > 全局 > CSS 默认 > Less 默认
+- **优先级规则**：Props (style/className) > 组件级配置 > CSS 变量 > Less 变量
 
 ### 1. 类名规范
 - 前缀: `soui-`

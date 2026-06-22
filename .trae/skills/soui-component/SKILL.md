@@ -122,7 +122,7 @@ SoUi/
   
 - **`src/components/ConfigProvider/index.tsx`** - ConfigProvider 实现
   - 了解如何生成 CSS 变量
-  - 了解 useTheme 和 useComponentTheme hooks
+  - 了解 ConfigContext 的导出和使用方式
 
 - **`src/styles/global.less`** - 全局样式和 CSS 变量
   - 查看 `:root` 中定义的 CSS 变量
@@ -185,7 +185,7 @@ SoUi 采用**三层设计令牌系统**，这是理解主题变量的关键：
 
 **优先级规则:**
 ```
-Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
+Props (style/className) > 组件级配置 > CSS 变量 > Less 变量
 ```
 
 阅读 **`src/styles/variables.less`** 了解所有可用的 Less 变量（作为最终回退）：
@@ -229,15 +229,19 @@ Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
 **重点关注：**
 1. **主题变量应用模式**
    ```tsx
-   // Button 组件的主题变量应用示例
-   const buttonTheme = useComponentTheme('Button');
-   const globalTheme = useTheme();
+   // 标准组件的主题集成方式
+   import ConfigContext from '../ConfigProvider/context';
    
-   const borderRadiusValue = buttonTheme?.borderRadius || globalTheme?.borderRadius;
+   const context = useContext(ConfigContext);
+   const componentTheme = (context?.components?.ComponentName || {}) as Record<string, any>;
    
-   const buttonStyle: React.CSSProperties = {
-     '--soui-button-border-radius': `${borderRadiusValue}px`,
-   };
+   // 将主题值注入为 CSS 变量
+   const cssVars: React.CSSProperties & Record<string, any> = {};
+   if (componentTheme.borderRadius !== undefined) {
+     cssVars['--soui-component-border-radius'] = `${componentTheme.borderRadius}px`;
+   }
+   
+   const componentStyle = { ...cssVars, ...style } as React.CSSProperties;
    ```
 
 2. **CSS 变量命名规范**
@@ -271,8 +275,9 @@ Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
    - ✅ 组件级覆盖 → 添加 `-component` 后缀
 
 3. **样式优先级规则**
-   - 组件级配置 > 全局主题配置 > CSS 默认值 > Less 默认值
-   - 使用 `var(--css-variable, @less-variable)` 实现回退
+   - Props (style/className) > 组件级配置 > CSS 变量 > Less 变量
+   - style.less 使用 `var(--soui-component-xxx, @less-variable)` 实现回退
+   - JS 注入的 CSS 变量覆盖 Less 默认值，用户 inline style 覆盖一切
 
 4. **组件结构设计**
    - 主组件 + 子组件的组合模式
@@ -302,56 +307,80 @@ Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
 - [ ] 导出完整的 Props 类型
 - [ ] 为枚举类型添加 JSDoc 注释
 
-**示例：主题集成的完整流程（分层设计）**
+**示例：主题集成的完整流程（ConfigContext 模式）**
 
 ```tsx
-// 1. 在组件中获取主题配置
-const componentTheme = useComponentTheme('ComponentName');
-const globalTheme = useTheme();
+// === 标准组件（渲染在 ConfigProvider DOM 树内）===
+import React, { useContext } from 'react';
+import ConfigContext from '../ConfigProvider/context';
 
-// 2. 计算最终值（组件级优先，否则使用全局配置）
-const borderRadiusValue = componentTheme?.borderRadius || globalTheme?.borderRadius;
-const fontSizeValue = componentTheme?.fontSize || globalTheme?.fontSize;
+const Component: React.FC<ComponentProps> = ({ className, style, ...rest }) => {
+  // 1. 从 ConfigContext 读取组件级主题配置
+  const context = useContext(ConfigContext);
+  const componentTheme = (context?.components?.ComponentName || {}) as Record<string, any>;
 
-// 3. 应用到样式 - 生成第1层和第2层CSS变量
-const componentStyle: React.CSSProperties = {
-  // === 第1层: 设计令牌 (如果该组件需要定义新的全局令牌) ===
-  '--soui-color-bg-default': globalTheme?.tooltipBgColor,
-  '--soui-font-size-sm': `${globalTheme?.tooltipFontSize}px`,
-  
-  // === 第2层: 组件配置点 (引用设计令牌或自定义) ===
-  '--soui-component-bg-color': componentTheme?.colorBgDefault || globalTheme?.tooltipBgColor,
-  '--soui-component-font-size': componentTheme?.fontSize ? `${componentTheme.fontSize}px` : undefined,
-  '--soui-component-border-radius': borderRadiusValue ? `${borderRadiusValue}px` : undefined,
-  
-  // === 第3层: 组件级覆盖 (优先级最高) ===
-  '--soui-component-bg-color-component': componentTheme?.colorBgDefault,
-  '--soui-component-font-size-component': componentTheme?.fontSize ? `${componentTheme.fontSize}px` : undefined,
-} as any;
+  // 2. 将主题值注入为 CSS 自定义属性
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (componentTheme.borderRadius !== undefined) {
+    cssVars['--soui-component-border-radius'] = `${componentTheme.borderRadius}px`;
+  }
+  if (componentTheme.fontSize !== undefined) {
+    cssVars['--soui-component-font-size'] = `${componentTheme.fontSize}px`;
+  }
+  if (componentTheme.colorPrimary !== undefined) {
+    cssVars['--soui-component-color-primary'] = componentTheme.colorPrimary;
+  }
 
-// 4. 在 style.less 中使用 CSS 变量（三层回退）
+  // 3. 合并样式：cssVars 在前，用户 style 在后（用户优先级最高）
+  const componentStyle = { ...cssVars, ...style } as React.CSSProperties;
+
+  return <div className={classNames('soui-component', className)} style={componentStyle} {...rest} />;
+};
+```
+
+```less
+// === style.less：CSS 变量 + Less 回退 ===
+@import '../../styles/variables.less';
+
 .soui-component {
-  // 第1层: 引用全局设计令牌
-  --soui-color-bg-default: var(--soui-color-bg-default, @bg-color-base);
-  --soui-font-size-sm: var(--soui-font-size-sm, @font-size-sm);
-  
-  // 第2层: 组件配置点（引用设计令牌）
-  --soui-component-bg-color: var(--soui-color-bg-default);
-  --soui-component-font-size: var(--soui-font-size-sm);
-  --soui-component-border-radius: var(--soui-border-radius, @border-radius-base);
-  
-  // 实际样式使用（三层回退：组件级 > 全局 > Less）
-  background: var(--soui-component-bg-color-component, var(--soui-component-bg-color));
-  font-size: var(--soui-component-font-size-component, var(--soui-component-font-size));
-  border-radius: var(--soui-component-border-radius-component, var(--soui-component-border-radius));
+  // JS 注入的 CSS 变量会覆盖 Less 默认值
+  color: var(--soui-component-color-primary, @primary-color);
+  font-size: var(--soui-component-font-size, @font-size-base);
+  border-radius: var(--soui-component-border-radius, @border-radius-base);
+  transition: all @transition-duration @transition-timing-function;
 }
 ```
 
+```tsx
+// === Portal 组件（渲染在 ConfigProvider DOM 树外，需要 DOM 桥接）===
+
+const CONFIG_PROVIDER_VARS = [
+  '--soui-component-border-radius',
+  '--soui-component-font-size',
+  '--soui-component-color-primary',
+  '--soui-primary-color',
+  '--soui-border-radius',
+];
+
+function applyConfigProviderVars(el: HTMLElement): void {
+  const provider = document.querySelector('.soui-config-provider');
+  if (!provider) return;
+  const cs = getComputedStyle(provider);
+  CONFIG_PROVIDER_VARS.forEach((v) => {
+    const val = cs.getPropertyValue(v).trim();
+    if (val) el.style.setProperty(v, val);
+  });
+}
+
+// 在创建容器后调用：applyConfigProviderVars(container);
+```
+
 **关键要点:**
-- ✅ **第1层**: 定义真正的全局变量，不带组件前缀
-- ✅ **第2层**: 组件配置点引用第1层，大部分属性复用设计令牌
-- ✅ **第3层**: 组件级覆盖添加 `-component` 后缀
-- ✅ **样式文件**: 使用 `var()` 实现三层回退机制
+- ✅ **标准组件**：使用 `useContext(ConfigContext)` 读取主题，通过 inline CSS 变量覆盖 Less 默认值
+- ✅ **Portal 组件**：使用 DOM 桥接 `getComputedStyle` 从 `.soui-config-provider` 复制 CSS 变量
+- ✅ **不要使用** `useComponentTheme` 或 `useTheme`（这些 hook 不存在于当前代码库）
+- ✅ **回退链**：`var(--soui-component-xxx, @less-variable)` — JS 注入覆盖 Less 默认值
+- ✅ **优先级**：Props style > 组件级配置 > CSS 变量 > Less 变量
 
 ### 步骤 1: 创建组件文件
 
@@ -379,40 +408,48 @@ mkdir -p SoUi/src/components/ComponentName
 
 #### 1.2 创建组件主文件 `index.tsx`
 
-**标准组件模板：**
+**标准组件模板（普通组件，渲染在 ConfigProvider DOM 树内）：**
 
 ```tsx
-import React from 'react';
+import React, { useContext } from 'react';
 import classNames from 'classnames';
+import ConfigContext from '../ConfigProvider/context';
 import './style.less';
 
 // ==================== Types ====================
 
-export interface ComponentProps {
+export interface ComponentProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** 属性说明 */
   propName?: Type;
 }
 
-// ==================== Sub-components (如有) ====================
+// ==================== Component ====================
 
-const SubComponent: React.FC<SubProps> = ({ ... }) => {
-  return <div>...</div>;
-};
-
-// ==================== Main Component ====================
-
-const Component: React.FC<ComponentProps & React.HTMLAttributes<HTMLElement>> = ({
+const Component: React.FC<ComponentProps> = ({
   prop1 = defaultValue,
   className,
   style,
   children,
-  ...props
+  ...rest
 }) => {
-  // 内部逻辑
+  // 从 ConfigContext 读取主题（可选链确保无 ConfigProvider 时不报错）
+  const context = useContext(ConfigContext);
+  const componentTheme = (context?.components?.ComponentName || {}) as Record<string, any>;
+
+  // 将主题配置注入为 CSS 变量（覆盖 style.less 中的默认值）
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (componentTheme.borderRadius !== undefined) {
+    cssVars['--soui-component-border-radius'] = `${componentTheme.borderRadius}px`;
+  }
+  if (componentTheme.fontSize !== undefined) {
+    cssVars['--soui-component-font-size'] = `${componentTheme.fontSize}px`;
+  }
+  // ... 其他主题属性
+
+  const componentStyle = { ...cssVars, ...style } as React.CSSProperties;
 
   const componentClassName = classNames(
     'soui-component',
-    `soui-component-variant`,
     {
       'soui-component-modifier': condition,
     },
@@ -420,25 +457,55 @@ const Component: React.FC<ComponentProps & React.HTMLAttributes<HTMLElement>> = 
   );
 
   return (
-    <div className={componentClassName} style={style} {...props}>
+    <div className={componentClassName} style={componentStyle} {...rest}>
       {children}
     </div>
   );
 };
 
-// 附加子组件（如有）
-Component.SubComponent = SubComponent;
-
 export default Component;
 ```
 
 **关键规范：**
-1. 所有类名前缀为 `soui-`
-2. 使用 `classNames` 库处理条件类名
-3. Props 接口继承原生 HTML 属性（使用 `Omit` 排除冲突属性）
-4. 支持 JSDoc 注释（`/** 说明 */`）
-5. 通过 `& { SubComponent: ... }` 语法附加子组件
-6. 解构 props 时设置默认值
+1. 使用 `useContext(ConfigContext)` + 可选链 `context?.components?.ComponentName` 读取主题
+2. **不要**使用 `useComponentTheme` 或 `useTheme`（这些 hook 不存在于当前代码库）
+3. 将主题值注入为 CSS 自定义属性（`--soui-component-xxx`），通过 inline style 传入
+4. 合并顺序：`{ ...cssVars, ...style }` 确保用户 style 优先级最高
+5. 无 ConfigProvider 时组件正常工作（回退到 Less 变量默认值）
+6. 所有类名前缀为 `soui-`，使用 `classNames` 处理条件类名
+7. Props 接口继承原生 HTML 属性（使用 `Omit` 排除冲突属性）
+8. 支持 JSDoc 注释（`/** 说明 */`）
+
+**Portal 组件模板（渲染在 ConfigProvider DOM 树外，如 Message、Notification）：**
+
+```tsx
+// Portal 组件使用 createRoot 渲染，无法继承 React Context
+// 需要通过 DOM 桥接从 .soui-config-provider 复制 CSS 变量
+
+const CONFIG_PROVIDER_VARS = [
+  '--soui-component-border-radius',
+  '--soui-component-font-size',
+  '--soui-primary-color',
+  // ... 所有需要的 CSS 变量
+];
+
+function applyConfigProviderVars(el: HTMLElement): void {
+  const provider = document.querySelector('.soui-config-provider');
+  if (!provider) return;
+  const cs = getComputedStyle(provider);
+  CONFIG_PROVIDER_VARS.forEach((v) => {
+    const val = cs.getPropertyValue(v).trim();
+    if (val) el.style.setProperty(v, val);
+  });
+}
+
+// 在创建容器时调用
+applyConfigProviderVars(container);
+```
+
+**两种组件类型的判断标准：**
+- **普通组件**：直接渲染为 JSX 元素（如 Alert、Loading、Button）→ 使用 `useContext(ConfigContext)`
+- **Portal 组件**：使用 `createRoot`/`createPortal` 渲染到 `document.body`（如 Message、Notification）→ 使用 DOM 桥接
 
 #### 1.3 创建样式文件 `style.less`
 
@@ -453,38 +520,36 @@ export default Component;
   to { ... }
 }
 
-// Mixins（如有复用样式）
-.mixin-name(@param) { ... }
-
 // 主类名
 .soui-component {
-  // 基础样式
-  color: @text-color;
-  font-size: @font-size-base;
+  // 使用 CSS 变量 + Less 变量回退链
+  color: var(--soui-component-color, @text-color);
+  font-size: var(--soui-component-font-size, @font-size-base);
+  border-radius: var(--soui-component-border-radius, @border-radius-base);
+  transition: all @transition-duration @transition-timing-function;
 
   // 变体
   &-variant1 { ... }
   &-variant2 { ... }
 
-  // 状态
-  &-disabled { ... }
-  &-loading { ... }
+  // 状态（关闭动画等）
+  &-closing {
+    opacity: 0;
+    // 确保 transition 覆盖所有动画属性
+  }
 
   // 子元素
   &-inner { ... }
   &-content { ... }
-
-  // 修饰符
-  &--large { ... }
-  &--small { ... }
 }
 ```
 
 **关键规范：**
 1. 必须 `@import '../../styles/variables.less'`
-2. 使用 BEM 命名规范（`.soui-component--modifier`）
-3. 使用 CSS 变量支持主题定制
-4. 过渡动画使用 `@transition-duration` 和 `@transition-timing-function`
+2. **CSS 变量回退链**：`var(--soui-component-xxx, @less-variable)` — JS 注入的 CSS 变量覆盖 Less 默认值
+3. 过渡动画使用 `@transition-duration` 和 `@transition-timing-function`
+4. 有退出动画的组件需添加 `-closing` 状态类，transition 覆盖所有动画属性
+5. 避免硬编码颜色值，始终使用变量
 
 ### 步骤 2: 导出组件
 
@@ -554,6 +619,65 @@ export default () => (
 |--------|------|------|
 | onClick | 点击事件 | `(e: Event) => void` |
 
+## 主题定制
+
+ComponentName 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。
+
+<!-- 如果是 Portal 组件，添加以下说明 -->
+<!-- **工作原理：** ComponentName 使用 `createRoot` 渲染在 ConfigProvider 的 DOM 树之外，通过 DOM 桥接机制（`getComputedStyle` 读取 `.soui-config-provider` 上的 CSS 变量并复制到容器）来实现主题同步。 -->
+
+<!-- 如果是普通组件，添加以下说明 -->
+ComponentName 作为标准 React 组件渲染在 ConfigProvider 的 DOM 树内，通过 CSS 变量继承自动获取主题配置，无需额外桥接。
+
+### 组件级配置
+
+通过 `theme.components.ComponentName` 针对组件进行精细化配置：
+
+```tsx
+<ConfigProvider
+  theme={{
+    components: {
+      ComponentName: {
+        borderRadius: 8,
+        fontSize: 14,
+        // ... 其他组件专属配置
+      },
+    },
+  }}
+>
+  <YourApp />
+</ConfigProvider>
+```
+
+### 配置优先级
+
+配置优先级从高到低：
+
+1. **Props (style/className)** - 直接传入的样式属性
+2. **组件级配置** - `theme.components.ComponentName` 中的配置
+3. **CSS 变量** - 全局 CSS 自定义属性
+4. **Less 变量** - 默认值
+
+### 可用的主题配置项
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| borderRadius | 圆角大小（像素） | `number` | `6` |
+| fontSize | 字体大小（像素） | `number` | `14` |
+<!-- 列出所有组件专属配置项及默认值 -->
+
+### 自定义 CSS 变量
+
+对于更高级的定制需求，可以直接覆盖 CSS 变量：
+
+```tsx
+<ComponentName 
+  style={{
+    '--soui-component-border-radius': '10px',
+  }}
+/>
+```
+
 ## 设计原则
 
 ### ✅ 推荐用法
@@ -572,7 +696,12 @@ export default () => (
 
 ## 无障碍访问
 
-组件遵循 WAI-ARIA 规范的说明。
+组件遵循 WAI-ARIA 规范（根据组件特性选择适用项）：
+
+- 反馈类组件（Alert/Notification）：使用 `role="alert"`
+- 加载组件：使用 `role="status"` + `aria-live="polite"` + `aria-busy`
+- 关闭按钮：`aria-label="关闭"`（中文）
+- 表单控件：支持键盘操作和焦点管理
 
 ## FAQ
 
@@ -593,10 +722,16 @@ export default () => (
 2. 必须有"何时使用"章节
 3. 代码演示要有说明文字
 4. API 表格要完整
-5. 包含设计原则（推荐/避免）
-6. 包含无障碍访问说明
-7. 包含 FAQ
-8. 链接到相关组件
+5. **必须包含"主题定制"章节**（重要！）
+   - 说明组件与 ConfigProvider 的关系（DOM 树内/外）
+   - 组件级配置示例
+   - 四层配置优先级说明
+   - 可用的主题配置项表格（含默认值）
+   - 自定义 CSS 变量示例
+6. 包含设计原则（推荐/避免）
+7. 包含无障碍访问说明
+8. 包含 FAQ
+9. 链接到相关组件
 
 #### 3.2 更新侧边栏配置
 
@@ -980,8 +1115,13 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 ### 文档编写
 1. 示例代码要可运行
 2. API 文档要完整准确
-3. 提供正反示例对比
-4. 包含常见问题解答
+3. **必须包含"主题定制"章节**（重要！）
+   - 说明组件与 ConfigProvider 的关系（DOM 树内/外）
+   - 组件级配置示例
+   - 四层配置优先级说明
+   - 可用的主题配置项表格（含默认值）
+4. 提供正反示例对比
+5. 包含常见问题解答
 
 ## 检查清单
 
@@ -990,26 +1130,41 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 - [ ] **在开始开发前已询问用户是否参考主流框架**（重要！）
 - [ ] **在编写代码前已查看主题样式和现有组件实现**（重要！）
   - [ ] 已阅读 `ConfigProvider/types.ts` 了解主题配置类型
-  - [ ] 已阅读 `ConfigProvider/index.tsx` 了解主题实现方式
+  - [ ] 已阅读 `ConfigProvider/index.tsx` 了解 CSS 变量注入方式
   - [ ] 已阅读 `styles/variables.less` 了解可用的设计变量
   - [ ] 已参考 2-3 个相似的现有组件实现
 - [ ] **主题集成已完成**（重要！）
-  - [ ] 支持圆角配置（borderRadius）
-  - [ ] 支持字体大小配置（fontSize）
-  - [ ] 支持主色配置（colorPrimary / primaryColor）
-  - [ ] **使用三层设计令牌系统**（重要！）
-    - [ ] 第1层：定义全局设计令牌（不带组件前缀）
-    - [ ] 第2层：组件配置点引用设计令牌
-    - [ ] 第3层：组件级覆盖添加 `-component` 后缀
-  - [ ] 正确处理配置优先级（组件级 > 全局 > CSS 默认 > Less 默认）
-  - [ ] 在 style.less 中使用 `var()` 实现三层回退
+  - [ ] 使用 `useContext(ConfigContext)` + 可选链读取主题（**不是** `useComponentTheme`）
+  - [ ] 主题值通过 CSS 自定义属性注入到根元素 inline style
+  - [ ] style.less 中使用 `var(--soui-component-xxx, @less-variable)` 回退链
+  - [ ] 正确处理配置优先级：Props > 组件级配置 > CSS 变量 > Less 变量
+  - [ ] 无 ConfigProvider 时组件正常工作
   - [ ] 在 `ConfigProvider/types.ts` 中添加了组件级配置类型
+  - [ ] **如果是 Portal 组件**：使用 DOM 桥接（`getComputedStyle`）复制 CSS 变量
+  - [ ] **如果是 Portal 组件**：每次打开时刷新 CSS 变量以支持动态主题
+- [ ] **内存管理**（Portal 组件必须检查）
+  - [ ] `createRoot` 创建的 root 在移除 DOM 前调用 `root.unmount()`
+  - [ ] `destroyAll` 同时清理容器 DOM 和所有 React root
+  - [ ] React 18 严格模式下无 DOM 泄漏（使用 ref callback 管理生命周期）
+- [ ] **退出动画**（有可关闭行为的组件）
+  - [ ] 设置 `closing` 状态 → 添加 CSS 类 → setTimeout(300) → 移除 DOM
+  - [ ] CSS transition 覆盖所有动画属性（opacity、max-height、padding 等）
+  - [ ] 退出过程中设置 `pointer-events: none` 防止交互
+- [ ] **无障碍访问**
+  - [ ] 反馈类组件使用 `role="alert"`
+  - [ ] 加载组件使用 `role="status"` + `aria-live="polite"`
+  - [ ] 关闭按钮 `aria-label="关闭"`（中文）
 - [ ] 如果用户选择参考框架，已研究该框架的 API 设计
 - [ ] 即使参考了其他框架，也使用了 SoUi 的设计变量和命名规范
 - [ ] 组件文件 `src/components/ComponentName/index.tsx` 已创建
 - [ ] 样式文件 `src/components/ComponentName/style.less` 已创建
 - [ ] 已在 `src/index.ts` 中导出组件和类型
 - [ ] 文档文件 `src/docs/components/component-name.md` 已创建
+- [ ] **文档包含"主题定制"章节**（重要！）
+  - [ ] 说明组件与 ConfigProvider 的关系（DOM 树内/外）
+  - [ ] 组件级配置示例
+  - [ ] 四层配置优先级说明
+  - [ ] 可用的主题配置项表格（含默认值）
 - [ ] 已在 `.vitepress/config.ts` 中添加侧边栏配置
 - [ ] 示例目录 `examples/ComponentName/` 已创建
 - [ ] **已为每个示例创建对应的 `.tsx` 实例文件**（重要！）
@@ -1035,7 +1190,52 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 
 复制以下模板快速开始新组件开发：
 
-### index.tsx 模板
+### index.tsx 模板（标准组件）
+```tsx
+import React, { useContext } from 'react';
+import classNames from 'classnames';
+import ConfigContext from '../ConfigProvider/context';
+import './style.less';
+
+export interface ComponentNameProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  /** 属性说明 */
+  propName?: string;
+}
+
+const ComponentName: React.FC<ComponentNameProps> = ({
+  propName = 'default',
+  className,
+  style,
+  children,
+  ...rest
+}) => {
+  const context = useContext(ConfigContext);
+  const theme = (context?.components?.ComponentName || {}) as Record<string, any>;
+
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (theme.borderRadius !== undefined) {
+    cssVars['--soui-component-name-border-radius'] = `${theme.borderRadius}px`;
+  }
+  if (theme.fontSize !== undefined) {
+    cssVars['--soui-component-name-font-size'] = `${theme.fontSize}px`;
+  }
+
+  const componentStyle = { ...cssVars, ...style } as React.CSSProperties;
+
+  return (
+    <div className={classNames('soui-component-name', className)} style={componentStyle} {...rest}>
+      {children}
+    </div>
+  );
+};
+
+export default ComponentName;
+```
+
+### index.tsx 模板（纯 CSS 继承组件 — 无需读取 ConfigContext）
+
+适用于纯展示型组件，CSS 变量继承即可满足主题需求（如 Loading）：
+
 ```tsx
 import React from 'react';
 import classNames from 'classnames';
@@ -1046,20 +1246,16 @@ export interface ComponentNameProps {
   propName?: string;
 }
 
-const ComponentName: React.FC<ComponentNameProps & React.HTMLAttributes<HTMLDivElement>> = ({
+const ComponentName: React.FC<ComponentNameProps> = ({
   propName = 'default',
   className,
   style,
   children,
-  ...props
+  ...rest
 }) => {
-  const componentClassName = classNames(
-    'soui-component',
-    className
-  );
-
+  // 无需 useContext — CSS 变量继承自动处理主题
   return (
-    <div className={componentClassName} style={style} {...props}>
+    <div className={classNames('soui-component-name', className)} style={style} {...rest}>
       {children}
     </div>
   );
@@ -1072,9 +1268,12 @@ export default ComponentName;
 ```less
 @import '../../styles/variables.less';
 
-.soui-component {
-  color: @text-color;
-  font-size: @font-size-base;
+.soui-component-name {
+  // CSS 变量回退链：JS 注入 > CSS 变量 > Less 默认值
+  color: var(--soui-component-name-color, @primary-color);
+  font-size: var(--soui-component-name-font-size, @font-size-base);
+  border-radius: var(--soui-component-name-border-radius, @border-radius-base);
+  transition: all @transition-duration @transition-timing-function;
 }
 ```
 

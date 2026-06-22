@@ -41,7 +41,7 @@
 
 #### 1. 查看主题配置
 - 阅读 `ConfigProvider/types.ts` 了解可用的主题配置项
-- 阅读 `ConfigProvider/index.tsx` 了解 useTheme 和 useComponentTheme hooks
+- 阅读 `ConfigProvider/index.tsx` 了解 ConfigContext 和 CSS 变量注入方式
 
 #### 2. 查看设计变量
 - 阅读 `styles/variables.less` 了解所有可用的 Less 变量
@@ -259,7 +259,7 @@ examples/Typography/
 ### 关于主题集成的经验
 - **必须先查看**：ConfigProvider 的类型定义和实现方式
 - **使用 CSS 变量**：避免硬编码颜色值，使用 `var()` 函数
-- **优先级规则**：组件级配置 > 全局配置 > CSS 默认值 > Less 默认值
+- **优先级规则**：Props (style/className) > 组件级配置 > CSS 变量 > Less 变量
 - **完整支持**：borderRadius、fontSize、colorPrimary、controlHeight 等常用配置
 - **类型定义**：在 ConfigProvider/types.ts 中添加组件级配置类型
 

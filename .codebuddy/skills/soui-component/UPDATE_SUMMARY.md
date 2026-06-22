@@ -1,8 +1,83 @@
 # soui-component Skill 更新总结
 
 ## 最新更新
-**更新时间**: 2026-05-08  
-**更新内容**: 添加三层设计令牌系统规范
+**更新时间**: 2026-06-22
+**更新内容**: 基于组件审查经验修正主题集成模式，消除不存在的 hook 引用
+
+### 更新原因
+在系统性审查 Skeleton、Progress、Menu、Message、Alert、Notification、Loading 等组件后，发现 Skill 文档中存在以下问题：
+1. 多处引用了 `useComponentTheme` 和 `useTheme` 两个 **不存在于当前代码库** 的 hook
+2. 配置优先级链描述为 5 层（含"全局配置"），实际运行时为 4 层
+3. 缺少 Portal 组件（createRoot）的 DOM 桥接模式说明
+4. 缺少内存管理、退出动画、无障碍访问等实践经验
+5. 组件模板和快速开始模板未反映真实代码库的集成方式
+
+### 主要更新内容
+
+#### 1. SKILL.md 修正 — 主题集成模式
+
+**修正：移除 `useComponentTheme`/`useTheme`，替换为 ConfigContext 模式**
+
+所有涉及主题集成的代码示例和模板均已替换为实际代码库中的正确模式：
+
+```tsx
+// ❌ 旧模式（hook 不存在）
+const componentTheme = useComponentTheme('ComponentName');
+const globalTheme = useTheme();
+
+// ✅ 新模式（ConfigContext + 可选链）
+import ConfigContext from '../ConfigProvider/context';
+const context = useContext(ConfigContext);
+const componentTheme = (context?.components?.ComponentName || {}) as Record<string, any>;
+```
+
+**修正：配置优先级从 5 层改为 4 层**
+
+```
+// ❌ 旧：Props > 组件级 > 全局配置 > CSS 变量 > Less 变量（5层）
+// ✅ 新：Props (style/className) > 组件级配置 > CSS 变量 > Less 变量（4层）
+```
+
+**新增：两种组件类型的集成模式**
+
+- **标准组件**（DOM 树内）：`useContext(ConfigContext)` + CSS 变量注入
+- **Portal 组件**（DOM 树外）：DOM 桥接 `getComputedStyle` 从 `.soui-config-provider` 复制 CSS 变量
+
+**新增：快速开始模板更新**
+
+提供三种模板：
+1. 标准组件模板（含 ConfigContext 集成）
+2. 纯 CSS 继承组件模板（无需 ConfigContext，如 Loading）
+3. Portal 组件模板（含 DOM 桥接）
+
+**新增：检查清单扩展**
+
+新增 Portal 组件、内存管理、退出动画、无障碍访问等检查项。
+
+#### 2. QUICK_REFERENCE.md 修正
+
+- 主题集成代码示例替换为 ConfigContext 模式
+- 优先级规则修正为 4 层
+
+#### 3. EXAMPLE.md 修正
+
+- `ConfigProvider/index.tsx` 描述从"useTheme 和 useComponentTheme hooks"改为"ConfigContext 和 CSS 变量注入方式"
+- 优先级规则修正为 4 层
+
+### 关键发现（来自组件审查）
+
+1. **ConfigContext 是唯一正确的主题读取方式** — `useComponentTheme`/`useTheme` 从未在代码库中定义
+2. **纯展示型组件可以不需要读取 ConfigContext** — CSS 变量继承自动处理主题（如 Loading）
+3. **Portal 组件必须使用 DOM 桥接** — createRoot 渲染在 React 树外，无法继承 Context
+4. **内存管理** — createRoot 的 root 必须在移除 DOM 前调用 `unmount()`
+5. **退出动画** — 标准模式：`closing` 状态 → CSS 类 → setTimeout(300) → 移除 DOM
+6. **无障碍** — 反馈类用 `role="alert"`，加载类用 `role="status"`，关闭按钮用 `aria-label="关闭"`
+
+---
+
+## 之前更新
+
+### 2026-05-08 — 添加三层设计令牌系统规范
 
 ### 更新原因
 根据 Tooltip 组件主题化改造的经验，发现需要明确 CSS 变量的分层设计原则，避免变量命名混乱和重复定义。

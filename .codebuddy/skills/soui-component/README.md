@@ -146,5 +146,7 @@
 
 ## 版本历史
 
+- v1.3 (2026-06-22) - 修正主题集成模式：移除不存在的 useComponentTheme/useTheme hook，替换为 ConfigContext 模式；修正优先级链为 4 层；新增 Portal 组件 DOM 桥接模式、内存管理、退出动画、无障碍访问等实践经验
+- v1.2 (2026-05-08) - 添加三层设计令牌系统规范
 - v1.1 (2026-05-07) - 添加参考主流框架功能，支持 Ant Design、MUI、Chakra UI、Tailwind UI 等
 - v1.0 (2026-04-29) - 初始版本，基于 Typography 组件开发经验
