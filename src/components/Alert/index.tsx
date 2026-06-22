@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import classNames from 'classnames';
 import Icon from '../Icon';
-import { useComponentTheme, useTheme } from '../ConfigProvider';
+import ConfigContext from '../ConfigProvider/context';
 import './style.less';
 
 // ==================== Types ====================
@@ -25,7 +25,7 @@ export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
   icon?: React.ReactNode;
   /** 是否显示图标 */
   showIcon?: boolean;
-  /** 关闭动画 */
+  /** 关闭动画（300ms）结束后触发的回调 */
   afterClose?: () => void;
   /** 是否为 banner 模式 */
   banner?: boolean;
@@ -38,7 +38,7 @@ export interface AlertProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
 const defaultIconMap: Record<AlertType, string> = {
   success: 'CheckOne',
   info: 'Info',
-  warning: 'Info',
+  warning: 'Attention',
   error: 'CloseOne',
 };
 
@@ -61,40 +61,57 @@ const Alert: React.FC<AlertProps> = ({
   ...rest
 }) => {
   const [closed, setClosed] = useState(false);
+  const [closing, setClosing] = useState(false);
 
-  // 获取主题配置
-  const alertTheme = useComponentTheme('Alert');
+  // 直接从 Context 读取主题，不强制要求 ConfigProvider
+  const context = useContext(ConfigContext);
+  const alertTheme = (context?.components?.Alert || {}) as Record<string, any>;
+
   // banner 模式下默认为 warning 类型
   const effectiveType: AlertType = banner && type === 'info' ? 'warning' : type;
 
   // 主题 CSS 变量
-  const alertStyle: React.CSSProperties = {
-    ...(alertTheme?.borderRadius ? { '--soui-alert-border-radius': `${alertTheme.borderRadius}px` } : {}),
-    ...(alertTheme?.fontSize ? { '--soui-alert-font-size': `${alertTheme.fontSize}px` } : {}),
-    ...(alertTheme?.titleFontSize ? { '--soui-alert-title-font-size': `${alertTheme.titleFontSize}px` } : {}),
-    ...(alertTheme?.iconSize ? { '--soui-alert-icon-size': `${alertTheme.iconSize}px` } : {}),
-    // 状态颜色覆盖
-    ...(alertTheme?.colorSuccessBg ? { '--soui-alert-success-bg': alertTheme.colorSuccessBg } : {}),
-    ...(alertTheme?.colorSuccessBorder ? { '--soui-alert-success-border': alertTheme.colorSuccessBorder } : {}),
-    ...(alertTheme?.colorInfoBg ? { '--soui-alert-info-bg': alertTheme.colorInfoBg } : {}),
-    ...(alertTheme?.colorInfoBorder ? { '--soui-alert-info-border': alertTheme.colorInfoBorder } : {}),
-    ...(alertTheme?.colorWarningBg ? { '--soui-alert-warning-bg': alertTheme.colorWarningBg } : {}),
-    ...(alertTheme?.colorWarningBorder ? { '--soui-alert-warning-border': alertTheme.colorWarningBorder } : {}),
-    ...(alertTheme?.colorErrorBg ? { '--soui-alert-error-bg': alertTheme.colorErrorBg } : {}),
-    ...(alertTheme?.colorErrorBorder ? { '--soui-alert-error-border': alertTheme.colorErrorBorder } : {}),
-    ...style,
-  } as any;
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (alertTheme.borderRadius !== undefined) {
+    cssVars['--soui-alert-border-radius'] = `${alertTheme.borderRadius}px`;
+  }
+  if (alertTheme.fontSize !== undefined) {
+    cssVars['--soui-alert-font-size'] = `${alertTheme.fontSize}px`;
+  }
+  if (alertTheme.titleFontSize !== undefined) {
+    cssVars['--soui-alert-title-font-size'] = `${alertTheme.titleFontSize}px`;
+  }
+  if (alertTheme.iconSize !== undefined) {
+    cssVars['--soui-alert-icon-size'] = `${alertTheme.iconSize}px`;
+  }
+  if (alertTheme.colorSuccessBg) cssVars['--soui-alert-success-bg'] = alertTheme.colorSuccessBg;
+  if (alertTheme.colorSuccessBorder) cssVars['--soui-alert-success-border'] = alertTheme.colorSuccessBorder;
+  if (alertTheme.colorInfoBg) cssVars['--soui-alert-info-bg'] = alertTheme.colorInfoBg;
+  if (alertTheme.colorInfoBorder) cssVars['--soui-alert-info-border'] = alertTheme.colorInfoBorder;
+  if (alertTheme.colorWarningBg) cssVars['--soui-alert-warning-bg'] = alertTheme.colorWarningBg;
+  if (alertTheme.colorWarningBorder) cssVars['--soui-alert-warning-border'] = alertTheme.colorWarningBorder;
+  if (alertTheme.colorErrorBg) cssVars['--soui-alert-error-bg'] = alertTheme.colorErrorBg;
+  if (alertTheme.colorErrorBorder) cssVars['--soui-alert-error-border'] = alertTheme.colorErrorBorder;
 
-  // 关闭处理
+  const alertStyle = { ...cssVars, ...style } as React.CSSProperties;
+
+  // 关闭处理：先触发退出动画，过渡结束后再移除 DOM
   const handleClose = useCallback(() => {
-    setClosed(true);
-    afterClose?.();
-  }, [afterClose]);
+    if (closing) return;
+    setClosing(true);
+    setTimeout(() => {
+      setClosed(true);
+      afterClose?.();
+    }, 300); // 与 style.less 中 transition-duration 保持一致
+  }, [afterClose, closing]);
 
   // 已关闭时不渲染
   if (closed) return null;
 
   const hasDescription = !!description;
+
+  // 图标大小：主题配置 > 描述模式默认 24 > 普通模式默认 16
+  const iconSize = alertTheme.iconSize ?? (hasDescription ? 24 : 16);
 
   const alertClassName = classNames(
     'soui-alert',
@@ -103,6 +120,7 @@ const Alert: React.FC<AlertProps> = ({
       'soui-alert-with-description': hasDescription,
       'soui-alert-banner': banner,
       'soui-alert-closable': closable,
+      'soui-alert-closing': closing,
     },
     className,
   );
@@ -114,7 +132,7 @@ const Alert: React.FC<AlertProps> = ({
       const iconName = defaultIconMap[effectiveType];
       return (
         <span className="soui-alert-icon">
-          <Icon name={iconName} size={hasDescription ? 24 : 16} color={effectiveType === 'info' ? 'primary' : effectiveType} />
+          <Icon name={iconName} size={iconSize} color={effectiveType === 'info' ? 'primary' : effectiveType} />
         </span>
       );
     }

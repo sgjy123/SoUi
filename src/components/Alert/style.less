@@ -32,7 +32,11 @@
   font-size: var(--soui-alert-font-size, var(--soui-font-size, @font-size-base));
   line-height: var(--soui-line-height, @line-height-base);
   word-break: break-word;
-  transition: opacity @transition-duration @transition-timing-function;
+  transition:
+    opacity @transition-duration @transition-timing-function,
+    max-height @transition-duration @transition-timing-function,
+    padding @transition-duration @transition-timing-function,
+    margin @transition-duration @transition-timing-function;
 
   // === 类型变体 ===
   &-success {
@@ -88,6 +92,17 @@
     border-right: none;
   }
 
+  // === 关闭动画 ===
+  &-closing {
+    opacity: 0;
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+  }
+
   // === 图标 ===
   &-icon {
     flex-shrink: 0;
@@ -107,7 +122,7 @@
   }
 
   &-description {
-    color: @text-color-secondary;
+    color: var(--soui-alert-description-color, @text-color-secondary);
     margin-top: 4px;
   }
 

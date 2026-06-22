@@ -94,32 +94,13 @@
 | showIcon | 是否显示图标 | `boolean` | `false` | - |
 | banner | 是否为 banner 模式 | `boolean` | `false` | - |
 | action | 自定义操作元素 | `ReactNode` | - | - |
-| afterClose | 关闭动画结束后触发的回调 | `() => void` | - | - |
-
-### 事件
-
-| 事件名 | 说明 | 类型 |
-|--------|------|------|
-| afterClose | 关闭后的回调 | `() => void` |
+| afterClose | 关闭动画（300ms）结束后触发的回调 | `() => void` | - | - |
 
 ## 主题定制
 
 Alert 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。
 
-### 全局配置
-
-通过 `theme` 属性配置全局样式，影响所有使用该组件的实例：
-
-```tsx
-<ConfigProvider
-  theme={{
-    borderRadius: 8,
-    fontSize: 14,
-  }}
->
-  <Alert message="自定义主题" type="info" />
-</ConfigProvider>
-```
+**注意：** Alert 组件可以在没有 ConfigProvider 的情况下独立使用，不会抛出错误。
 
 ### 组件级配置
 
@@ -146,22 +127,34 @@ Alert 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层�
 </ConfigProvider>
 ```
 
+### 配置优先级
+
+配置优先级从高到低：
+
+1. **Props (style/className)** - 直接传入的样式属性
+2. **组件级配置** - `theme.components.Alert` 中的配置
+3. **CSS 变量** - 全局 CSS 自定义属性
+4. **Less 变量** - 默认值
+
 ### 可用的主题配置项
 
-| 配置项 | 说明 | 类型 |
-|--------|------|------|
-| borderRadius | 圆角大小（像素） | `number` |
-| fontSize | 字体大小（像素） | `number` |
-| titleFontSize | 标题字号（像素） | `number` |
-| iconSize | 图标大小（像素） | `number` |
-| colorSuccessBg | 成功状态背景色 | `string` |
-| colorSuccessBorder | 成功状态边框色 | `string` |
-| colorInfoBg | 信息状态背景色 | `string` |
-| colorInfoBorder | 信息状态边框色 | `string` |
-| colorWarningBg | 警告状态背景色 | `string` |
-| colorWarningBorder | 警告状态边框色 | `string` |
-| colorErrorBg | 错误状态背景色 | `string` |
-| colorErrorBorder | 错误状态边框色 | `string` |
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| borderRadius | 圆角大小（像素） | `number` | `6` |
+| fontSize | 字体大小（像素） | `number` | `14` |
+| titleFontSize | 标题字号（像素） | `number` | `16` |
+| iconSize | 图标大小（像素） | `number` | `16/24` |
+| colorSuccessBg | 成功状态背景色 | `string` | `#f6ffed` |
+| colorSuccessBorder | 成功状态边框色 | `string` | `#b7eb8f` |
+| colorInfoBg | 信息状态背景色 | `string` | `#e6f4ff` |
+| colorInfoBorder | 信息状态边框色 | `string` | `#91caff` |
+| colorWarningBg | 警告状态背景色 | `string` | `#fffbe6` |
+| colorWarningBorder | 警告状态边框色 | `string` | `#ffe58f` |
+| colorErrorBg | 错误状态背景色 | `string` | `#fff2f0` |
+| colorErrorBorder | 错误状态边框色 | `string` | `#ffccc7` |
+| colorDescription | 描述文字颜色 | `string` | `rgba(0,0,0,0.65)` |
+
+**说明：** `iconSize` 默认值在有 `description` 时为 `24`，无 `description` 时为 `16`。
 
 ## 无障碍访问
 
@@ -176,7 +169,26 @@ Banner 模式下 Alert 会去掉圆角和左右边框，适合放在页面顶部
 
 ### 如何自定义图标？
 
-可以通过 `showIcon` 属性显示默认图标，也可以通过 `icon` 属性传入自定义的 React 节点作为图标。
+可以通过 `showIcon` 属性显示默认图标，也可以通过 `icon` 属性传入自定义的 React 节点作为图标。各类型的默认图标为：`success` → CheckOne，`info` → Info，`warning` → Attention，`error` → CloseOne。
+
+### 关闭动画是如何工作的？
+
+当用户点击关闭按钮时，Alert 会先添加退出动画类（透明度渐变为 0，高度收缩为 0），等待 300ms 动画完成后再从 DOM 中移除组件，最后触发 `afterClose` 回调。这样可以确保用户看到平滑的过渡效果，而不是突然消失。
+
+```tsx
+<Alert
+  message="可关闭的提示"
+  type="info"
+  closable
+  afterClose={() => {
+    console.log('Alert 已完全关闭');
+  }}
+/>
+```
+
+### Alert 组件必须配合 ConfigProvider 使用吗？
+
+不需要。Alert 组件可以在没有 ConfigProvider 的情况下独立使用，不会抛出错误。当没有 ConfigProvider 时，组件会使用 Less 变量中定义的默认样式。如果有 ConfigProvider，组件会自动读取 `theme.components.Alert` 配置并应用相应的主题。
 
 ## 相关资源
 
