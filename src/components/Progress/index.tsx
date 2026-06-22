@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext, useRef } from 'react';
 import classNames from 'classnames';
+import ConfigContext from '../ConfigProvider/context';
 import './style.less';
 
 // ==================== Types ====================
@@ -78,7 +79,16 @@ const statusColorMap: Record<ProgressStatus, string> = {
 
 /** 获取渐变字符串 */
 const getGradientColor = (strokeColor: ProgressGradient): string => {
-  const { from = '#1677ff', to = '#1677ff', direction = 'to right' } = strokeColor;
+  const { from = '#1677ff', to = '#1677ff', direction = 'right' } = strokeColor;
+
+  // 将方向映射转换为有效的 CSS linear-gradient 方向值
+  const directionMap: Record<string, string> = {
+    left: 'to left',
+    right: 'to right',
+    top: 'to top',
+    bottom: 'to bottom',
+  };
+  const cssDirection = directionMap[direction] || direction;
 
   // 检查是否有自定义断点
   const customStops = Object.entries(strokeColor).filter(
@@ -89,10 +99,10 @@ const getGradientColor = (strokeColor: ProgressGradient): string => {
     const stops = customStops
       .map(([key, value]) => `${value} ${key}%`)
       .join(', ');
-    return `linear-gradient(${direction}, ${stops})`;
+    return `linear-gradient(${cssDirection}, ${stops})`;
   }
 
-  return `linear-gradient(${direction}, ${from}, ${to})`;
+  return `linear-gradient(${cssDirection}, ${from}, ${to})`;
 };
 
 /** 解析 strokeColor */
@@ -181,10 +191,34 @@ const LineProgress: React.FC<ProgressProps> = ({
   style,
   ...rest
 }) => {
+  const context = useContext(ConfigContext);
+  const progressTheme = context?.components?.Progress || {};
+
   const clampedPercent = clampPercent(percent);
   const successPercent = success?.percent ?? 0;
-  const clampedSuccessPercent = clampPercent(successPercent);
+  const clampedSuccessPercent = Math.min(clampPercent(successPercent), clampedPercent);
   const sizeObj = getSize(size, 'line');
+
+  // ConfigContext → CSS 变量
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (progressTheme.borderRadius !== undefined) {
+    cssVars['--soui-progress-border-radius'] = `${progressTheme.borderRadius}px`;
+  }
+  if (progressTheme.fontSize !== undefined) {
+    cssVars['--soui-progress-font-size'] = `${progressTheme.fontSize}px`;
+  }
+  if (progressTheme.colorPrimary) {
+    cssVars['--soui-progress-color-primary'] = progressTheme.colorPrimary;
+  }
+  if (progressTheme.colorSuccess) {
+    cssVars['--soui-progress-color-success'] = progressTheme.colorSuccess;
+  }
+  if (progressTheme.colorError) {
+    cssVars['--soui-progress-color-error'] = progressTheme.colorError;
+  }
+  if (progressTheme.colorTrail) {
+    cssVars['--soui-progress-trail-color'] = progressTheme.colorTrail;
+  }
 
   // 步骤模式
   if (steps && steps > 0) {
@@ -196,10 +230,9 @@ const LineProgress: React.FC<ProgressProps> = ({
     if (status === 'success') {
       activeStepColor = success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)';
     } else if (status === 'exception') {
-      activeStepColor = typeof strokeColor === 'string' ? strokeColor : parseStrokeColor(strokeColor);
-      if (!activeStepColor) {
-        activeStepColor = 'var(--soui-progress-color-error, #ff4d4f)';
-      }
+      activeStepColor = strokeColor
+        ? parseStrokeColor(strokeColor)
+        : 'var(--soui-progress-color-error, #ff4d4f)';
     } else {
       activeStepColor = success?.strokeColor || parseStrokeColor(strokeColor);
     }
@@ -207,7 +240,7 @@ const LineProgress: React.FC<ProgressProps> = ({
     return (
       <div
         className={classNames('soui-progress', 'soui-progress-steps', `soui-progress-status-${status}`, className)}
-        style={style}
+        style={{ ...cssVars, ...style }}
         {...rest}
       >
         <div className="soui-progress-steps-outer">
@@ -244,25 +277,30 @@ const LineProgress: React.FC<ProgressProps> = ({
 
   // 普通线形模式
   // 根据 status 确定颜色
+  const hasStrokeColor = !!strokeColor;
   let barColor: string;
   if (status === 'success') {
     barColor = success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)';
   } else if (status === 'exception') {
-    barColor = typeof strokeColor === 'string' ? strokeColor : parseStrokeColor(strokeColor);
-    if (!barColor) {
-      barColor = 'var(--soui-progress-color-error, #ff4d4f)';
-    }
+    barColor = hasStrokeColor
+      ? parseStrokeColor(strokeColor)
+      : 'var(--soui-progress-color-error, #ff4d4f)';
   } else {
-    barColor = parseStrokeColor(strokeColor);
+    barColor = hasStrokeColor
+      ? parseStrokeColor(strokeColor)
+      : 'var(--soui-progress-color-primary, #1677ff)';
   }
   
   const trackBg = trailColor || 'var(--soui-progress-trail-color, #f5f5f5)';
 
+  const isGradient = barColor.startsWith('linear-gradient');
+  const barHeight = strokeWidth || (typeof sizeObj.height === 'number' ? sizeObj.height : 8);
+
   const barStyle: React.CSSProperties = {
     width: `${clampedPercent}%`,
-    backgroundColor: barColor.startsWith('linear-gradient') ? undefined : barColor,
-    backgroundImage: barColor.startsWith('linear-gradient') ? barColor : undefined,
-    height: strokeWidth || (typeof sizeObj.height === 'number' ? sizeObj.height : 8),
+    backgroundColor: isGradient ? undefined : barColor,
+    backgroundImage: isGradient ? barColor : undefined,
+    height: barHeight,
   };
 
   const trailStyle: React.CSSProperties = {
@@ -273,7 +311,7 @@ const LineProgress: React.FC<ProgressProps> = ({
   return (
     <div
       className={classNames('soui-progress', 'soui-progress-line', `soui-progress-status-${status}`, className)}
-      style={style}
+      style={{ ...cssVars, ...style }}
       role="progressbar"
       aria-valuenow={clampedPercent}
       aria-valuemin={0}
@@ -289,7 +327,7 @@ const LineProgress: React.FC<ProgressProps> = ({
               style={{
                 width: `${clampedSuccessPercent}%`,
                 backgroundColor: success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)',
-                height: strokeWidth || (typeof sizeObj.height === 'number' ? sizeObj.height : 8),
+                height: barHeight,
               }}
             />
           )}
@@ -326,14 +364,44 @@ const CircleProgress: React.FC<ProgressProps> = ({
   style,
   ...rest
 }) => {
+  const context = useContext(ConfigContext);
+  const progressTheme = context?.components?.Progress || {};
+
+  // 稳定的渐变 ID，避免 re-render 时变化
+  const gradientIdRef = useRef(`soui-progress-gradient-${Math.random().toString(36).slice(2)}`);
+  const gradientId = gradientIdRef.current;
+
   const clampedPercent = clampPercent(percent);
   const successPercent = success?.percent ?? 0;
-  const clampedSuccessPercent = clampPercent(successPercent);
+  const clampedSuccessPercent = Math.min(clampPercent(successPercent), clampedPercent);
   const sizeObj = getSize(size, type);
 
-  const viewSize = typeof sizeObj.width === 'number' ? sizeObj.width : 120;
+  // 确保圆形使用正方形尺寸，避免数组导致宽高不一致
+  const viewSize = typeof sizeObj.width === 'number'
+    ? sizeObj.width
+    : typeof sizeObj.height === 'number'
+      ? sizeObj.height
+      : 120;
   const defaultStrokeWidth = type === 'dashboard' ? 6 : 8;
   const sw = strokeWidth ?? defaultStrokeWidth;
+
+  // ConfigContext → CSS 变量
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (progressTheme.fontSize !== undefined) {
+    cssVars['--soui-progress-font-size'] = `${progressTheme.fontSize}px`;
+  }
+  if (progressTheme.colorPrimary) {
+    cssVars['--soui-progress-color-primary'] = progressTheme.colorPrimary;
+  }
+  if (progressTheme.colorSuccess) {
+    cssVars['--soui-progress-color-success'] = progressTheme.colorSuccess;
+  }
+  if (progressTheme.colorError) {
+    cssVars['--soui-progress-color-error'] = progressTheme.colorError;
+  }
+  if (progressTheme.colorTrail) {
+    cssVars['--soui-progress-trail-color'] = progressTheme.colorTrail;
+  }
 
   // 计算 SVG 参数
   const radius = (viewSize - sw) / 2;
@@ -365,24 +433,26 @@ const CircleProgress: React.FC<ProgressProps> = ({
   const successDashOffset = arcLength - (clampedSuccessPercent / 100) * (totalAngle / 360) * circumference;
 
   // 根据 status 确定颜色
+  const hasStrokeColor = !!strokeColor;
   let barColor: string;
   if (status === 'success') {
     barColor = success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)';
   } else if (status === 'exception') {
-    barColor = typeof strokeColor === 'string' ? strokeColor : parseStrokeColor(strokeColor);
-    if (!barColor) {
-      barColor = 'var(--soui-progress-color-error, #ff4d4f)';
-    }
+    barColor = hasStrokeColor
+      ? parseStrokeColor(strokeColor)
+      : 'var(--soui-progress-color-error, #ff4d4f)';
   } else {
-    barColor = parseStrokeColor(strokeColor);
+    // normal / active：有自定义颜色时使用自定义色，否则使用主色默认值
+    barColor = hasStrokeColor
+      ? parseStrokeColor(strokeColor)
+      : 'var(--soui-progress-color-primary, #1677ff)';
   }
-  
+
   const trackColor = trailColor || 'var(--soui-progress-trail-color, #f5f5f5)';
   const successColor = success?.strokeColor || 'var(--soui-progress-color-success, #52c41a)';
 
   // 渐变定义
-  const gradientId = `soui-progress-gradient-${Math.random().toString(36).slice(2)}`;
-  const hasGradient = strokeColor && typeof strokeColor === 'object';
+  const hasGradient = hasStrokeColor && typeof strokeColor === 'object';
 
   const renderGradientDef = () => {
     if (!hasGradient || typeof strokeColor === 'string') return null;
@@ -397,6 +467,7 @@ const CircleProgress: React.FC<ProgressProps> = ({
     );
   };
 
+  // 渐变时使用 url 引用，否则直接使用颜色值
   const finalBarColor = hasGradient ? `url(#${gradientId})` : barColor;
 
   // 文本尺寸
@@ -432,6 +503,7 @@ const CircleProgress: React.FC<ProgressProps> = ({
       style={{
         width: viewSize,
         height: viewSize,
+        ...cssVars,
         ...style,
       }}
       role="progressbar"
