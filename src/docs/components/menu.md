@@ -424,71 +424,63 @@ Menu 组件遵循 WAI-ARIA 规范：
 
 ## 主题定制
 
-Menu 组件支持通过 ConfigProvider 进行全局或组件级的主题定制。
+Menu 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。主题配置会同时作用于菜单本体和弹出层（Popup）。
 
-### 全局主题配置
+### 组件级配置
 
-通过 ConfigProvider 的 `theme` 属性可以统一修改所有 Menu 组件的样式：
-
-```tsx
-import { ConfigProvider, Menu } from '@soui/ui';
-
-const App = () => {
-  return (
-    <ConfigProvider
-      theme={{
-        // 全局主色会影响 Menu 的选中状态颜色
-        primaryColor: '#722ed1',
-        primaryHoverColor: '#9254de',
-        
-        // 字体大小和圆角
-        fontSize: 14,
-        borderRadius: 8,
-      }}
-    >
-      <Menu items={items} />
-    </ConfigProvider>
-  );
-};
-```
-
-### 组件级主题配置
-
-通过 `theme.components.Menu` 可以单独定制 Menu 组件的样式，不影响其他组件：
+通过 `theme.components.Menu` 针对 Menu 组件进行精细化配置：
 
 ```tsx
-import { ConfigProvider, Menu } from '@soui/ui';
+import { ConfigProvider } from '@soui/ui';
 
-const App = () => {
-  return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Menu: {
-            // 颜色配置
-            colorPrimary: '#52c41a',           // 主色（影响选中状态）
-            colorPrimaryHover: '#73d13d',      // 主色悬停
-            colorText: 'rgba(0, 0, 0, 0.85)',  // 文本颜色
-            colorTextSecondary: 'rgba(0, 0, 0, 0.65)', // 次要文本颜色
-            
-            // 状态背景色
-            itemSelectedBg: 'rgba(82, 196, 26, 0.1)',   // 选中项背景色
-            itemSelectedColor: '#52c41a',               // 选中项文本颜色
-            itemHoverBg: 'rgba(0, 0, 0, 0.06)',         // 悬停背景色
-            itemActiveBg: 'rgba(0, 0, 0, 0.08)',        // 激活背景色
-            
-            // 尺寸配置
-            fontSize: 14,                      // 字体大小（像素）
-            borderRadius: 6,                   // 圆角（像素）
-          },
+export default () => (
+  <ConfigProvider
+    theme={{
+      components: {
+        Menu: {
+          borderRadius: 8,                          // 菜单项圆角（px）
+          fontSize: 14,                             // 文本字号（px）
+          colorPrimary: '#722ed1',                  // 主色（选中指示器、焦点轮廓）
+          colorPrimaryHover: '#9254de',             // 主色悬停态
+          colorText: 'rgba(0, 0, 0, 0.85)',         // 菜单文本颜色
+          colorTextSecondary: 'rgba(0, 0, 0, 0.65)', // 次要文本颜色（分组标题）
+          itemSelectedBg: 'rgba(114, 46, 209, 0.1)', // 选中项背景色
+          itemSelectedColor: '#722ed1',              // 选中项文本颜色
+          itemHoverBg: 'rgba(0, 0, 0, 0.06)',       // 悬停背景色
+          itemActiveBg: 'rgba(0, 0, 0, 0.08)',      // 按下背景色
         },
-      }}
-    >
-      <Menu items={items} />
-    </ConfigProvider>
-  );
-};
+      },
+    }}
+  >
+    <YourApp />
+  </ConfigProvider>
+);
 ```
+
+> **注意**：配置项对菜单本体及所有弹出层（Popup）均生效，无需分别配置。弹出层通过 `createPortal` 渲染到 `document.body`，但 CSS 变量会自动透传至弹出层容器。
+
+### 配置优先级
+
+SoUi 采用以下优先级规则（从高到低）：
+
+```
+Props 属性（style）> 组件级配置 > CSS 变量 > Less 变量
+```
+
+### 可用的主题配置项
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| `borderRadius` | 菜单项圆角大小（px） | `number` | 继承 `@border-radius-base`（`6px`） |
+| `fontSize` | 菜单文本字号（px） | `number` | 继承 `@font-size-base`（`14px`） |
+| `colorPrimary` | 主色，用于选中指示器和焦点轮廓 | `string` | `#1677ff` |
+| `colorPrimaryHover` | 主色悬停态 | `string` | `#4096ff` |
+| `colorText` | 菜单文本颜色 | `string` | `rgba(0, 0, 0, 0.88)` |
+| `colorTextSecondary` | 次要文本颜色（分组标题等） | `string` | `rgba(0, 0, 0, 0.65)` |
+| `itemSelectedBg` | 选中项背景色 | `string` | `rgba(24, 144, 255, 0.1)` |
+| `itemSelectedColor` | 选中项文本/图标颜色 | `string` | `#1677ff` |
+| `itemHoverBg` | 悬停背景色 | `string` | `rgba(0, 0, 0, 0.04)` |
+| `itemActiveBg` | 按下（active）背景色 | `string` | `rgba(0, 0, 0, 0.06)` |
 
 ### CSS 变量定制
 
@@ -645,6 +637,10 @@ const [selectedKeys, setSelectedKeys] = useState([currentPath]);
 2. 确保子菜单项有 `children` 数组
 3. 检查 `popupZIndex` 是否足够高
 4. 确认父容器没有 `overflow: hidden`
+
+### 弹出层菜单的主题配置会生效吗？
+
+会。Menu 组件会将 ConfigProvider 的主题配置以 CSS 变量的形式透传到弹出层（Popup）容器。即使弹出层通过 `createPortal` 渲染到 `document.body`，自定义的悬停背景色、选中背景色等配置依然正常生效。
 
 ### 如何实现动态菜单？
 

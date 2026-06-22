@@ -479,11 +479,11 @@
       .soui-menu-item {
         &:hover {
           color: var(--soui-menu-item-selected-color);
-          background-color: rgba(0, 0, 0, 0.04);
+          background-color: var(--soui-menu-item-hover-bg);
         }
 
         &.soui-menu-item-selected {
-          background-color: rgba(24, 144, 255, 0.1);
+          background-color: var(--soui-menu-item-selected-bg);
           font-weight: 500;
 
           .soui-menu-item-label, .soui-menu-item-icon {
@@ -524,7 +524,7 @@
   &-title {
     padding: 8px 16px;
     font-size: @font-size-sm;
-    color: @text-color-secondary;
+    color: var(--soui-menu-color-text-secondary, @text-color-secondary);
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -592,7 +592,7 @@
 
 .soui-menu-item:focus-visible,
 .soui-submenu-title:focus-visible {
-  outline: 2px solid var(--soui-menu-color-primary);
+  outline: 2px solid var(--soui-menu-color-primary-hover);
   outline-offset: -2px;
 }
 

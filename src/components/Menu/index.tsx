@@ -10,6 +10,7 @@ import { createPortal } from "react-dom";
 import classNames from "classnames";
 import Icon from "../Icon";
 import Tooltip from "../Tooltip";
+import ConfigContext from "../ConfigProvider/context";
 import "./style.less";
 
 export type MenuMode = "inline" | "vertical" | "horizontal";
@@ -53,6 +54,7 @@ interface MenuContextProps {
   level: number;
   isPopup: boolean;
   popupTheme: "light" | "dark";
+  cssVars: React.CSSProperties & Record<string, any>;
   onSelect: (key: string, keyPath: string[]) => void;
   onToggleOpen: (key: string) => void;
 }
@@ -156,6 +158,7 @@ const Popup = ({
   mode,
   popupTheme,
   level,
+  cssVars,
 }: {
   visible: boolean;
   anchor: DOMRect | null;
@@ -164,6 +167,7 @@ const Popup = ({
   mode: MenuMode;
   popupTheme: "light" | "dark";
   level: number;
+  cssVars?: React.CSSProperties & Record<string, any>;
 }) => {
   if (!visible || !anchor) {
     return null;
@@ -184,6 +188,7 @@ const Popup = ({
         top: shouldPopupFromBottom ? anchor.bottom : anchor.top,
         left: shouldPopupFromBottom ? anchor.left : anchor.right + 4,
         zIndex,
+        ...cssVars,
       }}
     >
       {children}
@@ -207,6 +212,7 @@ const SubMenu = React.memo(
       level,
       isPopup,
       popupTheme,
+      cssVars,
       onToggleOpen,
     } = useMenuContext();
     const open = openKeys.includes(item.key);
@@ -256,6 +262,7 @@ const SubMenu = React.memo(
           level: level + 1,
           isPopup: popupMode,
           popupTheme,
+          cssVars,
           onSelect: useMenuContext().onSelect,
           onToggleOpen,
         }}
@@ -334,6 +341,7 @@ const SubMenu = React.memo(
             mode={mode}
             popupTheme={popupTheme}
             level={level + 1}
+            cssVars={cssVars}
           >
             <div
               onMouseEnter={() => {
@@ -398,6 +406,9 @@ const Menu: React.FC<MenuProps> = ({
   onOpenChange,
   popupTheme = "light",
 }) => {
+  const configContext = useContext(ConfigContext);
+  const menuTheme = configContext?.components?.Menu || {};
+
   const [innerSelectedKeys, setInnerSelectedKeys] =
     useState(defaultSelectedKeys);
   const [innerOpenKeys, setInnerOpenKeys] = useState(defaultOpenKeys);
@@ -430,6 +441,40 @@ const Menu: React.FC<MenuProps> = ({
     },
     [openKeys, accordion, controlledOpenKeys, onOpenChange],
   );
+
+  // ConfigContext → CSS 变量
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (menuTheme.borderRadius !== undefined) {
+    cssVars['--soui-menu-border-radius'] = `${menuTheme.borderRadius}px`;
+  }
+  if (menuTheme.fontSize !== undefined) {
+    cssVars['--soui-menu-font-size'] = `${menuTheme.fontSize}px`;
+  }
+  if (menuTheme.colorPrimary) {
+    cssVars['--soui-menu-color-primary'] = menuTheme.colorPrimary;
+  }
+  if (menuTheme.colorPrimaryHover) {
+    cssVars['--soui-menu-color-primary-hover'] = menuTheme.colorPrimaryHover;
+  }
+  if (menuTheme.colorText) {
+    cssVars['--soui-menu-color-text'] = menuTheme.colorText;
+  }
+  if (menuTheme.colorTextSecondary) {
+    cssVars['--soui-menu-color-text-secondary'] = menuTheme.colorTextSecondary;
+  }
+  if (menuTheme.itemSelectedBg) {
+    cssVars['--soui-menu-item-selected-bg'] = menuTheme.itemSelectedBg;
+  }
+  if (menuTheme.itemSelectedColor) {
+    cssVars['--soui-menu-item-selected-color'] = menuTheme.itemSelectedColor;
+  }
+  if (menuTheme.itemHoverBg) {
+    cssVars['--soui-menu-item-hover-bg'] = menuTheme.itemHoverBg;
+  }
+  if (menuTheme.itemActiveBg) {
+    cssVars['--soui-menu-item-active-bg'] = menuTheme.itemActiveBg;
+  }
+
   const contextValue = useMemo(
     () => ({
       mode,
@@ -441,6 +486,7 @@ const Menu: React.FC<MenuProps> = ({
       level: 0,
       isPopup: false,
       popupTheme,
+      cssVars,
       onSelect,
       onToggleOpen,
     }),
@@ -452,6 +498,7 @@ const Menu: React.FC<MenuProps> = ({
       triggerSubMenuAction,
       popupZIndex,
       popupTheme,
+      cssVars,
       onSelect,
       onToggleOpen,
     ],
@@ -467,7 +514,7 @@ const Menu: React.FC<MenuProps> = ({
           },
           className,
         )}
-        style={style}
+        style={{ ...cssVars, ...style }}
         role="menu"
       >
         {items.map((item) => renderNode(item, []))}

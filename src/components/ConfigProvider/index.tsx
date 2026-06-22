@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import ConfigContext from './context';
 import type { ConfigProviderProps, ThemeConfig, ConfigContextProps } from './types';
 import { defaultTheme } from './types';
-import { addOpacityToColor } from '../../utils';
+import { addOpacityToColor } from '@/utils';
 import './style.less';
 
 const ConfigProvider: React.FC<ConfigProviderProps> = ({
@@ -44,7 +44,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const loadingTheme = mergedTheme.components?.Loading || {};
     // 获取 Skeleton 组件级配置
     const skeletonTheme = mergedTheme.components?.Skeleton || {};
-    
+
     return {
       // ==================== 全局基础变量 ====================
       '--soui-primary-color': mergedTheme.primaryColor,
@@ -57,12 +57,12 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-border-radius': `${mergedTheme.borderRadius}px`,
       '--soui-font-size': `${mergedTheme.fontSize}px`,
       '--soui-line-height': mergedTheme.lineHeight?.toString(),
-      
+
       // 间距变量
       '--soui-size-small': `${mergedTheme.paddingSM}px`,
       '--soui-size-middle': `${mergedTheme.paddingMD}px`,
       '--soui-size-large': `${mergedTheme.paddingLG}px`,
-      
+
       // ==================== Typography 组件配置 ====================
       // 第2层: Typography 组件配置点 (引用设计令牌)
       '--soui-typography-font-size-sm': `${mergedTheme.fontSizeSM}px`,
@@ -70,7 +70,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-typography-font-size-lg': `${mergedTheme.fontSizeLG}px`,
       '--soui-typography-font-size-xl': `${mergedTheme.fontSizeXL}px`,
       '--soui-typography-line-height-base': mergedTheme.lineHeight?.toString(),
-      
+
       // 标题字号
       '--soui-typography-heading-1-font-size': `${mergedTheme.headingLevel1FontSize}px`,
       '--soui-typography-heading-2-font-size': `${mergedTheme.headingLevel2FontSize}px`,
@@ -80,19 +80,19 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-typography-heading-1-font-size-md': `${mergedTheme.headingLevel1FontSizeMD}px`,
       '--soui-typography-heading-2-font-size-md': `${mergedTheme.headingLevel2FontSizeMD}px`,
       '--soui-typography-heading-3-font-size-md': `${mergedTheme.headingLevel3FontSizeMD}px`,
-      
+
       // 标题行高
       '--soui-typography-heading-1-line-height': mergedTheme.headingLevel1LineHeight?.toString(),
       '--soui-typography-heading-2-line-height': mergedTheme.headingLevel2LineHeight?.toString(),
       '--soui-typography-heading-3-line-height': mergedTheme.headingLevel3LineHeight?.toString(),
       '--soui-typography-heading-4-line-height': mergedTheme.headingLevel4LineHeight?.toString(),
       '--soui-typography-heading-5-line-height': mergedTheme.headingLevel5LineHeight?.toString(),
-      
+
       // 特殊样式
       '--soui-typography-mark-bg-color': mergedTheme.markBackgroundColor,
       '--soui-typography-code-bg-color': mergedTheme.codeBackgroundColor,
       '--soui-typography-code-border-color': mergedTheme.codeBorderColor,
-      
+
       // Typography 组件级变量（优先级更高）
       '--soui-typography-color-text': typographyTheme.colorText || 'rgba(0, 0, 0, 0.88)',
       '--soui-typography-color-text-secondary': typographyTheme.colorTextSecondary || 'rgba(0, 0, 0, 0.65)',
@@ -112,7 +112,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-typography-editable-focus-shadow-opacity': typographyTheme.editableFocusShadowOpacity?.toString() || '0.2',
       '--soui-typography-expand-color': typographyTheme.expandColor || mergedTheme.primaryColor,
       '--soui-typography-expand-hover-color': typographyTheme.expandHoverColor || mergedTheme.primaryHoverColor,
-      
+
       // Typography 带透明度的颜色（用于focus、hover等效果）
       '--soui-typography-link-focus-color': addOpacityToColor(
         typographyTheme.colorLink || mergedTheme.primaryColor || '#1890ff',
@@ -126,7 +126,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
         typographyTheme.editableBorderColor || mergedTheme.primaryColor || '#1890ff',
         typographyTheme.editableFocusShadowOpacity || 0.2
       ),
-      
+
       // ==================== Icon 组件配置 ====================
       '--soui-icon-size': `${iconTheme.size || 24}px`,
       '--soui-icon-color-primary': iconTheme.colorPrimary || mergedTheme.primaryColor,
@@ -137,7 +137,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-icon-color-default': iconTheme.colorDefault || mergedTheme.primaryColor,
       '--soui-icon-hover-opacity': iconTheme.hoverOpacity?.toString() || '0.7',
       '--soui-icon-active-opacity': iconTheme.activeOpacity?.toString() || '0.5',
-      
+
       // ==================== Tooltip 组件配置 ====================
       // 第1层: 设计令牌 (Design Tokens) - 真正的全局变量
       '--soui-color-bg-default': mergedTheme.tooltipBgColor,
@@ -147,7 +147,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-box-shadow-secondary': mergedTheme.tooltipBoxShadow,
       '--soui-z-index-popover': mergedTheme.tooltipZIndex?.toString(),
       '--soui-transition-duration': `${mergedTheme.tooltipAnimationDuration}s`,
-      
+
       // 第2层: Tooltip 配置点 (引用设计令牌)
       '--soui-tooltip-bg-color': mergedTheme.tooltipBgColor,
       '--soui-tooltip-text-color': mergedTheme.tooltipTextColor,
@@ -161,7 +161,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-tooltip-arrow-size': `${mergedTheme.tooltipArrowSize}px`,
       '--soui-tooltip-z-index': mergedTheme.tooltipZIndex?.toString(),
       '--soui-tooltip-animation-duration': `${mergedTheme.tooltipAnimationDuration}s`,
-      
+
       // 第3层: Tooltip 组件级覆盖 (优先级最高)
       '--soui-tooltip-color-bg-default': tooltipTheme.colorBgDefault || mergedTheme.tooltipBgColor,
       '--soui-tooltip-color-text': tooltipTheme.colorText || mergedTheme.tooltipTextColor,
@@ -177,12 +177,12 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-tooltip-z-index-component': tooltipTheme.zIndex?.toString(),
       '--soui-tooltip-animation-duration-component': tooltipTheme.animationDuration ? `${tooltipTheme.animationDuration}s` : undefined,
       '--soui-tooltip-animation-timing-function': tooltipTheme.animationTimingFunction,
-      
+
       // ==================== Divider 组件配置 ====================
       // 第2层: Divider 配置点 (引用设计令牌)
       '--soui-divider-color': dividerTheme.colorBorder || mergedTheme.borderColorBase,
       '--soui-divider-font-size': dividerTheme.fontSize ? `${dividerTheme.fontSize}px` : undefined,
-      
+
       // ==================== Layout 组件配置 ====================
       // 第2层: Layout 配置点 (引用设计令牌)
       '--soui-layout-color-bg': layoutTheme.colorBg || '@bg-color-layout',
@@ -200,7 +200,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-layout-sider-trigger-color-text': layoutTheme.siderTriggerColorText || '#fff',
       '--soui-layout-sider-trigger-color-bg': layoutTheme.siderTriggerColorBg || 'rgba(255, 255, 255, 0.1)',
       '--soui-layout-sider-trigger-color-bg-hover': layoutTheme.siderTriggerColorBgHover || 'rgba(255, 255, 255, 0.2)',
-      
+
       // ==================== Menu 组件配置 ====================
       // 第2层: Menu 配置点 (引用设计令牌)
       '--soui-menu-color-text': menuTheme.colorText || '@text-color',
@@ -212,7 +212,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-menu-item-selected-color': menuTheme.itemSelectedColor || mergedTheme.primaryColor,
       '--soui-menu-border-radius': menuTheme.borderRadius ? `${menuTheme.borderRadius}px` : undefined,
       '--soui-menu-font-size': menuTheme.fontSize ? `${menuTheme.fontSize}px` : undefined,
-      
+
       // 第3层: Menu 组件级覆盖 (优先级最高)
       '--soui-menu-color-text-component': menuTheme.colorText,
       '--soui-menu-color-primary-component': menuTheme.colorPrimary,
@@ -220,7 +220,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-menu-item-selected-color-component': menuTheme.itemSelectedColor,
       '--soui-menu-border-radius-component': menuTheme.borderRadius ? `${menuTheme.borderRadius}px` : undefined,
       '--soui-menu-font-size-component': menuTheme.fontSize ? `${menuTheme.fontSize}px` : undefined,
-      
+
       // ==================== Anchor 组件配置 ====================
       // 第2层: Anchor 配置点 (引用设计令牌)
       '--soui-anchor-color-primary': anchorTheme.colorPrimary || mergedTheme.primaryColor,
@@ -228,7 +228,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-anchor-link-padding-block': anchorTheme.linkPadding ? `${anchorTheme.linkPadding}px` : undefined,
       '--soui-anchor-font-size': anchorTheme.fontSize ? `${anchorTheme.fontSize}px` : undefined,
       '--soui-anchor-ink-width': anchorTheme.inkWidth ? `${anchorTheme.inkWidth}px` : undefined,
-      
+
       // ==================== Alert 组件配置 ====================
       // 第2层: Alert 配置点 (引用设计令牌)
       '--soui-alert-border-radius': alertTheme.borderRadius ? `${alertTheme.borderRadius}px` : undefined,
