@@ -19,6 +19,7 @@ import Progress from '../../src/components/Progress';
 import Notification from '../../src/components/Notification';
 import Loading from '../../src/components/Loading';
 import Skeleton from '../../src/components/Skeleton';
+import Dialog from '../../src/components/Dialog';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -74,6 +75,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Notification,
     Loading,
     Skeleton,
+    Dialog,
     ConfigProvider,
     ...scope,
   };

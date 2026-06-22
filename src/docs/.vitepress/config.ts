@@ -240,7 +240,7 @@ function sidebarComponents() {
       text: '反馈组件',
       collapsed: false,
       items: [
-        { text: 'Modal 对话框', link: 'modal' },
+        { text: 'Dialog 对话框', link: 'dialog' },
         { text: 'Message 全局提示', link: 'message' },
         { text: 'Notification 通知提醒框', link: 'notification' },
         { text: 'Loading 加载中', link: 'loading' },

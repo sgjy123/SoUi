@@ -276,6 +276,16 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
+        key: 'dialog',
+        label: 'Dialog 对话框',
+        icon: 'Remind',
+        items: [
+          { key: 'dialog-basic', label: 'Dialog 基础用法', componentPath: 'Dialog', exampleName: 'Basic', description: '基本的对话框用法。' },
+          { key: 'dialog-confirm', label: 'Dialog 确认框', componentPath: 'Dialog', exampleName: 'Confirm', description: '静态方法的确认框、信息、成功、警告、错误。' },
+          { key: 'dialog-async', label: 'Dialog 异步提交', componentPath: 'Dialog', exampleName: 'Async', description: '异步操作的对话框，带有加载状态。' },
+        ],
+      },
+      {
         key: 'loading',
         label: 'Loading 加载中',
         icon: 'LoadingThree',

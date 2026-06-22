@@ -79,6 +79,10 @@ export type { AnchorProps, AnchorItem, AnchorLinkProps, AnchorDirection } from '
 export { default as Affix } from './components/Affix';
 export type { AffixProps } from './components/Affix';
 
+// Dialog Component
+export { default as Dialog } from './components/Dialog';
+export type { DialogProps, DialogConfirmConfig, DialogReturnType, DialogOkType, DialogHookInstance, DialogInstance } from './components/Dialog';
+
 // Alert Component
 export { default as Alert } from './components/Alert';
 export type { AlertProps, AlertType } from './components/Alert';

@@ -326,7 +326,8 @@ export const useConfig = () => {
 export const useTheme = () => {
   const context = React.useContext(ConfigContext);
   if (!context) {
-    throw new Error('useTheme must be used within ConfigProvider');
+    // 不在 ConfigProvider 内时返回空对象，组件将使用 Less 默认值
+    return {};
   }
   return context.theme || {};
 };
@@ -337,7 +338,7 @@ export const useTheme = () => {
 export const useComponentSize = () => {
   const context = React.useContext(ConfigContext);
   if (!context) {
-    throw new Error('useComponentSize must be used within ConfigProvider');
+    return 'middle' as const;
   }
   return context.componentSize || 'middle';
 };
@@ -350,7 +351,9 @@ export const useComponentTheme = <T extends keyof NonNullable<ConfigContextProps
 ): NonNullable<ConfigContextProps['components']>[T] => {
   const context = React.useContext(ConfigContext);
   if (!context) {
-    throw new Error('useComponentTheme must be used within ConfigProvider');
+    // 不在 ConfigProvider 内时返回空对象，组件将使用 Less 默认值
+    // 适用于 Portal 组件（Dialog、Notification、Message 等）通过 createRoot 渲染的场景
+    return {} as NonNullable<ConfigContextProps['components']>[T];
   }
   return (context.components?.[componentName] || {}) as NonNullable<ConfigContextProps['components']>[T];
 };

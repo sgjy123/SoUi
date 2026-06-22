@@ -1,0 +1,199 @@
+@import '../../styles/variables.less';
+
+// ==================== Dialog Root ====================
+
+.soui-dialog-root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--soui-dialog-z-index, @z-index-modal);
+  display: none;
+  overflow: hidden;
+
+  &-visible {
+    display: block;
+  }
+}
+
+// ==================== Dialog Mask ====================
+
+.soui-dialog-mask {
+  position: fixed;
+  inset: 0;
+  background-color: var(--soui-dialog-mask-bg-color, rgba(0, 0, 0, 0.45));
+  opacity: 0;
+  transition: opacity @transition-duration @transition-timing-function;
+
+  .soui-dialog-root-visible > & {
+    opacity: 1;
+  }
+}
+
+// ==================== Dialog Wrap ====================
+
+.soui-dialog-wrap {
+  position: fixed;
+  inset: 0;
+  overflow: auto;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 100px 32px 32px;
+  pointer-events: none;
+
+  &-centered {
+    align-items: center;
+    padding: 32px;
+  }
+}
+
+// ==================== Dialog ====================
+
+.soui-dialog {
+  position: relative;
+  background-color: var(--soui-dialog-bg-color, @bg-color-base);
+  border-radius: var(--soui-dialog-border-radius, @border-radius-lg);
+  box-shadow: var(--soui-dialog-box-shadow, @box-shadow-secondary);
+  max-width: calc(100vw - 64px);
+  max-height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  animation: soui-dialog-enter @transition-duration @transition-timing-function;
+  pointer-events: auto;
+
+  &-closing {
+    animation: soui-dialog-exit @transition-duration @transition-timing-function forwards;
+  }
+
+  // ==================== Close Button ====================
+
+  &-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    background: transparent;
+    border: none;
+    border-radius: var(--soui-border-radius, @border-radius-base);
+    cursor: pointer;
+    transition: all @transition-duration @transition-timing-function;
+    z-index: 1;
+
+    &:hover {
+      color: var(--soui-text-color, @text-color);
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    svg {
+      width: 1em;
+      height: 1em;
+    }
+  }
+
+  // ==================== Header ====================
+
+  &-header {
+    padding: var(--soui-dialog-header-padding, 12px 20px);
+    border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
+  }
+
+  &-title {
+    font-size: var(--soui-dialog-title-font-size, @font-size-lg);
+    font-weight: 600;
+    line-height: var(--soui-line-height-base, @line-height-base);
+    color: var(--soui-text-color, @text-color);
+    word-break: break-word;
+  }
+
+  // ==================== Body ====================
+
+  &-body {
+    padding: var(--soui-dialog-body-padding, 16px 20px);
+    font-size: var(--soui-font-size, @font-size-base);
+    line-height: var(--soui-line-height-base, @line-height-base);
+    color: var(--soui-text-color, @text-color);
+    overflow: auto;
+    word-break: break-word;
+  }
+
+  // ==================== Footer ====================
+
+  &-footer {
+    padding: var(--soui-dialog-footer-padding, 10px 20px);
+    border-top: 1px solid var(--soui-border-color-split, @border-color-split);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--soui-margin-sm, @margin-sm);
+  }
+
+  // ==================== Confirm Type ====================
+
+  &-confirm {
+    .soui-dialog-footer {
+      border-top: none;
+      padding-top: 0;
+    }
+  }
+
+  &-confirm-body {
+    display: flex;
+    gap: var(--soui-dialog-confirm-gap, 12px);
+    padding: var(--soui-dialog-confirm-body-padding, 16px 20px);
+  }
+
+  &-confirm-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-top: 2px;
+  }
+
+  &-confirm-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &-confirm-title {
+    display: block;
+    font-size: var(--soui-dialog-title-font-size, @font-size-lg);
+    font-weight: 600;
+    line-height: var(--soui-line-height-base, @line-height-base);
+    color: var(--soui-text-color, @text-color);
+    margin-bottom: var(--soui-margin-sm, @margin-sm);
+    word-break: break-word;
+  }
+}
+
+// ==================== Animations ====================
+
+@keyframes soui-dialog-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes soui-dialog-exit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
