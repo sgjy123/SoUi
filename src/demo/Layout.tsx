@@ -6,6 +6,7 @@ import ConfigProvider from "../components/ConfigProvider";
 import Layout from "../components/Layout";
 import Menu from "../components/Menu";
 import Icon from "../components/Icon";
+import { ThemeProviderWrapper } from "./ThemeSwitcher";
 import "./style.less";
 
 const DocsLayout: React.FC = () => {
@@ -59,7 +60,7 @@ const DocsLayout: React.FC = () => {
     })) || [];
 
   return (
-    <ConfigProvider>
+    <ThemeProviderWrapper>
       <Layout hasSider style={{ minHeight: '100vh', borderRadius: '8px', overflow: 'hidden' }}>
         {/* 左侧菜单 */}
         <Layout.Sider width={256}
@@ -126,7 +127,7 @@ const DocsLayout: React.FC = () => {
           </div>
         </Layout>
       </Layout>
-    </ConfigProvider>
+    </ThemeProviderWrapper>
   );
 };
 
