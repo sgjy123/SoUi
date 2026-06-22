@@ -415,6 +415,11 @@ export interface ComponentThemeConfig {
     /** 高亮色（动画效果） */
     colorHighlight?: string;
   };
+  /** Affix 固钉组件配置 */
+  Affix?: {
+    /** z-index 层级 */
+    zIndex?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

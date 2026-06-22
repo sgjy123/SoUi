@@ -216,6 +216,7 @@ function sidebarComponents() {
         { text: 'Breadcrumb 面包屑', link: 'breadcrumb' },
         { text: 'Steps 步骤条', link: 'steps' },
         { text: 'Anchor 锚点', link: 'anchor' },
+        { text: 'Affix 固钉', link: 'affix' },
       ],
     },
     {

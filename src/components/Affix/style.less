@@ -1,0 +1,18 @@
+@import '../../styles/variables.less';
+
+// Affix 固钉组件样式
+.soui-affix {
+  // z-index 通过 CSS 变量注入，支持主题定制
+  z-index: var(--soui-affix-z-index, @z-index-popup-base);
+
+  // 非固定状态：正常文档流
+  &-wrapper {
+    display: block;
+  }
+
+  // 固定状态
+  &-fixed {
+    left: 0;
+    right: auto;
+  }
+}

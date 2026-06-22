@@ -12,6 +12,7 @@ import FloatButton from '../../src/components/FloatButton';
 import Breadcrumb from '../../src/components/Breadcrumb';
 import Steps from '../../src/components/Steps';
 import Anchor from '../../src/components/Anchor';
+import Affix from '../../src/components/Affix';
 import Alert from '../../src/components/Alert';
 import Message from '../../src/components/Message';
 import Progress from '../../src/components/Progress';
@@ -66,6 +67,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Step: Steps.Step,
     Anchor,
     AnchorLink: Anchor.Link,
+    Affix,
     Alert,
     Message,
     Progress,

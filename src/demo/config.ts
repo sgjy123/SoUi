@@ -178,6 +178,16 @@ export const docsConfig: MenuGroup[] = [
           { key: 'anchor-theme', label: 'Anchor 主题定制', componentPath: 'Anchor', exampleName: 'Theme', description: '通过 ConfigProvider 自定义锚点主题样式。' },
         ],
       },
+      {
+        key: 'affix',
+        label: 'Affix 固钉',
+        icon: 'Pin',
+        items: [
+          { key: 'affix-basic', label: 'Affix 基础用法', componentPath: 'Affix', exampleName: 'Basic', description: '最简单的用法，固定在顶部和底部。' },
+          { key: 'affix-target', label: 'Affix 指定容器', componentPath: 'Affix', exampleName: 'Target', description: '用 target 指定 Affix 需要监听滚动事件的元素。' },
+          { key: 'affix-callback', label: 'Affix 回调', componentPath: 'Affix', exampleName: 'Callback', description: '可以通过 onChange 获取到状态改变的情况。' },
+        ],
+      },
     ],
   },
   {
