@@ -107,7 +107,6 @@ const SkeletonAvatar: React.FC<SkeletonAvatarProps & SkeletonElementProps> = ({
   };
 
   const actualSize = typeof size === 'number' ? size : sizeMap[size];
-  const borderRadius = shape === 'circle' ? '50%' : `${skeletonTheme.borderRadius || 6}px`;
 
   const avatarClassName = classNames(
     'soui-skeleton-avatar',
@@ -118,13 +117,22 @@ const SkeletonAvatar: React.FC<SkeletonAvatarProps & SkeletonElementProps> = ({
     className
   );
 
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (skeletonTheme.borderRadius !== undefined) {
+    cssVars['--soui-skeleton-border-radius'] = `${skeletonTheme.borderRadius}px`;
+  }
+  if (skeletonTheme.colorBg) {
+    cssVars['--soui-skeleton-color-bg'] = skeletonTheme.colorBg;
+  }
+
   return (
     <div
       className={avatarClassName}
       style={{
         width: actualSize,
         height: actualSize,
-        borderRadius,
+        borderRadius: shape === 'circle' ? '50%' : undefined,
+        ...cssVars,
         ...style,
       }}
     />
@@ -150,11 +158,6 @@ const SkeletonButton: React.FC<SkeletonButtonProps> = ({
   };
 
   const sizeConfig = sizeMap[size];
-  const borderRadius = shape === 'circle'
-    ? '50%'
-    : shape === 'round'
-      ? sizeConfig.height / 2
-      : `${skeletonTheme.borderRadius || 6}px`;
 
   const buttonClassName = classNames(
     'soui-skeleton-button',
@@ -166,13 +169,22 @@ const SkeletonButton: React.FC<SkeletonButtonProps> = ({
     className
   );
 
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (skeletonTheme.borderRadius !== undefined) {
+    cssVars['--soui-skeleton-border-radius'] = `${skeletonTheme.borderRadius}px`;
+  }
+  if (skeletonTheme.colorBg) {
+    cssVars['--soui-skeleton-color-bg'] = skeletonTheme.colorBg;
+  }
+
   return (
     <div
       className={buttonClassName}
       style={{
         width: shape === 'circle' ? sizeConfig.height : sizeConfig.width,
         height: sizeConfig.height,
-        borderRadius,
+        borderRadius: shape === 'circle' ? '50%' : shape === 'round' ? sizeConfig.height / 2 : undefined,
+        ...cssVars,
         ...style,
       }}
     />
@@ -186,6 +198,9 @@ const SkeletonInput: React.FC<SkeletonInputProps> = ({
   className,
   style,
 }) => {
+  const context = useContext(ConfigContext);
+  const skeletonTheme = context?.components?.Skeleton || {};
+
   const sizeMap: Record<SkeletonSize, { width: number; height: number }> = {
     small: { width: 160, height: 24 },
     default: { width: 200, height: 32 },
@@ -202,12 +217,21 @@ const SkeletonInput: React.FC<SkeletonInputProps> = ({
     className
   );
 
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (skeletonTheme.borderRadius !== undefined) {
+    cssVars['--soui-skeleton-border-radius'] = `${skeletonTheme.borderRadius}px`;
+  }
+  if (skeletonTheme.colorBg) {
+    cssVars['--soui-skeleton-color-bg'] = skeletonTheme.colorBg;
+  }
+
   return (
     <div
       className={inputClassName}
       style={{
         width: sizeConfig.width,
         height: sizeConfig.height,
+        ...cssVars,
         ...style,
       }}
     />
@@ -220,6 +244,9 @@ const SkeletonImage: React.FC<SkeletonImageProps> = ({
   className,
   style,
 }) => {
+  const context = useContext(ConfigContext);
+  const skeletonTheme = context?.components?.Skeleton || {};
+
   const imageClassName = classNames(
     'soui-skeleton-image',
     {
@@ -228,8 +255,16 @@ const SkeletonImage: React.FC<SkeletonImageProps> = ({
     className
   );
 
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (skeletonTheme.borderRadius !== undefined) {
+    cssVars['--soui-skeleton-border-radius'] = `${skeletonTheme.borderRadius}px`;
+  }
+  if (skeletonTheme.colorBg) {
+    cssVars['--soui-skeleton-color-bg'] = skeletonTheme.colorBg;
+  }
+
   return (
-    <div className={imageClassName} style={style}>
+    <div className={imageClassName} style={{ ...cssVars, ...style }}>
       <svg
         className="soui-skeleton-image-icon"
         viewBox="0 0 1098 1024"
@@ -261,6 +296,18 @@ const Skeleton: React.FC<SkeletonProps> & {
 }) => {
   const context = useContext(ConfigContext);
   const skeletonTheme = context?.components?.Skeleton || {};
+
+  const cssVars: React.CSSProperties & Record<string, any> = {};
+  if (skeletonTheme.borderRadius !== undefined) {
+    cssVars['--soui-skeleton-border-radius'] = `${skeletonTheme.borderRadius}px`;
+    cssVars['--soui-skeleton-border-radius-lg'] = `${skeletonTheme.borderRadius}px`;
+  }
+  if (skeletonTheme.colorBg) {
+    cssVars['--soui-skeleton-color-bg'] = skeletonTheme.colorBg;
+  }
+  if (skeletonTheme.colorHighlight) {
+    cssVars['--soui-skeleton-color-highlight'] = skeletonTheme.colorHighlight;
+  }
 
   // 如果有 children 且 loading 为 false，直接显示子组件
   if (loading !== undefined) {
@@ -328,7 +375,7 @@ const Skeleton: React.FC<SkeletonProps> & {
   );
 
   return (
-    <div className={skeletonClassName} style={style}>
+    <div className={skeletonClassName} style={{ ...cssVars, ...style }}>
       {showAvatar && (
         <div className="soui-skeleton-header">
           <SkeletonAvatar

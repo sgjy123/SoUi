@@ -115,6 +115,53 @@ import { Skeleton, Space } from '@soui/ui';
 </div>
 ```
 
+### 主题定制
+
+通过 ConfigProvider 自定义 Skeleton 的圆角、背景色和动画高亮色。子组件同样会继承主题配置。
+
+```tsx
+import { ConfigProvider, Skeleton, Space } from '@soui/ui';
+
+<div>
+  <h4>自定义圆角和背景色</h4>
+  <ConfigProvider
+    theme={{
+      components: {
+        Skeleton: {
+          borderRadius: 8,
+          colorBg: '#e6f4ff',
+        },
+      },
+    }}
+  >
+    <Skeleton active avatar paragraph={{ rows: 3 }} />
+  </ConfigProvider>
+
+  <h4>自定义动画高亮色</h4>
+  <ConfigProvider
+    theme={{
+      components: {
+        Skeleton: {
+          colorBg: '#fff7e6',
+          colorHighlight: '#ffe7ba',
+          borderRadius: 4,
+        },
+      },
+    }}
+  >
+    <Space direction="vertical" size={16} style={{ width: '100%' }}>
+      <Skeleton active />
+      <Space>
+        <Skeleton.Button active />
+        <Skeleton.Avatar active />
+        <Skeleton.Input active />
+        <Skeleton.Image active />
+      </Space>
+    </Space>
+  </ConfigProvider>
+</div>
+```
+
 ## API
 
 ### Skeleton
@@ -175,11 +222,11 @@ import { Skeleton, Space } from '@soui/ui';
 
 ## 主题定制
 
-Skeleton 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。
+Skeleton 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。主组件和所有子组件（`Avatar`、`Button`、`Input`、`Image`）均会自动读取 ConfigProvider 的主题配置。
 
 ### 组件级配置
 
-通过 `theme.components.Skeleton` 针对特定组件进行精细化配置：
+通过 `theme.components.Skeleton` 针对 Skeleton 组件进行精细化配置：
 
 ```tsx
 import { ConfigProvider } from '@soui/ui';
@@ -189,10 +236,9 @@ export default () => (
     theme={{
       components: {
         Skeleton: {
-          // 组件专属配置项
-          borderRadius: 6,              // 圆角大小
+          borderRadius: 6,              // 圆角大小（px）
           colorBg: '#f5f5f5',           // 占位背景色
-          colorHighlight: '#e8e8e8',    // 动画高亮色
+          colorHighlight: '#e8e8e8',    // 动画高亮色（active 动画中的亮部颜色）
         },
       },
     }}
@@ -202,22 +248,30 @@ export default () => (
 );
 ```
 
+> **注意**：配置项会同时作用于主组件（标题、段落、头像）和独立使用的子组件（`Skeleton.Button`、`Skeleton.Input` 等），无需分别配置。
+
 ### 配置优先级
 
 SoUi 采用以下优先级规则（从高到低）：
 
 ```
-Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
+Props 属性（style / className）> 组件级配置 > 全局配置 > CSS 变量 > Less 变量
 ```
 
 ### 可用的主题配置项
 
 **颜色相关：**
-- `colorBg` - 占位背景色
-- `colorHighlight` - 动画高亮色
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| `colorBg` | 占位背景色 | `string` | `#f5f5f5`（继承 `@bg-color-disable`） |
+| `colorHighlight` | 动画高亮色，仅在 `active` 为 `true` 时可见 | `string` | `#f0f0f0` |
 
 **尺寸相关：**
-- `borderRadius` - 圆角大小（像素）
+
+| 配置项 | 说明 | 类型 | 默认值 |
+|--------|------|------|--------|
+| `borderRadius` | 圆角大小（px），同时作用于标准模式和 `round` 圆角模式 | `number` | `2`（继承 `@border-radius-sm`） |
 
 ### 自定义 CSS 变量
 
@@ -229,13 +283,25 @@ Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
     '--soui-skeleton-color-bg': '#e0e0e0',
     '--soui-skeleton-color-highlight': '#d0d0d0',
     '--soui-skeleton-border-radius': '8px',
+    '--soui-skeleton-border-radius-lg': '12px',
   }}
 />
 ```
 
-**CSS 变量命名规范：**
-- 第2层（组件配置点）：`--soui-skeleton-{property}` - 带组件前缀的配置点
-- 第3层（组件级覆盖）：`--soui-skeleton-{property}-component` - 带 `-component` 后缀的覆盖变量
+**可用的 CSS 变量：**
+
+| CSS 变量 | 说明 | 默认值 |
+|----------|------|--------|
+| `--soui-skeleton-color-bg` | 占位背景色 | `@bg-color-disable`（`#f5f5f5`） |
+| `--soui-skeleton-color-highlight` | 动画高亮色 | `#f0f0f0` |
+| `--soui-skeleton-border-radius` | 标准圆角 | `@border-radius-sm`（`2px`） |
+| `--soui-skeleton-border-radius-lg` | 圆角模式下的较大圆角 | `@border-radius-base`（`6px`） |
+| `--soui-skeleton-title-height` | 标题占位高度 | `16px` |
+| `--soui-skeleton-title-margin-bottom` | 标题下间距 | `16px` |
+| `--soui-skeleton-paragraph-height` | 段落行高 | `16px` |
+| `--soui-skeleton-paragraph-gap` | 段落行间距 | `12px` |
+| `--soui-skeleton-avatar-margin` | 头像右间距 | `16px` |
+| `--soui-skeleton-image-size` | 图片占位尺寸 | `96px` |
 
 ## 无障碍访问
 
@@ -282,6 +348,19 @@ Props 属性 > 组件级配置 > 全局配置 > CSS 变量 > Less 变量
   <Skeleton.Input />
   <Skeleton.Image />
 </Space>
+```
+
+### 子组件是否支持主题定制？
+
+支持。所有子组件都会自动读取 ConfigProvider 中的 `Skeleton` 主题配置（`borderRadius`、`colorBg`、`colorHighlight`），无需额外操作。子组件也可以单独通过 `style` 属性覆盖 CSS 变量：
+
+```tsx
+<Skeleton.Button
+  style={{
+    '--soui-skeleton-color-bg': '#d9f7be',
+    '--soui-skeleton-border-radius': '12px',
+  }}
+/>
 ```
 
 ## 相关资源
