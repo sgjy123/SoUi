@@ -4,7 +4,6 @@ import ConfigContext from './context';
 import type { ConfigProviderProps, ThemeConfig, ConfigContextProps } from './types';
 import { defaultTheme } from './types';
 import { addOpacityToColor } from '@/utils';
-import './style.less';
 
 const ConfigProvider: React.FC<ConfigProviderProps> = ({
   theme,
