@@ -29,7 +29,7 @@ export const themes = {
   },
   // 主题2: 绿色清新风
   green: {
-    name: '绿色清新',
+    name: '绿色清新（大尺寸）',
     theme: {
       primaryColor: '#52c41a',
       primaryHoverColor: '#73d13d',
@@ -38,7 +38,9 @@ export const themes = {
       warningColor: '#faad14',
       errorColor: '#ff4d4f',
       infoColor: '#52c41a',
-      borderRadius: 6,
+      borderRadius: 22,
+      fontSize: 22,
+      maxWidth: 400,
       components: {
         Menu: {
           colorPrimary: '#52c41a',
@@ -93,7 +95,7 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ onThemeChange }) => {
         <>
           {/* 遮罩层 */}
           <div className="soui-theme-overlay" onClick={() => setVisible(false)} />
-          
+
           {/* 主题列表 */}
           <div className="soui-theme-panel">
             <div className="soui-theme-panel-header">
@@ -103,14 +105,14 @@ const ThemeSwitcher: React.FC<ThemeSwitcherProps> = ({ onThemeChange }) => {
               {(Object.keys(themes) as ThemeKey[]).map((key) => {
                 const theme = themes[key];
                 const isActive = currentTheme === key;
-                
+
                 return (
                   <button
                     key={key}
                     className={`soui-theme-item ${isActive ? 'active' : ''}`}
                     onClick={() => handleThemeChange(key)}
                   >
-                    <div 
+                    <div
                       className="soui-theme-color-preview"
                       style={{ backgroundColor: theme.theme.primaryColor }}
                     />

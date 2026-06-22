@@ -79,6 +79,38 @@ let messageCount = 0;
 
 const genKey = () => `soui-message-${++messageCount}-${Date.now()}`;
 
+// ==================== ConfigProvider 主题桥接 ====================
+
+/**
+ * 将 ConfigProvider 注入的 CSS 变量复制到消息容器上。
+ * Message 通过 createRoot 渲染到 document.body 的独立 DOM 节点，
+ * 无法继承 ConfigProvider 的 CSS 变量级联，因此需要手动复制。
+ */
+const CONFIG_PROVIDER_VARS = [
+  '--soui-message-border-radius',
+  '--soui-message-font-size',
+  '--soui-message-max-width',
+  '--soui-primary-color',
+  '--soui-primary-hover-color',
+  '--soui-success-color',
+  '--soui-warning-color',
+  '--soui-error-color',
+  '--soui-border-radius',
+  '--soui-font-size',
+];
+
+function applyConfigProviderVars(el: HTMLElement): void {
+  const provider = document.querySelector('.soui-config-provider');
+  if (!provider) return;
+  const cs = getComputedStyle(provider);
+  CONFIG_PROVIDER_VARS.forEach((v) => {
+    const val = cs.getPropertyValue(v).trim();
+    if (val) {
+      el.style.setProperty(v, val);
+    }
+  });
+}
+
 const NoticeItem: React.FC<NoticeItemProps> = ({ config, onRemove, removing }) => {
   const timerRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -195,6 +227,14 @@ let root: Root | null = null;
 let container: HTMLDivElement | null = null;
 let messageInstance: MessageInstance | null = null;
 
+// 默认配置（模块级，供 getInstance 和 Message.config 共享）
+let defaultOptions: {
+  top?: number;
+  duration?: number;
+  maxCount?: number;
+  getContainer?: () => HTMLElement;
+} = {};
+
 /**
  * 创建或获取 Message 实例
  */
@@ -204,6 +244,8 @@ function getInstance(
 ): void {
   // 如果已有实例且容器存在，直接使用
   if (messageInstance && container && document.body.contains(container)) {
+    // 每次调用都刷新主题变量，确保动态主题切换生效
+    applyConfigProviderVars(container);
     callback(messageInstance);
     return;
   }
@@ -215,6 +257,14 @@ function getInstance(
     container = document.createElement('div');
     container.className = 'soui-message-provider';
     targetContainer.appendChild(container);
+  }
+
+  // 应用 ConfigProvider 主题 CSS 变量
+  applyConfigProviderVars(container);
+
+  // 应用 top 配置
+  if (defaultOptions.top !== undefined) {
+    container.style.top = `${defaultOptions.top}px`;
   }
 
   if (!root) {
@@ -229,6 +279,23 @@ function getInstance(
   function addNotice(config: MessageConfig): void {
     const noticeKey = config.key || genKey();
     notices = [...notices, { ...config, key: noticeKey }];
+    // 超出最大数量时裁剪最早的消息（loading 类型不参与计数）
+    const maxCount = defaultOptions.maxCount;
+    if (maxCount) {
+      const nonLoadingCount = notices.filter((n) => n.type !== 'loading').length;
+      if (nonLoadingCount > maxCount) {
+        const toRemove = nonLoadingCount - maxCount;
+        let removed = 0;
+        notices = notices.filter((n) => {
+          if (n.type === 'loading') return true;
+          if (removed < toRemove) {
+            removed++;
+            return false;
+          }
+          return true;
+        });
+      }
+    }
     rerender();
   }
 
@@ -310,14 +377,6 @@ function getInstance(
  * ```
  */
 const Message = (() => {
-  // 默认配置
-  let defaultOptions: {
-    top?: number;
-    duration?: number;
-    maxCount?: number;
-    getContainer?: () => HTMLElement;
-  } = {};
-
   function openMessage(config: MessageConfig): void {
     const mergedDuration = config.duration ?? defaultOptions.duration ?? 3;
     getInstance((instance) => {
@@ -355,74 +414,81 @@ const Message = (() => {
      * Hook 方式使用 Message
      * @returns [api, contextHolder]
      */
-    useMessage() {
-      const [holder, setHolder] = useState<React.ReactElement | null>(null);
-      const instanceRef = useRef<MessageInstance | null>(null);
+    useMessage(): [MessageInstance, React.ReactElement] {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const holderRootRef = useRef<any>(null);
+      const stateRef = useRef<any>(null);
+
+      // 稳定 API 对象：首次渲染即可调用，ref callback 确保 root 始终就绪
+      const apiRef = useRef<MessageInstance | null>(null);
+      if (!apiRef.current) {
+        let notices: MessageConfig[] = [];
+
+        const renderMessages = () => {
+          stateRef.current?.root?.render(
+            <MessageContainer notices={notices} onRemove={removeNotice} />
+          );
+        };
+
+        const removeNotice = (key: React.Key) => {
+          notices = notices.filter((n) => n.key !== key);
+          renderMessages();
+        };
+
+        const addNotice = (config: MessageConfig) => {
+          const noticeKey = config.key || genKey();
+          notices = [...notices, { ...config, key: noticeKey }];
+          if (defaultOptions.maxCount) {
+            const nonLoading = notices.filter((n) => n.type !== 'loading').length;
+            if (nonLoading > defaultOptions.maxCount) {
+              const toRemove = nonLoading - defaultOptions.maxCount;
+              let removed = 0;
+              notices = notices.filter((n) => {
+                if (n.type === 'loading') return true;
+                if (removed < toRemove) { removed++; return false; }
+                return true;
+              });
+            }
+          }
+          renderMessages();
+        };
+
+        apiRef.current = {
+          open: addNotice,
+          success(content, duration) { addNotice({ content, type: 'success', duration }); },
+          info(content, duration) { addNotice({ content, type: 'info', duration }); },
+          warning(content, duration) { addNotice({ content, type: 'warning', duration }); },
+          error(content, duration) { addNotice({ content, type: 'error', duration }); },
+          loading(content, duration) { addNotice({ content, type: 'loading', duration: duration ?? 0 }); },
+          destroy() { notices = []; renderMessages(); },
+        };
+      }
+
+      // Ref callback：React 保证在 DOM 插入时调用 el，移除时调用 null
+      // 严格模式下会经历 el → null → el 的完整周期，不会泄漏 DOM
+      const holderRef = useCallback((el: HTMLDivElement | null) => {
+        if (el) {
+          applyConfigProviderVars(el);
+          const root = createRoot(el);
+          stateRef.current = { root };
+        } else if (stateRef.current) {
+          stateRef.current.root.unmount();
+          stateRef.current = null;
+        }
+      }, []);
 
       useEffect(() => {
-        if (!holder) {
-          // 创建一个占位 div 用于渲染消息
-          const placeholder = document.createElement('div');
-          holderRootRef.current = createRoot(placeholder);
-
-          let notices: MessageConfig[] = [];
-
-          const api: MessageInstance = {
-            open(config) {
-              const noticeKey = config.key || genKey();
-              notices = [...notices, { ...config, key: noticeKey }];
-              renderMessages();
-            },
-            success(content, duration) {
-              notices = [...notices, { content, type: 'success' as MessageType, key: genKey(), duration }];
-              renderMessages();
-            },
-            info(content, duration) {
-              notices = [...notices, { content, type: 'info' as MessageType, key: genKey(), duration }];
-              renderMessages();
-            },
-            warning(content, duration) {
-              notices = [...notices, { content, type: 'warning' as MessageType, key: genKey(), duration }];
-              renderMessages();
-            },
-            error(content, duration) {
-              notices = [...notices, { content, type: 'error' as MessageType, key: genKey(), duration }];
-              renderMessages();
-            },
-            loading(content, duration) {
-              notices = [...notices, { content, type: 'loading' as MessageType, key: genKey(), duration: duration ?? 0 }];
-              renderMessages();
-            },
-            destroy() {
-              notices = [];
-              renderMessages();
-            },
-          };
-
-          // eslint-disable-next-line no-inner-declarations
-          function removeNotice(key: React.Key) {
-            notices = notices.filter((item) => item.key !== key);
-            renderMessages();
-          }
-
-          // eslint-disable-next-line no-inner-declarations
-          function renderMessages() {
-            holderRootRef.current?.render(
-              <MessageContainer notices={notices} onRemove={removeNotice} />
-            );
-          }
-
-          instanceRef.current = api;
-          setHolder(<>{renderMessages()}</> as any);
-        }
         return () => {
-          holderRootRef.current?.unmount();
+          if (stateRef.current) {
+            stateRef.current.root.unmount();
+            stateRef.current = null;
+          }
         };
       }, []);
 
-      return [instanceRef.current || {} as MessageInstance, holder || <></>];
+      return [
+        apiRef.current,
+        <div ref={holderRef} style={{ display: 'none' }} />,
+      ];
     },
 
     /**

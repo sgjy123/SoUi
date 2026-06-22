@@ -199,22 +199,7 @@ const [messageApi, contextHolder] = Message.useMessage();
 
 ## 主题定制
 
-Message 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三层设计令牌系统。
-
-### 全局配置
-
-通过 `theme` 属性配置全局样式：
-
-```tsx
-<ConfigProvider
-  theme={{
-    borderRadius: 8,
-    fontSize: 14,
-  }}
->
-  <App />
-</ConfigProvider>
-```
+Message 组件支持通过 ConfigProvider 进行主题定制。静态方法（`Message.success()` 等）和 Hook 方式（`useMessage`）均可自动获取 ConfigProvider 的主题配置。
 
 ### 组件级配置
 
@@ -225,15 +210,23 @@ Message 组件支持通过 ConfigProvider 进行主题定制，遵循 SoUi 三�
   theme={{
     components: {
       Message: {
-        borderRadius: 8,
-        fontSize: 16,
-        maxWidth: 600,
+        borderRadius: 8,     // 消息圆角（px）
+        fontSize: 16,        // 消息字号（px）
+        maxWidth: 600,       // 消息最大宽度（px）
       },
     },
   }}
 >
   <App />
 </ConfigProvider>
+```
+
+> **工作原理**：Message 通过 `createRoot` 渲染到 `document.body` 的独立容器中，无法直接继承 ConfigProvider 的 CSS 变量。组件内部会自动从 `.soui-config-provider` 元素读取已注入的 CSS 变量并复制到消息容器上，因此静态方法和 Hook 方式均能正确响应主题配置。
+
+### 配置优先级
+
+```
+MessageConfig.style > 组件级配置 > CSS 变量 > Less 变量
 ```
 
 ### 可用的主题配置项
@@ -283,9 +276,24 @@ Message.destroy();
 Message.success('加载完成');
 ```
 
-### 为什么使用 Hook 方式？
+### 静态方法和 Hook 方式有什么区别？
 
-静态方法调用（`Message.success()`）通过 `createRoot` 在独立的 React 树中渲染，无法感知 `ConfigProvider` 的主题配置。如果需要在 ConfigProvider 主题环境下使用 Message，推荐使用 `useMessage` Hook 方式。
+两者在功能上基本一致，都支持 ConfigProvider 主题配置。主要区别在于：
+
+- **静态方法**（`Message.success()`）：可在任意位置调用（事件处理、异步回调等），使用更方便。消息渲染在 `document.body` 的独立容器中。
+- **Hook 方式**（`useMessage()`）：API 实例随组件挂载而创建、随卸载而销毁，生命周期更可控。适合需要在组件卸载时自动清理消息的场景。
+
+### `Message.config()` 中 `top` 和 `maxCount` 如何工作？
+
+`top` 控制消息距离页面顶部的偏移量（默认 16px），`maxCount` 限制同时显示的最大消息数量（超出时自动移除最早的非 loading 消息）：
+
+```tsx
+Message.config({
+  top: 24,        // 距顶部 24px
+  maxCount: 3,    // 最多同时显示 3 条
+  duration: 5,    // 默认显示 5 秒
+});
+```
 
 ## 相关资源
 
