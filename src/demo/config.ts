@@ -289,6 +289,17 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
+        key: 'drawer',
+        label: 'Drawer 抽屉',
+        icon: 'Box',
+        items: [
+          { key: 'drawer-basic', label: 'Drawer 基础用法', componentPath: 'Drawer', exampleName: 'Basic', description: '基本的抽屉用法，从屏幕边缘滑出。' },
+          { key: 'drawer-placement', label: 'Drawer 弹出方向', componentPath: 'Drawer', exampleName: 'Placement', description: '支持上、右、下、左四个方向。' },
+          { key: 'drawer-extra', label: 'Drawer 额外操作', componentPath: 'Drawer', exampleName: 'Extra', description: '头部额外操作区和底部操作栏。' },
+          { key: 'drawer-size', label: 'Drawer 尺寸', componentPath: 'Drawer', exampleName: 'Size', description: '默认、大尺寸和自定义宽度。' },
+        ],
+      },
+      {
         key: 'loading',
         label: 'Loading 加载中',
         icon: 'LoadingThree',

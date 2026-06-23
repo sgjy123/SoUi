@@ -83,6 +83,10 @@ export type { AffixProps } from './components/Affix';
 export { default as Dialog } from './components/Dialog';
 export type { DialogProps, DialogConfirmConfig, DialogReturnType, DialogOkType, DialogHookInstance, DialogInstance } from './components/Dialog';
 
+// Drawer Component
+export { default as Drawer } from './components/Drawer';
+export type { DrawerProps, DrawerPlacement, DrawerSize } from './components/Drawer';
+
 // Alert Component
 export { default as Alert } from './components/Alert';
 export type { AlertProps, AlertType } from './components/Alert';

@@ -241,6 +241,7 @@ function sidebarComponents() {
       collapsed: false,
       items: [
         { text: 'Dialog 对话框', link: 'dialog' },
+        { text: 'Drawer 抽屉', link: 'drawer' },
         { text: 'Message 全局提示', link: 'message' },
         { text: 'Notification 通知提醒框', link: 'notification' },
         { text: 'Loading 加载中', link: 'loading' },

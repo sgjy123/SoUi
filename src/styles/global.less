@@ -189,6 +189,19 @@
   --soui-loading-dot-size-sm: 14px;                                      // Loading专属:小号加载图标尺寸
   --soui-loading-dot-size-lg: 32px;                                      // Loading专属:大号加载图标尺寸
 
+  // === 第2层: Drawer 组件配置点 (引用设计令牌) ===
+  --soui-drawer-border-radius: var(--soui-border-radius-lg);               // 引用全局大圆角
+  --soui-drawer-title-font-size: var(--soui-font-size-lg);                 // 引用全局大字号
+  --soui-drawer-bg-color: @bg-color-base;                                  // Drawer专属:背景色
+  --soui-drawer-mask-bg-color: rgba(0, 0, 0, 0.45);                        // Drawer专属:遮罩背景色
+  --soui-drawer-header-padding: 12px 20px;                                 // Drawer专属:头部内边距
+  --soui-drawer-body-padding: 16px 20px;                                   // Drawer专属:内容区内边距
+  --soui-drawer-footer-padding: 10px 20px;                                 // Drawer专属:底部内边距
+  --soui-drawer-z-index: var(--soui-z-index-popover);                      // 引用全局z-index
+  --soui-drawer-box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08),
+    -3px 0 6px -4px rgba(0, 0, 0, 0.12),
+    -9px 0 28px 8px rgba(0, 0, 0, 0.05);                                  // Drawer专属:阴影
+
   // === 第2层: Skeleton 组件配置点 (引用设计令牌) ===
   --soui-skeleton-color-bg: @bg-color-disable;                             // Skeleton专属:占位背景色
   --soui-skeleton-color-highlight: #f0f0f0;                                // Skeleton专属:动画高亮色

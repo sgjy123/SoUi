@@ -41,6 +41,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const notificationTheme = mergedTheme.components?.Notification || {};
     // 获取 Loading 组件级配置
     const loadingTheme = mergedTheme.components?.Loading || {};
+    // 获取 Drawer 组件级配置
+    const drawerTheme = mergedTheme.components?.Drawer || {};
     // 获取 Skeleton 组件级配置
     const skeletonTheme = mergedTheme.components?.Skeleton || {};
 
@@ -277,6 +279,18 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-loading-dot-size': loadingTheme.dotSize ? `${loadingTheme.dotSize}px` : undefined,
       '--soui-loading-dot-size-sm': loadingTheme.dotSizeSM ? `${loadingTheme.dotSizeSM}px` : undefined,
       '--soui-loading-dot-size-lg': loadingTheme.dotSizeLG ? `${loadingTheme.dotSizeLG}px` : undefined,
+
+      // ==================== Drawer 组件配置 ====================
+      // 第2层: Drawer 配置点 (引用设计令牌)
+      '--soui-drawer-border-radius': drawerTheme.borderRadius ? `${drawerTheme.borderRadius}px` : undefined,
+      '--soui-drawer-title-font-size': drawerTheme.titleFontSize ? `${drawerTheme.titleFontSize}px` : undefined,
+      '--soui-drawer-bg-color': drawerTheme.colorBg,
+      '--soui-drawer-mask-bg-color': drawerTheme.maskBgColor,
+      '--soui-drawer-header-padding': drawerTheme.headerPadding,
+      '--soui-drawer-body-padding': drawerTheme.bodyPadding,
+      '--soui-drawer-footer-padding': drawerTheme.footerPadding,
+      '--soui-drawer-z-index': drawerTheme.zIndex?.toString(),
+      '--soui-drawer-box-shadow': drawerTheme.boxShadow,
 
       // ==================== Skeleton 组件配置 ====================
       // 第2层: Skeleton 配置点 (引用设计令牌)

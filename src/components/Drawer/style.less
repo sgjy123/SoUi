@@ -1,0 +1,306 @@
+@import '../../styles/variables.less';
+
+// ==================== Drawer Root ====================
+
+.soui-drawer-root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--soui-drawer-z-index, @z-index-modal);
+  display: none;
+  overflow: hidden;
+
+  &-visible {
+    display: block;
+  }
+}
+
+// ==================== Drawer Mask ====================
+
+.soui-drawer-mask {
+  position: fixed;
+  inset: 0;
+  background-color: var(--soui-drawer-mask-bg-color, rgba(0, 0, 0, 0.45));
+  opacity: 0;
+  transition: opacity @transition-duration @transition-timing-function;
+
+  // 打开时遮罩可见（非关闭状态）
+  .soui-drawer-root-visible:not(.soui-drawer-root-closing) > & {
+    opacity: 1;
+  }
+}
+
+// ==================== Drawer Wrap ====================
+
+.soui-drawer-wrap {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+
+  // 不同方向的 wrap 布局
+  &-right {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &-left {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &-top {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  &-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+  }
+}
+
+// ==================== Drawer Panel ====================
+
+.soui-drawer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--soui-drawer-bg-color, @bg-color-base);
+  pointer-events: auto;
+  overflow: hidden;
+
+  // ==================== Placement Variants ====================
+
+  &-right {
+    border-radius: var(--soui-drawer-border-radius, @border-radius-lg) 0 0 var(--soui-drawer-border-radius, @border-radius-lg);
+    box-shadow: var(--soui-drawer-box-shadow,
+      -6px 0 16px 0 rgba(0, 0, 0, 0.08),
+      -3px 0 6px -4px rgba(0, 0, 0, 0.12),
+      -9px 0 28px 8px rgba(0, 0, 0, 0.05));
+    animation: soui-drawer-right-in @transition-duration @transition-timing-function;
+    max-width: 100vw;
+    height: 100%;
+  }
+
+  &-left {
+    border-radius: 0 var(--soui-drawer-border-radius, @border-radius-lg) var(--soui-drawer-border-radius, @border-radius-lg) 0;
+    box-shadow: var(--soui-drawer-box-shadow,
+      6px 0 16px 0 rgba(0, 0, 0, 0.08),
+      3px 0 6px -4px rgba(0, 0, 0, 0.12),
+      9px 0 28px 8px rgba(0, 0, 0, 0.05));
+    animation: soui-drawer-left-in @transition-duration @transition-timing-function;
+    max-width: 100vw;
+    height: 100%;
+  }
+
+  &-top {
+    border-radius: 0 0 var(--soui-drawer-border-radius, @border-radius-lg) var(--soui-drawer-border-radius, @border-radius-lg);
+    box-shadow: var(--soui-drawer-box-shadow,
+      0 6px 16px 0 rgba(0, 0, 0, 0.08),
+      0 3px 6px -4px rgba(0, 0, 0, 0.12),
+      0 9px 28px 8px rgba(0, 0, 0, 0.05));
+    animation: soui-drawer-top-in @transition-duration @transition-timing-function;
+    width: 100%;
+    max-height: 100vh;
+  }
+
+  &-bottom {
+    border-radius: var(--soui-drawer-border-radius, @border-radius-lg) var(--soui-drawer-border-radius, @border-radius-lg) 0 0;
+    box-shadow: var(--soui-drawer-box-shadow,
+      0 -6px 16px 0 rgba(0, 0, 0, 0.08),
+      0 -3px 6px -4px rgba(0, 0, 0, 0.12),
+      0 -9px 28px 8px rgba(0, 0, 0, 0.05));
+    animation: soui-drawer-bottom-in @transition-duration @transition-timing-function;
+    width: 100%;
+    max-height: 100vh;
+  }
+
+  // ==================== Closing State ====================
+
+  &-closing {
+    &.soui-drawer-right {
+      animation: soui-drawer-right-out @transition-duration @transition-timing-function forwards;
+    }
+
+    &.soui-drawer-left {
+      animation: soui-drawer-left-out @transition-duration @transition-timing-function forwards;
+    }
+
+    &.soui-drawer-top {
+      animation: soui-drawer-top-out @transition-duration @transition-timing-function forwards;
+    }
+
+    &.soui-drawer-bottom {
+      animation: soui-drawer-bottom-out @transition-duration @transition-timing-function forwards;
+    }
+  }
+
+  // ==================== Close Button ====================
+
+  &-close {
+    position: absolute;
+    top: var(--soui-drawer-close-top, 16px);
+    right: var(--soui-drawer-close-right, 16px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    background: transparent;
+    border: none;
+    border-radius: var(--soui-border-radius, @border-radius-base);
+    cursor: pointer;
+    transition: all @transition-duration @transition-timing-function;
+    z-index: 1;
+
+    &:hover {
+      color: var(--soui-text-color, @text-color);
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    svg {
+      width: 1em;
+      height: 1em;
+    }
+  }
+
+  // ==================== Header ====================
+
+  &-header {
+    padding: var(--soui-drawer-header-padding, 12px 20px);
+    border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  &-header-row {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &-title {
+    font-size: var(--soui-drawer-title-font-size, @font-size-lg);
+    font-weight: 600;
+    line-height: var(--soui-line-height-base, @line-height-base);
+    color: var(--soui-text-color, @text-color);
+    word-break: break-word;
+  }
+
+  &-extra {
+    flex-shrink: 0;
+    margin-left: var(--soui-margin-sm, @margin-sm);
+  }
+
+  // ==================== Body ====================
+
+  &-body {
+    padding: var(--soui-drawer-body-padding, 16px 20px);
+    font-size: var(--soui-font-size, @font-size-base);
+    line-height: var(--soui-line-height-base, @line-height-base);
+    color: var(--soui-text-color, @text-color);
+    overflow: auto;
+    flex: 1;
+    word-break: break-word;
+  }
+
+  // ==================== Footer ====================
+
+  &-footer {
+    padding: var(--soui-drawer-footer-padding, 10px 20px);
+    border-top: 1px solid var(--soui-border-color-split, @border-color-split);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--soui-margin-sm, @margin-sm);
+    flex-shrink: 0;
+  }
+}
+
+// ==================== Animations ====================
+
+// Right: slide in from right
+@keyframes soui-drawer-right-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes soui-drawer-right-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+// Left: slide in from left
+@keyframes soui-drawer-left-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes soui-drawer-left-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+// Top: slide in from top
+@keyframes soui-drawer-top-in {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes soui-drawer-top-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+// Bottom: slide in from bottom
+@keyframes soui-drawer-bottom-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes soui-drawer-bottom-out {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
