@@ -9,7 +9,6 @@ export default () => {
       title: '确认操作',
       content: '使用 useDialog Hook 可以继承 ConfigProvider 的主题上下文。',
       onOk() {
-        debugger
         // 关闭弹窗
         console.log('确认');
       },
