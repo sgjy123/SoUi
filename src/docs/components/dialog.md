@@ -13,7 +13,7 @@
 
 ### 基础对话框
 
-最基本的对话框用法，通过 `open` 属性控制显示和隐藏。
+最基本的对话框用法，通过 `open` 属性控制显示和隐藏。对话框高度自适应内容，不会有多余空白。
 
 ```tsx
 import React, { useState } from 'react';
@@ -42,7 +42,7 @@ export default () => {
 
 ### 确认对话框
 
-使用静态方法快速弹出确认对话框，支持 `confirm`、`info`、`success`、`warning`、`error` 五种类型。
+使用静态方法快速弹出确认对话框，支持 `confirm`、`info`、`success`、`warning`、`error` 五种类型。点击确定或取消后自动关闭。
 
 ```tsx
 import { Button, Dialog } from 'soui';
@@ -63,7 +63,7 @@ Dialog.success({
 
 ### 异步提交
 
-点击确定后执行异步操作，通过 `confirmLoading` 显示加载状态。
+点击确定后执行异步操作，通过 `confirmLoading` 显示加载状态。`confirmLoading` 为 `true` 时不会自动关闭，直到变为 `false`。
 
 ```tsx
 import React, { useState } from 'react';
@@ -100,6 +100,74 @@ export default () => {
 };
 ```
 
+### 居中显示
+
+通过 `centered` 属性让对话框在视口中垂直居中。
+
+```tsx
+import React, { useState } from 'react';
+import { Button, Dialog } from 'soui';
+
+export default () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button type="primary" onClick={() => setOpen(true)}>
+        居中对话框
+      </Button>
+      <Dialog
+        open={open}
+        title="居中显示"
+        centered
+        onOk={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+      >
+        <p>对话框在视口中垂直居中显示。</p>
+      </Dialog>
+    </>
+  );
+};
+```
+
+### useDialog Hook
+
+当需要在 `ConfigProvider` 内使用对话框并继承主题上下文时，使用 `useDialog` Hook。Hook 创建的对话框点击确定或取消后会自动关闭。
+
+```tsx
+import React from 'react';
+import { Button, Dialog, Space } from 'soui';
+
+export default () => {
+  const [dialog, contextHolder] = Dialog.useDialog();
+
+  const showConfirm = () => {
+    dialog.confirm({
+      title: '确认操作',
+      content: '使用 useDialog Hook 可以继承 ConfigProvider 的主题上下文。',
+      onOk() { console.log('确认'); },
+    });
+  };
+
+  const showSuccess = () => {
+    dialog.success({
+      title: '操作成功',
+      content: '这是通过 useDialog Hook 调用的成功提示。',
+    });
+  };
+
+  return (
+    <>
+      {contextHolder}
+      <Space>
+        <Button onClick={showConfirm}>确认框</Button>
+        <Button onClick={showSuccess}>成功</Button>
+      </Space>
+    </>
+  );
+};
+```
+
 ## API
 
 ### Dialog Props
@@ -114,7 +182,7 @@ export default () => {
 | confirmLoading | 确定按钮 loading | `boolean` | `false` |
 | footer | 底部内容，设为 `null` 时不显示 | `ReactNode` | - |
 | width | 宽度 | `number \| string` | `420` |
-| centered | 是否居中显示 | `boolean` | `false` |
+| centered | 是否垂直居中显示 | `boolean` | `false` |
 | destroyOnHidden | 关闭时销毁内容 | `boolean` | `false` |
 | mask | 是否显示遮罩 | `boolean` | `true` |
 | maskClosable | 点击遮罩是否可关闭 | `boolean` | `true` |
@@ -159,7 +227,12 @@ export default () => {
 
 ### useDialog Hook
 
-当需要在 `ConfigProvider` 内使用对话框并继承主题上下文时，使用 `useDialog` Hook。
+`Dialog.useDialog()` 返回 `[api, contextHolder]`：
+
+- `api` - 包含 `open`、`confirm`、`info`、`success`、`warning`、`error` 方法
+- `contextHolder` - 需要渲染在 JSX 中，用于挂载对话框容器
+
+Hook 创建的对话框点击确定或取消后会自动关闭（带动画）。如果 `confirmLoading` 为 `true`，则不会自动关闭，直到变为 `false`。
 
 ```tsx
 const [dialog, contextHolder] = Dialog.useDialog();
@@ -181,14 +254,14 @@ Dialog 支持通过 `ConfigProvider` 进行主题定制：
     components: {
       Dialog: {
         borderRadius: 8,
-        titleFontSize: 18,
+        titleFontSize: 16,
         colorBg: '#ffffff',
         maskBgColor: 'rgba(0, 0, 0, 0.45)',
-        headerPadding: '16px 24px',
-        bodyPadding: '24px',
-        footerPadding: '12px 24px',
+        headerPadding: '12px 20px',
+        bodyPadding: '16px 20px',
+        footerPadding: '10px 20px',
         zIndex: 1000,
-        boxShadow: '0 6px 16px rgba(0, 0, 0, 0.08)',
+        boxShadow: '0 6px 16px rgba(0, 0, 0, 0.1)',
       },
     },
   }}
@@ -205,11 +278,11 @@ Dialog 支持通过 `ConfigProvider` 进行主题定制：
 | `--soui-dialog-title-font-size` | 标题字号 | `16px` |
 | `--soui-dialog-bg-color` | 背景色 | `#fff` |
 | `--soui-dialog-mask-bg-color` | 遮罩背景色 | `rgba(0, 0, 0, 0.45)` |
-| `--soui-dialog-header-padding` | 头部内边距 | `16px 24px` |
-| `--soui-dialog-body-padding` | 内容区内边距 | `24px` |
-| `--soui-dialog-footer-padding` | 底部内边距 | `12px 24px` |
+| `--soui-dialog-header-padding` | 头部内边距 | `12px 20px` |
+| `--soui-dialog-body-padding` | 内容区内边距 | `16px 20px` |
+| `--soui-dialog-footer-padding` | 底部内边距 | `10px 20px` |
 | `--soui-dialog-z-index` | 层级 | `1000` |
-| `--soui-dialog-box-shadow` | 阴影 | `0 6px 16px rgba(0, 0, 0, 0.08)` |
+| `--soui-dialog-box-shadow` | 阴影 | `0 6px 16px rgba(0, 0, 0, 0.1)` |
 
 ## FAQ
 
@@ -221,6 +294,18 @@ Dialog 支持通过 `ConfigProvider` 进行主题定制：
 
 设置 `maskClosable={false}` 即可阻止点击遮罩关闭对话框。
 
+### 不同使用方式的关闭行为有什么区别？
+
+- **声明式 Dialog**：`onOk` 不会自动关闭对话框，需要用户在回调中手动设置 `open={false}`。这给了用户完全的控制权，适合需要异步验证的场景。
+- **静态方法**（`Dialog.confirm` 等）：点击确定或取消后自动关闭。如果 `confirmLoading` 为 `true`，则等待变为 `false` 后再关闭。
+- **useDialog Hook**：与静态方法行为一致，点击确定或取消后自动关闭。
+
 ### 异步操作时如何保持对话框打开？
 
-使用 `confirmLoading` 属性控制确定按钮的加载状态。当 `confirmLoading` 为 `true` 时，点击确定不会自动关闭对话框，直到 `confirmLoading` 变为 `false`。
+**声明式 Dialog**：使用 `confirmLoading` 属性控制确定按钮的加载状态。当 `confirmLoading` 为 `true` 时，点击确定不会触发关闭，直到 `confirmLoading` 变为 `false` 且用户手动设置 `open={false}`。
+
+**静态方法 / useDialog**：同样使用 `confirmLoading`，当为 `true` 时不会自动关闭，变为 `false` 后自动关闭。
+
+### 对话框内容区域高度如何控制？
+
+对话框 body 区域高度自适应内容，不会有多余空白。如果内容超出 `max-height`（默认 `calc(100vh - 64px)`），body 会出现滚动条。

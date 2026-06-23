@@ -64,17 +64,6 @@ export const customCode = `<Button onClick={() => setOpen1(true)}>自定义宽�
   <p>通过 width 属性设置对话框宽度为 600px。</p>
 </Dialog>
 
-<Button onClick={() => setOpen2(true)}>居中显示</Button>
-<Dialog
-  open={open2}
-  title="居中对话框"
-  centered
-  onOk={() => setOpen2(false)}
-  onCancel={() => setOpen2(false)}
->
-  <p>通过 centered 属性让对话框垂直居中显示。</p>
-</Dialog>
-
 <Button onClick={() => setOpen3(true)}>自定义按钮文字</Button>
 <Dialog
   open={open3}
@@ -85,6 +74,21 @@ export const customCode = `<Button onClick={() => setOpen1(true)}>自定义宽�
   onCancel={() => setOpen3(false)}
 >
   <p>通过 okText 和 cancelText 自定义按钮文字。</p>
+</Dialog>`;
+
+export const centeredCode = `const [open, setOpen] = useState(false);
+
+<Button type="primary" onClick={() => setOpen(true)}>
+  居中对话框
+</Button>
+<Dialog
+  open={open}
+  title="居中显示"
+  centered
+  onOk={() => setOpen(false)}
+  onCancel={() => setOpen(false)}
+>
+  <p>对话框在视口中垂直居中显示。</p>
 </Dialog>`;
 
 export const useDialogCode = `const [dialog, contextHolder] = Dialog.useDialog();
