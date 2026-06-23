@@ -129,6 +129,8 @@ interface DialogWrapperProps extends DialogProps {
   type?: 'confirm' | 'info' | 'success' | 'warning' | 'error';
   /** config spread 可能带入 content（静态方法用） */
   content?: React.ReactNode;
+  /** Hook 模式下自动关闭 */
+  hookMode?: boolean;
 }
 
 const DialogWrapper: React.FC<DialogWrapperProps> = ({
@@ -163,6 +165,7 @@ const DialogWrapper: React.FC<DialogWrapperProps> = ({
   confirmIcon,
   type: configType,
   content,
+  hookMode = false,
 }) => {
   // configType 来自 DialogConfirmConfig spread，confirmType 来自显式传入
   const resolvedConfirmType = confirmType || configType;
@@ -229,11 +232,11 @@ const DialogWrapper: React.FC<DialogWrapperProps> = ({
   const handleOk = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       onOk?.(e);
-      if (!confirmLoading) {
+      if (hookMode && !confirmLoading) {
         setClosing(true);
       }
     },
-    [onOk, confirmLoading],
+    [onOk, hookMode, confirmLoading],
   );
 
   if (!visible && !closing) return null;
@@ -544,6 +547,7 @@ Dialog.useDialog = (): [DialogHookInstance, React.ReactElement] => {
             key={key}
             {...config}
             open={true}
+            hookMode
             onCancel={(e) => {
               config.onCancel?.(e);
               onClose();
@@ -607,7 +611,7 @@ Dialog.useDialog = (): [DialogHookInstance, React.ReactElement] => {
     error: (config) => addDialog({ ...config, type: 'error' }),
   };
 
-  return [api, <div ref={holderRef} style={{ display: 'none' }} />];
+  return [api, <div ref={holderRef} className="soui-dialog-hook-holder" />];
 };
 
 export default Dialog;

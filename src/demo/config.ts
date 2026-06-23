@@ -283,6 +283,9 @@ export const docsConfig: MenuGroup[] = [
           { key: 'dialog-basic', label: 'Dialog 基础用法', componentPath: 'Dialog', exampleName: 'Basic', description: '基本的对话框用法。' },
           { key: 'dialog-confirm', label: 'Dialog 确认框', componentPath: 'Dialog', exampleName: 'Confirm', description: '静态方法的确认框、信息、成功、警告、错误。' },
           { key: 'dialog-async', label: 'Dialog 异步提交', componentPath: 'Dialog', exampleName: 'Async', description: '异步操作的对话框，带有加载状态。' },
+          { key: 'dialog-custom', label: 'Dialog 自定义', componentPath: 'Dialog', exampleName: 'Custom', description: '自定义宽度、居中显示、按钮文字等。' },
+          { key: 'dialog-custom-footer', label: 'Dialog 自定义底部', componentPath: 'Dialog', exampleName: 'CustomFooter', description: '自定义对话框底部内容或隐藏底部。' },
+          { key: 'dialog-use-dialog', label: 'Dialog useDialog', componentPath: 'Dialog', exampleName: 'UseDialog', description: '使用 useDialog Hook 继承主题上下文。' },
         ],
       },
       {

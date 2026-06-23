@@ -250,6 +250,7 @@ const SubMenu = React.memo(
       inlineCollapsed && mode === "inline" && level === 0 && !isPopup;
     const popupMode = collapsed || mode !== "inline";
     const popupOpen = popupMode ? popupVisible : open;
+    const menuContextValue = useMenuContext();
     const renderChildren = () => (
       <MenuContext.Provider
         value={{
@@ -263,7 +264,7 @@ const SubMenu = React.memo(
           isPopup: popupMode,
           popupTheme,
           cssVars,
-          onSelect: useMenuContext().onSelect,
+          onSelect: menuContextValue.onSelect,
           onToggleOpen,
         }}
       >
