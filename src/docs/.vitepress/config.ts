@@ -248,6 +248,7 @@ function sidebarComponents() {
         { text: 'Skeleton 占位符', link: 'skeleton' },
         { text: 'Progress 进度条', link: 'progress' },
         { text: 'Alert 警告提示', link: 'alert' },
+        { text: 'Result 结果', link: 'result' },
       ],
     },
   ]

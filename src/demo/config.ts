@@ -320,6 +320,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'skeleton-sub-components', label: 'Skeleton 子组件', componentPath: 'Skeleton', exampleName: 'SubComponents', description: '按钮、头像、输入框、图片占位。' },
         ],
       },
+      {
+        key: 'result',
+        label: 'Result 结果',
+        icon: 'CheckCorrect',
+        items: [
+          { key: 'result-basic', label: 'Result 基础用法', componentPath: 'Result', exampleName: 'Basic', description: '成功状态的反馈结果，带有标题、描述和操作按钮。' },
+          { key: 'result-status', label: 'Result 所有状态', componentPath: 'Result', exampleName: 'Status', description: '展示所有可用的结果状态：success、error、warning、info 和 HTTP 状态码。' },
+          { key: 'result-custom-icon', label: 'Result 自定义图标', componentPath: 'Result', exampleName: 'CustomIcon', description: '通过 icon 属性自定义结果图标。' },
+          { key: 'result-content', label: 'Result 自定义内容', componentPath: 'Result', exampleName: 'Content', description: '在副标题下方添加额外的内容区域。' },
+        ],
+      },
     ],
   },
   {

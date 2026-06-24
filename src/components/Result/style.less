@@ -1,0 +1,100 @@
+@import '../../styles/variables.less';
+
+// ==================== Result 主样式 ====================
+
+.soui-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--soui-result-padding, @padding-xl @padding-lg);
+  text-align: center;
+
+  // === 图标区域 ===
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--soui-result-icon-margin-bottom, @padding-lg);
+    line-height: 1;
+
+    // 状态图标尺寸覆盖
+    &.soui-result-icon-status {
+      svg {
+        width: var(--soui-result-icon-size, 64px);
+        height: var(--soui-result-icon-size, 64px);
+      }
+    }
+
+    // SVG 插图
+    &.soui-result-icon-svg {
+      // 保持原始 SVG 尺寸
+    }
+  }
+
+  // === 标题 ===
+  &-title {
+    color: var(--soui-result-title-color, @text-color);
+    font-size: var(--soui-result-title-font-size, 24px);
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: var(--soui-result-title-margin-bottom, @padding-sm);
+  }
+
+  // === 副标题 ===
+  &-subtitle {
+    color: var(--soui-result-subtitle-color, @text-color-secondary);
+    font-size: var(--soui-result-subtitle-font-size, @font-size-base);
+    line-height: @line-height-base;
+    margin-bottom: var(--soui-result-subtitle-margin-bottom, @padding-lg);
+  }
+
+  // === 操作区域 ===
+  &-extra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--soui-result-extra-gap, @padding-sm);
+    margin-bottom: var(--soui-result-extra-margin-bottom, @padding-lg);
+  }
+
+  // === 内容区域 ===
+  &-content {
+    width: 100%;
+    margin-top: var(--soui-result-content-margin-top, @padding-lg);
+    padding-top: var(--soui-result-content-padding-top, @padding-lg);
+    border-top: 1px solid var(--soui-result-content-border-color, @border-color-split);
+    text-align: left;
+  }
+
+  // === 状态颜色（通过 CSS 变量控制图标颜色回退） ===
+  &-success {
+    .soui-result-icon-status {
+      color: var(--soui-result-color-success, @success-color);
+    }
+  }
+
+  &-error {
+    .soui-result-icon-status {
+      color: var(--soui-result-color-error, @error-color);
+    }
+  }
+
+  &-warning {
+    .soui-result-icon-status {
+      color: var(--soui-result-color-warning, @warning-color);
+    }
+  }
+
+  &-info {
+    .soui-result-icon-status {
+      color: var(--soui-result-color-info, @primary-color);
+    }
+  }
+
+  // === HTTP 状态码无额外样式 ===
+  &-403,
+  &-404,
+  &-500 {
+    // SVG 图标自带颜色
+  }
+}

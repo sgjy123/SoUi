@@ -420,6 +420,27 @@ export interface ComponentThemeConfig {
     /** z-index 层级 */
     zIndex?: number;
   };
+  /** Result 结果组件配置 */
+  Result?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 标题字号（像素） */
+    titleFontSize?: number;
+    /** 副标题字号（像素） */
+    subTitleFontSize?: number;
+    /** 图标尺寸（像素） */
+    iconSize?: number;
+    /** 成功状态颜色 */
+    colorSuccess?: string;
+    /** 错误状态颜色 */
+    colorError?: string;
+    /** 警告状态颜色 */
+    colorWarning?: string;
+    /** 信息状态颜色 */
+    colorInfo?: string;
+  };
   /** Drawer 抽屉组件配置 */
   Drawer?: {
     /** 圆角大小（像素） */

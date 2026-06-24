@@ -21,6 +21,7 @@ import Loading from '../../src/components/Loading';
 import Skeleton from '../../src/components/Skeleton';
 import Dialog from '../../src/components/Dialog';
 import Drawer from '../../src/components/Drawer';
+import Result from '../../src/components/Result';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -78,6 +79,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Skeleton,
     Dialog,
     Drawer,
+    Result,
     ConfigProvider,
     ...scope,
   };

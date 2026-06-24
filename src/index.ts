@@ -111,6 +111,10 @@ export type { LoadingProps, LoadingSize } from './components/Loading';
 export { default as Skeleton } from './components/Skeleton';
 export type { SkeletonProps, SkeletonAvatarProps, SkeletonButtonProps, SkeletonInputProps, SkeletonImageProps, SkeletonTitleProps, SkeletonParagraphProps, SkeletonSize, SkeletonAvatarShape, SkeletonButtonShape } from './components/Skeleton';
 
+// Result Component
+export { default as Result } from './components/Result';
+export type { ResultProps, ResultStatus } from './components/Result';
+
 // Utils
 export * from './utils';
 
