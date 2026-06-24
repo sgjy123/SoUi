@@ -331,6 +331,18 @@ export const docsConfig: MenuGroup[] = [
           { key: 'result-content', label: 'Result 自定义内容', componentPath: 'Result', exampleName: 'Content', description: '在副标题下方添加额外的内容区域。' },
         ],
       },
+      {
+        key: 'watermark',
+        label: 'Watermark 水印',
+        icon: 'Shield',
+        items: [
+          { key: 'watermark-basic', label: 'Watermark 基础用法', componentPath: 'Watermark', exampleName: 'Basic', description: '基础的文字水印。' },
+          { key: 'watermark-multiline', label: 'Watermark 多行文本', componentPath: 'Watermark', exampleName: 'MultiLine', description: '支持多行文字水印。' },
+          { key: 'watermark-image', label: 'Watermark 图片水印', componentPath: 'Watermark', exampleName: 'Image', description: '使用图片作为水印内容。' },
+          { key: 'watermark-content', label: 'Watermark 覆盖内容', componentPath: 'Watermark', exampleName: 'Content', description: '水印覆盖在子元素上方。' },
+          { key: 'watermark-custom', label: 'Watermark 自定义样式', componentPath: 'Watermark', exampleName: 'CustomStyle', description: '自定义水印的颜色、大小、旋转角度等。' },
+        ],
+      },
     ],
   },
   {

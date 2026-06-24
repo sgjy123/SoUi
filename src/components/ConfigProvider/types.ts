@@ -483,6 +483,15 @@ export interface ComponentThemeConfig {
     /** 阴影 */
     boxShadow?: string;
   };
+  /** Watermark 水印组件配置 */
+  Watermark?: {
+    /** 字体颜色 */
+    fontColor?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** z-index */
+    zIndex?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

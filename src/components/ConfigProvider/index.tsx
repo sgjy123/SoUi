@@ -45,6 +45,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const drawerTheme = mergedTheme.components?.Drawer || {};
     // 获取 Skeleton 组件级配置
     const skeletonTheme = mergedTheme.components?.Skeleton || {};
+    // 获取 Watermark 组件级配置
+    const watermarkTheme = mergedTheme.components?.Watermark || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -298,6 +300,12 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-skeleton-color-highlight': skeletonTheme.colorHighlight,
       '--soui-skeleton-border-radius': skeletonTheme.borderRadius ? `${skeletonTheme.borderRadius}px` : undefined,
       '--soui-skeleton-border-radius-lg': skeletonTheme.borderRadius ? `${skeletonTheme.borderRadius}px` : undefined,
+
+      // ==================== Watermark 组件配置 ====================
+      // 第2层: Watermark 配置点
+      '--soui-watermark-font-color': watermarkTheme.fontColor,
+      '--soui-watermark-font-size': watermarkTheme.fontSize ? `${watermarkTheme.fontSize}px` : undefined,
+      '--soui-watermark-z-index': watermarkTheme.zIndex?.toString(),
     } as any;
   }, [mergedTheme]);
 

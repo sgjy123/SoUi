@@ -1,0 +1,22 @@
+@import '../../styles/variables.less';
+
+// ==================== Watermark Base Styles ====================
+.soui-watermark {
+  position: relative;
+  overflow: hidden;
+
+  &-has-children {
+    position: relative;
+  }
+}
+
+// 水印层样式（仅作为兜底，实际样式由 JS 动态注入）
+.soui-watermark-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: var(--soui-watermark-z-index, @z-index-base);
+}

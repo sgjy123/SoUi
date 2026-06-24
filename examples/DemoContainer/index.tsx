@@ -22,6 +22,7 @@ import Skeleton from '../../src/components/Skeleton';
 import Dialog from '../../src/components/Dialog';
 import Drawer from '../../src/components/Drawer';
 import Result from '../../src/components/Result';
+import Watermark from '../../src/components/Watermark';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -80,6 +81,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Dialog,
     Drawer,
     Result,
+    Watermark,
     ConfigProvider,
     ...scope,
   };

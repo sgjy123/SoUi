@@ -249,6 +249,7 @@ function sidebarComponents() {
         { text: 'Progress 进度条', link: 'progress' },
         { text: 'Alert 警告提示', link: 'alert' },
         { text: 'Result 结果', link: 'result' },
+        { text: 'Watermark 水印', link: 'watermark' },
       ],
     },
   ]
