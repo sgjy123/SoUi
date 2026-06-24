@@ -16,8 +16,9 @@
   // 颜色令牌
   --soui-color-bg-default: rgba(0, 0, 0, 0.88);      // 默认深色背景
   --soui-color-text-inverse: #fff;                    // 反色文本(白色)
-  --soui-color-text: @text-color;                     // 主要文本色
-  --soui-color-text-secondary: @text-color-secondary; // 次要文本色
+  --soui-text-color: @text-color;                     // 主要文本色
+  --soui-text-color-secondary: @text-color-secondary; // 次要文本色
+  --soui-text-color-disabled: @text-color-disabled;   // 禁用文本色
   
   // 尺寸令牌
   --soui-border-radius: @border-radius-base;
@@ -30,6 +31,12 @@
   --soui-line-height: @line-height-base;
   --soui-line-height-sm: @line-height-sm;
   --soui-line-height-lg: @line-height-lg;
+  --soui-line-height-base: @line-height-base;
+  
+  // 通用间距/边框令牌
+  --soui-border-color-split: @border-color-split;
+  --soui-border-color-base: @border-color;
+  --soui-margin-sm: @margin-sm;
   
   // 视觉效果令牌
   --soui-box-shadow-secondary: @box-shadow-secondary;
@@ -189,6 +196,19 @@
   --soui-loading-dot-size-sm: 14px;                                      // Loading专属:小号加载图标尺寸
   --soui-loading-dot-size-lg: 32px;                                      // Loading专属:大号加载图标尺寸
 
+  // === 第2层: Dialog 组件配置点 (引用设计令牌) ===
+  --soui-dialog-border-radius: var(--soui-border-radius-lg);             // 引用全局大圆角
+  --soui-dialog-title-font-size: var(--soui-font-size-lg);               // 引用全局大字号
+  --soui-dialog-bg-color: @bg-color-base;                                // Dialog专属:背景色
+  --soui-dialog-mask-bg-color: rgba(0, 0, 0, 0.45);                      // Dialog专属:遮罩背景色
+  --soui-dialog-header-padding: 12px 20px;                               // Dialog专属:头部内边距
+  --soui-dialog-body-padding: 16px 20px;                                 // Dialog专属:内容区内边距
+  --soui-dialog-footer-padding: 10px 20px;                               // Dialog专属:底部内边距
+  --soui-dialog-z-index: var(--soui-z-index-popover);                    // 引用全局z-index
+  --soui-dialog-box-shadow: var(--soui-box-shadow-secondary);            // 引用全局阴影
+  --soui-dialog-confirm-gap: 12px;                                       // Dialog专属:确认框图标与内容间距
+  --soui-dialog-confirm-body-padding: 16px 20px;                         // Dialog专属:确认框主体内边距
+
   // === 第2层: Drawer 组件配置点 (引用设计令牌) ===
   --soui-drawer-border-radius: var(--soui-border-radius-lg);               // 引用全局大圆角
   --soui-drawer-title-font-size: var(--soui-font-size-lg);                 // 引用全局大字号
@@ -201,6 +221,8 @@
   --soui-drawer-box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08),
     -3px 0 6px -4px rgba(0, 0, 0, 0.12),
     -9px 0 28px 8px rgba(0, 0, 0, 0.05);                                  // Drawer专属:阴影
+  --soui-drawer-close-top: 16px;                                           // Drawer专属:关闭按钮顶部偏移
+  --soui-drawer-close-right: 16px;                                         // Drawer专属:关闭按钮右侧偏移
 
   // === 第2层: Skeleton 组件配置点 (引用设计令牌) ===
   --soui-skeleton-color-bg: @bg-color-disable;                             // Skeleton专属:占位背景色
