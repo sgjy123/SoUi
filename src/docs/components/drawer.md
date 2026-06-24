@@ -247,9 +247,27 @@ Drawer 作为 Portal 组件，通过 `createPortal` 渲染在 ConfigProvider 的
   style={{
     '--soui-drawer-border-radius': '12px',
     '--soui-drawer-bg-color': '#f5f5f5',
+    '--soui-drawer-close-top': '20px',
+    '--soui-drawer-close-right': '20px',
   }}
 />
 ```
+
+支持的 CSS 变量：
+
+| 变量名 | 说明 | 默认值 |
+| --- | --- | --- |
+| `--soui-drawer-border-radius` | 圆角 | `8px` |
+| `--soui-drawer-title-font-size` | 标题字号 | `16px` |
+| `--soui-drawer-bg-color` | 背景色 | `#fff` |
+| `--soui-drawer-mask-bg-color` | 遮罩背景色 | `rgba(0, 0, 0, 0.45)` |
+| `--soui-drawer-header-padding` | 头部内边距 | `12px 20px` |
+| `--soui-drawer-body-padding` | 内容区内边距 | `16px 20px` |
+| `--soui-drawer-footer-padding` | 底部内边距 | `10px 20px` |
+| `--soui-drawer-z-index` | 层级 | `1030` |
+| `--soui-drawer-box-shadow` | 阴影 | `-6px 0 16px 0 rgba(0, 0, 0, 0.08), ...` |
+| `--soui-drawer-close-top` | 关闭按钮顶部偏移 | `16px` |
+| `--soui-drawer-close-right` | 关闭按钮右侧偏移 | `16px` |
 
 ## 设计原则
 

@@ -519,12 +519,45 @@ ConfigProvider 会自动生成 CSS 变量，您可以在任何地方使用：
   /* 设计令牌 (Design Tokens) - 真正的全局变量 */
   --soui-color-bg-default: rgba(0, 0, 0, 0.88);        // 默认深色背景
   --soui-color-text-inverse: #fff;                      // 反色文本(白色)
+  --soui-text-color: rgba(0, 0, 0, 0.88);               // 主要文本色
+  --soui-text-color-secondary: rgba(0, 0, 0, 0.65);     // 次要文本色
+  --soui-text-color-disabled: rgba(0, 0, 0, 0.25);      // 禁用文本色
+  --soui-line-height-base: 1.5715;                      // 基础行高
+  --soui-border-color-split: #f0f0f0;                   // 分割线颜色
+  --soui-border-color-base: #d9d9d9;                    // 基础边框颜色
+  --soui-margin-sm: 8px;                                // 小间距
   --soui-font-size-sm: 12px;                            // 小字号
   --soui-line-height-sm: 1.6667;                        // 小行高
   --soui-box-shadow-secondary: 0 3px 6px ...;          // 次级阴影
   --soui-z-index-popover: 1030;                         // 浮层层级
   --soui-transition-duration: 0.2s;                     // 动画时长
   
+  /* Dialog 组件配置点 */
+  --soui-dialog-border-radius: var(--soui-border-radius-lg);
+  --soui-dialog-title-font-size: var(--soui-font-size-lg);
+  --soui-dialog-bg-color: #fff;
+  --soui-dialog-mask-bg-color: rgba(0, 0, 0, 0.45);
+  --soui-dialog-header-padding: 12px 20px;
+  --soui-dialog-body-padding: 16px 20px;
+  --soui-dialog-footer-padding: 10px 20px;
+  --soui-dialog-z-index: var(--soui-z-index-popover);
+  --soui-dialog-box-shadow: var(--soui-box-shadow-secondary);
+  --soui-dialog-confirm-gap: 12px;
+  --soui-dialog-confirm-body-padding: 16px 20px;
+
+  /* Drawer 组件配置点 */
+  --soui-drawer-border-radius: var(--soui-border-radius-lg);
+  --soui-drawer-title-font-size: var(--soui-font-size-lg);
+  --soui-drawer-bg-color: #fff;
+  --soui-drawer-mask-bg-color: rgba(0, 0, 0, 0.45);
+  --soui-drawer-header-padding: 12px 20px;
+  --soui-drawer-body-padding: 16px 20px;
+  --soui-drawer-footer-padding: 10px 20px;
+  --soui-drawer-z-index: var(--soui-z-index-popover);
+  --soui-drawer-box-shadow: -6px 0 16px 0 rgba(0, 0, 0, 0.08), ...;
+  --soui-drawer-close-top: 16px;
+  --soui-drawer-close-right: 16px;
+
   /* Tooltip 组件配置点 (引用设计令牌) */
   --soui-tooltip-bg-color: var(--soui-color-bg-default);
   --soui-tooltip-text-color: var(--soui-color-text-inverse);

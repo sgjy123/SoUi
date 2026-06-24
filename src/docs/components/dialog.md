@@ -281,8 +281,10 @@ Dialog 支持通过 `ConfigProvider` 进行主题定制：
 | `--soui-dialog-header-padding` | 头部内边距 | `12px 20px` |
 | `--soui-dialog-body-padding` | 内容区内边距 | `16px 20px` |
 | `--soui-dialog-footer-padding` | 底部内边距 | `10px 20px` |
-| `--soui-dialog-z-index` | 层级 | `1000` |
-| `--soui-dialog-box-shadow` | 阴影 | `0 6px 16px rgba(0, 0, 0, 0.1)` |
+| `--soui-dialog-z-index` | 层级 | `1030` |
+| `--soui-dialog-box-shadow` | 阴影 | `0 6px 16px rgba(0, 0, 0, 0.08)` |
+| `--soui-dialog-confirm-gap` | 确认框图标与内容间距 | `12px` |
+| `--soui-dialog-confirm-body-padding` | 确认框主体内边距 | `16px 20px` |
 
 ## FAQ
 
