@@ -79,7 +79,7 @@
     padding: 0;
     font-size: 14px;
     line-height: 1;
-    color: var(--soui-text-color-secondary, @text-color-secondary);
+    color: var(--soui-text-color, @text-color);
     background: transparent;
     border: none;
     border-radius: var(--soui-border-radius, @border-radius-base);
@@ -88,8 +88,8 @@
     z-index: 1;
 
     &:hover {
-      color: var(--soui-text-color, @text-color);
       background-color: rgba(0, 0, 0, 0.04);
+      transform: rotate(90deg);
     }
 
     svg {
