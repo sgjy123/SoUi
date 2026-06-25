@@ -7,7 +7,7 @@ import './style.less';
 // ==================== Types ====================
 
 export type InputSize = 'large' | 'middle' | 'small';
-export type InputStatus = 'error' | 'warning';
+export type InputStatus = 'error' | 'warning' | 'success';
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix' | 'ref'> {
   /** 输入框尺寸 */
@@ -20,20 +20,20 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   bordered?: boolean;
   /** 无边框模式 */
   borderless?: boolean;
-  /** 带标签的前缀 */
+  /** 前缀内容 */
   prefix?: React.ReactNode;
-  /** 带标签的后缀 */
+  /** 后缀内容 */
   suffix?: React.ReactNode;
-  /** 带标签的前置元素 */
+  /** 前置标签 */
   addonBefore?: React.ReactNode;
-  /** 带标签的后置元素 */
+  /** 后置标签 */
   addonAfter?: React.ReactNode;
   /** 是否允许清空 */
   allowClear?: boolean | { clearIcon?: React.ReactNode };
   /** 最大长度 */
   maxLength?: number;
   /** 是否显示字数统计 */
-  showCount?: boolean | ((count: number, maxLength: number) => React.ReactNode);
+  showCount?: boolean | ((count: number, maxLength: number | undefined) => React.ReactNode);
   /** 按下回车的回调 */
   onPressEnter?: React.KeyboardEventHandler<HTMLInputElement>;
   /** 是否只读 */
@@ -56,7 +56,7 @@ export interface TextAreaProps extends Omit<React.TextareaHTMLAttributes<HTMLTex
   /** 最大长度 */
   maxLength?: number;
   /** 是否显示字数统计 */
-  showCount?: boolean | ((count: number, maxLength: number) => React.ReactNode);
+  showCount?: boolean | ((count: number, maxLength: number | undefined) => React.ReactNode);
   /** 是否允许清空 */
   allowClear?: boolean;
   /** 按下回车的回调 */
@@ -73,14 +73,14 @@ export interface TextAreaProps extends Omit<React.TextareaHTMLAttributes<HTMLTex
   className?: string;
 }
 
-export interface PasswordProps extends InputProps {
+export interface PasswordProps extends Omit<InputProps, 'type' | 'suffix'> {
   /** 是否显示切换按钮 */
   visibilityToggle?: boolean;
   /** 自定义图标渲染 */
   iconRender?: (visible: boolean) => React.ReactNode;
 }
 
-export interface SearchProps extends InputProps {
+export interface SearchProps extends Omit<InputProps, 'suffix'> {
   /** 是否有确认按钮，可设为按钮文字 */
   enterButton?: boolean | React.ReactNode;
   /** 搜索 loading */
@@ -111,6 +111,27 @@ function resolveClearIcon(allowClear: InputProps['allowClear']): React.ReactNode
     return allowClear.clearIcon;
   }
   return <Icon name="Close" size={14} theme="outline" />;
+}
+
+function buildInputCssVars(inputTheme: Record<string, any>, globalTheme: Record<string, any>): Record<string, any> {
+  const cssVars: Record<string, any> = {};
+  const borderRadiusValue = inputTheme?.borderRadius || globalTheme?.borderRadius;
+  const fontSizeValue = inputTheme?.fontSize || globalTheme?.fontSize;
+  if (borderRadiusValue !== undefined) cssVars['--soui-input-border-radius'] = `${borderRadiusValue}px`;
+  if (fontSizeValue !== undefined) cssVars['--soui-input-font-size'] = `${fontSizeValue}px`;
+  if (inputTheme?.colorBorder) cssVars['--soui-input-color-border'] = inputTheme.colorBorder;
+  if (inputTheme?.colorBorderHover) cssVars['--soui-input-color-border-hover'] = inputTheme.colorBorderHover;
+  if (inputTheme?.colorBorderFocus) cssVars['--soui-input-color-border-focus'] = inputTheme.colorBorderFocus;
+  if (inputTheme?.colorBg) cssVars['--soui-input-color-bg'] = inputTheme.colorBg;
+  if (inputTheme?.colorText) cssVars['--soui-input-color-text'] = inputTheme.colorText;
+  if (inputTheme?.colorBgDisabled) cssVars['--soui-input-color-bg-disabled'] = inputTheme.colorBgDisabled;
+  if (inputTheme?.colorTextDisabled) cssVars['--soui-input-color-text-disabled'] = inputTheme.colorTextDisabled;
+  if (inputTheme?.colorError) cssVars['--soui-input-color-error'] = inputTheme.colorError;
+  if (inputTheme?.colorWarning) cssVars['--soui-input-color-warning'] = inputTheme.colorWarning;
+  if (inputTheme?.colorSuccess) cssVars['--soui-input-color-success'] = inputTheme.colorSuccess;
+  if (inputTheme?.colorIcon) cssVars['--soui-input-color-icon'] = inputTheme.colorIcon;
+  if (inputTheme?.colorIconHover) cssVars['--soui-input-color-icon-hover'] = inputTheme.colorIconHover;
+  return cssVars;
 }
 
 // ==================== Input ====================
@@ -159,32 +180,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   useImperativeHandle(ref, () => inputRef.current!);
 
-  // Shrink suffix when clear icon shows (the clear icon sits within the suffix area)
   const hasClear = !!allowClear && !!valueStr && !disabled && !readOnly;
   const clearIcon = resolveClearIcon(allowClear);
+  const isBordered = bordered && !borderless;
 
-  // Count: maxLength
-  const resolvedMax = maxLength;
-
-  // CSS Variables
-  const borderRadiusValue = inputTheme?.borderRadius || globalTheme?.borderRadius;
-  const fontSizeValue = inputTheme?.fontSize || globalTheme?.fontSize;
-
-  const cssVars: Record<string, any> = {};
-  if (borderRadiusValue !== undefined) cssVars['--soui-input-border-radius'] = `${borderRadiusValue}px`;
-  if (fontSizeValue !== undefined) cssVars['--soui-input-font-size'] = `${fontSizeValue}px`;
-  if (inputTheme?.colorBorder) cssVars['--soui-input-color-border'] = inputTheme.colorBorder;
-  if (inputTheme?.colorBorderHover) cssVars['--soui-input-color-border-hover'] = inputTheme.colorBorderHover;
-  if (inputTheme?.colorBorderFocus) cssVars['--soui-input-color-border-focus'] = inputTheme.colorBorderFocus;
-  if (inputTheme?.colorBg) cssVars['--soui-input-color-bg'] = inputTheme.colorBg;
-  if (inputTheme?.colorText) cssVars['--soui-input-color-text'] = inputTheme.colorText;
-  if (inputTheme?.colorBgDisabled) cssVars['--soui-input-color-bg-disabled'] = inputTheme.colorBgDisabled;
-  if (inputTheme?.colorTextDisabled) cssVars['--soui-input-color-text-disabled'] = inputTheme.colorTextDisabled;
-  if (inputTheme?.colorError) cssVars['--soui-input-color-error'] = inputTheme.colorError;
-  if (inputTheme?.colorWarning) cssVars['--soui-input-color-warning'] = inputTheme.colorWarning;
-  if (inputTheme?.colorIcon) cssVars['--soui-input-color-icon'] = inputTheme.colorIcon;
-  if (inputTheme?.colorIconHover) cssVars['--soui-input-color-icon-hover'] = inputTheme.colorIconHover;
-
+  const cssVars = buildInputCssVars(inputTheme, globalTheme);
   const mergedStyle: React.CSSProperties = { ...cssVars, ...style };
 
   // Handlers
@@ -194,19 +194,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   };
 
   const handleClear = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
     e.stopPropagation();
     if (!isControlled) setInnerValue('');
     onClear?.();
+    // 直接调用 onChange 回调，不使用原生 DOM API
+    const syntheticEvent = {
+      target: { value: '' },
+      currentTarget: inputRef.current,
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      nativeEvent: new Event('input'),
+      type: 'change',
+    } as React.ChangeEvent<HTMLInputElement>;
+    onChange?.(syntheticEvent);
     inputRef.current?.focus();
-    // trigger synthetic onChange with empty value
-    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLInputElement.prototype, 'value'
-    )?.set;
-    if (nativeInputValueSetter && inputRef.current) {
-      nativeInputValueSetter.call(inputRef.current, '');
-      const event = new Event('input', { bubbles: true });
-      inputRef.current.dispatchEvent(event);
-    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -214,6 +216,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     onKeyDown?.(e);
   };
 
+  // ---- count (inside suffix area) ----
+  const actualCount = valueStr.length;
+  const showCountNode = showCount ? (
+    <span className="soui-input-count">
+      {typeof showCount === 'function'
+        ? showCount(actualCount, maxLength)
+        : maxLength !== undefined
+          ? `${actualCount} / ${maxLength}`
+          : `${actualCount}`}
+    </span>
+  ) : null;
+
+  // ---- wrapper classes ----
   const wrapperCls = classNames(
     'soui-input-wrapper',
     `soui-input-wrapper-${mergedSize}`,
@@ -223,11 +238,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       'soui-input-wrapper-focused': isFocused,
       'soui-input-wrapper-hovered': isHovered && !disabled && !readOnly,
       'soui-input-wrapper-has-prefix': !!prefix,
-      'soui-input-wrapper-has-suffix': !!suffix || hasClear,
+      'soui-input-wrapper-has-suffix': !!suffix || hasClear || !!showCountNode,
       'soui-input-wrapper-has-addon-before': !!addonBefore,
       'soui-input-wrapper-has-addon-after': !!addonAfter,
-      'soui-input-wrapper-borderless': borderless,
-      'soui-input-wrapper-bordered': bordered && !borderless,
+      'soui-input-wrapper-borderless': !isBordered,
+      'soui-input-wrapper-bordered': isBordered,
       [`soui-input-wrapper-status-${status}`]: !!status && !disabled,
     },
     className,
@@ -238,19 +253,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'soui-input-readonly': readOnly,
   });
 
-  // ---- count ----
-  const actualCount = valueStr.length;
-  const showCountNode = showCount && resolvedMax ? (
-    <span className="soui-input-count">
-      {typeof showCount === 'function'
-        ? showCount(actualCount, resolvedMax)
-        : `${actualCount} / ${resolvedMax}`}
-    </span>
-  ) : null;
-
   // ---- affix wrapper ----
   const affixWrapperCls = classNames('soui-input-affix-wrapper', {
-    'soui-input-affix-wrapper-borderless': borderless,
+    'soui-input-affix-wrapper-borderless': !isBordered,
     'soui-input-affix-wrapper-focused': isFocused,
   });
 
@@ -291,19 +296,20 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
             {clearIcon}
           </span>
         )}
+        {showCountNode}
       </span>
     </span>
   );
 
-  // ---- container with addons ----
+  // ---- container with addons (不要添加 wrapperCls，避免 flex-direction: column 干扰水平布局) ----
   if (addonBefore || addonAfter) {
-    const containerCls = classNames('soui-input-addon-wrapper', wrapperCls);
     return (
-      <span className={containerCls} style={mergedStyle}>
+      <span className="soui-input-addon-wrapper" style={mergedStyle}>
         {addonBefore && <span className="soui-input-addon-before">{addonBefore}</span>}
-        {renderInput}
+        <span className={wrapperCls}>
+          {renderInput}
+        </span>
         {addonAfter && <span className="soui-input-addon-after">{addonAfter}</span>}
-        {showCountNode}
       </span>
     );
   }
@@ -311,7 +317,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <span className={wrapperCls} style={mergedStyle}>
       {renderInput}
-      {showCountNode}
     </span>
   );
 });
@@ -349,40 +354,50 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
   const value = isControlled ? valueProp : innerValue;
   const valueStr = typeof value === 'string' || typeof value === 'number' ? String(value ?? '') : '';
   const [isFocused, setIsFocused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useImperativeHandle(ref, () => textareaRef.current!);
 
   const hasClear = !!allowClear && !!valueStr && !disabled;
+  const cssVars = buildInputCssVars(inputTheme, globalTheme);
+  const mergedStyle: React.CSSProperties = { ...cssVars, ...style };
 
-  // CSS Variables
-  const borderRadiusValue = inputTheme?.borderRadius || globalTheme?.borderRadius;
-  const fontSizeValue = inputTheme?.fontSize || globalTheme?.fontSize;
-  const cssVars: Record<string, any> = {};
-  if (borderRadiusValue !== undefined) cssVars['--soui-input-border-radius'] = `${borderRadiusValue}px`;
-  if (fontSizeValue !== undefined) cssVars['--soui-input-font-size'] = `${fontSizeValue}px`;
-  if (inputTheme?.colorBorder) cssVars['--soui-input-color-border'] = inputTheme.colorBorder;
-  if (inputTheme?.colorBorderHover) cssVars['--soui-input-color-border-hover'] = inputTheme.colorBorderHover;
-  if (inputTheme?.colorBorderFocus) cssVars['--soui-input-color-border-focus'] = inputTheme.colorBorderFocus;
-  if (inputTheme?.colorBg) cssVars['--soui-input-color-bg'] = inputTheme.colorBg;
-  if (inputTheme?.colorText) cssVars['--soui-input-color-text'] = inputTheme.colorText;
-  if (inputTheme?.colorBgDisabled) cssVars['--soui-input-color-bg-disabled'] = inputTheme.colorBgDisabled;
-  if (inputTheme?.colorTextDisabled) cssVars['--soui-input-color-text-disabled'] = inputTheme.colorTextDisabled;
-
-  // Auto size
+  // Auto size - 正确计算高度（包含 padding 和 border）
   useEffect(() => {
     if (autoSize && textareaRef.current) {
       const el = textareaRef.current;
+      const computedStyle = getComputedStyle(el);
+      const lineHeight = parseFloat(computedStyle.lineHeight) || 22;
+      const paddingTop = parseFloat(computedStyle.paddingTop) || 0;
+      const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
+      const borderTop = parseFloat(computedStyle.borderTopWidth) || 0;
+      const borderBottom = parseFloat(computedStyle.borderBottomWidth) || 0;
+
+      // 重置高度以获取正确的 scrollHeight
       el.style.height = 'auto';
-      const minRows = typeof autoSize === 'object' ? autoSize.minRows : undefined;
-      const maxRows = typeof autoSize === 'object' ? autoSize.maxRows : undefined;
-      const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 20;
-      el.style.height = `${Math.max(el.scrollHeight, minRows ? minRows * lineHeight : 0)}px`;
-      if (maxRows) {
-        el.style.maxHeight = `${maxRows * lineHeight}px`;
+      const scrollHeight = el.scrollHeight;
+
+      if (typeof autoSize === 'object') {
+        const { minRows, maxRows } = autoSize;
+        const paddingHeight = paddingTop + paddingBottom;
+        const borderHeight = borderTop + borderBottom;
+
+        const minHeight = minRows ? minRows * lineHeight + paddingHeight + borderHeight : undefined;
+        const maxHeight = maxRows ? maxRows * lineHeight + paddingHeight + borderHeight : undefined;
+
+        let height = scrollHeight;
+        if (minHeight && height < minHeight) height = minHeight;
+        if (maxHeight && height > maxHeight) height = maxHeight;
+
+        el.style.height = `${height}px`;
+        el.style.overflowY = maxHeight && scrollHeight > maxHeight ? 'auto' : 'hidden';
+      } else {
+        el.style.height = `${scrollHeight}px`;
+        el.style.overflowY = 'hidden';
       }
     }
-  }, [value, autoSize]);
+  }, [valueStr, autoSize]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!isControlled) setInnerValue(e.target.value);
@@ -390,18 +405,20 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
   };
 
   const handleClear = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
     e.stopPropagation();
     if (!isControlled) setInnerValue('');
     onClear?.();
+    const syntheticEvent = {
+      target: { value: '' },
+      currentTarget: textareaRef.current,
+      preventDefault: () => {},
+      stopPropagation: () => {},
+      nativeEvent: new Event('input'),
+      type: 'change',
+    } as React.ChangeEvent<HTMLTextAreaElement>;
+    onChange?.(syntheticEvent);
     textareaRef.current?.focus();
-    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLTextAreaElement.prototype, 'value'
-    )?.set;
-    if (nativeInputValueSetter && textareaRef.current) {
-      nativeInputValueSetter.call(textareaRef.current, '');
-      const event = new Event('input', { bubbles: true });
-      textareaRef.current.dispatchEvent(event);
-    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -409,13 +426,15 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
     onKeyDown?.(e);
   };
 
-  const resolvedMax = maxLength;
+  // ---- count ----
   const actualCount = valueStr.length;
-  const showCountNode = showCount && resolvedMax ? (
-    <span className="soui-input-count">
+  const showCountNode = showCount ? (
+    <span className="soui-input-textarea-count">
       {typeof showCount === 'function'
-        ? showCount(actualCount, resolvedMax)
-        : `${actualCount} / ${resolvedMax}`}
+        ? showCount(actualCount, maxLength)
+        : maxLength !== undefined
+          ? `${actualCount} / ${maxLength}`
+          : `${actualCount}`}
     </span>
   ) : null;
 
@@ -427,15 +446,18 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
       'soui-input-wrapper-disabled': disabled,
       'soui-input-wrapper-bordered': bordered,
       'soui-input-wrapper-focused': isFocused,
+      'soui-input-wrapper-hovered': isHovered && !disabled,
     },
     className,
   );
 
-  const mergedStyle: React.CSSProperties = { ...cssVars, ...style };
-
   return (
     <span className={wrapperCls} style={mergedStyle}>
-      <span className="soui-input-textarea-affix">
+      <span
+        className="soui-input-textarea-affix"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <textarea
           ref={textareaRef}
           className="soui-input soui-input-textarea"
@@ -461,8 +483,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
             <Icon name="Close" size={14} theme="outline" />
           </span>
         )}
+        {showCountNode}
       </span>
-      {showCountNode}
     </span>
   );
 });
@@ -498,9 +520,9 @@ const Password = forwardRef<HTMLInputElement, PasswordProps>((props, ref) => {
   return (
     <Input
       ref={ref}
+      {...rest}
       type={visible ? 'text' : 'password'}
       suffix={toggleIcon}
-      {...rest}
     />
   );
 });
@@ -531,26 +553,48 @@ const Search = forwardRef<HTMLInputElement, SearchProps>((props, ref) => {
   };
 
   const handleSearch = (e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>) => {
+    if (loading) return;
     onSearch?.(value as string, e);
   };
 
-  const searchSuffix = enterButton ? (
-    <span
-      className={classNames('soui-input-search-button', { 'soui-input-search-button-loading': loading })}
-      onClick={handleSearch}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSearch(e as any); } }}
-      role="button"
-      tabIndex={0}
-    >
-      {loading ? (
-        <Icon name="Loading" size={16} theme="outline" />
-      ) : typeof enterButton === 'boolean' ? (
-        <Icon name="Search" size={16} theme="outline" />
-      ) : (
-        enterButton
-      )}
-    </span>
-  ) : (
+  // 有 enterButton 时：按钮作为 addonAfter 渲染（与 Ant Design 一致）
+  if (enterButton) {
+    const buttonNode = (
+      <span
+        className={classNames('soui-input-search-button', { 'soui-input-search-button-loading': loading })}
+        onClick={handleSearch}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSearch(e as any); } }}
+        role="button"
+        tabIndex={0}
+      >
+        {loading ? (
+          <Icon name="Loading" size={16} theme="outline" />
+        ) : typeof enterButton === 'boolean' ? (
+          <Icon name="Search" size={16} theme="outline" />
+        ) : (
+          <>
+            <Icon name="Search" size={16} theme="outline" />
+            <span>{enterButton}</span>
+          </>
+        )}
+      </span>
+    );
+
+    return (
+      <Input
+        ref={ref}
+        value={value}
+        onChange={handleChange}
+        addonAfter={buttonNode}
+        onPressEnter={handleSearch}
+        disabled={disabled}
+        {...rest}
+      />
+    );
+  }
+
+  // 无 enterButton 时：搜索图标作为 suffix 渲染
+  const searchIcon = (
     <span
       className="soui-input-search-icon"
       onClick={handleSearch}
@@ -571,9 +615,9 @@ const Search = forwardRef<HTMLInputElement, SearchProps>((props, ref) => {
       ref={ref}
       value={value}
       onChange={handleChange}
-      suffix={searchSuffix}
+      suffix={searchIcon}
       onPressEnter={handleSearch}
-      disabled={disabled || loading}
+      disabled={disabled}
       {...rest}
     />
   );

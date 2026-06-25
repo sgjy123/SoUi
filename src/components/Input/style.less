@@ -1,8 +1,11 @@
 @import '../../styles/variables.less';
 
 // ==================== Input Variables ====================
-.soui-input-wrapper {
-  // Defaults: use CSS variables from ConfigProvider with Less fallback
+// Local alias layer: maps --soui-input-* (from ConfigProvider/inline) to --soui-input-local-* with Less fallbacks.
+// Must be defined on BOTH .soui-input-wrapper and .soui-input-addon-wrapper because
+// in addon mode, addon elements are siblings of .soui-input-wrapper (not children),
+// so they can't inherit CSS custom properties defined only on it.
+.input-css-variable-aliases() {
   --soui-input-local-border-radius: var(--soui-input-border-radius, @border-radius-base);
   --soui-input-local-font-size: var(--soui-input-font-size, @font-size-base);
   --soui-input-local-control-height-sm: var(--soui-input-control-height-small, @control-height-sm);
@@ -17,8 +20,13 @@
   --soui-input-local-color-text-disabled: var(--soui-input-color-text-disabled, @text-color-disabled);
   --soui-input-local-color-error: var(--soui-input-color-error, @error-color);
   --soui-input-local-color-warning: var(--soui-input-color-warning, @warning-color);
+  --soui-input-local-color-success: var(--soui-input-color-success, @success-color);
   --soui-input-local-color-icon: var(--soui-input-color-icon, rgba(0, 0, 0, 0.45));
   --soui-input-local-color-icon-hover: var(--soui-input-color-icon-hover, rgba(0, 0, 0, 0.65));
+}
+
+.soui-input-wrapper {
+  .input-css-variable-aliases();
 }
 
 // ==================== Affix Wrapper ====================
@@ -102,6 +110,7 @@
   white-space: nowrap;
   flex-shrink: 0;
   color: var(--soui-input-local-color-icon);
+  gap: 4px;
 
   &-inner {
     display: flex;
@@ -116,13 +125,13 @@
   justify-content: center;
   width: 16px;
   height: 16px;
-  margin-left: 4px;
   color: var(--soui-input-local-color-icon);
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
-  border-radius: 50%;
+  border-radius: 2px;
   transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  flex-shrink: 0;
 
   &:hover {
     color: var(--soui-input-local-color-icon-hover);
@@ -137,11 +146,24 @@
   }
 }
 
+// Hover 时也显示清除图标
+.soui-input-affix-wrapper:hover .soui-input-clear-icon {
+  opacity: 1;
+  visibility: visible;
+}
+
+// ==================== Count (inside suffix) ====================
+.soui-input-count {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 // ==================== Wrapper States ====================
 .soui-input-wrapper {
   position: relative;
   display: inline-flex;
-  flex-direction: column;
   width: 100%;
   min-width: 0;
 
@@ -167,7 +189,8 @@
 
   // reset
   &-borderless.soui-input-wrapper-status-error,
-  &-borderless.soui-input-wrapper-status-warning {
+  &-borderless.soui-input-wrapper-status-warning,
+  &-borderless.soui-input-wrapper-status-success {
     .soui-input-affix-wrapper {
       border: none;
       box-shadow: none;
@@ -187,6 +210,10 @@
     border-color: var(--soui-input-local-color-warning);
     box-shadow: 0 0 0 2px fade(@warning-color, 10%);
   }
+  &-hovered&-bordered&-status-success .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-success);
+    box-shadow: 0 0 0 2px fade(@success-color, 10%);
+  }
 
   // --- focus ---
   &-focused&-bordered .soui-input-affix-wrapper {
@@ -201,6 +228,10 @@
   &-focused&-bordered&-status-warning .soui-input-affix-wrapper {
     border-color: var(--soui-input-local-color-warning);
     box-shadow: 0 0 0 2px fade(@warning-color, 20%);
+  }
+  &-focused&-bordered&-status-success .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-success);
+    box-shadow: 0 0 0 2px fade(@success-color, 20%);
   }
 
   // --- disabled ---
@@ -226,6 +257,14 @@
   &-status-warning&-focused&-bordered .soui-input-affix-wrapper {
     border-color: var(--soui-input-local-color-warning);
     box-shadow: 0 0 0 2px fade(@warning-color, 20%);
+  }
+
+  &-status-success&-bordered .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-success);
+  }
+  &-status-success&-focused&-bordered .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-success);
+    box-shadow: 0 0 0 2px fade(@success-color, 20%);
   }
 }
 
@@ -258,16 +297,23 @@
 
 // ==================== Addon ====================
 .soui-input-addon-wrapper {
+  .input-css-variable-aliases();
   display: inline-flex;
   width: 100%;
+  // 确保水平布局（不受内部 input-wrapper 影响）
+  flex-direction: row;
 }
 
 // Remove left/right border from affix wrapper when adjacent to addons (避免双边边框)
 .soui-input-wrapper-has-addon-before .soui-input-affix-wrapper {
   border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 .soui-input-wrapper-has-addon-after .soui-input-affix-wrapper {
   border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 // Affix wrapper in addon group: no border-radius (addons handle their own)
@@ -277,13 +323,15 @@
 }
 
 // Sync addon border colors on hover/focus
-.soui-input-wrapper-hovered {
+// Addon elements are siblings of .soui-input-wrapper inside .soui-input-addon-wrapper,
+// so we use :has() to target the parent addon-wrapper.
+.soui-input-addon-wrapper:has(.soui-input-wrapper-hovered) {
   .soui-input-addon-before,
   .soui-input-addon-after {
     border-color: var(--soui-input-local-color-border-hover);
   }
 }
-.soui-input-wrapper-focused {
+.soui-input-addon-wrapper:has(.soui-input-wrapper-focused) {
   .soui-input-addon-before,
   .soui-input-addon-after {
     border-color: var(--soui-input-local-color-border-focus);
@@ -315,29 +363,21 @@
   border-radius: 0 var(--soui-input-local-border-radius) var(--soui-input-local-border-radius) 0;
 }
 
-// ==================== Count ====================
-.soui-input-count {
-  display: block;
-  width: 100%;
-  margin-top: 4px;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.45);
-  text-align: right;
-}
-
 // ==================== TextArea ====================
 .soui-input-textarea {
-  padding: 7px 11px;
+  padding: 4px 11px;
   resize: vertical;
-  min-height: 60px;
+  min-height: 32px;
+  line-height: 1.5715;
+  /* 只过渡视觉属性，不过渡 height/width，避免 resize 拖拽卡顿 */
+  transition: border-color @transition-duration @transition-timing-function,
+              box-shadow @transition-duration @transition-timing-function;
 
   &-wrapper {
     &.soui-input-wrapper-bordered {
       background-color: var(--soui-input-local-color-bg);
       border: 1px solid var(--soui-input-local-color-border);
       border-radius: var(--soui-input-local-border-radius);
-      transition: border-color @transition-duration @transition-timing-function,
-                  box-shadow @transition-duration @transition-timing-function;
       overflow: hidden;
     }
 
@@ -354,6 +394,17 @@
       background-color: var(--soui-input-local-color-bg-disabled);
       border-color: @border-color;
     }
+
+    // TextArea status
+    &.soui-input-wrapper-status-error.soui-input-wrapper-bordered {
+      border-color: var(--soui-input-local-color-error);
+    }
+    &.soui-input-wrapper-status-warning.soui-input-wrapper-bordered {
+      border-color: var(--soui-input-local-color-warning);
+    }
+    &.soui-input-wrapper-status-success.soui-input-wrapper-bordered {
+      border-color: var(--soui-input-local-color-success);
+    }
   }
 }
 
@@ -361,6 +412,19 @@
   position: relative;
   display: block;
   width: 100%;
+}
+
+// TextArea count - positioned inside at bottom-right
+.soui-input-textarea-count {
+  position: absolute;
+  right: 11px;
+  bottom: 4px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  background: linear-gradient(to top, var(--soui-input-local-color-bg, #fff) 50%, transparent 50%);
+  padding-left: 4px;
+  z-index: 1;
 }
 
 .soui-input-textarea-clear-icon {
@@ -374,8 +438,9 @@
   height: 16px;
   color: var(--soui-input-local-color-icon);
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: 2px;
   transition: color 0.2s ease, background-color 0.2s ease;
+  z-index: 1;
 
   &:hover {
     color: var(--soui-input-local-color-icon-hover);
@@ -428,8 +493,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100% + 2px);
-  margin: -1px -11px -1px 4px;
+  gap: 4px;
+  height: 100%;
   padding: 0 16px;
   background-color: var(--soui-primary-color, @primary-color);
   border: none;
@@ -439,6 +504,7 @@
   font-size: var(--soui-input-local-font-size);
   transition: background-color @transition-duration @transition-timing-function;
   white-space: nowrap;
+  flex-shrink: 0;
 
   &:hover {
     background-color: var(--soui-primary-hover-color, @primary-hover-color);
@@ -456,7 +522,16 @@
   &-loading {
     cursor: not-allowed;
     opacity: 0.7;
+    pointer-events: none;
   }
+}
+
+// Search addonAfter 模式：移除 addon-after 的默认 padding 和背景，让按钮完全控制外观
+.soui-input-addon-after:has(.soui-input-search-button) {
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
 }
 
 // Size adjustments for search button
