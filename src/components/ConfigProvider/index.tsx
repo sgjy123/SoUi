@@ -326,9 +326,10 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       // 第2层: Input 配置点 (引用设计令牌)
       '--soui-input-border-radius': inputTheme.borderRadius ? `${inputTheme.borderRadius}px` : undefined,
       '--soui-input-font-size': inputTheme.fontSize ? `${inputTheme.fontSize}px` : undefined,
-      '--soui-input-control-height-small': inputTheme.controlHeight ? `${inputTheme.controlHeight}px` : '24px',
+      // controlHeight 仅控制 middle 尺寸，small/large 基于它派生
+      '--soui-input-control-height-small': inputTheme.controlHeight ? `${inputTheme.controlHeight - 8}px` : '24px',
       '--soui-input-control-height-middle': inputTheme.controlHeight ? `${inputTheme.controlHeight}px` : '32px',
-      '--soui-input-control-height-large': inputTheme.controlHeight ? `${inputTheme.controlHeight}px` : '40px',
+      '--soui-input-control-height-large': inputTheme.controlHeight ? `${inputTheme.controlHeight + 8}px` : '40px',
       '--soui-input-color-border': inputTheme.colorBorder || mergedTheme.borderColorBase,
       '--soui-input-color-border-hover': inputTheme.colorBorderHover || mergedTheme.primaryHoverColor,
       '--soui-input-color-border-focus': inputTheme.colorBorderFocus || mergedTheme.primaryColor,
