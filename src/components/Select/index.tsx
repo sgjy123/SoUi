@@ -217,7 +217,6 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [isHovered, setIsHovered] = useState(false);
 
   // Refs
   const selectRef = useRef<HTMLDivElement>(null);
@@ -486,7 +485,7 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
     `soui-select-${mergedSize}`,
     {
       'soui-select-open': open,
-      'soui-select-focused': open || isHovered,
+      'soui-select-focused': open,
       'soui-select-disabled': disabled,
       'soui-select-multiple': isMultiple,
       'soui-select-single': !isMultiple,
@@ -640,8 +639,6 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
       ref={selectRef}
       className={selectCls}
       style={mergedStyle}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onKeyDown={!showSearch || !open ? handleKeyDown : undefined}
       tabIndex={disabled ? -1 : 0}
       onFocus={(e) => {

@@ -167,7 +167,8 @@
     align-items: center;
     color: rgba(0, 0, 0, 0.25);
     pointer-events: none;
-    transition: transform @transition-duration @transition-timing-function;
+    transition: transform @transition-duration @transition-timing-function,
+                opacity 0.2s ease;
   }
 
   &.soui-select-open .soui-select-arrow {
@@ -203,6 +204,12 @@
   &.soui-select-focused .soui-select-clear {
     opacity: 1;
     visibility: visible;
+  }
+
+  // Hide arrow when clear button is visible to prevent overlap
+  &:hover .soui-select-clear ~ .soui-select-arrow,
+  &.soui-select-focused .soui-select-clear ~ .soui-select-arrow {
+    opacity: 0;
   }
 
   // ==================== Hover ====================
