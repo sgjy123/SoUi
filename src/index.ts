@@ -115,6 +115,14 @@ export type { SkeletonProps, SkeletonAvatarProps, SkeletonButtonProps, SkeletonI
 export { default as Result } from './components/Result';
 export type { ResultProps, ResultStatus } from './components/Result';
 
+// Table Component
+export { default as Table } from './components/Table';
+export type { TableProps, ColumnType, TableSize, SortOrder, AlignType, PaginationConfig, RowSelectionConfig, ExpandableConfig } from './components/Table';
+
+// Input Component
+export { default as Input } from './components/Input';
+export type { InputProps, InputSize, InputStatus, InputRef, InputTextAreaProps } from './components/Input';
+
 // Utils
 export * from './utils';
 

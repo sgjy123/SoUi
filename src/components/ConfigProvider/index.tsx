@@ -47,6 +47,10 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const skeletonTheme = mergedTheme.components?.Skeleton || {};
     // 获取 Watermark 组件级配置
     const watermarkTheme = mergedTheme.components?.Watermark || {};
+    // 获取 Table 组件级配置
+    const tableTheme = mergedTheme.components?.Table || {};
+    // 获取 Input 组件级配置
+    const inputTheme = mergedTheme.components?.Input || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -306,6 +310,37 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-watermark-font-color': watermarkTheme.fontColor,
       '--soui-watermark-font-size': watermarkTheme.fontSize ? `${watermarkTheme.fontSize}px` : undefined,
       '--soui-watermark-z-index': watermarkTheme.zIndex?.toString(),
+
+      // ==================== Table 组件配置 ====================
+      // 第2层: Table 配置点
+      '--soui-table-border-radius': tableTheme.borderRadius ? `${tableTheme.borderRadius}px` : undefined,
+      '--soui-table-font-size': tableTheme.fontSize ? `${tableTheme.fontSize}px` : undefined,
+      '--soui-table-header-bg': tableTheme.headerBg,
+      '--soui-table-header-color': tableTheme.headerColor,
+      '--soui-table-row-hover-bg': tableTheme.rowHoverBg,
+      '--soui-table-border-color': tableTheme.borderColor,
+      '--soui-table-stripe-bg': tableTheme.stripeBg,
+      '--soui-table-selected-row-bg': tableTheme.selectedRowBg,
+
+      // ==================== Input 组件配置 ====================
+      // 第2层: Input 配置点 (引用设计令牌)
+      '--soui-input-border-radius': inputTheme.borderRadius ? `${inputTheme.borderRadius}px` : undefined,
+      '--soui-input-font-size': inputTheme.fontSize ? `${inputTheme.fontSize}px` : undefined,
+      '--soui-input-control-height-small': inputTheme.controlHeight ? `${inputTheme.controlHeight}px` : '24px',
+      '--soui-input-control-height-middle': inputTheme.controlHeight ? `${inputTheme.controlHeight}px` : '32px',
+      '--soui-input-control-height-large': inputTheme.controlHeight ? `${inputTheme.controlHeight}px` : '40px',
+      '--soui-input-color-border': inputTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-input-color-border-hover': inputTheme.colorBorderHover || mergedTheme.primaryHoverColor,
+      '--soui-input-color-border-focus': inputTheme.colorBorderFocus || mergedTheme.primaryColor,
+      '--soui-input-color-bg': inputTheme.colorBg || '#fff',
+      '--soui-input-color-text': inputTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-input-color-bg-disabled': inputTheme.colorBgDisabled || '#f5f5f5',
+      '--soui-input-color-text-disabled': inputTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
+      '--soui-input-color-error': inputTheme.colorError || mergedTheme.errorColor,
+      '--soui-input-color-warning': inputTheme.colorWarning || mergedTheme.warningColor,
+      '--soui-input-color-success': inputTheme.colorSuccess || mergedTheme.successColor,
+      '--soui-input-color-icon': inputTheme.colorIcon || 'rgba(0, 0, 0, 0.45)',
+      '--soui-input-color-icon-hover': inputTheme.colorIconHover || 'rgba(0, 0, 0, 0.65)',
     } as any;
   }, [mergedTheme]);
 

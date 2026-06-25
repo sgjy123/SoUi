@@ -227,6 +227,28 @@ export const docsConfig: MenuGroup[] = [
     ],
   },
   {
+    title: '数据展示',
+    icon: 'Table',
+    components: [
+      {
+        key: 'table',
+        label: 'Table 表格',
+        icon: 'TableFile',
+        items: [
+          { key: 'table-basic', label: 'Table 基础用法', componentPath: 'Table', exampleName: 'Basic', description: '最基本的表格用法，展示列和数据。' },
+          { key: 'table-sorter', label: 'Table 排序', componentPath: 'Table', exampleName: 'Sorter', description: '支持列排序功能。' },
+          { key: 'table-selection', label: 'Table 行选择', componentPath: 'Table', exampleName: 'Selection', description: '支持选择行数据。' },
+          { key: 'table-bordered', label: 'Table 边框', componentPath: 'Table', exampleName: 'Bordered', description: '带边框的表格。' },
+          { key: 'table-size', label: 'Table 尺寸', componentPath: 'Table', exampleName: 'Size', description: '小、中、大三种尺寸。' },
+          { key: 'table-expandable', label: 'Table 展开行', componentPath: 'Table', exampleName: 'Expandable', description: '可展开的行内容。' },
+          { key: 'table-pagination', label: 'Table 分页', componentPath: 'Table', exampleName: 'Pagination', description: '带分页的表格。' },
+          { key: 'table-loading', label: 'Table 加载中', componentPath: 'Table', exampleName: 'Loading', description: '加载状态展示。' },
+          { key: 'table-fixed-header', label: 'Table 固定表头', componentPath: 'Table', exampleName: 'FixedHeader', description: '固定表头，支持横向滚动。' },
+        ],
+      },
+    ],
+  },
+  {
     title: '反馈组件',
     icon: 'Remind',
     components: [
@@ -341,6 +363,28 @@ export const docsConfig: MenuGroup[] = [
           { key: 'watermark-image', label: 'Watermark 图片水印', componentPath: 'Watermark', exampleName: 'Image', description: '使用图片作为水印内容。' },
           { key: 'watermark-content', label: 'Watermark 覆盖内容', componentPath: 'Watermark', exampleName: 'Content', description: '水印覆盖在子元素上方。' },
           { key: 'watermark-custom', label: 'Watermark 自定义样式', componentPath: 'Watermark', exampleName: 'CustomStyle', description: '自定义水印的颜色、大小、旋转角度等。' },
+        ],
+      },
+    ],
+  },
+  {
+    title: '表单组件',
+    icon: 'Edit',
+    components: [
+      {
+        key: 'input',
+        label: 'Input 输入框',
+        icon: 'EditOne',
+        items: [
+          { key: 'input-basic', label: 'Input 基础用法', componentPath: 'Input', exampleName: 'Basic', description: '基本的输入框用法。' },
+          { key: 'input-size', label: 'Input 尺寸', componentPath: 'Input', exampleName: 'Size', description: '三种尺寸的输入框。' },
+          { key: 'input-status', label: 'Input 状态', componentPath: 'Input', exampleName: 'Status', description: '成功、警告、错误状态。' },
+          { key: 'input-prefix-suffix', label: 'Input 前后缀', componentPath: 'Input', exampleName: 'PrefixSuffix', description: '添加前缀和后缀内容。' },
+          { key: 'input-addon', label: 'Input 前置/后置标签', componentPath: 'Input', exampleName: 'Addon', description: '带有前置和后置标签的输入框。' },
+          { key: 'input-count', label: 'Input 字符计数', componentPath: 'Input', exampleName: 'Count', description: '显示字符计数和最大长度限制。' },
+          { key: 'input-bordered', label: 'Input 无边框', componentPath: 'Input', exampleName: 'Bordered', description: '无边框样式的输入框。' },
+          { key: 'input-search', label: 'Input 搜索框', componentPath: 'Input', exampleName: 'Search', description: '搜索框和带清除按钮的输入框。' },
+          { key: 'input-textarea', label: 'Input.TextArea 多行输入', componentPath: 'Input', exampleName: 'TextArea', description: '多行文本输入框。' },
         ],
       },
     ],

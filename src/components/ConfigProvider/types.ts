@@ -23,8 +23,34 @@ export interface ComponentThemeConfig {
   Input?: {
     /** 边框颜色 */
     colorBorder?: string;
-    /** 圆角 */
+    /** 圆角大小（像素） */
     borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 控件高度（像素） */
+    controlHeight?: number;
+    /** 悬停边框颜色 */
+    colorBorderHover?: string;
+    /** 聚焦边框颜色 */
+    colorBorderFocus?: string;
+    /** 背景色 */
+    colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 禁用状态背景色 */
+    colorBgDisabled?: string;
+    /** 禁用状态文本颜色 */
+    colorTextDisabled?: string;
+    /** 错误状态边框颜色 */
+    colorError?: string;
+    /** 警告状态边框颜色 */
+    colorWarning?: string;
+    /** 成功状态边框颜色 */
+    colorSuccess?: string;
+    /** 图标颜色 */
+    colorIcon?: string;
+    /** 图标悬停颜色 */
+    colorIconHover?: string;
   };
   /** 图标组件配置 */
   Icon?: {
@@ -491,6 +517,25 @@ export interface ComponentThemeConfig {
     fontSize?: number;
     /** z-index */
     zIndex?: number;
+  };
+  /** Table 表格组件配置 */
+  Table?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 表头背景色 */
+    headerBg?: string;
+    /** 表头文字颜色 */
+    headerColor?: string;
+    /** 行悬停背景色 */
+    rowHoverBg?: string;
+    /** 边框颜色 */
+    borderColor?: string;
+    /** 斑马纹背景色 */
+    stripeBg?: string;
+    /** 选中行背景色 */
+    selectedRowBg?: string;
   };
   // 可以继续添加其他组件的配置
 }

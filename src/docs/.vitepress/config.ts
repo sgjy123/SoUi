@@ -234,6 +234,8 @@ function sidebarComponents() {
         { text: 'Tag 标签', link: 'tag' },
         { text: 'Badge 徽标', link: 'badge' },
         { text: 'Tooltip 文字提示', link: 'tooltip' },
+        { text: 'Popover 弹出提示', link: 'popover' },
+        { text: 'Table 表格', link: 'table' },
       ],
     },
     {

@@ -1,0 +1,427 @@
+@import '../../styles/variables.less';
+
+// ==================== Table Variables ====================
+@table-font-size: var(--soui-table-font-size, @font-size-base);
+@table-border-radius: var(--soui-table-border-radius, @border-radius-base);
+@table-border-color: var(--soui-table-border-color, @border-color-split);
+@table-header-bg: var(--soui-table-header-bg, #fafafa);
+@table-header-color: var(--soui-table-header-color, @text-color);
+@table-row-hover-bg: var(--soui-table-row-hover-bg, #f5f5f5);
+@table-stripe-bg: var(--soui-table-stripe-bg, #fafafa);
+@table-selected-row-bg: var(--soui-table-selected-row-bg, #e6f4ff);
+@table-primary-color: var(--soui-primary-color, @primary-color);
+
+// ==================== Table Base ====================
+.soui-table {
+  position: relative;
+  font-size: @table-font-size;
+  border-radius: @table-border-radius;
+  overflow: hidden;
+
+  // ==================== Bordered ====================
+  &-bordered {
+    border: 1px solid @table-border-color;
+
+    .soui-table-th,
+    .soui-table-td {
+      border-right: 1px solid @table-border-color;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+
+    .soui-table-thead tr:not(:last-child) th {
+      border-bottom: 1px solid @table-border-color;
+    }
+  }
+
+  // ==================== Table Title/Footer ====================
+  &-title,
+  &-footer {
+    padding: @padding-sm @padding-md;
+    background: @table-header-bg;
+    border-radius: @table-border-radius;
+  }
+
+  &-title {
+    border-bottom: 1px solid @table-border-color;
+    border-radius: @table-border-radius @table-border-radius 0 0;
+    font-weight: 600;
+  }
+
+  &-footer {
+    border-top: 1px solid @table-border-color;
+    border-radius: 0 0 @table-border-radius @table-border-radius;
+  }
+
+  // ==================== Table Wrapper ====================
+  &-wrapper {
+    overflow: auto;
+  }
+
+  &-element {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+
+  // ==================== Table Header ====================
+  &-thead {
+    .soui-table-th {
+      padding: @padding-sm @padding-md;
+      background: @table-header-bg;
+      color: @table-header-color;
+      font-weight: 600;
+      text-align: left;
+      border-bottom: 1px solid @table-border-color;
+      white-space: nowrap;
+      user-select: none;
+
+      &-sortable {
+        cursor: pointer;
+        transition: background @transition-duration @transition-timing-function;
+
+        &:hover {
+          background: #f0f0f0;
+        }
+      }
+
+      &-align-center {
+        text-align: center;
+      }
+
+      &-align-right {
+        text-align: right;
+      }
+
+      &-ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &-content {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      &-selection {
+        text-align: center;
+      }
+
+      &-expand {
+        width: 48px;
+        text-align: center;
+      }
+
+      &-fixed-left,
+      &-fixed-right {
+        position: sticky;
+        z-index: 1;
+        background: @table-header-bg;
+      }
+
+      &-fixed-left {
+        left: 0;
+      }
+
+      &-fixed-right {
+        right: 0;
+      }
+
+      &-sorted {
+        background-color: #f5f5f5;
+      }
+    }
+  }
+
+  // ==================== Sorter ====================
+  &-sorter {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-left: 4px;
+
+    &-icon {
+      font-size: 10px;
+      color: @text-color-disabled;
+      line-height: 1;
+      transition: color @transition-duration @transition-timing-function;
+
+      &-active {
+        color: @table-primary-color;
+      }
+    }
+  }
+
+  // ==================== Table Body ====================
+  &-tbody {
+    .soui-table-tr {
+      transition: background-color @transition-duration @transition-timing-function;
+
+      &:hover {
+        background-color: @table-row-hover-bg;
+      }
+
+      &-selected {
+        background-color: @table-selected-row-bg;
+
+        &:hover {
+          background-color: #d6ebff;
+        }
+      }
+
+      &-expand-row {
+        background-color: @bg-color-base;
+      }
+    }
+
+    .soui-table-td {
+      padding: @padding-sm @padding-md;
+      border-bottom: 1px solid @table-border-color;
+      color: @text-color;
+      vertical-align: middle;
+
+      &-ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &-align-center {
+        text-align: center;
+      }
+
+      &-align-right {
+        text-align: right;
+      }
+
+      &-selection {
+        text-align: center;
+      }
+
+      &-expand {
+        width: 48px;
+        text-align: center;
+      }
+
+      &-expand-content {
+        padding: @padding-md;
+        background: @bg-color-layout;
+      }
+
+      &-empty {
+        text-align: center;
+        padding: @padding-xl @padding-md;
+        color: @text-color-secondary;
+      }
+
+      &-fixed-left,
+      &-fixed-right {
+        position: sticky;
+        z-index: 1;
+        background: @bg-color-base;
+      }
+
+      &-fixed-left {
+        left: 0;
+      }
+
+      &-fixed-right {
+        right: 0;
+      }
+    }
+  }
+
+  // ==================== Striped ====================
+  &-striped {
+    .soui-table-tbody .soui-table-tr:nth-child(even) {
+      background-color: @table-stripe-bg;
+    }
+  }
+
+  // ==================== Size Variants ====================
+  &-small {
+    .soui-table-th,
+    .soui-table-td {
+      padding: @padding-xs @padding-sm;
+      font-size: @font-size-sm;
+    }
+  }
+
+  &-middle {
+    .soui-table-th,
+    .soui-table-td {
+      padding: @padding-sm @padding-md;
+    }
+  }
+
+  &-large {
+    .soui-table-th,
+    .soui-table-td {
+      padding: @padding-md @padding-lg;
+      font-size: @font-size-lg;
+    }
+  }
+
+  // ==================== Expand Icon ====================
+  &-expand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: 1px solid @border-color;
+    border-radius: @border-radius-sm;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    color: @text-color;
+    background: @bg-color-base;
+    transition: all @transition-duration @transition-timing-function;
+    user-select: none;
+
+    &:hover {
+      border-color: @table-primary-color;
+      color: @table-primary-color;
+    }
+
+    &-expanded {
+      border-color: @table-primary-color;
+      color: @table-primary-color;
+    }
+  }
+
+  // ==================== Checkbox/Radio ====================
+  &-checkbox,
+  &-radio {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: @table-primary-color;
+    vertical-align: middle;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  // ==================== Loading ====================
+  &-loading {
+    position: relative;
+
+    &-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    &-spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid @table-primary-color;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: soui-table-spin 0.8s linear infinite;
+    }
+  }
+
+  // ==================== Empty ====================
+  &-empty {
+    color: @text-color-secondary;
+    padding: @padding-lg 0;
+    text-align: center;
+  }
+
+  // ==================== Loading Content ====================
+  &-loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: @padding-sm;
+  }
+
+  // ==================== Pagination ====================
+  &-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: @padding-sm @padding-md;
+    gap: @padding-md;
+
+    &-total {
+      color: @text-color-secondary;
+      font-size: @font-size-sm;
+      white-space: nowrap;
+    }
+
+    &-pages {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    &-btn {
+      min-width: 32px;
+      height: 32px;
+      padding: 0 @padding-xs;
+      border: 1px solid @border-color;
+      border-radius: @border-radius-sm;
+      background: @bg-color-base;
+      color: @text-color;
+      font-size: @font-size-sm;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all @transition-duration @transition-timing-function;
+
+      &:hover:not(:disabled) {
+        border-color: @table-primary-color;
+        color: @table-primary-color;
+      }
+
+      &-active {
+        border-color: @table-primary-color;
+        color: @table-primary-color;
+        font-weight: 600;
+      }
+
+      &:disabled {
+        color: @text-color-disabled;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  // ==================== Summary ====================
+  &-tfoot {
+    .soui-table-td {
+      padding: @padding-sm @padding-md;
+      background: @table-header-bg;
+      font-weight: 600;
+      border-top: 1px solid @table-border-color;
+    }
+  }
+}
+
+// ==================== Animations ====================
+@keyframes soui-table-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

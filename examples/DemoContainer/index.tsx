@@ -23,6 +23,8 @@ import Dialog from '../../src/components/Dialog';
 import Drawer from '../../src/components/Drawer';
 import Result from '../../src/components/Result';
 import Watermark from '../../src/components/Watermark';
+import Table from '../../src/components/Table';
+import Input from '../../src/components/Input';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -82,6 +84,9 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Drawer,
     Result,
     Watermark,
+    Table,
+    Input,
+    TextArea: Input.TextArea,
     ConfigProvider,
     ...scope,
   };
