@@ -25,6 +25,7 @@ import Result from '../../src/components/Result';
 import Watermark from '../../src/components/Watermark';
 import Table from '../../src/components/Table';
 import Input from '../../src/components/Input';
+import Select from '../../src/components/Select';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -87,6 +88,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Table,
     Input,
     TextArea: Input.TextArea,
+    Select,
     ConfigProvider,
     ...scope,
   };

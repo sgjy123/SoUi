@@ -212,6 +212,19 @@ export const docsConfig: MenuGroup[] = [
           { key: 'input-combined', label: 'Input 综合示例', componentPath: 'Input', exampleName: 'Combined', description: '综合示例：前缀 + 清空 + 字数统计等组合使用。' },
         ],
       },
+      {
+        key: 'select',
+        label: 'Select 选择器',
+        icon: 'FullSelection',
+        items: [
+          { key: 'select-basic', label: 'Select 基础用法', componentPath: 'Select', exampleName: 'Basic', description: '基础单选、默认值、禁用状态。' },
+          { key: 'select-multiple', label: 'Select 多选', componentPath: 'Select', exampleName: 'Multiple', description: '多选模式，支持标签式展示。' },
+          { key: 'select-search', label: 'Select 搜索', componentPath: 'Select', exampleName: 'Search', description: '带搜索功能的选择器。' },
+          { key: 'select-disabled', label: 'Select 禁用', componentPath: 'Select', exampleName: 'Disabled', description: '禁用选择器和禁用选项。' },
+          { key: 'select-sizes', label: 'Select 尺寸', componentPath: 'Select', exampleName: 'Sizes', description: '三种尺寸：small、middle、large。' },
+          { key: 'select-controlled', label: 'Select 受控模式', componentPath: 'Select', exampleName: 'Controlled', description: '通过 value 和 onChange 受控使用。' },
+        ],
+      },
     ],
   },
   {

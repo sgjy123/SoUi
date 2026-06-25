@@ -124,6 +124,10 @@ export { default as Input } from './components/Input';
 export type { InputProps, InputSize, InputStatus, TextAreaProps, PasswordProps, SearchProps } from './components/Input';
 export { TextArea, Password, Search } from './components/Input';
 
+// Select Component
+export { default as Select } from './components/Select';
+export type { SelectProps, SelectSize, SelectStatus, SelectMode, OptionType, SelectRef } from './components/Select';
+
 // Utils
 export * from './utils';
 

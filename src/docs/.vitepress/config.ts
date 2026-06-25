@@ -224,6 +224,7 @@ function sidebarComponents() {
       collapsed: false,
       items: [
         { text: 'Input 输入框', link: 'input' },
+        { text: 'Select 选择器', link: 'select' },
       ],
     },
     {

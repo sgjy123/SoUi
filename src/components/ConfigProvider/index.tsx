@@ -51,6 +51,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const tableTheme = mergedTheme.components?.Table || {};
     // 获取 Input 组件级配置
     const inputTheme = mergedTheme.components?.Input || {};
+    // 获取 Select 组件级配置
+    const selectTheme = mergedTheme.components?.Select || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -344,6 +346,27 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-input-color-icon-hover': inputTheme.colorIconHover || 'rgba(0, 0, 0, 0.65)',
       '--soui-input-color-addon-bg': inputTheme.colorAddonBg || '#fafafa',
       '--soui-input-color-addon-text': inputTheme.colorAddonText || 'rgba(0, 0, 0, 0.88)',
+
+      // ==================== Select 组件配置 ====================
+      // 第2层: Select 配置点 (引用设计令牌)
+      '--soui-select-border-radius': selectTheme.borderRadius ? `${selectTheme.borderRadius}px` : undefined,
+      '--soui-select-font-size': selectTheme.fontSize ? `${selectTheme.fontSize}px` : undefined,
+      '--soui-select-control-height-small': selectTheme.controlHeight ? `${selectTheme.controlHeight - 8}px` : '24px',
+      '--soui-select-control-height-middle': selectTheme.controlHeight ? `${selectTheme.controlHeight}px` : '32px',
+      '--soui-select-control-height-large': selectTheme.controlHeight ? `${selectTheme.controlHeight + 8}px` : '40px',
+      '--soui-select-color-border': selectTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-select-color-border-hover': selectTheme.colorBorderHover || mergedTheme.primaryHoverColor,
+      '--soui-select-color-border-focus': selectTheme.colorBorderFocus || mergedTheme.primaryColor,
+      '--soui-select-color-bg': selectTheme.colorBg || '#fff',
+      '--soui-select-color-text': selectTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-select-color-bg-disabled': selectTheme.colorBgDisabled || '#f5f5f5',
+      '--soui-select-color-text-disabled': selectTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
+      '--soui-select-color-error': selectTheme.colorError || mergedTheme.errorColor,
+      '--soui-select-color-warning': selectTheme.colorWarning || mergedTheme.warningColor,
+      '--soui-select-dropdown-bg': selectTheme.dropdownBg || '#fff',
+      '--soui-select-option-active-bg': selectTheme.optionActiveBg || 'rgba(0, 0, 0, 0.04)',
+      '--soui-select-option-selected-bg': selectTheme.optionSelectedBg || 'rgba(22, 119, 255, 0.08)',
+      '--soui-select-tag-bg': selectTheme.tagBg || '#fafafa',
     } as any;
   }, [mergedTheme]);
 
