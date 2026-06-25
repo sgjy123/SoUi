@@ -384,6 +384,7 @@ export const docsConfig: MenuGroup[] = [
           { key: 'input-count', label: 'Input 字符计数', componentPath: 'Input', exampleName: 'Count', description: '显示字符计数和最大长度限制。' },
           { key: 'input-bordered', label: 'Input 无边框', componentPath: 'Input', exampleName: 'Bordered', description: '无边框样式的输入框。' },
           { key: 'input-search', label: 'Input 搜索框', componentPath: 'Input', exampleName: 'Search', description: '搜索框和带清除按钮的输入框。' },
+          { key: 'input-password', label: 'Input 密码框', componentPath: 'Input', exampleName: 'Password', description: '用于密码输入的文本框。' },
           { key: 'input-textarea', label: 'Input.TextArea 多行输入', componentPath: 'Input', exampleName: 'TextArea', description: '多行文本输入框。' },
         ],
       },

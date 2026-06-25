@@ -1,6 +1,6 @@
 @import '../../styles/variables.less';
 
-// ==================== Input ====================
+// ==================== Input Base ====================
 
 .soui-input {
   position: relative;
@@ -16,102 +16,100 @@
   border: 1px solid var(--soui-input-color-border, @border-color);
   border-radius: var(--soui-input-border-radius, @border-radius-base);
   transition: all @transition-duration @transition-timing-function;
+  box-sizing: border-box;
 
-  // 尺寸变体
+  // ---- 尺寸变体 ----
   &-small {
-    padding: @padding-xs @padding-sm;
+    padding: 2px @padding-sm;
     font-size: var(--soui-input-font-size-sm, @font-size-sm);
-    height: var(--soui-input-control-height-small, 24px);
+    height: var(--soui-input-control-height-small, @control-height-sm);
   }
 
   &-middle {
-    height: var(--soui-input-control-height-middle, 32px);
+    height: var(--soui-input-control-height-middle, @control-height-base);
   }
 
   &-large {
     padding: @padding-sm @padding-md;
     font-size: var(--soui-input-font-size-lg, @font-size-lg);
-    height: var(--soui-input-control-height-large, 40px);
+    height: var(--soui-input-control-height-large, @control-height-lg);
   }
 
-  // 状态
+  // ---- 交互状态 ----
   &:hover {
     border-color: var(--soui-input-color-border-hover, @primary-hover-color);
   }
 
   &-focused {
     border-color: var(--soui-input-color-border-focus, @primary-color);
-    box-shadow: 0 0 0 2px rgba(@primary-color, 0.1);
+    box-shadow: 0 0 0 2px fade(@primary-color, 10%);
+    outline: none;
   }
 
   &-disabled {
     color: var(--soui-input-color-text-disabled, @text-color-disabled);
     background-color: var(--soui-input-color-bg-disabled, @bg-color-disable);
     cursor: not-allowed;
-    opacity: 0.6;
 
+    &:hover {
+      border-color: var(--soui-input-color-border, @border-color);
+    }
+
+    .soui-input-inner {
+      cursor: not-allowed;
+    }
+  }
+
+  &-readonly {
     &:hover {
       border-color: var(--soui-input-color-border, @border-color);
     }
   }
 
-  &-readonly {
-    background-color: @bg-color-layout;
-    cursor: default;
-  }
-
-  // 状态颜色
+  // ---- 校验状态 ----
   &-status-success {
     border-color: var(--soui-input-color-success, @success-color);
-
-    &:hover {
-      border-color: var(--soui-input-color-success, @success-color);
-    }
-
+    &:hover { border-color: var(--soui-input-color-success, @success-color); }
     &.soui-input-focused {
       border-color: var(--soui-input-color-success, @success-color);
-      box-shadow: 0 0 0 2px rgba(@success-color, 0.1);
+      box-shadow: 0 0 0 2px fade(@success-color, 10%);
     }
   }
 
   &-status-warning {
     border-color: var(--soui-input-color-warning, @warning-color);
-
-    &:hover {
-      border-color: var(--soui-input-color-warning, @warning-color);
-    }
-
+    &:hover { border-color: var(--soui-input-color-warning, @warning-color); }
     &.soui-input-focused {
       border-color: var(--soui-input-color-warning, @warning-color);
-      box-shadow: 0 0 0 2px rgba(@warning-color, 0.1);
+      box-shadow: 0 0 0 2px fade(@warning-color, 10%);
     }
   }
 
   &-status-error {
     border-color: var(--soui-input-color-error, @error-color);
-
-    &:hover {
-      border-color: var(--soui-input-color-error, @error-color);
-    }
-
+    &:hover { border-color: var(--soui-input-color-error, @error-color); }
     &.soui-input-focused {
       border-color: var(--soui-input-color-error, @error-color);
-      box-shadow: 0 0 0 2px rgba(@error-color, 0.1);
+      box-shadow: 0 0 0 2px fade(@error-color, 10%);
     }
   }
 
-  // 无边框模式
-  &-bordered {
-    border: 1px solid var(--soui-input-color-border, @border-color);
+  // ---- 无边框模式 ----
+  &-borderless {
+    border-color: transparent;
+    box-shadow: none;
+    &:hover { border-color: transparent; }
+    &.soui-input-focused { border-color: transparent; box-shadow: none; }
   }
 
-  // 前缀和后缀
+  // ---- 前缀 / 后缀 ----
   &-prefix,
   &-suffix {
     display: inline-flex;
     align-items: center;
     color: var(--soui-input-color-icon, @text-color-secondary);
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
   &-prefix {
@@ -122,40 +120,40 @@
     margin-left: @padding-xs;
   }
 
-  // 清除图标
+  // ---- 清除图标 ----
   &-clear-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 16px;
     height: 16px;
-    margin-left: @padding-xs;
-    color: var(--soui-input-color-icon, @text-color-secondary);
-    font-size: 14px;
-    line-height: 1;
+    color: var(--soui-input-color-icon, @text-color-disabled);
     cursor: pointer;
+    border-radius: 50%;
     transition: color @transition-duration @transition-timing-function;
 
     &:hover {
-      color: var(--soui-input-color-icon-hover, @text-color);
+      color: var(--soui-input-color-icon-hover, @text-color-secondary);
     }
   }
 
-  // 字符计数
+  // ---- 字符计数 ----
   &-count {
     margin-left: @padding-xs;
     color: @text-color-secondary;
-    font-size: 12px;
+    font-size: @font-size-sm;
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
-  // 内部输入框
+  // ---- 内部 input 元素 ----
   &-inner {
     flex: 1;
     min-width: 0;
     padding: 0;
     color: inherit;
     font-size: inherit;
+    font-family: inherit;
     line-height: inherit;
     background: transparent;
     border: none;
@@ -170,21 +168,16 @@
       -webkit-appearance: none;
       margin: 0;
     }
-  }
 
-  // 有前缀/后缀时的内边距调整
-  &-with-prefix &-inner {
-    padding-left: 0;
-  }
-
-  &-with-suffix &-inner {
-    padding-right: 0;
+    &[type='number'] {
+      -moz-appearance: textfield;
+    }
   }
 }
 
-// ==================== Input Group ====================
+// ==================== Input Group (addon) ====================
 
-.soui-input-group {
+.soui-input-group-wrapper {
   display: inline-flex;
   width: 100%;
   vertical-align: top;
@@ -192,58 +185,107 @@
   .soui-input {
     position: relative;
     z-index: 1;
-
-    &:not(:first-child):not(:last-child) {
-      border-radius: 0;
-    }
+    border-radius: 0;
 
     &:first-child:not(:last-child) {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    &:last-child:not(:first-child) {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-
-    &:focus {
-      z-index: 2;
-    }
-  }
-
-  // Addon
-  &-addon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 @padding-md;
-    color: @text-color;
-    font-size: var(--soui-input-font-size, @font-size-base);
-    line-height: @line-height-base;
-    background-color: @bg-color-layout;
-    border: 1px solid var(--soui-input-color-border, @border-color);
-    white-space: nowrap;
-
-    &-before {
-      border-right: 0;
       border-top-left-radius: var(--soui-input-border-radius, @border-radius-base);
       border-bottom-left-radius: var(--soui-input-border-radius, @border-radius-base);
     }
 
-    &-after {
-      border-left: 0;
+    &:last-child:not(:first-child) {
       border-top-right-radius: var(--soui-input-border-radius, @border-radius-base);
       border-bottom-right-radius: var(--soui-input-border-radius, @border-radius-base);
     }
+
+    &:focus,
+    &-focused {
+      z-index: 2;
+    }
   }
 
-  // 禁用状态
   &-disabled {
     .soui-input-addon {
       color: @text-color-disabled;
       background-color: @bg-color-disable;
     }
+  }
+}
+
+.soui-input-addon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 @padding-md;
+  color: @text-color;
+  font-size: var(--soui-input-font-size, @font-size-base);
+  line-height: @line-height-base;
+  background-color: @bg-color-layout;
+  border: 1px solid var(--soui-input-color-border, @border-color);
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &-before {
+    border-right: 0;
+    border-top-left-radius: var(--soui-input-border-radius, @border-radius-base);
+    border-bottom-left-radius: var(--soui-input-border-radius, @border-radius-base);
+  }
+
+  &-after {
+    border-left: 0;
+    border-top-right-radius: var(--soui-input-border-radius, @border-radius-base);
+    border-bottom-right-radius: var(--soui-input-border-radius, @border-radius-base);
+  }
+}
+
+// ==================== Password ====================
+
+.soui-input-password-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--soui-input-color-icon, @text-color-secondary);
+  transition: color @transition-duration @transition-timing-function;
+
+  &:hover {
+    color: var(--soui-input-color-icon-hover, @text-color);
+  }
+}
+
+// ==================== Search ====================
+
+.soui-input-search {
+  .soui-input-prefix {
+    color: var(--soui-input-color-icon, @text-color-disabled);
+  }
+}
+
+.soui-input-search-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 @padding-sm;
+  height: 100%;
+  color: #fff;
+  background-color: var(--soui-primary-color, @primary-color);
+  border-radius: 0 var(--soui-input-border-radius, @border-radius-base) var(--soui-input-border-radius, @border-radius-base) 0;
+  cursor: pointer;
+  transition: background-color @transition-duration @transition-timing-function;
+  margin: -@padding-xs -@padding-md;
+  margin-left: @padding-xs;
+
+  &:hover {
+    background-color: var(--soui-primary-hover-color, @primary-hover-color);
+  }
+
+  &:active {
+    background-color: var(--soui-primary-active-color, @primary-active-color);
+  }
+
+  &-loading {
+    opacity: 0.65;
+    pointer-events: none;
   }
 }
 
@@ -262,12 +304,14 @@
   padding: @padding-xs @padding-md;
   color: var(--soui-input-color-text, @text-color);
   font-size: var(--soui-input-font-size, @font-size-base);
+  font-family: inherit;
   line-height: @line-height-base;
   background-color: var(--soui-input-color-bg, #fff);
   border: 1px solid var(--soui-input-color-border, @border-color);
   border-radius: var(--soui-input-border-radius, @border-radius-base);
   transition: all @transition-duration @transition-timing-function;
   resize: vertical;
+  box-sizing: border-box;
 
   &::placeholder {
     color: rgba(0, 0, 0, 0.25);
@@ -279,15 +323,19 @@
 
   &:focus {
     border-color: var(--soui-input-color-border-focus, @primary-color);
-    box-shadow: 0 0 0 2px rgba(@primary-color, 0.1);
+    box-shadow: 0 0 0 2px fade(@primary-color, 10%);
     outline: none;
+  }
+
+  &-auto-size {
+    overflow: hidden;
+    resize: none;
   }
 
   &-disabled {
     color: var(--soui-input-color-text-disabled, @text-color-disabled);
     background-color: var(--soui-input-color-bg-disabled, @bg-color-disable);
     cursor: not-allowed;
-    opacity: 0.6;
 
     &:hover {
       border-color: var(--soui-input-color-border, @border-color);
@@ -295,57 +343,55 @@
   }
 
   &-readonly {
-    background-color: @bg-color-layout;
-    cursor: default;
+    &:hover {
+      border-color: var(--soui-input-color-border, @border-color);
+    }
   }
 
-  // 状态颜色
+  &-borderless {
+    border-color: transparent;
+    box-shadow: none;
+    &:hover { border-color: transparent; }
+    &:focus { border-color: transparent; box-shadow: none; }
+  }
+
+  // 校验状态
   &-status-success {
     border-color: var(--soui-input-color-success, @success-color);
-
-    &:hover {
-      border-color: var(--soui-input-color-success, @success-color);
-    }
-
+    &:hover { border-color: var(--soui-input-color-success, @success-color); }
     &:focus {
       border-color: var(--soui-input-color-success, @success-color);
-      box-shadow: 0 0 0 2px rgba(@success-color, 0.1);
+      box-shadow: 0 0 0 2px fade(@success-color, 10%);
     }
   }
 
   &-status-warning {
     border-color: var(--soui-input-color-warning, @warning-color);
-
-    &:hover {
-      border-color: var(--soui-input-color-warning, @warning-color);
-    }
-
+    &:hover { border-color: var(--soui-input-color-warning, @warning-color); }
     &:focus {
       border-color: var(--soui-input-color-warning, @warning-color);
-      box-shadow: 0 0 0 2px rgba(@warning-color, 0.1);
+      box-shadow: 0 0 0 2px fade(@warning-color, 10%);
     }
   }
 
   &-status-error {
     border-color: var(--soui-input-color-error, @error-color);
-
-    &:hover {
-      border-color: var(--soui-input-color-error, @error-color);
-    }
-
+    &:hover { border-color: var(--soui-input-color-error, @error-color); }
     &:focus {
       border-color: var(--soui-input-color-error, @error-color);
-      box-shadow: 0 0 0 2px rgba(@error-color, 0.1);
+      box-shadow: 0 0 0 2px fade(@error-color, 10%);
     }
   }
 
   // 字符计数
   &-count {
     position: absolute;
-    right: @padding-md;
-    bottom: @padding-xs;
+    right: @padding-sm;
+    bottom: 2px;
     color: @text-color-secondary;
-    font-size: 12px;
+    font-size: @font-size-sm;
     pointer-events: none;
+    background: linear-gradient(to top, var(--soui-input-color-bg, #fff) 50%, transparent 50%);
+    padding-left: @padding-xs;
   }
 }
