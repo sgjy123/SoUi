@@ -23,6 +23,8 @@
   --soui-input-local-color-success: var(--soui-input-color-success, @success-color);
   --soui-input-local-color-icon: var(--soui-input-color-icon, rgba(0, 0, 0, 0.45));
   --soui-input-local-color-icon-hover: var(--soui-input-color-icon-hover, rgba(0, 0, 0, 0.65));
+  --soui-input-local-color-addon-bg: var(--soui-input-color-addon-bg, #fafafa);
+  --soui-input-local-color-addon-text: var(--soui-input-color-addon-text, rgba(0, 0, 0, 0.88));
 }
 
 .soui-input-wrapper {
@@ -299,6 +301,7 @@
 .soui-input-addon-wrapper {
   .input-css-variable-aliases();
   display: inline-flex;
+  align-items: stretch;
   width: 100%;
   // 确保水平布局（不受内部 input-wrapper 影响）
   flex-direction: row;
@@ -345,9 +348,9 @@
   justify-content: center;
   padding: 0 11px;
   font-size: var(--soui-input-local-font-size);
-  background-color: #fafafa;
+  background-color: var(--soui-input-local-color-addon-bg);
   border: 1px solid var(--soui-input-local-color-border);
-  color: rgba(0, 0, 0, 0.88);
+  color: var(--soui-input-local-color-addon-text);
   white-space: nowrap;
   flex-shrink: 0;
   transition: border-color @transition-duration @transition-timing-function;

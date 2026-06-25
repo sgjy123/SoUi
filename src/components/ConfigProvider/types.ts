@@ -51,6 +51,10 @@ export interface ComponentThemeConfig {
     colorIcon?: string;
     /** 图标悬停颜色 */
     colorIconHover?: string;
+    /** 前后置标签背景色 */
+    colorAddonBg?: string;
+    /** 前后置标签文本颜色 */
+    colorAddonText?: string;
   };
   /** 图标组件配置 */
   Icon?: {

@@ -67,6 +67,11 @@ export const themes = {
           zIndex: 1030,
           colorBg: '#fff',
         },
+        Input: {
+          colorAddonBg: '#e6f7ff',
+          colorAddonText: '#1677ff',
+          controlHeight: 36,
+        },
       },
     } as ThemeConfig,
   },

@@ -117,8 +117,14 @@ function buildInputCssVars(inputTheme: Record<string, any>, globalTheme: Record<
   const cssVars: Record<string, any> = {};
   const borderRadiusValue = inputTheme?.borderRadius || globalTheme?.borderRadius;
   const fontSizeValue = inputTheme?.fontSize || globalTheme?.fontSize;
+  const controlHeightValue = inputTheme?.controlHeight || globalTheme?.controlHeight;
   if (borderRadiusValue !== undefined) cssVars['--soui-input-border-radius'] = `${borderRadiusValue}px`;
   if (fontSizeValue !== undefined) cssVars['--soui-input-font-size'] = `${fontSizeValue}px`;
+  if (controlHeightValue !== undefined) {
+    cssVars['--soui-input-control-height-small'] = `${controlHeightValue - 8}px`;
+    cssVars['--soui-input-control-height-middle'] = `${controlHeightValue}px`;
+    cssVars['--soui-input-control-height-large'] = `${controlHeightValue + 8}px`;
+  }
   if (inputTheme?.colorBorder) cssVars['--soui-input-color-border'] = inputTheme.colorBorder;
   if (inputTheme?.colorBorderHover) cssVars['--soui-input-color-border-hover'] = inputTheme.colorBorderHover;
   if (inputTheme?.colorBorderFocus) cssVars['--soui-input-color-border-focus'] = inputTheme.colorBorderFocus;
@@ -131,6 +137,8 @@ function buildInputCssVars(inputTheme: Record<string, any>, globalTheme: Record<
   if (inputTheme?.colorSuccess) cssVars['--soui-input-color-success'] = inputTheme.colorSuccess;
   if (inputTheme?.colorIcon) cssVars['--soui-input-color-icon'] = inputTheme.colorIcon;
   if (inputTheme?.colorIconHover) cssVars['--soui-input-color-icon-hover'] = inputTheme.colorIconHover;
+  if (inputTheme?.colorAddonBg) cssVars['--soui-input-color-addon-bg'] = inputTheme.colorAddonBg;
+  if (inputTheme?.colorAddonText) cssVars['--soui-input-color-addon-text'] = inputTheme.colorAddonText;
   return cssVars;
 }
 

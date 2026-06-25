@@ -342,6 +342,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-input-color-success': inputTheme.colorSuccess || mergedTheme.successColor,
       '--soui-input-color-icon': inputTheme.colorIcon || 'rgba(0, 0, 0, 0.45)',
       '--soui-input-color-icon-hover': inputTheme.colorIconHover || 'rgba(0, 0, 0, 0.65)',
+      '--soui-input-color-addon-bg': inputTheme.colorAddonBg || '#fafafa',
+      '--soui-input-color-addon-text': inputTheme.colorAddonText || 'rgba(0, 0, 0, 0.88)',
     } as any;
   }, [mergedTheme]);
 

@@ -343,6 +343,7 @@ function App() {
           Input: {
             borderRadius: 8,
             fontSize: 16,
+            controlHeight: 36,
             colorBorder: '#d9d9d9',
             colorBorderHover: '#4096ff',
             colorBorderFocus: '#1677ff',
@@ -355,6 +356,8 @@ function App() {
             colorSuccess: '#52c41a',
             colorIcon: 'rgba(0, 0, 0, 0.45)',
             colorIconHover: 'rgba(0, 0, 0, 0.65)',
+            colorAddonBg: '#fafafa',
+            colorAddonText: 'rgba(0, 0, 0, 0.88)',
           },
         },
       }}
@@ -371,6 +374,7 @@ function App() {
 |--------|------|------|--------|
 | borderRadius | 输入框圆角（单位 px） | `number` | 继承全局 `borderRadius`（6） |
 | fontSize | 字体大小（单位 px） | `number` | 继承全局 `fontSize`（14） |
+| controlHeight | 控件高度（单位 px），small = controlHeight - 8，large = controlHeight + 8 | `number` | `32` |
 | colorBorder | 边框颜色 | `string` | `#d9d9d9` |
 | colorBorderHover | 悬停边框颜色 | `string` | `#4096ff` |
 | colorBorderFocus | 聚焦边框颜色 | `string` | `#1677ff` |
@@ -383,6 +387,8 @@ function App() {
 | colorSuccess | 成功状态颜色 | `string` | `#52c41a` |
 | colorIcon | 图标颜色 | `string` | `rgba(0, 0, 0, 0.45)` |
 | colorIconHover | 图标悬停颜色 | `string` | `rgba(0, 0, 0, 0.65)` |
+| colorAddonBg | 前后置标签背景颜色 | `string` | `#fafafa` |
+| colorAddonText | 前后置标签文字颜色 | `string` | `rgba(0, 0, 0, 0.88)` |
 
 ### 优先级
 
