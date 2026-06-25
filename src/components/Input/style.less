@@ -1,0 +1,469 @@
+@import '../../styles/variables.less';
+
+// ==================== Input Variables ====================
+.soui-input-wrapper {
+  // Defaults: use CSS variables from ConfigProvider with Less fallback
+  --soui-input-local-border-radius: var(--soui-input-border-radius, @border-radius-base);
+  --soui-input-local-font-size: var(--soui-input-font-size, @font-size-base);
+  --soui-input-local-control-height-sm: var(--soui-input-control-height-small, @control-height-sm);
+  --soui-input-local-control-height-md: var(--soui-input-control-height-middle, @control-height-base);
+  --soui-input-local-control-height-lg: var(--soui-input-control-height-large, @control-height-lg);
+  --soui-input-local-color-border: var(--soui-input-color-border, @border-color);
+  --soui-input-local-color-border-hover: var(--soui-input-color-border-hover, @primary-hover-color);
+  --soui-input-local-color-border-focus: var(--soui-input-color-border-focus, @primary-color);
+  --soui-input-local-color-bg: var(--soui-input-color-bg, @bg-color-base);
+  --soui-input-local-color-text: var(--soui-input-color-text, @text-color);
+  --soui-input-local-color-bg-disabled: var(--soui-input-color-bg-disabled, @bg-color-disable);
+  --soui-input-local-color-text-disabled: var(--soui-input-color-text-disabled, @text-color-disabled);
+  --soui-input-local-color-error: var(--soui-input-color-error, @error-color);
+  --soui-input-local-color-warning: var(--soui-input-color-warning, @warning-color);
+  --soui-input-local-color-icon: var(--soui-input-color-icon, rgba(0, 0, 0, 0.45));
+  --soui-input-local-color-icon-hover: var(--soui-input-color-icon-hover, rgba(0, 0, 0, 0.65));
+}
+
+// ==================== Affix Wrapper ====================
+.soui-input-affix-wrapper {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 11px;
+  background: transparent;
+
+  &-focused {
+    .soui-input-suffix .soui-input-clear-icon {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+// ==================== Input Base ====================
+.soui-input {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-size: var(--soui-input-local-font-size);
+  font-family: inherit;
+  line-height: 1.5715;
+  color: var(--soui-input-local-color-text);
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  min-width: 0;
+
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.25);
+    user-select: none;
+  }
+
+  &:-ms-input-placeholder {
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+  &::-ms-input-placeholder {
+    color: rgba(0, 0, 0, 0.25);
+  }
+
+  &-readonly {
+    cursor: default;
+  }
+
+  &-disabled {
+    color: var(--soui-input-local-color-text-disabled);
+    cursor: not-allowed;
+    opacity: 1;
+  }
+
+  // Hide password reveal icon in Edge
+  &::-ms-reveal,
+  &::-ms-clear {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
+// ==================== Prefix & Suffix ====================
+.soui-input-prefix {
+  display: flex;
+  align-items: center;
+  margin-right: 4px;
+  white-space: nowrap;
+  color: var(--soui-input-local-color-icon);
+  flex-shrink: 0;
+}
+
+.soui-input-suffix {
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  color: var(--soui-input-local-color-icon);
+
+  &-inner {
+    display: flex;
+    align-items: center;
+  }
+}
+
+// ==================== Clear Icon ====================
+.soui-input-clear-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  color: var(--soui-input-local-color-icon);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  border-radius: 50%;
+  transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    color: var(--soui-input-local-color-icon-hover);
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--soui-primary-color, @primary-color);
+    outline-offset: 2px;
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// ==================== Wrapper States ====================
+.soui-input-wrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+
+  // --- bordered ---
+  &-bordered {
+    .soui-input-affix-wrapper {
+      background-color: var(--soui-input-local-color-bg);
+      border: 1px solid var(--soui-input-local-color-border);
+      border-radius: var(--soui-input-local-border-radius);
+      transition: border-color @transition-duration @transition-timing-function,
+                  box-shadow @transition-duration @transition-timing-function;
+    }
+  }
+
+  &-borderless {
+    .soui-input-affix-wrapper {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+  }
+
+  // reset
+  &-borderless.soui-input-wrapper-status-error,
+  &-borderless.soui-input-wrapper-status-warning {
+    .soui-input-affix-wrapper {
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  // --- hover ---
+  &-hovered&-bordered .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-border-hover);
+    z-index: 1;
+  }
+  &-hovered&-bordered&-status-error .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-error);
+    box-shadow: 0 0 0 2px fade(@error-color, 10%);
+  }
+  &-hovered&-bordered&-status-warning .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-warning);
+    box-shadow: 0 0 0 2px fade(@warning-color, 10%);
+  }
+
+  // --- focus ---
+  &-focused&-bordered .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-border-focus);
+    box-shadow: 0 0 0 2px fade(@primary-color, 10%);
+    z-index: 1;
+  }
+  &-focused&-bordered&-status-error .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-error);
+    box-shadow: 0 0 0 2px fade(@error-color, 20%);
+  }
+  &-focused&-bordered&-status-warning .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-warning);
+    box-shadow: 0 0 0 2px fade(@warning-color, 20%);
+  }
+
+  // --- disabled ---
+  &-disabled&-bordered .soui-input-affix-wrapper {
+    color: var(--soui-input-local-color-text-disabled);
+    background-color: var(--soui-input-local-color-bg-disabled);
+    border-color: @border-color;
+    cursor: not-allowed;
+  }
+
+  // --- status ---
+  &-status-error&-bordered .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-error);
+  }
+  &-status-error&-focused&-bordered .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-error);
+    box-shadow: 0 0 0 2px fade(@error-color, 20%);
+  }
+
+  &-status-warning&-bordered .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-warning);
+  }
+  &-status-warning&-focused&-bordered .soui-input-affix-wrapper {
+    border-color: var(--soui-input-local-color-warning);
+    box-shadow: 0 0 0 2px fade(@warning-color, 20%);
+  }
+}
+
+// ==================== Sizes ====================
+.soui-input-wrapper-small {
+  .soui-input-affix-wrapper {
+    height: var(--soui-input-local-control-height-sm);
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: @font-size-sm;
+  }
+}
+
+.soui-input-wrapper-middle {
+  .soui-input-affix-wrapper {
+    height: var(--soui-input-local-control-height-md);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}
+
+.soui-input-wrapper-large {
+  .soui-input-affix-wrapper {
+    height: var(--soui-input-local-control-height-lg);
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: @font-size-lg;
+  }
+}
+
+// ==================== Addon ====================
+.soui-input-addon-wrapper {
+  display: inline-flex;
+  width: 100%;
+}
+
+// Remove left/right border from affix wrapper when adjacent to addons (避免双边边框)
+.soui-input-wrapper-has-addon-before .soui-input-affix-wrapper {
+  border-left: 0;
+}
+.soui-input-wrapper-has-addon-after .soui-input-affix-wrapper {
+  border-right: 0;
+}
+
+// Affix wrapper in addon group: no border-radius (addons handle their own)
+.soui-input-addon-wrapper .soui-input-affix-wrapper {
+  flex: 1;
+  border-radius: 0;
+}
+
+// Sync addon border colors on hover/focus
+.soui-input-wrapper-hovered {
+  .soui-input-addon-before,
+  .soui-input-addon-after {
+    border-color: var(--soui-input-local-color-border-hover);
+  }
+}
+.soui-input-wrapper-focused {
+  .soui-input-addon-before,
+  .soui-input-addon-after {
+    border-color: var(--soui-input-local-color-border-focus);
+  }
+}
+
+.soui-input-addon-before,
+.soui-input-addon-after {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 11px;
+  font-size: var(--soui-input-local-font-size);
+  background-color: #fafafa;
+  border: 1px solid var(--soui-input-local-color-border);
+  color: rgba(0, 0, 0, 0.88);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: border-color @transition-duration @transition-timing-function;
+}
+
+.soui-input-addon-before {
+  border-right: 0;
+  border-radius: var(--soui-input-local-border-radius) 0 0 var(--soui-input-local-border-radius);
+}
+
+.soui-input-addon-after {
+  border-left: 0;
+  border-radius: 0 var(--soui-input-local-border-radius) var(--soui-input-local-border-radius) 0;
+}
+
+// ==================== Count ====================
+.soui-input-count {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  text-align: right;
+}
+
+// ==================== TextArea ====================
+.soui-input-textarea {
+  padding: 7px 11px;
+  resize: vertical;
+  min-height: 60px;
+
+  &-wrapper {
+    &.soui-input-wrapper-bordered {
+      background-color: var(--soui-input-local-color-bg);
+      border: 1px solid var(--soui-input-local-color-border);
+      border-radius: var(--soui-input-local-border-radius);
+      transition: border-color @transition-duration @transition-timing-function,
+                  box-shadow @transition-duration @transition-timing-function;
+      overflow: hidden;
+    }
+
+    &.soui-input-wrapper-focused.soui-input-wrapper-bordered {
+      border-color: var(--soui-input-local-color-border-focus);
+      box-shadow: 0 0 0 2px fade(@primary-color, 10%);
+    }
+
+    &.soui-input-wrapper-hovered.soui-input-wrapper-bordered:not(.soui-input-wrapper-focused) {
+      border-color: var(--soui-input-local-color-border-hover);
+    }
+
+    &.soui-input-wrapper-disabled.soui-input-wrapper-bordered {
+      background-color: var(--soui-input-local-color-bg-disabled);
+      border-color: @border-color;
+    }
+  }
+}
+
+.soui-input-textarea-affix {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.soui-input-textarea-clear-icon {
+  position: absolute;
+  top: 8px;
+  right: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--soui-input-local-color-icon);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    color: var(--soui-input-local-color-icon-hover);
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--soui-primary-color, @primary-color);
+    outline-offset: 2px;
+  }
+}
+
+// ==================== Password ====================
+.soui-input-password-icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--soui-input-local-color-icon);
+  border-radius: 2px;
+
+  &:hover {
+    color: var(--soui-input-local-color-icon-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--soui-primary-color, @primary-color);
+    outline-offset: 2px;
+  }
+}
+
+// ==================== Search ====================
+.soui-input-search-icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--soui-input-local-color-icon);
+  border-radius: 2px;
+
+  &:hover {
+    color: var(--soui-input-local-color-icon-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--soui-primary-color, @primary-color);
+    outline-offset: 2px;
+  }
+}
+
+.soui-input-search-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% + 2px);
+  margin: -1px -11px -1px 4px;
+  padding: 0 16px;
+  background-color: var(--soui-primary-color, @primary-color);
+  border: none;
+  border-radius: 0 var(--soui-input-local-border-radius) var(--soui-input-local-border-radius) 0;
+  color: #fff;
+  cursor: pointer;
+  font-size: var(--soui-input-local-font-size);
+  transition: background-color @transition-duration @transition-timing-function;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: var(--soui-primary-hover-color, @primary-hover-color);
+  }
+
+  &:active {
+    background-color: var(--soui-primary-active-color, @primary-active-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--soui-primary-color, @primary-color);
+    outline-offset: -2px;
+  }
+
+  &-loading {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+// Size adjustments for search button
+.soui-input-wrapper-small .soui-input-search-button {
+  padding: 0 8px;
+}
+
+.soui-input-wrapper-large .soui-input-search-button {
+  padding: 0 20px;
+}

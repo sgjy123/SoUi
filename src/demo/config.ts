@@ -191,6 +191,30 @@ export const docsConfig: MenuGroup[] = [
     ],
   },
   {
+    title: '数据录入',
+    icon: 'Edit',
+    components: [
+      {
+        key: 'input',
+        label: 'Input 输入框',
+        icon: 'Edit',
+        items: [
+          { key: 'input-basic', label: 'Input 基础用法', componentPath: 'Input', exampleName: 'Basic', description: '基本使用：输入框、禁用、只读状态。' },
+          { key: 'input-size', label: 'Input 尺寸', componentPath: 'Input', exampleName: 'Size', description: '三种尺寸：small、middle、large。' },
+          { key: 'input-status', label: 'Input 状态', componentPath: 'Input', exampleName: 'Status', description: '错误和警告状态。' },
+          { key: 'input-addon', label: 'Input 前后置标签', componentPath: 'Input', exampleName: 'Addon', description: '通过 addonBefore 和 addonAfter 添加前置/后置标签。' },
+          { key: 'input-prefix-suffix', label: 'Input 前缀后缀', componentPath: 'Input', exampleName: 'PrefixSuffix', description: '在输入框内添加前缀或后缀图标。' },
+          { key: 'input-clearable', label: 'Input 可清空', componentPath: 'Input', exampleName: 'Clearable', description: '启用 allowClear 显示清空按钮。' },
+          { key: 'input-borderless', label: 'Input 无边框', componentPath: 'Input', exampleName: 'Borderless', description: '无边框或去除边框样式。' },
+          { key: 'input-textarea', label: 'Input.TextArea 多行', componentPath: 'Input', exampleName: 'TextArea', description: '多行文本输入、自适应高度、字数统计。' },
+          { key: 'input-password', label: 'Input.Password 密码', componentPath: 'Input', exampleName: 'Password', description: '密码输入框，支持显示/隐藏切换。' },
+          { key: 'input-search', label: 'Input.Search 搜索', componentPath: 'Input', exampleName: 'Search', description: '搜索输入框，支持回车和点击搜索。' },
+          { key: 'input-combined', label: 'Input 综合示例', componentPath: 'Input', exampleName: 'Combined', description: '综合示例：前缀 + 清空 + 字数统计等组合使用。' },
+        ],
+      },
+    ],
+  },
+  {
     title: '排版与提示',
     icon: 'Text',
     components: [
