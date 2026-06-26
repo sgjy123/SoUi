@@ -244,6 +244,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'radio-theme', label: 'Radio 主题定制', componentPath: 'Radio', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'checkbox',
+        label: 'Checkbox 多选框',
+        icon: 'CheckCorrect',
+        items: [
+          { key: 'checkbox-basic', label: 'Checkbox 基础用法', componentPath: 'Checkbox', exampleName: 'Basic', description: '基本多选、默认选中、受控模式、禁用状态。' },
+          { key: 'checkbox-group', label: 'Checkbox 多选组', componentPath: 'Checkbox', exampleName: 'Group', description: 'Checkbox.Group 数据驱动、子组件方式。' },
+          { key: 'checkbox-indeterminate', label: 'Checkbox 半选状态', componentPath: 'Checkbox', exampleName: 'Indeterminate', description: 'indeterminate 半选状态与全选联动。' },
+          { key: 'checkbox-theme', label: 'Checkbox 主题定制', componentPath: 'Checkbox', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
   {

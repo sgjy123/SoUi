@@ -132,6 +132,10 @@ export type { SelectProps, SelectSize, SelectStatus, SelectMode, OptionType, Opt
 export { default as Radio } from './components/Radio';
 export type { RadioProps, RadioGroupProps, RadioSize, RadioOptionType, RadioButtonStyle } from './components/Radio';
 
+// Checkbox Component
+export { default as Checkbox } from './components/Checkbox';
+export type { CheckboxProps, CheckboxGroupProps, CheckboxSize } from './components/Checkbox';
+
 // Utils
 export * from './utils';
 

@@ -55,6 +55,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const selectTheme = mergedTheme.components?.Select || {};
     // 获取 Radio 组件级配置
     const radioTheme = mergedTheme.components?.Radio || {};
+    // 获取 Checkbox 组件级配置
+    const checkboxTheme = mergedTheme.components?.Checkbox || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -380,6 +382,16 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-radio-color-bg': radioTheme.colorBg || '#fff',
       '--soui-radio-color-text': radioTheme.colorText || 'rgba(0, 0, 0, 0.88)',
       '--soui-radio-color-bg-disabled': radioTheme.colorBgDisabled || '#f5f5f5',
+
+      // ==================== Checkbox 组件配置 ====================
+      '--soui-checkbox-color-primary': checkboxTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-checkbox-color-primary-hover': checkboxTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-checkbox-color-border': checkboxTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-checkbox-border-radius': checkboxTheme.borderRadius ? `${checkboxTheme.borderRadius}px` : '4px',
+      '--soui-checkbox-font-size': checkboxTheme.fontSize ? `${checkboxTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
+      '--soui-checkbox-color-bg': checkboxTheme.colorBg || '#fff',
+      '--soui-checkbox-color-text': checkboxTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-checkbox-color-bg-disabled': checkboxTheme.colorBgDisabled || '#f5f5f5',
     } as any;
   }, [mergedTheme]);
 

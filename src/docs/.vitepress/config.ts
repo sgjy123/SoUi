@@ -226,6 +226,7 @@ function sidebarComponents() {
         { text: 'Input 输入框', link: 'input' },
         { text: 'Select 选择器', link: 'select' },
         { text: 'Radio 单选框', link: 'radio' },
+        { text: 'Checkbox 多选框', link: 'checkbox' },
       ],
     },
     {

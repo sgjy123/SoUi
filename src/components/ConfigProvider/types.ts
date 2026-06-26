@@ -597,6 +597,25 @@ export interface ComponentThemeConfig {
     /** 禁用背景色 */
     colorBgDisabled?: string;
   };
+  /** 多选框组件配置 */
+  Checkbox?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 悬停主色 */
+    colorPrimaryHover?: string;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 圆角 */
+    borderRadius?: number;
+    /** 字体大小 */
+    fontSize?: number;
+    /** 背景色 */
+    colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 禁用背景色 */
+    colorBgDisabled?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

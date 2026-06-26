@@ -1,0 +1,197 @@
+@import '../../styles/variables.less';
+
+// ==================== Checkbox ====================
+.soui-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: var(--soui-checkbox-font-size, @font-size-base);
+  line-height: 1;
+  user-select: none;
+  position: relative;
+
+  // ==================== Inner Wrapper ====================
+  &-inner-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  // ==================== Hidden Input ====================
+  &-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+
+    &:focus-visible ~ .soui-checkbox-inner {
+      box-shadow: 0 0 0 2px fade(@primary-color, 20%);
+    }
+  }
+
+  // ==================== Box ====================
+  &-inner {
+    display: block;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--soui-checkbox-color-border, @border-color);
+    border-radius: var(--soui-checkbox-border-radius, 4px);
+    background-color: var(--soui-checkbox-color-bg, #fff);
+    box-sizing: border-box;
+    transition: border-color @transition-duration @transition-timing-function,
+                background-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
+    position: relative;
+
+    // Checkmark (::after)
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 22%;
+      width: 5.5px;
+      height: 9px;
+      border: 2px solid #fff;
+      border-top: 0;
+      border-inline-start: 0;
+      transform: rotate(45deg) scale(0);
+      opacity: 0;
+      transition: transform @transition-duration @transition-timing-function,
+                  opacity @transition-duration @transition-timing-function;
+    }
+
+    // Indeterminate dash (::before)
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 2px;
+      background-color: #fff;
+      border-radius: 1px;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      transition: transform @transition-duration @transition-timing-function,
+                  opacity @transition-duration @transition-timing-function;
+    }
+  }
+
+  // ==================== Label ====================
+  &-label {
+    color: var(--soui-checkbox-color-text, @text-color);
+    line-height: 1.5;
+  }
+
+  // ==================== Hover ====================
+  &:hover:not(.soui-checkbox-disabled) &-inner {
+    border-color: var(--soui-checkbox-color-primary, @primary-color);
+  }
+
+  // ==================== Checked ====================
+  &-checked &-inner {
+    background-color: var(--soui-checkbox-color-primary, @primary-color);
+    border-color: var(--soui-checkbox-color-primary, @primary-color);
+
+    &::after {
+      transform: rotate(45deg) scale(1);
+      opacity: 1;
+    }
+  }
+
+  // ==================== Indeterminate ====================
+  &-indeterminate &-inner {
+    background-color: var(--soui-checkbox-color-primary, @primary-color);
+    border-color: var(--soui-checkbox-color-primary, @primary-color);
+
+    &::before {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+
+    &::after {
+      transform: rotate(45deg) scale(0);
+      opacity: 0;
+    }
+  }
+
+  // ==================== Disabled ====================
+  &-disabled {
+    cursor: not-allowed;
+
+    .soui-checkbox-input {
+      cursor: not-allowed;
+    }
+
+    .soui-checkbox-inner {
+      background-color: var(--soui-checkbox-color-bg-disabled, #f5f5f5);
+      border-color: @border-color;
+
+      &::after {
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+
+      &::before {
+        background-color: rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .soui-checkbox-label {
+      color: @text-color-disabled;
+    }
+  }
+}
+
+// Checked + Disabled (outside nesting for correct selectors)
+.soui-checkbox.soui-checkbox-checked.soui-checkbox-disabled .soui-checkbox-inner {
+  background-color: var(--soui-checkbox-color-bg-disabled, #f5f5f5);
+  border-color: @border-color;
+
+  &::after {
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+// Indeterminate + Disabled
+.soui-checkbox.soui-checkbox-indeterminate.soui-checkbox-disabled .soui-checkbox-inner {
+  background-color: var(--soui-checkbox-color-bg-disabled, #f5f5f5);
+  border-color: @border-color;
+
+  &::before {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+// ==================== Checkbox Group ====================
+.soui-checkbox-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+
+  &-small {
+    gap: 8px;
+
+    .soui-checkbox {
+      font-size: @font-size-sm;
+    }
+  }
+
+  &-large {
+    gap: 16px;
+
+    .soui-checkbox {
+      font-size: @font-size-lg;
+    }
+  }
+}
