@@ -53,6 +53,9 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
+      - name: Build component library
+        run: pnpm run build
+
       - name: Build VitePress docs
         run: pnpm run docs:build
 
