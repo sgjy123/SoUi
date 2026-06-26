@@ -258,7 +258,7 @@ export const docsConfig: MenuGroup[] = [
       {
         key: 'input-number',
         label: 'InputNumber 数字输入',
-        icon: 'Number',
+        icon: 'Edit',
         items: [
           { key: 'input-number-basic', label: 'InputNumber 基础用法', componentPath: 'InputNumber', exampleName: 'Basic', description: '基本数字输入、受控模式、步进精度、禁用只读。' },
           { key: 'input-number-size', label: 'InputNumber 尺寸与附加', componentPath: 'InputNumber', exampleName: 'Size', description: '三种尺寸、前缀、前后置标签、隐藏按钮。' },
