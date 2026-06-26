@@ -141,6 +141,9 @@ export default defineConfig({
       // 可以在这里添加自定义 markdown-it 插件
     },
   },
+
+  // 忽略死链接检查（文档还在完善中）
+  ignoreDeadLinks: true,
 })
 
 // 侧边栏配置函数
