@@ -255,6 +255,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'checkbox-theme', label: 'Checkbox 主题定制', componentPath: 'Checkbox', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'input-number',
+        label: 'InputNumber 数字输入',
+        icon: 'Number',
+        items: [
+          { key: 'input-number-basic', label: 'InputNumber 基础用法', componentPath: 'InputNumber', exampleName: 'Basic', description: '基本数字输入、受控模式、步进精度、禁用只读。' },
+          { key: 'input-number-size', label: 'InputNumber 尺寸与附加', componentPath: 'InputNumber', exampleName: 'Size', description: '三种尺寸、前缀、前后置标签、隐藏按钮。' },
+          { key: 'input-number-variant', label: 'InputNumber 状态与格式化', componentPath: 'InputNumber', exampleName: 'Variant', description: '错误/警告状态、自定义格式化。' },
+          { key: 'input-number-theme', label: 'InputNumber 主题定制', componentPath: 'InputNumber', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
   {

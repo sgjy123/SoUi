@@ -28,6 +28,7 @@ import Input from '../../src/components/Input';
 import Select from '../../src/components/Select';
 import Radio from '../../src/components/Radio';
 import Checkbox from '../../src/components/Checkbox';
+import InputNumber from '../../src/components/InputNumber';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -96,6 +97,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     RadioButton: Radio.Button,
     Checkbox,
     CheckboxGroup: Checkbox.Group,
+    InputNumber,
     ConfigProvider,
     ...scope,
   };

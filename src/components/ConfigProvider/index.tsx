@@ -57,6 +57,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const radioTheme = mergedTheme.components?.Radio || {};
     // 获取 Checkbox 组件级配置
     const checkboxTheme = mergedTheme.components?.Checkbox || {};
+    // 获取 InputNumber 组件级配置
+    const inputNumberTheme = mergedTheme.components?.InputNumber || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -392,6 +394,20 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-checkbox-color-bg': checkboxTheme.colorBg || '#fff',
       '--soui-checkbox-color-text': checkboxTheme.colorText || 'rgba(0, 0, 0, 0.88)',
       '--soui-checkbox-color-bg-disabled': checkboxTheme.colorBgDisabled || '#f5f5f5',
+
+      // ==================== InputNumber 组件配置 ====================
+      '--soui-input-number-color-primary': inputNumberTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-input-number-color-border': inputNumberTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-input-number-color-border-hover': inputNumberTheme.colorBorderHover || mergedTheme.primaryHoverColor,
+      '--soui-input-number-color-border-focus': inputNumberTheme.colorBorderFocus || mergedTheme.primaryColor,
+      '--soui-input-number-border-radius': inputNumberTheme.borderRadius ? `${inputNumberTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
+      '--soui-input-number-font-size': inputNumberTheme.fontSize ? `${inputNumberTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
+      '--soui-input-number-control-height': inputNumberTheme.controlHeight ? `${inputNumberTheme.controlHeight}px` : '32px',
+      '--soui-input-number-color-bg': inputNumberTheme.colorBg || '#fff',
+      '--soui-input-number-color-text': inputNumberTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-input-number-color-bg-disabled': inputNumberTheme.colorBgDisabled || '#f5f5f5',
+      '--soui-input-number-color-error': inputNumberTheme.colorError || mergedTheme.errorColor,
+      '--soui-input-number-color-warning': inputNumberTheme.colorWarning || mergedTheme.warningColor,
     } as any;
   }, [mergedTheme]);
 

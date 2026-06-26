@@ -616,6 +616,33 @@ export interface ComponentThemeConfig {
     /** 禁用背景色 */
     colorBgDisabled?: string;
   };
+  /** 数字输入框组件配置 */
+  InputNumber?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 悬停边框颜色 */
+    colorBorderHover?: string;
+    /** 聚焦边框颜色 */
+    colorBorderFocus?: string;
+    /** 圆角 */
+    borderRadius?: number;
+    /** 字体大小 */
+    fontSize?: number;
+    /** 控件高度 */
+    controlHeight?: number;
+    /** 背景色 */
+    colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 禁用背景色 */
+    colorBgDisabled?: string;
+    /** 错误色 */
+    colorError?: string;
+    /** 警告色 */
+    colorWarning?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

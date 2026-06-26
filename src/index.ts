@@ -136,6 +136,10 @@ export type { RadioProps, RadioGroupProps, RadioSize, RadioOptionType, RadioButt
 export { default as Checkbox } from './components/Checkbox';
 export type { CheckboxProps, CheckboxGroupProps, CheckboxSize } from './components/Checkbox';
 
+// InputNumber Component
+export { default as InputNumber } from './components/InputNumber';
+export type { InputNumberProps, InputNumberSize, InputNumberStatus } from './components/InputNumber';
+
 // Utils
 export * from './utils';
 
