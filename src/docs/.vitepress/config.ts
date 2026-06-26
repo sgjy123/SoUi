@@ -73,30 +73,10 @@ export default defineConfig({
       copyright: 'Copyright © 2024-present SoUi Team',
     },
 
-    // 搜索配置（使用 Algolia DocSearch）
-    search: {
-      provider: 'local',
-      options: {
-        locales: {
-          root: {
-            translations: {
-              button: {
-                buttonText: '搜索文档',
-                buttonAriaLabel: '搜索文档',
-              },
-              modal: {
-                noResultsText: '无法找到相关结果',
-                resetButtonTitle: '清除查询条件',
-                footer: {
-                  selectText: '选择',
-                  navigateText: '切换',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+    // 搜索配置（暂时禁用，本地搜索在 CI 中有问题）
+    // search: {
+    //   provider: 'local',
+    // },
 
     // 编辑链接
     editLink: {
