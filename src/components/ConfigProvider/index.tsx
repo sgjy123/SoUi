@@ -53,6 +53,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const inputTheme = mergedTheme.components?.Input || {};
     // 获取 Select 组件级配置
     const selectTheme = mergedTheme.components?.Select || {};
+    // 获取 Radio 组件级配置
+    const radioTheme = mergedTheme.components?.Radio || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -367,6 +369,17 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-select-option-active-bg': selectTheme.optionActiveBg || 'rgba(0, 0, 0, 0.04)',
       '--soui-select-option-selected-bg': selectTheme.optionSelectedBg || 'rgba(22, 119, 255, 0.08)',
       '--soui-select-tag-bg': selectTheme.tagBg || '#fafafa',
+
+      // ==================== Radio 组件配置 ====================
+      '--soui-radio-color-primary': radioTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-radio-color-primary-hover': radioTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-radio-color-border': radioTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-radio-border-radius': radioTheme.borderRadius ? `${radioTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
+      '--soui-radio-font-size': radioTheme.fontSize ? `${radioTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
+      '--soui-radio-control-height': radioTheme.controlHeight ? `${radioTheme.controlHeight}px` : '32px',
+      '--soui-radio-color-bg': radioTheme.colorBg || '#fff',
+      '--soui-radio-color-text': radioTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-radio-color-bg-disabled': radioTheme.colorBgDisabled || '#f5f5f5',
     } as any;
   }, [mergedTheme]);
 

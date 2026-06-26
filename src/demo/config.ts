@@ -233,6 +233,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'select-custom-render', label: 'Select 自定义渲染', componentPath: 'Select', exampleName: 'CustomRender', description: '自定义图标、选项渲染、下拉内容。' },
         ],
       },
+      {
+        key: 'radio',
+        label: 'Radio 单选框',
+        icon: 'CheckOne',
+        items: [
+          { key: 'radio-basic', label: 'Radio 基础用法', componentPath: 'Radio', exampleName: 'Basic', description: '基本单选、默认选中、受控模式、禁用状态。' },
+          { key: 'radio-group', label: 'Radio 单选组', componentPath: 'Radio', exampleName: 'Group', description: 'Radio.Group 数据驱动、按钮风格。' },
+          { key: 'radio-size', label: 'Radio 尺寸', componentPath: 'Radio', exampleName: 'Size', description: '大、中、小三种尺寸。' },
+          { key: 'radio-theme', label: 'Radio 主题定制', componentPath: 'Radio', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
   {

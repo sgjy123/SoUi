@@ -225,6 +225,7 @@ function sidebarComponents() {
       items: [
         { text: 'Input 输入框', link: 'input' },
         { text: 'Select 选择器', link: 'select' },
+        { text: 'Radio 单选框', link: 'radio' },
       ],
     },
     {

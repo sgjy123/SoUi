@@ -128,6 +128,10 @@ export { TextArea, Password, Search } from './components/Input';
 export { default as Select } from './components/Select';
 export type { SelectProps, SelectSize, SelectStatus, SelectMode, OptionType, OptionGroupType, GroupedOptionType, SelectRef } from './components/Select';
 
+// Radio Component
+export { default as Radio } from './components/Radio';
+export type { RadioProps, RadioGroupProps, RadioSize, RadioOptionType, RadioButtonStyle } from './components/Radio';
+
 // Utils
 export * from './utils';
 

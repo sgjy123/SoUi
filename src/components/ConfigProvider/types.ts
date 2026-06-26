@@ -576,6 +576,27 @@ export interface ComponentThemeConfig {
     /** 多选标签背景色 */
     tagBg?: string;
   };
+  /** 单选框组件配置 */
+  Radio?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 悬停主色 */
+    colorPrimaryHover?: string;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 圆角（用于 button 模式） */
+    borderRadius?: number;
+    /** 字体大小 */
+    fontSize?: number;
+    /** 控件高度（button 模式） */
+    controlHeight?: number;
+    /** 背景色 */
+    colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 禁用背景色 */
+    colorBgDisabled?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

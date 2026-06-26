@@ -26,6 +26,7 @@ import Watermark from '../../src/components/Watermark';
 import Table from '../../src/components/Table';
 import Input from '../../src/components/Input';
 import Select from '../../src/components/Select';
+import Radio from '../../src/components/Radio';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -89,6 +90,9 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Input,
     TextArea: Input.TextArea,
     Select,
+    Radio,
+    RadioGroup: Radio.Group,
+    RadioButton: Radio.Button,
     ConfigProvider,
     ...scope,
   };
