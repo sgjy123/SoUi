@@ -6,6 +6,9 @@ export default defineConfig({
   title: 'SoUi',
   description: '现代化 React 组件库',
   
+  // GitHub Pages 基础路径（与仓库名一致）
+  base: '/SoUi/',
+  
   // 语言设置
   lang: 'zh-CN',
   
