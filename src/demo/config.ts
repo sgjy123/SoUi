@@ -277,6 +277,18 @@ export const docsConfig: MenuGroup[] = [
           { key: 'switch-theme', label: 'Switch 主题定制', componentPath: 'Switch', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'cascader',
+        label: 'Cascader 级联选择',
+        icon: 'List',
+        items: [
+          { key: 'cascader-basic', label: 'Cascader 基础用法', componentPath: 'Cascader', exampleName: 'Basic', description: '基本级联选择、默认值、受控模式、禁用。' },
+          { key: 'cascader-change-on-select', label: 'Cascader 选择即改变', componentPath: 'Cascader', exampleName: 'ChangeOnSelect', description: '允许选择父级、自定义显示、悬停展开、不同尺寸。' },
+          { key: 'cascader-multiple', label: 'Cascader 多选', componentPath: 'Cascader', exampleName: 'Multiple', description: '多选模式、标签限制、多选搜索、选择即改变。' },
+          { key: 'cascader-searchable', label: 'Cascader 搜索与加载', componentPath: 'Cascader', exampleName: 'Searchable', description: '搜索过滤、异步加载、状态校验。' },
+          { key: 'cascader-theme', label: 'Cascader 主题定制', componentPath: 'Cascader', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
   {

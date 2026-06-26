@@ -1,0 +1,508 @@
+@import '../../styles/variables.less';
+
+// ==================== Cascader Variables ====================
+.cascader-css-variable-aliases() {
+  --soui-cascader-local-border-radius: var(--soui-cascader-border-radius, @border-radius-base);
+  --soui-cascader-local-font-size: var(--soui-cascader-font-size, @font-size-base);
+  --soui-cascader-local-control-height-sm: var(--soui-cascader-control-height-small, @control-height-sm);
+  --soui-cascader-local-control-height-md: var(--soui-cascader-control-height-middle, @control-height-base);
+  --soui-cascader-local-control-height-lg: var(--soui-cascader-control-height-large, @control-height-lg);
+  --soui-cascader-local-color-border: var(--soui-cascader-color-border, @border-color);
+  --soui-cascader-local-color-border-hover: var(--soui-cascader-color-border-hover, @primary-hover-color);
+  --soui-cascader-local-color-border-focus: var(--soui-cascader-color-border-focus, @primary-color);
+  --soui-cascader-local-color-bg: var(--soui-cascader-color-bg, @bg-color-base);
+  --soui-cascader-local-color-text: var(--soui-cascader-color-text, @text-color);
+  --soui-cascader-local-color-bg-disabled: var(--soui-cascader-color-bg-disabled, @bg-color-disable);
+  --soui-cascader-local-color-text-disabled: var(--soui-cascader-color-text-disabled, @text-color-disabled);
+  --soui-cascader-local-color-error: var(--soui-cascader-color-error, @error-color);
+  --soui-cascader-local-color-warning: var(--soui-cascader-color-warning, @warning-color);
+  --soui-cascader-local-dropdown-bg: var(--soui-cascader-dropdown-bg, @bg-color-base);
+  --soui-cascader-local-option-active-bg: var(--soui-cascader-option-active-bg, rgba(0, 0, 0, 0.04));
+  --soui-cascader-local-option-selected-bg: var(--soui-cascader-option-selected-bg, fade(@primary-color, 8%));
+  --soui-cascader-local-tag-bg: var(--soui-cascader-tag-bg, #fafafa);
+}
+
+// ==================== Main Cascader ====================
+.soui-cascader {
+  .cascader-css-variable-aliases();
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  font-size: var(--soui-cascader-local-font-size);
+  outline: none;
+
+  // ==================== Selector ====================
+  .soui-cascader-selector {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: var(--soui-cascader-local-control-height-md);
+    padding: 0 30px 0 11px;
+    background-color: var(--soui-cascader-local-color-bg);
+    border: 1px solid var(--soui-cascader-local-color-border);
+    border-radius: var(--soui-cascader-local-border-radius);
+    box-sizing: border-box;
+    transition: border-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
+    cursor: pointer;
+  }
+
+  // ==================== Prefix ====================
+  .soui-cascader-prefix {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 4px;
+    color: rgba(0, 0, 0, 0.45);
+    flex-shrink: 0;
+  }
+
+  // ==================== Placeholder ====================
+  .soui-cascader-selection-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 11px;
+    right: 30px;
+    transform: translateY(-50%);
+    color: rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // ==================== Selected Item (Single) ====================
+  &.soui-cascader-single .soui-cascader-selection-item:not(.soui-cascader-selection-item-overflow) {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--soui-cascader-local-color-text);
+    max-width: 100%;
+  }
+
+  // ==================== Search Input ====================
+  .soui-cascader-selection-search {
+    display: inline-flex;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .soui-cascader-selection-search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    min-width: 4px;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font-family: inherit;
+    color: var(--soui-cascader-local-color-text);
+    cursor: pointer;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.25);
+    }
+
+    &[value=""] {
+      width: 4px;
+    }
+  }
+
+  // ==================== Multiple Tags ====================
+  .soui-cascader-selection-overflow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    padding: 2px 0;
+  }
+
+  &.soui-cascader-multiple .soui-cascader-selection-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    height: 24px;
+    padding: 0 4px 0 8px;
+    background-color: var(--soui-cascader-local-tag-bg);
+    border: 1px solid @border-color-split;
+    border-radius: @border-radius-sm;
+    font-size: @font-size-sm;
+    color: var(--soui-cascader-local-color-text);
+    max-width: 100%;
+    cursor: default;
+    line-height: 1;
+
+    &-content {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      color: rgba(0, 0, 0, 0.45);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.2s ease, background-color 0.2s ease;
+
+      &:hover {
+        color: rgba(0, 0, 0, 0.65);
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+    }
+
+    &-overflow {
+      background-color: rgba(0, 0, 0, 0.06);
+      border-color: transparent;
+      color: rgba(0, 0, 0, 0.65);
+      cursor: default;
+
+      .soui-cascader-selection-item-remove {
+        display: none;
+      }
+    }
+  }
+
+  // ==================== Arrow ====================
+  .soui-cascader-arrow {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    transition: transform @transition-duration @transition-timing-function;
+  }
+
+  &.soui-cascader-open .soui-cascader-arrow {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  // ==================== Clear ====================
+  .soui-cascader-clear {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    background-color: var(--soui-cascader-local-color-bg);
+    color: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.45);
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &:hover .soui-cascader-clear,
+  &.soui-cascader-focused .soui-cascader-clear {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &:hover .soui-cascader-clear ~ .soui-cascader-arrow,
+  &.soui-cascader-focused .soui-cascader-clear ~ .soui-cascader-arrow {
+    opacity: 0;
+  }
+
+  // ==================== Hover ====================
+  &:hover:not(.soui-cascader-disabled) .soui-cascader-selector {
+    border-color: var(--soui-cascader-local-color-border-hover);
+  }
+
+  // ==================== Focus (Open) ====================
+  &.soui-cascader-open:not(.soui-cascader-disabled) .soui-cascader-selector {
+    border-color: var(--soui-cascader-local-color-border-focus);
+    box-shadow: 0 0 0 2px fade(@primary-color, 10%);
+  }
+
+  // ==================== Disabled ====================
+  &.soui-cascader-disabled {
+    cursor: not-allowed;
+
+    .soui-cascader-selector {
+      background-color: var(--soui-cascader-local-color-bg-disabled);
+      color: var(--soui-cascader-local-color-text-disabled);
+      cursor: not-allowed;
+    }
+
+    .soui-cascader-selection-item {
+      color: var(--soui-cascader-local-color-text-disabled);
+    }
+
+    .soui-cascader-selection-item-remove {
+      display: none;
+    }
+  }
+
+  // ==================== Status ====================
+  &.soui-cascader-status-error .soui-cascader-selector {
+    border-color: var(--soui-cascader-local-color-error);
+  }
+  &.soui-cascader-status-error.soui-cascader-open .soui-cascader-selector {
+    border-color: var(--soui-cascader-local-color-error);
+    box-shadow: 0 0 0 2px fade(@error-color, 20%);
+  }
+
+  &.soui-cascader-status-warning .soui-cascader-selector {
+    border-color: var(--soui-cascader-local-color-warning);
+  }
+  &.soui-cascader-status-warning.soui-cascader-open .soui-cascader-selector {
+    border-color: var(--soui-cascader-local-color-warning);
+    box-shadow: 0 0 0 2px fade(@warning-color, 20%);
+  }
+
+  // ==================== Sizes ====================
+  &.soui-cascader-small .soui-cascader-selector {
+    min-height: var(--soui-cascader-local-control-height-sm);
+    padding: 0 26px 0 7px;
+    font-size: @font-size-sm;
+  }
+  &.soui-cascader-small .soui-cascader-arrow { right: 7px; }
+  &.soui-cascader-small .soui-cascader-clear { right: 7px; }
+  &.soui-cascader-small .soui-cascader-selection-placeholder { left: 7px; right: 26px; }
+  &.soui-cascader-small.soui-cascader-multiple .soui-cascader-selection-item {
+    height: 18px;
+    font-size: 11px;
+    padding: 0 2px 0 6px;
+  }
+
+  &.soui-cascader-large .soui-cascader-selector {
+    min-height: var(--soui-cascader-local-control-height-lg);
+    padding: 0 34px 0 11px;
+    font-size: @font-size-lg;
+  }
+  &.soui-cascader-large .soui-cascader-arrow { right: 11px; }
+  &.soui-cascader-large .soui-cascader-selection-placeholder { right: 34px; }
+  &.soui-cascader-large.soui-cascader-multiple .soui-cascader-selection-item {
+    height: 28px;
+  }
+}
+
+// ==================== Dropdown (Portal) ====================
+.soui-cascader-dropdown {
+  .cascader-css-variable-aliases();
+  z-index: @z-index-popover;
+  background: var(--soui-cascader-local-dropdown-bg);
+  border-radius: var(--soui-cascader-local-border-radius);
+  box-shadow: @box-shadow-secondary;
+  padding: 4px;
+  box-sizing: border-box;
+  animation: soui-cascader-dropdown-in 0.15s ease-out;
+}
+
+.soui-cascader-dropdown-topLeft,
+.soui-cascader-dropdown-topRight {
+  animation: soui-cascader-dropdown-in-top 0.15s ease-out;
+}
+
+@keyframes soui-cascader-dropdown-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.8);
+    transform-origin: top center;
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes soui-cascader-dropdown-in-top {
+  from {
+    opacity: 0;
+    transform: scaleY(0.8);
+    transform-origin: bottom center;
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+// ==================== Menus Container ====================
+.soui-cascader-menus {
+  display: flex;
+  max-height: 256px;
+  overflow: hidden;
+}
+
+// ==================== Menu Column ====================
+.soui-cascader-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 111px;
+  max-height: 256px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+
+  & + .soui-cascader-menu {
+    border-left: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.15); border-radius: 3px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+}
+
+// Search results menu wider
+.soui-cascader-menu-search {
+  min-width: 200px;
+}
+
+// ==================== Option ====================
+.soui-cascader-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  border-radius: calc(var(--soui-cascader-local-border-radius) - 2px);
+  color: var(--soui-cascader-local-color-text);
+  font-size: var(--soui-cascader-local-font-size);
+  transition: background-color 0.15s ease;
+  min-height: 32px;
+  box-sizing: border-box;
+  line-height: 22px;
+
+  &-content {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &-active:not(&-disabled) {
+    background-color: var(--soui-cascader-local-option-active-bg);
+  }
+
+  &-selected:not(&-disabled) {
+    background-color: var(--soui-cascader-local-option-selected-bg);
+    font-weight: 600;
+  }
+
+  &-disabled {
+    color: @text-color-disabled;
+    cursor: not-allowed;
+  }
+
+  &-expand {
+    display: inline-flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.25);
+    flex-shrink: 0;
+  }
+
+  &-loading {
+    display: inline-flex;
+    align-items: center;
+    color: var(--soui-primary-color, @primary-color);
+    flex-shrink: 0;
+    animation: soui-cascader-loading-spin 1s linear infinite;
+  }
+
+  // ==================== Checkbox (Multiple) ====================
+  &-checkbox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border: 1px solid @border-color;
+    border-radius: @border-radius-sm;
+    background: @bg-color-base;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    &-checked {
+      background-color: var(--soui-primary-color, @primary-color);
+      border-color: var(--soui-primary-color, @primary-color);
+      color: #fff;
+    }
+
+    &-half {
+      border-color: var(--soui-primary-color, @primary-color);
+      background: @bg-color-base;
+    }
+  }
+}
+
+// Indeterminate dash
+.soui-cascader-checkbox-indeterminate {
+  display: block;
+  width: 8px;
+  height: 2px;
+  background-color: var(--soui-primary-color, @primary-color);
+  border-radius: 1px;
+}
+
+// Half-selected option style
+.soui-cascader-option-half:not(.soui-cascader-option-disabled) {
+  background-color: var(--soui-cascader-local-option-selected-bg);
+}
+
+@keyframes soui-cascader-loading-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// ==================== Search Highlight ====================
+.soui-cascader-search-highlight {
+  color: var(--soui-primary-color, @primary-color);
+  font-weight: 600;
+}
+
+// ==================== Empty ====================
+.soui-cascader-empty {
+  padding: 16px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.25);
+  font-size: var(--soui-cascader-local-font-size);
+}
+
+// ==================== Panel (Inline) ====================
+.soui-cascader-panel {
+  .cascader-css-variable-aliases();
+  display: inline-block;
+  background: var(--soui-cascader-local-dropdown-bg);
+  border: 1px solid @border-color-split;
+  border-radius: var(--soui-cascader-local-border-radius);
+  box-shadow: @box-shadow-secondary;
+  padding: 4px;
+  box-sizing: border-box;
+  font-size: var(--soui-cascader-local-font-size);
+
+  .soui-cascader-menus {
+    max-height: 320px;
+  }
+
+  .soui-cascader-menu {
+    max-height: 320px;
+  }
+}

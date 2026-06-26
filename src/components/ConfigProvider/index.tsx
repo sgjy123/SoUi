@@ -61,6 +61,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const inputNumberTheme = mergedTheme.components?.InputNumber || {};
     // 获取 Switch 组件级配置
     const switchTheme = mergedTheme.components?.Switch || {};
+    // 获取 Cascader 组件级配置
+    const cascaderTheme = mergedTheme.components?.Cascader || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -418,6 +420,25 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-switch-color-bg': switchTheme.colorBg || 'rgba(0, 0, 0, 0.25)',
       '--soui-switch-color-bg-hover': switchTheme.colorBgHover || 'rgba(0, 0, 0, 0.35)',
       '--soui-switch-color-text': switchTheme.colorText || '#fff',
+
+      // ==================== Cascader 组件配置 ====================
+      '--soui-cascader-border-radius': cascaderTheme.borderRadius ? `${cascaderTheme.borderRadius}px` : undefined,
+      '--soui-cascader-font-size': cascaderTheme.fontSize ? `${cascaderTheme.fontSize}px` : undefined,
+      '--soui-cascader-control-height-small': cascaderTheme.controlHeight ? `${cascaderTheme.controlHeight - 8}px` : '24px',
+      '--soui-cascader-control-height-middle': cascaderTheme.controlHeight ? `${cascaderTheme.controlHeight}px` : '32px',
+      '--soui-cascader-control-height-large': cascaderTheme.controlHeight ? `${cascaderTheme.controlHeight + 8}px` : '40px',
+      '--soui-cascader-color-border': cascaderTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-cascader-color-border-hover': cascaderTheme.colorBorderHover || mergedTheme.primaryHoverColor,
+      '--soui-cascader-color-border-focus': cascaderTheme.colorBorderFocus || mergedTheme.primaryColor,
+      '--soui-cascader-color-bg': cascaderTheme.colorBg || '#fff',
+      '--soui-cascader-color-text': cascaderTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-cascader-color-bg-disabled': cascaderTheme.colorBgDisabled || '#f5f5f5',
+      '--soui-cascader-color-text-disabled': cascaderTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
+      '--soui-cascader-color-error': cascaderTheme.colorError || mergedTheme.errorColor,
+      '--soui-cascader-color-warning': cascaderTheme.colorWarning || mergedTheme.warningColor,
+      '--soui-cascader-dropdown-bg': cascaderTheme.dropdownBg || '#fff',
+      '--soui-cascader-option-active-bg': cascaderTheme.optionActiveBg || 'rgba(0, 0, 0, 0.04)',
+      '--soui-cascader-option-selected-bg': cascaderTheme.optionSelectedBg || 'rgba(22, 119, 255, 0.08)',
     } as any;
   }, [mergedTheme]);
 

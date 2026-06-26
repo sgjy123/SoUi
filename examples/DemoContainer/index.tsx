@@ -30,6 +30,7 @@ import Radio from '../../src/components/Radio';
 import Checkbox from '../../src/components/Checkbox';
 import InputNumber from '../../src/components/InputNumber';
 import Switch from '../../src/components/Switch';
+import Cascader from '../../src/components/Cascader';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -100,6 +101,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     CheckboxGroup: Checkbox.Group,
     InputNumber,
     Switch,
+    Cascader,
     ConfigProvider,
     ...scope,
   };

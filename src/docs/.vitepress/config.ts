@@ -229,6 +229,7 @@ function sidebarComponents() {
         { text: 'Checkbox 多选框', link: 'checkbox' },
         { text: 'InputNumber 数字输入', link: 'input-number' },
         { text: 'Switch 开关', link: 'switch' },
+        { text: 'Cascader 级联选择', link: 'cascader' },
       ],
     },
     {

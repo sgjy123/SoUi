@@ -144,6 +144,10 @@ export type { InputNumberProps, InputNumberSize, InputNumberStatus } from './com
 export { default as Switch } from './components/Switch';
 export type { SwitchProps, SwitchSize } from './components/Switch';
 
+// Cascader Component
+export { default as Cascader } from './components/Cascader';
+export type { CascaderProps, CascaderSize, CascaderStatus, CascaderExpandTrigger, CascaderOption, CascaderFieldNames, CascaderRef, CascaderPlacement, CascaderShowCheckedStrategy, CascaderPanelProps } from './components/Cascader';
+
 // Utils
 export * from './utils';
 

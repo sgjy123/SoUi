@@ -658,6 +658,39 @@ export interface ComponentThemeConfig {
     /** 文字颜色 */
     colorText?: string;
   };
+  /** 级联选择器组件配置 */
+  Cascader?: {
+    /** 边框圆角（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 控件高度（像素） */
+    controlHeight?: number;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 悬停边框颜色 */
+    colorBorderHover?: string;
+    /** 聚焦边框颜色 */
+    colorBorderFocus?: string;
+    /** 背景色 */
+    colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 禁用背景色 */
+    colorBgDisabled?: string;
+    /** 禁用文本颜色 */
+    colorTextDisabled?: string;
+    /** 错误状态颜色 */
+    colorError?: string;
+    /** 警告状态颜色 */
+    colorWarning?: string;
+    /** 下拉面板背景色 */
+    dropdownBg?: string;
+    /** 选项悬停背景色 */
+    optionActiveBg?: string;
+    /** 选项选中背景色 */
+    optionSelectedBg?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 
