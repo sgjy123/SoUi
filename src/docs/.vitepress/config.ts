@@ -103,9 +103,6 @@ export default defineConfig({
   // Vite 配置（支持 React 和 Less）
   vite: {
     plugins: [react() as any],
-    build: {
-      outDir: '../dist-docs',
-    },
     css: {
       preprocessorOptions: {
         less: {
