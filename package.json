@@ -28,7 +28,9 @@
     "docs:dev": "npm run build && vitepress dev src/docs",
     "docs:build": "vitepress build src/docs",
     "docs:preview": "vitepress preview src/docs",
-    "docs:deploy": "gh-pages -d src/docs/.vitepress/dist"
+    "docs:deploy": "gh-pages -d src/docs/.vitepress/dist",
+    "examples:dev": "vite --config vite.examples.config.ts",
+    "examples:build": "vite build --config vite.examples.config.ts"
   },
   "keywords": [
     "react",

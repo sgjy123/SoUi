@@ -59,6 +59,13 @@ jobs:
       - name: Build VitePress docs
         run: pnpm run docs:build
 
+      - name: Build examples app
+        run: pnpm run examples:build
+
+      - name: Combine docs and examples
+        run: |
+          cp -r dist-examples src/docs/.vitepress/dist/examples
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

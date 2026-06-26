@@ -33,6 +33,7 @@ export default defineConfig({
       { text: '样式', link: '/styles/overview' },
       { text: '主题', link: '/theming/config-provider' },
       { text: '组件', link: '/components/button' },
+      { text: '示例', link: '/SoUi/examples/', target: '_blank' },
       { 
         text: '资源', 
         items: [
