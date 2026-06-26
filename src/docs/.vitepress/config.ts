@@ -5,19 +5,19 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   title: 'SoUi',
   description: '现代化 React 组件库',
-  
+
   // GitHub Pages 基础路径（与仓库名一致）
   base: '/SoUi/',
-  
+
   // 语言设置
   lang: 'zh-CN',
-  
+
   // Head 配置（添加图标等）
   head: [
     ['link', { rel: 'icon', type: 'image/x-icon', href: '/SoUi.ico' }],
     ['meta', { name: 'theme-color', content: '#1677ff' }],
   ],
-  
+
   // 主题配置
   themeConfig: {
     // Logo 配置
@@ -26,16 +26,16 @@ export default defineConfig({
       width: 24,
       height: 24,
     },
-    
+
     // 导航栏
     nav: [
       { text: '指南', link: '/guide/introduction' },
       { text: '样式', link: '/styles/overview' },
       { text: '主题', link: '/theming/config-provider' },
       { text: '组件', link: '/components/button' },
-      { text: '示例', link: '/SoUi/examples/', target: '_blank' },
-      { 
-        text: '资源', 
+      { text: '示例', link: '/examples/', target: '_blank' },
+      {
+        text: '资源',
         items: [
           { text: '更新日志', link: '/resources/changelog' },
           { text: '迁移指南', link: '/resources/migration' },
