@@ -1,0 +1,132 @@
+@import '../../styles/variables.less';
+
+// ==================== Switch ====================
+.soui-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: var(--soui-switch-border-radius, 11px);
+  background-color: var(--soui-switch-color-bg, rgba(0, 0, 0, 0.25));
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition: background-color @transition-duration @transition-timing-function;
+  vertical-align: middle;
+  box-sizing: border-box;
+
+  // ==================== Handle (thumb) ====================
+  &-handle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 2px rgba(0, 0, 0, 0.08);
+    transition: left @transition-duration @transition-timing-function,
+                width @transition-duration @transition-timing-function;
+    z-index: 1;
+  }
+
+  // ==================== Inner (children text) ====================
+  &-inner {
+    display: block;
+    margin: 0 8px 0 24px;
+    color: var(--soui-switch-color-text, #fff);
+    font-size: 12px;
+    line-height: 22px;
+    white-space: nowrap;
+    transition: margin @transition-duration @transition-timing-function;
+  }
+
+  // ==================== Checked ====================
+  &-checked {
+    background-color: var(--soui-switch-color-primary, @primary-color);
+
+    .soui-switch-handle {
+      left: calc(100% - 20px);
+    }
+
+    .soui-switch-inner {
+      margin: 0 24px 0 8px;
+    }
+  }
+
+  // ==================== Hover ====================
+  &:hover:not(:disabled) {
+    background-color: var(--soui-switch-color-bg-hover, rgba(0, 0, 0, 0.35));
+  }
+}
+
+// Checked + Hover (outside nesting for correct selectors)
+.soui-switch.soui-switch-checked:hover:not(:disabled) {
+  background-color: var(--soui-switch-color-primary-hover, @primary-hover-color);
+}
+
+// Focus visible
+.soui-switch:focus-visible {
+  box-shadow: 0 0 0 2px fade(@primary-color, 20%);
+}
+
+// ==================== Disabled ====================
+.soui-switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+// ==================== Loading ====================
+.soui-switch-loading {
+  cursor: default;
+}
+
+.soui-switch-loading-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--soui-switch-color-primary, @primary-color);
+  animation: soui-switch-loading-spin 1s linear infinite;
+}
+
+@keyframes soui-switch-loading-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// ==================== Small Size ====================
+.soui-switch-small {
+  min-width: 28px;
+  height: 16px;
+  border-radius: var(--soui-switch-border-radius, 8px);
+
+  .soui-switch-handle {
+    width: 12px;
+    height: 12px;
+    top: 2px;
+    left: 2px;
+  }
+
+  .soui-switch-inner {
+    font-size: 10px;
+    line-height: 16px;
+    margin: 0 6px 0 16px;
+  }
+}
+
+.soui-switch-small.soui-switch-checked {
+  .soui-switch-handle {
+    left: calc(100% - 14px);
+  }
+
+  .soui-switch-inner {
+    margin: 0 16px 0 6px;
+  }
+}

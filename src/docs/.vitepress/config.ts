@@ -228,6 +228,7 @@ function sidebarComponents() {
         { text: 'Radio 单选框', link: 'radio' },
         { text: 'Checkbox 多选框', link: 'checkbox' },
         { text: 'InputNumber 数字输入', link: 'input-number' },
+        { text: 'Switch 开关', link: 'switch' },
       ],
     },
     {

@@ -140,6 +140,10 @@ export type { CheckboxProps, CheckboxGroupProps, CheckboxSize } from './componen
 export { default as InputNumber } from './components/InputNumber';
 export type { InputNumberProps, InputNumberSize, InputNumberStatus } from './components/InputNumber';
 
+// Switch Component
+export { default as Switch } from './components/Switch';
+export type { SwitchProps, SwitchSize } from './components/Switch';
+
 // Utils
 export * from './utils';
 

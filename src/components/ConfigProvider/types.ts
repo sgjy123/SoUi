@@ -643,6 +643,21 @@ export interface ComponentThemeConfig {
     /** 警告色 */
     colorWarning?: string;
   };
+  /** 开关组件配置 */
+  Switch?: {
+    /** 主色（开启态背景） */
+    colorPrimary?: string;
+    /** 悬停主色 */
+    colorPrimaryHover?: string;
+    /** 圆角 */
+    borderRadius?: number;
+    /** 关闭态背景色 */
+    colorBg?: string;
+    /** 关闭态悬停背景色 */
+    colorBgHover?: string;
+    /** 文字颜色 */
+    colorText?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

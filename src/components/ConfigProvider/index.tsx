@@ -59,6 +59,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const checkboxTheme = mergedTheme.components?.Checkbox || {};
     // 获取 InputNumber 组件级配置
     const inputNumberTheme = mergedTheme.components?.InputNumber || {};
+    // 获取 Switch 组件级配置
+    const switchTheme = mergedTheme.components?.Switch || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -408,6 +410,14 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-input-number-color-bg-disabled': inputNumberTheme.colorBgDisabled || '#f5f5f5',
       '--soui-input-number-color-error': inputNumberTheme.colorError || mergedTheme.errorColor,
       '--soui-input-number-color-warning': inputNumberTheme.colorWarning || mergedTheme.warningColor,
+
+      // ==================== Switch 组件配置 ====================
+      '--soui-switch-color-primary': switchTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-switch-color-primary-hover': switchTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-switch-border-radius': switchTheme.borderRadius ? `${switchTheme.borderRadius}px` : '11px',
+      '--soui-switch-color-bg': switchTheme.colorBg || 'rgba(0, 0, 0, 0.25)',
+      '--soui-switch-color-bg-hover': switchTheme.colorBgHover || 'rgba(0, 0, 0, 0.35)',
+      '--soui-switch-color-text': switchTheme.colorText || '#fff',
     } as any;
   }, [mergedTheme]);
 

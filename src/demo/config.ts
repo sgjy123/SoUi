@@ -266,6 +266,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'input-number-theme', label: 'InputNumber 主题定制', componentPath: 'InputNumber', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'switch',
+        label: 'Switch 开关',
+        icon: 'SwitchContrast',
+        items: [
+          { key: 'switch-basic', label: 'Switch 基础用法', componentPath: 'Switch', exampleName: 'Basic', description: '基本开关、默认状态、受控模式、禁用。' },
+          { key: 'switch-variant', label: 'Switch 尺寸与内容', componentPath: 'Switch', exampleName: 'Variant', description: '小尺寸、自定义文字和图标。' },
+          { key: 'switch-loading', label: 'Switch 加载状态', componentPath: 'Switch', exampleName: 'Loading', description: 'loading 属性与异步操作。' },
+          { key: 'switch-theme', label: 'Switch 主题定制', componentPath: 'Switch', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
   {
