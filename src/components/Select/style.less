@@ -155,6 +155,18 @@
         background-color: rgba(0, 0, 0, 0.06);
       }
     }
+
+    // +N overflow indicator for maxTagCount
+    &-overflow {
+      background-color: rgba(0, 0, 0, 0.06);
+      border-color: transparent;
+      color: rgba(0, 0, 0, 0.65);
+      cursor: default;
+
+      .soui-select-selection-item-remove {
+        display: none;
+      }
+    }
   }
 
   // ==================== Arrow ====================
@@ -409,4 +421,31 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.25);
   font-size: var(--soui-select-local-font-size);
+}
+
+// ==================== Option Group ====================
+.soui-select-group {
+  list-style: none;
+
+  > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.soui-select-group-header {
+  padding: 6px 12px 4px;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  font-weight: 500;
+  line-height: 20px;
+  cursor: default;
+  user-select: none;
+}
+
+// ==================== Create Option (Tags mode) ====================
+.soui-select-option-create {
+  color: var(--soui-primary-color, @primary-color);
+  font-style: italic;
 }

@@ -27,7 +27,19 @@ export interface OptionType {
   value: string;
   /** 是否禁用 */
   disabled?: boolean;
+  /** 分组子选项（存在时表示这是一个分组） */
+  children?: OptionType[];
 }
+
+/** 选项分组类型 */
+export interface OptionGroupType {
+  /** 分组标签 */
+  label: React.ReactNode;
+  /** 分组子选项 */
+  children: OptionType[];
+}
+
+export type GroupedOptionType = OptionType | OptionGroupType;
 
 export interface SelectRef {
   focus: () => void;
@@ -66,8 +78,16 @@ export interface SelectProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   dropdownMatchSelectWidth?: boolean | number;
   /** 空数据时显示的内容 */
   notFoundContent?: React.ReactNode;
-  /** 选项数据 */
-  options?: OptionType[];
+  /** 选项数据（支持分组） */
+  options?: GroupedOptionType[];
+  /** 多选时最多显示的标签数量，超出以 +N 展示 */
+  maxTagCount?: number;
+  /** 自定义下拉菜单内容 */
+  dropdownRender?: (menu: React.ReactElement) => React.ReactElement;
+  /** 自定义选项渲染 */
+  optionRender?: (option: OptionType, index: number) => React.ReactNode;
+  /** 自定义后缀图标 */
+  suffixIcon?: React.ReactNode;
   /** 聚焦回调 */
   onFocus?: (e: React.FocusEvent) => void;
   /** 失焦回调 */
@@ -97,6 +117,24 @@ function useGlobalTheme(): Record<string, any> {
 }
 
 // ==================== Utils ====================
+
+/** Type guard: check if an item is an option group */
+function isOptionGroup(item: GroupedOptionType): item is OptionGroupType {
+  return 'children' in item && Array.isArray((item as OptionGroupType).children);
+}
+
+/** Flatten grouped options into a plain array for filtering, keyboard nav, and selection lookup */
+function flattenOptions(options: GroupedOptionType[]): OptionType[] {
+  const result: OptionType[] = [];
+  for (const opt of options) {
+    if (isOptionGroup(opt)) {
+      result.push(...opt.children);
+    } else {
+      result.push(opt);
+    }
+  }
+  return result;
+}
 
 function buildSelectCssVars(selectTheme: Record<string, any>, globalTheme: Record<string, any>): Record<string, any> {
   const cssVars: Record<string, any> = {};
@@ -185,6 +223,10 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
     dropdownMatchSelectWidth = true,
     notFoundContent = '暂无数据',
     options = [],
+    maxTagCount,
+    dropdownRender,
+    optionRender,
+    suffixIcon,
     onFocus,
     onBlur,
     onDropdownVisibleChange,
@@ -236,7 +278,7 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
 
   // Helpers
   const getOptionByValue = useCallback(
-    (val: string): OptionType | undefined => options.find((opt) => opt.value === val),
+    (val: string): OptionType | undefined => flattenOptions(options).find((opt) => opt.value === val),
     [options]
   );
 
@@ -248,20 +290,26 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
     [getOptionByValue]
   );
 
-  // Filtered options
+  // Filtered options (preserves group structure)
   const filteredOptions = useMemo(() => {
-    if (!searchValue) return options;
-    if (filterOption === false) return options;
-    if (typeof filterOption === 'function') {
-      return options.filter((opt) => (filterOption as Function)(searchValue, opt));
-    }
-    // Default: filter by label text
-    const lower = searchValue.toLowerCase();
-    return options.filter((opt) => {
+    const defaultFilter = (opt: OptionType) => {
       const labelStr = typeof opt.label === 'string' ? opt.label.toLowerCase() : String(opt.value).toLowerCase();
-      return labelStr.includes(lower);
+      return labelStr.includes(searchValue.toLowerCase());
+    };
+    const customFilter = typeof filterOption === 'function' ? (opt: OptionType) => (filterOption as Function)(searchValue, opt) : defaultFilter;
+    const doFilter = !searchValue ? null : filterOption === false ? null : customFilter;
+
+    return options.filter((item) => {
+      if (isOptionGroup(item)) {
+        if (!doFilter) return item.children.length > 0;
+        return item.children.some(doFilter);
+      }
+      return doFilter ? doFilter(item) : true;
     });
   }, [options, searchValue, filterOption]);
+
+  // Flat filtered options for keyboard navigation (excludes group headers)
+  const flatFilteredOptions = useMemo(() => flattenOptions(filteredOptions), [filteredOptions]);
 
   // Dropdown positioning
   const updatePosition = useCallback(() => {
@@ -306,8 +354,13 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
         const selectedOpts = nextValues.map((v) => getOptionByValue(v)).filter(Boolean) as OptionType[];
         onChange?.(nextValues, selectedOpts);
         setSearchValue('');
-        // Keep focus on search input for continuous selection
-        searchInputRef.current?.focus();
+        // In tags mode, keep dropdown open for continuous tagging
+        if (mode !== 'tags') {
+          // For multiple mode, keep focus on search input
+          searchInputRef.current?.focus();
+        } else {
+          searchInputRef.current?.focus();
+        }
       } else {
         const nextValue = [opt.value];
         if (!isControlled) setInnerValue(nextValue);
@@ -315,7 +368,24 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
         setOpenState(false);
       }
     },
-    [isMultiple, selectedValues, isControlled, onChange, getOptionByValue, setOpenState]
+    [isMultiple, selectedValues, isControlled, onChange, getOptionByValue, setOpenState, mode]
+  );
+
+  // Create new option in tags mode
+  const handleCreateTag = useCallback(
+    (val: string) => {
+      if (!val.trim()) return;
+      // Don't create duplicate
+      if (selectedValues.includes(val)) return;
+
+      const newOpt: OptionType = { label: val, value: val };
+      const nextValues = [...selectedValues, val];
+      if (!isControlled) setInnerValue(nextValues);
+      onChange?.(nextValues, [...nextValues.map((v) => getOptionByValue(v)).filter(Boolean), newOpt] as OptionType[]);
+      setSearchValue('');
+      searchInputRef.current?.focus();
+    },
+    [selectedValues, isControlled, onChange, getOptionByValue]
   );
 
   // Remove tag in multiple mode
@@ -368,8 +438,8 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
           }
           setActiveIndex((prev) => {
             let next = prev + 1;
-            while (next < filteredOptions.length && filteredOptions[next].disabled) next++;
-            return next < filteredOptions.length ? next : prev;
+            while (next < flatFilteredOptions.length && flatFilteredOptions[next].disabled) next++;
+            return next < flatFilteredOptions.length ? next : prev;
           });
           break;
         }
@@ -381,15 +451,18 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
           }
           setActiveIndex((prev) => {
             let next = prev - 1;
-            while (next >= 0 && filteredOptions[next].disabled) next--;
+            while (next >= 0 && flatFilteredOptions[next].disabled) next--;
             return next >= 0 ? next : prev;
           });
           break;
         }
         case 'Enter': {
           e.preventDefault();
-          if (open && activeIndex >= 0 && activeIndex < filteredOptions.length) {
-            handleSelect(filteredOptions[activeIndex]);
+          if (open && activeIndex >= 0 && activeIndex < flatFilteredOptions.length) {
+            handleSelect(flatFilteredOptions[activeIndex]);
+          } else if (open && mode === 'tags' && searchValue.trim()) {
+            // Tags mode: create new option from search text
+            handleCreateTag(searchValue.trim());
           } else if (!open) {
             setOpenState(true);
           }
@@ -409,7 +482,7 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
         }
       }
     },
-    [disabled, open, activeIndex, filteredOptions, handleSelect, setOpenState, isMultiple, searchValue, selectedValues, handleRemoveTag]
+    [disabled, open, activeIndex, flatFilteredOptions, handleSelect, setOpenState, isMultiple, searchValue, selectedValues, handleRemoveTag, mode, handleCreateTag]
   );
 
   // Scroll active option into view
@@ -498,9 +571,13 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
   // Render selected content
   const renderSelectorContent = () => {
     if (isMultiple) {
+      // Determine visible tags based on maxTagCount
+      const visibleValues = maxTagCount !== undefined ? selectedValues.slice(0, maxTagCount) : selectedValues;
+      const overflowCount = maxTagCount !== undefined ? Math.max(0, selectedValues.length - maxTagCount) : 0;
+
       return (
         <div className="soui-select-selection-overflow">
-          {selectedValues.map((val) => (
+          {visibleValues.map((val) => (
             <span className="soui-select-selection-item" key={val}>
               <span className="soui-select-selection-item-content">{getLabelByValue(val)}</span>
               <span
@@ -513,6 +590,11 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
               </span>
             </span>
           ))}
+          {overflowCount > 0 && (
+            <span className="soui-select-selection-item soui-select-selection-item-overflow">
+              <span className="soui-select-selection-item-content">+{overflowCount}</span>
+            </span>
+          )}
           {showSearch && (
             <span className="soui-select-selection-search">
               <input
@@ -580,44 +662,118 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
   const renderDropdown = () => {
     if (!open) return null;
 
-    const dropdownNode = (
+    // Track flat index for keyboard active highlighting
+    let flatIdx = -1;
+
+    const menuContent = (
+      <ul className="soui-select-option-list">
+        {filteredOptions.map((item, groupIdx) => {
+          if (isOptionGroup(item)) {
+            const groupKey = typeof item.label === 'string' ? item.label : `group-${groupIdx}`;
+            return (
+              <li key={groupKey} className="soui-select-group" role="group">
+                <div className="soui-select-group-header">{item.label}</div>
+                <ul>
+                  {item.children.map((opt) => {
+                    if (searchValue && filterOption !== false) {
+                      const labelStr = typeof opt.label === 'string' ? opt.label.toLowerCase() : String(opt.value).toLowerCase();
+                      const matches = typeof filterOption === 'function'
+                        ? (filterOption as Function)(searchValue, opt)
+                        : labelStr.includes(searchValue.toLowerCase());
+                      if (!matches) return null;
+                    }
+                    flatIdx++;
+                    const currentFlatIdx = flatIdx;
+                    const isSelected = selectedValues.includes(opt.value);
+                    return (
+                      <li
+                        key={opt.value}
+                        className={classNames('soui-select-option', {
+                          'soui-select-option-selected': isSelected,
+                          'soui-select-option-disabled': opt.disabled,
+                          'soui-select-option-active': currentFlatIdx === activeIndex,
+                        })}
+                        onClick={() => handleSelect(opt)}
+                        onMouseEnter={() => !opt.disabled && setActiveIndex(currentFlatIdx)}
+                        role="option"
+                        aria-selected={isSelected}
+                        aria-disabled={opt.disabled}
+                        title={typeof opt.label === 'string' ? opt.label : undefined}
+                      >
+                        {isMultiple && (
+                          <span className={classNames('soui-select-option-checkbox', { 'soui-select-option-checkbox-checked': isSelected })}>
+                            {isSelected && <Icon name="Check" size={12} theme="outline" />}
+                          </span>
+                        )}
+                        <span className="soui-select-option-content">
+                          {optionRender ? optionRender(opt, currentFlatIdx) : opt.label}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </li>
+            );
+          }
+
+          // Plain option
+          const opt = item as OptionType;
+          flatIdx++;
+          const currentFlatIdx = flatIdx;
+          const isSelected = selectedValues.includes(opt.value);
+          return (
+            <li
+              key={opt.value}
+              className={classNames('soui-select-option', {
+                'soui-select-option-selected': isSelected,
+                'soui-select-option-disabled': opt.disabled,
+                'soui-select-option-active': currentFlatIdx === activeIndex,
+              })}
+              onClick={() => handleSelect(opt)}
+              onMouseEnter={() => !opt.disabled && setActiveIndex(currentFlatIdx)}
+              role="option"
+              aria-selected={isSelected}
+              aria-disabled={opt.disabled}
+              title={typeof opt.label === 'string' ? opt.label : undefined}
+            >
+              {isMultiple && (
+                <span className={classNames('soui-select-option-checkbox', { 'soui-select-option-checkbox-checked': isSelected })}>
+                  {isSelected && <Icon name="Check" size={12} theme="outline" />}
+                </span>
+              )}
+              <span className="soui-select-option-content">
+                {optionRender ? optionRender(opt, currentFlatIdx) : opt.label}
+              </span>
+            </li>
+          );
+        })}
+        {/* Tags mode: show "create" hint when search value has no match */}
+        {mode === 'tags' && searchValue && flatFilteredOptions.length === 0 && (
+          <li
+            className="soui-select-option soui-select-option-create"
+            onClick={() => handleCreateTag(searchValue)}
+            onMouseEnter={() => setActiveIndex(0)}
+          >
+            <span className="soui-select-option-content">
+              创建 "{searchValue}"
+            </span>
+          </li>
+        )}
+        {filteredOptions.length === 0 && !(mode === 'tags' && searchValue) && (
+          <div className="soui-select-empty">{notFoundContent}</div>
+        )}
+      </ul>
+    );
+
+    // Build the dropdown menu node
+    const defaultMenu = (
       <div
         ref={dropdownRef}
         className={classNames('soui-select-dropdown', dropdownClassName)}
         style={dropdownStyle}
         role="listbox"
       >
-        <ul className="soui-select-option-list">
-          {filteredOptions.map((opt, idx) => {
-            const isSelected = selectedValues.includes(opt.value);
-            return (
-              <li
-                key={opt.value}
-                className={classNames('soui-select-option', {
-                  'soui-select-option-selected': isSelected,
-                  'soui-select-option-disabled': opt.disabled,
-                  'soui-select-option-active': idx === activeIndex,
-                })}
-                onClick={() => handleSelect(opt)}
-                onMouseEnter={() => !opt.disabled && setActiveIndex(idx)}
-                role="option"
-                aria-selected={isSelected}
-                aria-disabled={opt.disabled}
-                title={typeof opt.label === 'string' ? opt.label : undefined}
-              >
-                {isMultiple && (
-                  <span className={classNames('soui-select-option-checkbox', { 'soui-select-option-checkbox-checked': isSelected })}>
-                    {isSelected && <Icon name="Check" size={12} theme="outline" />}
-                  </span>
-                )}
-                <span className="soui-select-option-content">{opt.label}</span>
-              </li>
-            );
-          })}
-          {filteredOptions.length === 0 && (
-            <div className="soui-select-empty">{notFoundContent}</div>
-          )}
-        </ul>
+        {dropdownRender ? dropdownRender(menuContent) : menuContent}
       </div>
     );
 
@@ -628,7 +784,7 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
           if (el) applyConfigProviderVars(el);
         }}
       >
-        {dropdownNode}
+        {defaultMenu}
       </div>,
       document.body
     );
@@ -670,10 +826,12 @@ const Select = forwardRef<SelectRef, SelectProps>((props, ref) => {
         </span>
       )}
 
-      {/* Arrow icon */}
+      {/* Arrow / Suffix icon */}
       <span className="soui-select-arrow">
         {loading ? (
           <Icon name="Loading" size={12} theme="outline" />
+        ) : suffixIcon !== undefined ? (
+          suffixIcon
         ) : (
           <Icon name="Down" size={12} theme="outline" />
         )}

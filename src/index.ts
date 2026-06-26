@@ -126,7 +126,7 @@ export { TextArea, Password, Search } from './components/Input';
 
 // Select Component
 export { default as Select } from './components/Select';
-export type { SelectProps, SelectSize, SelectStatus, SelectMode, OptionType, SelectRef } from './components/Select';
+export type { SelectProps, SelectSize, SelectStatus, SelectMode, OptionType, OptionGroupType, GroupedOptionType, SelectRef } from './components/Select';
 
 // Utils
 export * from './utils';
