@@ -148,6 +148,10 @@ export type { SwitchProps, SwitchSize } from './components/Switch';
 export { default as Cascader } from './components/Cascader';
 export type { CascaderProps, CascaderSize, CascaderStatus, CascaderExpandTrigger, CascaderOption, CascaderFieldNames, CascaderRef, CascaderPlacement, CascaderShowCheckedStrategy, CascaderPanelProps } from './components/Cascader';
 
+// TreeSelect Component
+export { default as TreeSelect } from './components/TreeSelect';
+export type { TreeSelectProps, TreeSelectSize, TreeSelectStatus, TreeSelectOption, TreeSelectFieldNames, TreeSelectRef, TreeSelectShowCheckedStrategy } from './components/TreeSelect';
+
 // Utils
 export * from './utils';
 

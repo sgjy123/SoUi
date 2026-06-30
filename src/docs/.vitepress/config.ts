@@ -214,6 +214,7 @@ function sidebarComponents() {
         { text: 'InputNumber 数字输入', link: 'input-number' },
         { text: 'Switch 开关', link: 'switch' },
         { text: 'Cascader 级联选择', link: 'cascader' },
+        { text: 'TreeSelect 树形下拉', link: 'tree-select' },
       ],
     },
     {

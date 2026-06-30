@@ -1,0 +1,489 @@
+@import '../../styles/variables.less';
+
+// ==================== CSS Variable Aliases ====================
+.tree-select-css-variable-aliases() {
+  --soui-ts-local-border-radius: var(--soui-tree-select-border-radius, @border-radius-base);
+  --soui-ts-local-font-size: var(--soui-tree-select-font-size, @font-size-base);
+  --soui-ts-local-control-height-sm: var(--soui-tree-select-control-height-small, @control-height-sm);
+  --soui-ts-local-control-height-md: var(--soui-tree-select-control-height-middle, @control-height-base);
+  --soui-ts-local-control-height-lg: var(--soui-tree-select-control-height-large, @control-height-lg);
+  --soui-ts-local-color-border: var(--soui-tree-select-color-border, @border-color);
+  --soui-ts-local-color-border-hover: var(--soui-tree-select-color-border-hover, @primary-hover-color);
+  --soui-ts-local-color-border-focus: var(--soui-tree-select-color-border-focus, @primary-color);
+  --soui-ts-local-color-bg: var(--soui-tree-select-color-bg, @bg-color-base);
+  --soui-ts-local-color-text: var(--soui-tree-select-color-text, @text-color);
+  --soui-ts-local-color-bg-disabled: var(--soui-tree-select-color-bg-disabled, @bg-color-disable);
+  --soui-ts-local-color-text-disabled: var(--soui-tree-select-color-text-disabled, @text-color-disabled);
+  --soui-ts-local-color-error: var(--soui-tree-select-color-error, @error-color);
+  --soui-ts-local-color-warning: var(--soui-tree-select-color-warning, @warning-color);
+  --soui-ts-local-dropdown-bg: var(--soui-tree-select-dropdown-bg, @bg-color-base);
+  --soui-ts-local-option-active-bg: var(--soui-tree-select-option-active-bg, rgba(0, 0, 0, 0.04));
+  --soui-ts-local-option-selected-bg: var(--soui-tree-select-option-selected-bg, fade(@primary-color, 8%));
+  --soui-ts-local-tag-bg: var(--soui-tree-select-tag-bg, #fafafa);
+}
+
+// ==================== Main TreeSelect ====================
+.soui-tree-select {
+  .tree-select-css-variable-aliases();
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+  font-size: var(--soui-ts-local-font-size);
+  outline: none;
+
+  // ==================== Selector ====================
+  .soui-tree-select-selector {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: var(--soui-ts-local-control-height-md);
+    padding: 0 30px 0 11px;
+    background-color: var(--soui-ts-local-color-bg);
+    border: 1px solid var(--soui-ts-local-color-border);
+    border-radius: var(--soui-ts-local-border-radius);
+    box-sizing: border-box;
+    transition: border-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
+    cursor: pointer;
+  }
+
+  // ==================== Placeholder ====================
+  .soui-tree-select-selection-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 11px;
+    right: 30px;
+    transform: translateY(-50%);
+    color: rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  // ==================== Selected Item (Single) ====================
+  &.soui-tree-select-single .soui-tree-select-selection-item {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--soui-ts-local-color-text);
+    max-width: 100%;
+  }
+
+  // ==================== Search Input ====================
+  .soui-tree-select-selection-search {
+    display: inline-flex;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .soui-tree-select-selection-search-input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    min-width: 4px;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    font-family: inherit;
+    color: var(--soui-ts-local-color-text);
+    cursor: pointer;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.25);
+    }
+
+    &[value=""] {
+      width: 4px;
+    }
+  }
+
+  // ==================== Multiple Tags ====================
+  .soui-tree-select-selection-overflow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    padding: 2px 0;
+  }
+
+  &.soui-tree-select-multiple .soui-tree-select-selection-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    height: 24px;
+    padding: 0 4px 0 8px;
+    background-color: var(--soui-ts-local-tag-bg);
+    border: 1px solid @border-color-split;
+    border-radius: @border-radius-sm;
+    font-size: @font-size-sm;
+    color: var(--soui-ts-local-color-text);
+    max-width: 100%;
+    cursor: default;
+    line-height: 1;
+
+    &-content {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &-remove {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      color: rgba(0, 0, 0, 0.45);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: color 0.2s ease, background-color 0.2s ease;
+
+      &:hover {
+        color: rgba(0, 0, 0, 0.65);
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+    }
+
+    &-overflow {
+      background-color: rgba(0, 0, 0, 0.06);
+      border-color: transparent;
+      color: rgba(0, 0, 0, 0.65);
+      cursor: default;
+
+      .soui-tree-select-selection-item-remove {
+        display: none;
+      }
+    }
+  }
+
+  // ==================== Arrow ====================
+  .soui-tree-select-arrow {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    transition: transform @transition-duration @transition-timing-function,
+                opacity 0.2s ease;
+  }
+
+  &.soui-tree-select-open .soui-tree-select-arrow {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  // ==================== Clear ====================
+  .soui-tree-select-clear {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    background-color: var(--soui-ts-local-color-bg);
+    color: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.45);
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &:hover .soui-tree-select-clear,
+  &.soui-tree-select-focused .soui-tree-select-clear {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &:hover .soui-tree-select-clear ~ .soui-tree-select-arrow,
+  &.soui-tree-select-focused .soui-tree-select-clear ~ .soui-tree-select-arrow {
+    opacity: 0;
+  }
+
+  // ==================== Hover ====================
+  &:hover:not(.soui-tree-select-disabled) .soui-tree-select-selector {
+    border-color: var(--soui-ts-local-color-border-hover);
+  }
+
+  // ==================== Focus (Open) ====================
+  &.soui-tree-select-open:not(.soui-tree-select-disabled) .soui-tree-select-selector {
+    border-color: var(--soui-ts-local-color-border-focus);
+    box-shadow: 0 0 0 2px fade(@primary-color, 10%);
+  }
+
+  // ==================== Disabled ====================
+  &.soui-tree-select-disabled {
+    cursor: not-allowed;
+
+    .soui-tree-select-selector {
+      background-color: var(--soui-ts-local-color-bg-disabled);
+      color: var(--soui-ts-local-color-text-disabled);
+      cursor: not-allowed;
+    }
+
+    .soui-tree-select-selection-item {
+      color: var(--soui-ts-local-color-text-disabled);
+    }
+
+    .soui-tree-select-selection-item-remove {
+      display: none;
+    }
+  }
+
+  // ==================== Status ====================
+  &.soui-tree-select-status-error .soui-tree-select-selector {
+    border-color: var(--soui-ts-local-color-error);
+  }
+  &.soui-tree-select-status-error.soui-tree-select-open .soui-tree-select-selector {
+    border-color: var(--soui-ts-local-color-error);
+    box-shadow: 0 0 0 2px fade(@error-color, 20%);
+  }
+
+  &.soui-tree-select-status-warning .soui-tree-select-selector {
+    border-color: var(--soui-ts-local-color-warning);
+  }
+  &.soui-tree-select-status-warning.soui-tree-select-open .soui-tree-select-selector {
+    border-color: var(--soui-ts-local-color-warning);
+    box-shadow: 0 0 0 2px fade(@warning-color, 20%);
+  }
+
+  // ==================== Sizes ====================
+  &.soui-tree-select-small .soui-tree-select-selector {
+    min-height: var(--soui-ts-local-control-height-sm);
+    padding: 0 26px 0 7px;
+    font-size: @font-size-sm;
+  }
+  &.soui-tree-select-small .soui-tree-select-arrow { right: 7px; }
+  &.soui-tree-select-small .soui-tree-select-clear { right: 7px; }
+  &.soui-tree-select-small .soui-tree-select-selection-placeholder { left: 7px; right: 26px; }
+  &.soui-tree-select-small.soui-tree-select-multiple .soui-tree-select-selection-item {
+    height: 18px;
+    font-size: 11px;
+    padding: 0 2px 0 6px;
+  }
+
+  &.soui-tree-select-large .soui-tree-select-selector {
+    min-height: var(--soui-ts-local-control-height-lg);
+    padding: 0 34px 0 11px;
+    font-size: @font-size-lg;
+  }
+  &.soui-tree-select-large .soui-tree-select-arrow { right: 11px; }
+  &.soui-tree-select-large .soui-tree-select-selection-placeholder { right: 34px; }
+  &.soui-tree-select-large.soui-tree-select-multiple .soui-tree-select-selection-item {
+    height: 28px;
+  }
+}
+
+// ==================== Dropdown (Portal) ====================
+.soui-tree-select-dropdown {
+  .tree-select-css-variable-aliases();
+  z-index: @z-index-popover;
+  background: var(--soui-ts-local-dropdown-bg);
+  border-radius: var(--soui-ts-local-border-radius);
+  box-shadow: @box-shadow-secondary;
+  padding: 4px;
+  box-sizing: border-box;
+  animation: soui-tree-select-dropdown-in 0.15s ease-out;
+}
+
+@keyframes soui-tree-select-dropdown-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.8);
+    transform-origin: top center;
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+// ==================== Tree ====================
+.soui-tree-select-tree {
+  max-height: 256px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 4px 0;
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.15); border-radius: 3px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+}
+
+// ==================== Tree Node ====================
+.soui-tree-select-treenode {
+  display: flex;
+  align-items: center;
+  padding: 4px 12px 4px 0;
+  cursor: pointer;
+  font-size: var(--soui-ts-local-font-size);
+  color: var(--soui-ts-local-color-text);
+  transition: background-color 0.15s ease;
+  min-height: 32px;
+  box-sizing: border-box;
+  line-height: 22px;
+
+  &:hover:not(.soui-tree-select-treenode-disabled) {
+    background-color: var(--soui-ts-local-option-active-bg);
+  }
+
+  &-selected:not(&-disabled) {
+    background-color: var(--soui-ts-local-option-selected-bg);
+
+    .soui-tree-select-node-content {
+      font-weight: 600;
+    }
+  }
+
+  &-checked:not(&-disabled) {
+    background-color: var(--soui-ts-local-option-selected-bg);
+  }
+
+  &-half-checked:not(&-disabled) {
+    background-color: var(--soui-ts-local-option-selected-bg);
+    opacity: 0.85;
+  }
+
+  &-disabled {
+    color: @text-color-disabled;
+    cursor: not-allowed;
+
+    .soui-tree-select-switcher {
+      cursor: default;
+    }
+  }
+}
+
+// ==================== Switcher ====================
+.soui-tree-select-switcher {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s ease, color 0.2s ease;
+
+  &-open {
+    transform: rotate(90deg);
+  }
+
+  &-close {
+    transform: rotate(0deg);
+  }
+
+  &-noop {
+    cursor: default;
+    color: transparent;
+  }
+}
+
+// ==================== Checkbox ====================
+.soui-tree-select-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  border: 1px solid @border-color;
+  border-radius: @border-radius-sm;
+  background: @bg-color-base;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &-checked {
+    background-color: var(--soui-primary-color, @primary-color);
+    border-color: var(--soui-primary-color, @primary-color);
+    color: #fff;
+  }
+
+  &-half {
+    border-color: var(--soui-primary-color, @primary-color);
+    background: @bg-color-base;
+  }
+
+  &-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.soui-tree-select-checkbox-indeterminate {
+  display: block;
+  width: 8px;
+  height: 2px;
+  background-color: var(--soui-primary-color, @primary-color);
+  border-radius: 1px;
+}
+
+// ==================== Node Content ====================
+.soui-tree-select-node-content {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0 4px;
+  border-radius: calc(var(--soui-ts-local-border-radius) - 2px);
+  transition: background-color 0.15s ease;
+
+  &-selected {
+    color: var(--soui-primary-color, @primary-color);
+  }
+
+  &-disabled {
+    color: @text-color-disabled;
+  }
+}
+
+// ==================== Children (Indent) ====================
+.soui-tree-select-children {
+  // Default no extra styles
+}
+
+.soui-tree-select-line {
+  // Optional line connector
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 23px;
+    width: 1px;
+    height: 100%;
+    border-left: 1px dashed rgba(0, 0, 0, 0.12);
+  }
+}
+
+// ==================== Empty ====================
+.soui-tree-select-empty {
+  padding: 16px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.25);
+  font-size: var(--soui-ts-local-font-size);
+}

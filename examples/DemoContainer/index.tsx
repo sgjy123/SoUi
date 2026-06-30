@@ -31,6 +31,7 @@ import Checkbox from '../../src/components/Checkbox';
 import InputNumber from '../../src/components/InputNumber';
 import Switch from '../../src/components/Switch';
 import Cascader from '../../src/components/Cascader';
+import TreeSelect from '../../src/components/TreeSelect';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -102,6 +103,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     InputNumber,
     Switch,
     Cascader,
+    TreeSelect,
     ConfigProvider,
     ...scope,
   };

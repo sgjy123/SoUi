@@ -289,6 +289,18 @@ export const docsConfig: MenuGroup[] = [
           { key: 'cascader-theme', label: 'Cascader 主题定制', componentPath: 'Cascader', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'tree-select',
+        label: 'TreeSelect 树形下拉',
+        icon: 'TreeList',
+        items: [
+          { key: 'tree-select-basic', label: 'TreeSelect 基础用法', componentPath: 'TreeSelect', exampleName: 'Basic', description: '基本树形下拉选择、默认值、受控模式、禁用。' },
+          { key: 'tree-select-multiple', label: 'TreeSelect 多选', componentPath: 'TreeSelect', exampleName: 'Multiple', description: '多选模式、标签溢出限制。' },
+          { key: 'tree-select-checkable', label: 'TreeSelect 可勾选', componentPath: 'TreeSelect', exampleName: 'Checkable', description: '树节点勾选模式、显示策略。' },
+          { key: 'tree-select-searchable', label: 'TreeSelect 搜索与状态', componentPath: 'TreeSelect', exampleName: 'Searchable', description: '搜索过滤、错误和警告状态。' },
+          { key: 'tree-select-theme', label: 'TreeSelect 主题定制', componentPath: 'TreeSelect', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题、尺寸。' },
+        ],
+      },
     ],
   },
   {
