@@ -340,9 +340,9 @@
   font-size: var(--soui-ts-local-font-size);
   color: var(--soui-ts-local-color-text);
   transition: background-color 0.15s ease;
-  min-height: 32px;
+  min-height: calc(var(--soui-ts-local-font-size, @font-size-base) * 1.5715 + 8px);
   box-sizing: border-box;
-  line-height: 22px;
+  line-height: @line-height-base;
 
   &:hover:not(.soui-tree-select-treenode-disabled) {
     background-color: var(--soui-ts-local-option-active-bg);

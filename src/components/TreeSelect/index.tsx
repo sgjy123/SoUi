@@ -350,9 +350,33 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     return Array.isArray(v) ? v : [v];
   };
 
+  // Parent map / flat options (needed for value expansion, declared before state)
+  const parentMap = useMemo(() => buildParentMap(treeData, fieldNames), [treeData, fieldNames]);
+
+  const flatOptions = useMemo(() => {
+    const result: TreeSelectOption[] = [];
+    const walk = (nodes: TreeSelectOption[]) => {
+      for (const n of nodes) {
+        result.push(n);
+        const ch = getOptChildren(n, fieldNames);
+        if (ch) walk(ch);
+      }
+    };
+    walk(treeData);
+    return result;
+  }, [treeData, fieldNames]);
+
   const isControlled = valueProp !== undefined;
-  const [innerValue, setInnerValue] = useState<(string | number)[]>(() => normalizeValue(defaultValue));
-  const selectedValues = isControlled ? normalizeValue(valueProp) : innerValue;
+  const [innerValue, setInnerValue] = useState<(string | number)[]>(
+    () => expandValue(normalizeValue(defaultValue), showCheckedStrategy, flatOptions, fieldNames),
+  );
+  const selectedValues = useMemo(
+    () =>
+      isControlled
+        ? expandValue(normalizeValue(valueProp), showCheckedStrategy, flatOptions, fieldNames)
+        : innerValue,
+    [isControlled, valueProp, innerValue, showCheckedStrategy, flatOptions, fieldNames],
+  );
 
   // Expanded keys
   const isTreeExpandedControlled = treeExpandedKeysProp !== undefined;
@@ -381,23 +405,6 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
       setOpenState(false);
     },
   }));
-
-  // Parent map for showCheckedStrategy
-  const parentMap = useMemo(() => buildParentMap(treeData, fieldNames), [treeData, fieldNames]);
-
-  // Flat all options for lookup
-  const flatOptions = useMemo(() => {
-    const result: TreeSelectOption[] = [];
-    const walk = (nodes: TreeSelectOption[]) => {
-      for (const n of nodes) {
-        result.push(n);
-        const ch = getOptChildren(n, fieldNames);
-        if (ch) walk(ch);
-      }
-    };
-    walk(treeData);
-    return result;
-  }, [treeData, fieldNames]);
 
   // Expand/Collapse
   const toggleExpand = useCallback(
@@ -433,22 +440,37 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
       const val = getOptValue(opt, fieldNames);
 
       if (treeCheckable && multiple) {
-        // Check/uncheck logic
+        // Internal state is the full expanded set, so it always includes
+        // all descendants when a parent is "checked". The toggle logic must
+        // operate on leaves + propagate up the ancestor chain, not on
+        // the clicked node alone.
         const state = getCheckState(opt);
-        let nextValues: (string | number)[];
+        const isOptLeaf = isLeafOpt(opt, fieldNames);
+        // Determine the actual node to toggle: a leaf toggles itself,
+        // a non-leaf toggles all its descendants.
+        const targetVals = isOptLeaf ? [val] : getAllDescendantValues(opt, fieldNames).filter((v) => {
+          const o = flatOptions.find((x) => getOptValue(x, fieldNames) === v);
+          return o ? isLeafOpt(o, fieldNames) : true;
+        });
 
+        let nextValues: (string | number)[];
         if (state === 'all') {
-          // Uncheck all descendants
-          const descValues = getAllDescendantValues(opt, fieldNames);
-          nextValues = selectedValues.filter((v) => !descValues.includes(v));
+          // Uncheck: remove the toggled leaves and the clicked (parent) value itself.
+          const removeSet = new Set<(string | number)>([...targetVals, val]);
+          nextValues = selectedValues.filter((v) => !removeSet.has(v));
         } else {
-          // Check all descendants
-          const descValues = getAllDescendantValues(opt, fieldNames);
-          const existing = new Set(selectedValues);
-          nextValues = [...selectedValues, ...descValues.filter((v) => !existing.has(v))];
+          // Check: add the toggled leaves and the clicked (parent) value itself.
+          const addSet = new Set<(string | number)>([...targetVals, val]);
+          // Also include the parent chain so getCheckState stays correct
+          let parentVal = parentMap.get(val);
+          while (parentVal !== undefined) {
+            addSet.add(parentVal);
+            parentVal = parentMap.get(parentVal);
+          }
+          nextValues = Array.from(new Set([...selectedValues, ...addSet]));
         }
 
-        // Apply showCheckedStrategy
+        // Apply showCheckedStrategy to compress the output
         const filtered = applyShowCheckedStrategy(nextValues, showCheckedStrategy, parentMap, flatOptions, fieldNames);
 
         if (!isControlled) setInnerValue(nextValues);
@@ -456,7 +478,8 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
           const o = findOption(treeData, v, fieldNames);
           return o ? getLabelStr(o, fieldNames) : String(v);
         });
-        onChange?.(filtered.length === 1 ? filtered[0] : filtered, labels.length === 1 ? labels[0] : labels);
+        // Always pass arrays in treeCheckable mode (it is always used with multiple=true)
+        onChange?.(filtered, labels);
         return;
       }
 
@@ -499,7 +522,12 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     (e: React.MouseEvent) => {
       e.stopPropagation();
       const nextValue: (string | number)[] = [];
-      if (!isControlled) setInnerValue(nextValue);
+      // Always update innerValue because:
+      // - Uncontrolled: directly updates displayed value
+      // - Single-select controlled: clearing to undefined switches from controlled
+      //   to uncontrolled (valueProp becomes undefined), so innerValue must be
+      //   pre-set to [] to avoid showing stale data on the next render
+      setInnerValue(nextValue);
       if (multiple) {
         onChange?.(nextValue, []);
       } else {
@@ -508,22 +536,38 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
       setSearchValue('');
       onClear?.();
     },
-    [isControlled, multiple, onChange, onClear],
+    [multiple, onChange, onClear],
   );
 
   // Remove tag
   const handleRemoveTag = useCallback(
     (val: string | number, e: React.MouseEvent) => {
       e.stopPropagation();
-      const nextValues = selectedValues.filter((v) => v !== val);
+
+      let nextValues: (string | number)[];
+      const _checkable = treeCheckable && multiple;
+      if (_checkable) {
+        // In treeCheckable mode, removing a parent tag should also uncheck all descendants
+        const opt = findOption(treeData, val, fieldNames);
+        const descValues = opt ? getAllDescendantValues(opt, fieldNames) : [val];
+        nextValues = selectedValues.filter((v) => !descValues.includes(v));
+      } else {
+        nextValues = selectedValues.filter((v) => v !== val);
+      }
+
       if (!isControlled) setInnerValue(nextValues);
-      const labels = nextValues.map((v) => {
+
+      // Apply showCheckedStrategy for onChange output
+      const outputValues = _checkable
+        ? applyShowCheckedStrategy(nextValues, showCheckedStrategy, parentMap, flatOptions, fieldNames)
+        : nextValues;
+      const labels = outputValues.map((v) => {
         const o = findOption(treeData, v, fieldNames);
         return o ? getLabelStr(o, fieldNames) : String(v);
       });
-      onChange?.(nextValues, labels);
+      onChange?.(outputValues, labels);
     },
-    [selectedValues, isControlled, onChange, treeData, fieldNames],
+    [selectedValues, isControlled, treeCheckable, multiple, onChange, treeData, fieldNames, showCheckedStrategy, parentMap, flatOptions],
   );
 
   // Search input
@@ -679,7 +723,7 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
   );
 
   // Render tree nodes
-  const renderTreeNode = (opt: TreeSelectOption, level: number, index: number): React.ReactNode => {
+  const renderTreeNode = (opt: TreeSelectOption, level: number): React.ReactNode => {
     const val = getOptValue(opt, fieldNames);
     const label = getOptLabel(opt, fieldNames);
     const children = getOptChildren(opt, fieldNames);
@@ -761,10 +805,6 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
             })}
             onClick={() => {
               if (!isDisabled) {
-                if (!leaf && !isCheckable) {
-                  // For single mode, also toggle expand on click
-                  toggleExpand(val);
-                }
                 handleSelect(opt);
               }
             }}
@@ -777,7 +817,7 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
         {/* Children */}
         {isExpanded && hasChildren && children && (
           <div className={classNames('soui-tree-select-children', { 'soui-tree-select-line': treeLine })}>
-            {children.map((child, idx) => renderTreeNode(child, level + 1, idx))}
+            {children.map((child) => renderTreeNode(child, level + 1))}
           </div>
         )}
       </React.Fragment>
@@ -787,9 +827,6 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
   // Render selected content
   const renderSelectorContent = () => {
     if (multiple) {
-      const visibleValues = maxTagCount !== undefined ? selectedValues.slice(0, maxTagCount) : selectedValues;
-      const overflowCount = maxTagCount !== undefined ? Math.max(0, selectedValues.length - maxTagCount) : 0;
-
       // Apply showCheckedStrategy for display
       const displayValues = isCheckable
         ? applyShowCheckedStrategy(selectedValues, showCheckedStrategy, parentMap, flatOptions, fieldNames)
@@ -896,7 +933,7 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     const menuContent = (
       <div className="soui-tree-select-tree">
         {treeData.length > 0 ? (
-          treeData.map((opt, idx) => renderTreeNode(opt, 0, idx))
+          treeData.map((opt) => renderTreeNode(opt, 0))
         ) : (
           <div className="soui-tree-select-empty">{notFoundContent}</div>
         )}
@@ -961,6 +998,30 @@ TreeSelect.displayName = 'TreeSelect';
 
 // ==================== showCheckedStrategy ====================
 
+/** Expand compressed values back to the full internal selection set.
+ *  For SHOW_PARENT/SHOW_CHILD, if a non-leaf value is present, all its
+ *  descendants are also considered selected so the tree checkboxes render
+ *  correctly and interactions stay consistent.
+ */
+function expandValue(
+  values: (string | number)[],
+  strategy: TreeSelectShowCheckedStrategy,
+  flatOptions: TreeSelectOption[],
+  fieldNames?: TreeSelectFieldNames,
+): (string | number)[] {
+  if (strategy === 'SHOW_ALL' || values.length === 0) return values;
+
+  const expanded = new Set(values);
+  for (const val of values) {
+    const opt = flatOptions.find((o) => getOptValue(o, fieldNames) === val);
+    if (opt && !isLeafOpt(opt, fieldNames)) {
+      const desc = getAllDescendantValues(opt, fieldNames);
+      desc.forEach((v) => expanded.add(v));
+    }
+  }
+  return Array.from(expanded);
+}
+
 function applyShowCheckedStrategy(
   values: (string | number)[],
   strategy: TreeSelectShowCheckedStrategy,
@@ -971,12 +1032,22 @@ function applyShowCheckedStrategy(
   if (strategy === 'SHOW_ALL') return values;
 
   if (strategy === 'SHOW_PARENT') {
-    // Only keep values whose parent is NOT in the selected set
+    // Helper: check if a node is "fully selected" — all its leaf descendants are in values.
+    const isFullySelected = (opt: TreeSelectOption): boolean => {
+      const leaves = getLeafValues(opt, fieldNames);
+      return leaves.length > 0 && leaves.every((lv) => values.includes(lv));
+    };
+
+    // Find the nearest fully-selected ancestor for a value.
+    // Only hide a child when its parent (or higher ancestor) is fully checked.
     return values.filter((v) => {
-      let parent = parentMap.get(v);
-      while (parent !== undefined) {
-        if (values.includes(parent)) return false;
-        parent = parentMap.get(parent);
+      let parentVal = parentMap.get(v);
+      while (parentVal !== undefined) {
+        if (values.includes(parentVal)) {
+          const parentOpt = flatOptions.find((o) => getOptValue(o, fieldNames) === parentVal);
+          if (parentOpt && isFullySelected(parentOpt)) return false;
+        }
+        parentVal = parentMap.get(parentVal);
       }
       return true;
     });

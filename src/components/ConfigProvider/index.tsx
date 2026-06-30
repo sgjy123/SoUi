@@ -63,6 +63,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const switchTheme = mergedTheme.components?.Switch || {};
     // 获取 Cascader 组件级配置
     const cascaderTheme = mergedTheme.components?.Cascader || {};
+    // 获取 TreeSelect 组件级配置
+    const treeSelectTheme = mergedTheme.components?.TreeSelect || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -439,6 +441,26 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-cascader-dropdown-bg': cascaderTheme.dropdownBg || '#fff',
       '--soui-cascader-option-active-bg': cascaderTheme.optionActiveBg || 'rgba(0, 0, 0, 0.04)',
       '--soui-cascader-option-selected-bg': cascaderTheme.optionSelectedBg || 'rgba(22, 119, 255, 0.08)',
+
+      // ==================== TreeSelect 组件配置 ====================
+      '--soui-tree-select-border-radius': treeSelectTheme.borderRadius ? `${treeSelectTheme.borderRadius}px` : undefined,
+      '--soui-tree-select-font-size': treeSelectTheme.fontSize ? `${treeSelectTheme.fontSize}px` : undefined,
+      '--soui-tree-select-control-height-small': treeSelectTheme.controlHeight ? `${treeSelectTheme.controlHeight - 8}px` : '24px',
+      '--soui-tree-select-control-height-middle': treeSelectTheme.controlHeight ? `${treeSelectTheme.controlHeight}px` : '32px',
+      '--soui-tree-select-control-height-large': treeSelectTheme.controlHeight ? `${treeSelectTheme.controlHeight + 8}px` : '40px',
+      '--soui-tree-select-color-border': treeSelectTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-tree-select-color-border-hover': treeSelectTheme.colorBorderHover || mergedTheme.primaryHoverColor,
+      '--soui-tree-select-color-border-focus': treeSelectTheme.colorBorderFocus || mergedTheme.primaryColor,
+      '--soui-tree-select-color-bg': treeSelectTheme.colorBg || '#fff',
+      '--soui-tree-select-color-text': treeSelectTheme.colorText || mergedTheme.textColor,
+      '--soui-tree-select-color-bg-disabled': treeSelectTheme.colorBgDisabled || '#f5f5f5',
+      '--soui-tree-select-color-text-disabled': treeSelectTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
+      '--soui-tree-select-color-error': treeSelectTheme.colorError || mergedTheme.errorColor,
+      '--soui-tree-select-color-warning': treeSelectTheme.colorWarning || mergedTheme.warningColor,
+      '--soui-tree-select-dropdown-bg': treeSelectTheme.dropdownBg || '#fff',
+      '--soui-tree-select-option-active-bg': treeSelectTheme.optionActiveBg || 'rgba(0, 0, 0, 0.04)',
+      '--soui-tree-select-option-selected-bg': treeSelectTheme.optionSelectedBg || 'rgba(22, 119, 255, 0.08)',
+      '--soui-tree-select-tag-bg': treeSelectTheme.tagBg || '#fafafa',
     } as any;
   }, [mergedTheme]);
 
