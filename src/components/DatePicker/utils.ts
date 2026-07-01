@@ -56,10 +56,24 @@ export function getDefaultFormat(mode: PickerMode, showTime?: boolean): string {
   if (showTime && mode === 'date') return 'YYYY-MM-DD HH:mm:ss';
   switch (mode) {
     case 'date': return 'YYYY-MM-DD';
-    case 'week': return 'YYYY-wo';
+    case 'week': return 'YYYY-Ww';
     case 'month': return 'YYYY-MM';
     case 'year': return 'YYYY';
   }
+}
+
+/** 格式化周选择器的显示文本
+ *  dayjs 的 w/ww format token 不可靠，改为后处理替换：
+ *  先用占位符替换 w/ww，让 dayjs 处理其余 token，再替换回实际周数
+ */
+export function formatWeekString(date: Dayjs, format: string): string {
+  const week = date.isoWeek();
+  const weekStr = String(week);
+  const weekPadded = week < 10 ? `0${week}` : weekStr;
+  // 用不常见占位符避免与 dayjs token 冲突
+  const processed = format.replace(/ww/g, '\x00WW\x00').replace(/(?<!\[)w(?!\])/g, '\x00W\x00');
+  const formatted = date.format(processed);
+  return formatted.replace(/\x00WW\x00/g, weekPadded).replace(/\x00W\x00/g, weekStr);
 }
 
 /** 检查 disabledDate 是否禁用某天 */

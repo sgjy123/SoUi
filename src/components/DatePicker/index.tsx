@@ -8,6 +8,7 @@ import {
   getMonths,
   getYearRange,
   getWeekNumber,
+  formatWeekString,
   WEEK_LABELS,
   MONTH_LABELS,
   type PickerMode,
@@ -92,6 +93,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
 }) => {
   const format = userFormat || getDefaultFormat(picker, showTime);
 
+  // Week mode uses formatWeekString to handle w/ww tokens (dayjs w token is unreliable)
+  const toDisplayText = (d: Dayjs | null): string => {
+    if (!d) return '';
+    return picker === 'week' ? formatWeekString(d, format) : d.format(format);
+  };
+
   // --- Value state ---
   const [internalValue, setInternalValue] = useState<Dayjs | null>(() => toDayjs(defaultValue));
   const isControlled = controlledValue !== undefined;
@@ -117,8 +124,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
   // Sync input text
   useEffect(() => {
-    setInputText(currentValue ? currentValue.format(format) : '');
-  }, [currentValue, format]);
+    setInputText(toDisplayText(currentValue));
+  }, [currentValue, format, picker]);
 
   // Sync time state from value
   useEffect(() => {
@@ -141,9 +148,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const emitValue = useCallback(
     (date: Dayjs | null) => {
       if (!isControlled) setInternalValue(date);
-      onChange?.(date ? date.toDate() : null, date ? date.format(format) : '');
+      onChange?.(date ? date.toDate() : null, toDisplayText(date));
     },
-    [isControlled, onChange, format],
+    [isControlled, onChange, format, picker],
   );
 
   // Select day
@@ -316,8 +323,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
   );
 
   const handleInputBlur = useCallback(() => {
-    setInputText(currentValue ? currentValue.format(format) : '');
-  }, [currentValue, format]);
+    setInputText(toDisplayText(currentValue));
+  }, [currentValue, format, picker]);
 
   // Outside click
   useEffect(() => {
