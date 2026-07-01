@@ -726,6 +726,21 @@ export interface ComponentThemeConfig {
     /** 多选标签背景色 */
     tagBg?: string;
   };
+  /** 评分组件配置 */
+  Rate?: {
+    /** 选中时的星星颜色 */
+    starColor?: string;
+    /** 未选中时的星星颜色 */
+    starBg?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 小号星星尺寸（像素） */
+    starSizeSM?: number;
+    /** 中号星星尺寸（像素） */
+    starSize?: number;
+    /** 大号星星尺寸（像素） */
+    starSizeLG?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

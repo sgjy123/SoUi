@@ -1,0 +1,60 @@
+@import '../../styles/variables.less';
+
+// ==================== Rate 评分 ====================
+
+.soui-rate {
+  display: inline-flex;
+  align-items: center;
+  gap: @margin-xs;
+  font-size: var(--soui-rate-font-size, @font-size-base);
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1;
+
+  // 禁用状态
+  &-disabled {
+    cursor: not-allowed;
+
+    .soui-rate-star {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  // 星星容器
+  &-star {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform @transition-duration @transition-timing-function;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  // 星星 SVG
+  &-star-svg {
+    display: block;
+    transition: fill @transition-duration @transition-timing-function;
+  }
+
+  // 自定义字符
+  &-character {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color @transition-duration @transition-timing-function,
+                opacity @transition-duration @transition-timing-function;
+  }
+
+  // 悬停放大效果
+  &-star-hover {
+    .soui-rate-star-svg,
+    .soui-rate-character {
+      transform: scale(1.1);
+    }
+  }
+}

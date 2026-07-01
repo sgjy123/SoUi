@@ -306,6 +306,19 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tree-select-theme', label: 'TreeSelect 主题定制', componentPath: 'TreeSelect', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题、尺寸。' },
         ],
       },
+      {
+        key: 'rate',
+        label: 'Rate 评分',
+        icon: 'Star',
+        items: [
+          { key: 'rate-basic', label: 'Rate 基础用法', componentPath: 'Rate', exampleName: 'Basic', description: '基本的评分组件，支持受控和非受控模式。' },
+          { key: 'rate-half', label: 'Rate 半星', componentPath: 'Rate', exampleName: 'Half', description: '允许选择半星，更精确的评分。' },
+          { key: 'rate-custom-character', label: 'Rate 自定义字符', componentPath: 'Rate', exampleName: 'CustomCharacter', description: '使用自定义字符替代默认星星。' },
+          { key: 'rate-disabled', label: 'Rate 禁用状态', componentPath: 'Rate', exampleName: 'Disabled', description: '禁用和只读状态。' },
+          { key: 'rate-size', label: 'Rate 尺寸', componentPath: 'Rate', exampleName: 'Size', description: '小、中、大三种尺寸。' },
+          { key: 'rate-tooltips', label: 'Rate 提示文字', componentPath: 'Rate', exampleName: 'Tooltips', description: '为每个评分项添加提示文字。' },
+        ],
+      },
     ],
   },
   {

@@ -215,6 +215,7 @@ function sidebarComponents() {
         { text: 'Switch 开关', link: 'switch' },
         { text: 'Cascader 级联选择', link: 'cascader' },
         { text: 'TreeSelect 树形下拉', link: 'tree-select' },
+        { text: 'Rate 评分', link: 'rate' },
       ],
     },
     {
