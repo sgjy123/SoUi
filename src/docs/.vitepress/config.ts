@@ -217,6 +217,7 @@ function sidebarComponents() {
         { text: 'TreeSelect 树形下拉', link: 'tree-select' },
         { text: 'Rate 评分', link: 'rate' },
         { text: 'ColorPicker 颜色选择器', link: 'color-picker' },
+        { text: 'DatePicker 日期选择器', link: 'date-picker' },
       ],
     },
     {
