@@ -743,7 +743,7 @@ export interface ComponentThemeConfig {
   };
   /** 颜色选择器组件配置 */
   ColorPicker?: {
-    /** 主色 */
+    /** 主色（格式按钮激活色、聚焦环色） */
     colorPrimary?: string;
     /** 圆角大小（像素） */
     borderRadius?: number;
@@ -753,6 +753,8 @@ export interface ComponentThemeConfig {
     colorBorder?: string;
     /** 面板背景色 */
     colorBg?: string;
+    /** 面板宽度（像素） */
+    panelWidth?: number;
   };
   // 可以继续添加其他组件的配置
 }

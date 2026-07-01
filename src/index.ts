@@ -159,6 +159,7 @@ export type { RateProps, RateSize } from './components/Rate';
 // ColorPicker Component
 export { default as ColorPicker } from './components/ColorPicker';
 export type { ColorPickerProps, ColorPickerSize, ColorPickerPlacement, PresetColorGroup } from './components/ColorPicker';
+export type { ColorFormat } from './components/ColorPicker/utils';
 
 // Utils
 export * from './utils';

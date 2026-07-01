@@ -6,194 +6,205 @@
   position: relative;
   display: inline-block;
   font-size: var(--soui-color-picker-font-size, @font-size-base);
+  overflow: visible; // 确保弹出面板不被裁剪
 
-  &-disabled {
-    opacity: 0.5;
+  // ==================== 状态修饰 ====================
+
+  &--disabled {
+    opacity: 0.45;
     cursor: not-allowed;
-
-    .soui-color-picker-trigger {
-      cursor: not-allowed;
-    }
+    pointer-events: none;
   }
 
-  // ===== 触发器 =====
+  // ==================== 触发器 ====================
+
   &-trigger {
     display: inline-flex;
     align-items: center;
     gap: @padding-xs;
-    padding: 0 @padding-sm;
+    padding: 3px;
     border: 1px solid var(--soui-color-picker-border-color, @border-color);
     border-radius: var(--soui-color-picker-border-radius, @border-radius-base);
-    background: var(--soui-color-picker-trigger-bg, @bg-color-base);
+    background: var(--soui-color-picker-panel-bg, @bg-color-base);
     cursor: pointer;
-    transition: all @transition-duration @transition-timing-function;
+    transition: border-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
     height: 32px;
+    box-sizing: border-box;
+    user-select: none;
 
     &:hover {
       border-color: var(--soui-color-picker-color-primary, @primary-color);
     }
-  }
 
-  &-small &-trigger {
-    height: 24px;
-    padding: 0 @padding-xs;
-  }
-
-  &-large &-trigger {
-    height: 40px;
-    padding: 0 @padding-md;
-  }
-
-  &-trigger-color {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    position: relative;
-    overflow: hidden;
-    flex-shrink: 0;
-  }
-
-  &-trigger-empty {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(45deg);
-    width: 1px;
-    height: 20px;
-    background: #ccc;
-  }
-
-  &-trigger-text {
-    font-size: @font-size-sm;
-    color: @text-color;
-    white-space: nowrap;
-  }
-
-  &-clear {
-    font-size: 14px;
-    color: @text-color-disabled;
-    cursor: pointer;
-    line-height: 1;
-    padding: 0 2px;
-
-    &:hover {
-      color: @text-color;
+    &:focus-visible {
+      outline: 2px solid var(--soui-color-picker-color-primary, @primary-color);
+      outline-offset: 2px;
     }
   }
 
-  // ===== 弹出面板 =====
+  // 尺寸变体
+  &--small &-trigger  { height: @control-height-sm; padding: 2px; }
+  &--middle &-trigger { height: @control-height-base; padding: 3px; }
+  &--large &-trigger  { height: @control-height-lg; padding: 4px; }
+
+  // 色块预览
+  &-swatch {
+    display: block;
+    width: 24px;
+    height: 100%;
+    border-radius: calc(var(--soui-color-picker-border-radius, @border-radius-base) - 2px);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+
+    &-empty {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      width: 2px;
+      height: 80%;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 1px;
+    }
+  }
+
+  // 颜色文本标签
+  &-label {
+    font-size: @font-size-sm;
+    color: @text-color;
+    white-space: nowrap;
+    padding-right: @padding-xs;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    letter-spacing: 0.02em;
+  }
+
+  // 清除按钮
+  &-clear-btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: @text-color-disabled;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color @transition-duration @transition-timing-function;
+
+    &:hover { color: @text-color; }
+  }
+
+  // ==================== 弹出面板 ====================
+
   &-panel {
     position: absolute;
     z-index: @z-index-popover;
-    width: 264px;
+    max-width: calc(100vw - 16px);
     background: var(--soui-color-picker-panel-bg, @bg-color-base);
     border-radius: var(--soui-color-picker-border-radius, @border-radius-base);
     box-shadow: @box-shadow-secondary;
-    padding: @padding-sm;
+    padding: @padding-md @padding-md @padding-sm;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    // 弹出方向
+    &--bottomLeft  { top: calc(100% + 6px); left: 0; }
+    &--bottomRight { top: calc(100% + 6px); right: 0; }
+    &--topLeft     { bottom: calc(100% + 6px); left: 0; }
+    &--topRight    { bottom: calc(100% + 6px); right: 0; }
   }
 
-  &-panel-bottomLeft {
-    top: 100%;
-    left: 0;
-    margin-top: 4px;
+  // 顶部预览色块
+  &-preview {
+    width: 100%;
+    height: 36px;
+    border-radius: 4px;
+    margin-bottom: @padding-sm;
+    border: 1px solid rgba(0, 0, 0, 0.06);
   }
 
-  &-panel-bottomRight {
-    top: 100%;
-    right: 0;
-    margin-top: 4px;
-  }
+  // ==================== 饱和度面板 ====================
 
-  &-panel-topLeft {
-    bottom: 100%;
-    left: 0;
-    margin-bottom: 4px;
-  }
-
-  &-panel-topRight {
-    bottom: 100%;
-    right: 0;
-    margin-bottom: 4px;
-  }
-
-  // ===== 饱和度/亮度面板 =====
   &-saturation {
     position: relative;
     width: 100%;
-    height: 140px;
-    border-radius: 4px;
+    height: 160px;
+    border-radius: 6px;
     cursor: crosshair;
     overflow: hidden;
     margin-bottom: @padding-sm;
+    user-select: none;
+
+    &-gradient {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+
+      &--white { background: linear-gradient(to right, #fff, transparent); }
+      &--black { background: linear-gradient(to bottom, transparent, #000); }
+    }
+
+    &-handle {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), inset 0 0 1px rgba(0, 0, 0, 0.2);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
   }
 
-  &-saturation-white {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, #fff, transparent);
-  }
+  // ==================== 滑块（色相 / 透明度共用） ====================
 
-  &-saturation-black {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent, #000);
-  }
-
-  &-saturation-pointer {
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  // ===== 滑块 =====
   &-slider {
     position: relative;
     width: 100%;
-    height: 10px;
-    border-radius: 5px;
+    height: 12px;
+    border-radius: 6px;
     cursor: pointer;
     margin-bottom: @padding-sm;
+    user-select: none;
+
+    &--hue {
+      background: linear-gradient(
+        to right,
+        #f00 0%, #ff0 16.67%, #0f0 33.33%,
+        #0ff 50%, #00f 66.67%, #f0f 83.33%, #f00 100%
+      );
+    }
+
+    &--alpha {
+      background-size: 8px 8px;
+      overflow: hidden;
+    }
+
+    &-alpha-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+    }
+
+    &-thumb {
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
   }
 
-  &-hue {
-    background: linear-gradient(
-      to right,
-      #f00 0%, #ff0 17%, #0f0 33%,
-      #0ff 50%, #00f 67%, #f0f 83%, #f00 100%
-    );
-  }
+  // ==================== 输入行 ====================
 
-  &-alpha {
-    background-image:
-      linear-gradient(45deg, #ccc 25%, transparent 25%),
-      linear-gradient(-45deg, #ccc 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, #ccc 75%),
-      linear-gradient(-45deg, transparent 75%, #ccc 75%);
-    background-size: 8px 8px;
-    background-position: 0 0, 0 4px, 4px -4px, -4px 0;
-  }
-
-  &-slider-handle {
-    position: absolute;
-    top: 50%;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #fff;
-    border: 2px solid #fff;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  // ===== 输入区域 =====
-  &-input-area {
+  &-input-row {
     display: flex;
     align-items: center;
     gap: @padding-xs;
@@ -204,51 +215,59 @@
     flex: 1;
     height: 28px;
     padding: 0 @padding-xs;
-    border: 1px solid @border-color;
+    border: 1px solid var(--soui-color-picker-border-color, @border-color);
     border-radius: 4px;
     font-size: @font-size-sm;
-    font-family: monospace;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    color: @text-color;
+    background: @bg-color-base;
     outline: none;
-    transition: border-color @transition-duration @transition-timing-function;
+    transition: border-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
 
     &:focus {
       border-color: var(--soui-color-picker-color-primary, @primary-color);
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
     }
 
     &:disabled {
       background: @bg-color-disable;
+      color: @text-color-disabled;
       cursor: not-allowed;
     }
   }
 
-  &-formats {
+  &-format-group {
     display: flex;
     gap: 2px;
+    flex-shrink: 0;
   }
 
   &-format-btn {
-    padding: 2px 6px;
-    font-size: 10px;
+    appearance: none;
+    padding: 3px 7px;
+    font-size: 11px;
+    font-weight: 500;
     border: 1px solid @border-color;
-    border-radius: 3px;
+    border-radius: 4px;
     background: transparent;
     color: @text-color-secondary;
     cursor: pointer;
     transition: all @transition-duration @transition-timing-function;
 
     &:hover {
-      color: var(--soui-color-picker-color-primary, @primary-color);
       border-color: var(--soui-color-picker-color-primary, @primary-color);
     }
 
-    &-active {
+    &--active {
       background: var(--soui-color-picker-color-primary, @primary-color);
       color: #fff;
       border-color: var(--soui-color-picker-color-primary, @primary-color);
     }
   }
 
-  // ===== 预设颜色 =====
+  // ==================== 预设色板 ====================
+
   &-presets {
     border-top: 1px solid @border-color-split;
     padding-top: @padding-sm;
@@ -257,37 +276,44 @@
   &-preset-group {
     margin-bottom: @padding-xs;
 
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
+    &:last-child { margin-bottom: 0; }
 
-  &-preset-label {
-    font-size: @font-size-sm;
-    color: @text-color-secondary;
-    margin-bottom: 4px;
+    &-label {
+      font-size: @font-size-sm;
+      color: @text-color-secondary;
+      margin-bottom: 6px;
+      line-height: 1;
+    }
   }
 
   &-preset-colors {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 5px;
   }
 
-  &-preset-color {
-    width: 18px;
-    height: 18px;
-    border-radius: 3px;
+  &-preset-item {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
     cursor: pointer;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    transition: transform @transition-duration @transition-timing-function;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0;
+    transition: transform @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
 
     &:hover {
-      transform: scale(1.2);
+      transform: scale(1.15);
     }
 
-    &-active {
-      box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--soui-color-picker-color-primary, @primary-color);
+    &:focus-visible {
+      outline: 2px solid var(--soui-color-picker-color-primary, @primary-color);
+      outline-offset: 2px;
+    }
+
+    &--active {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--soui-color-picker-color-primary, @primary-color);
     }
   }
 }

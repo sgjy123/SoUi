@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ColorPicker } from '../../src';
 
 export default () => {
-  const [color, setColor] = useState('#1677FF');
+  const [color, setColor] = useState('#1677ff');
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
