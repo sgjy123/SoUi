@@ -5,7 +5,7 @@
 .soui-color-picker {
   position: relative;
   display: inline-block;
-  font-size: var(--soui-color-picker-font-size, @font-size-base);
+  font-size: var(--soui-color-picker-font-size-component, var(--soui-color-picker-font-size, @font-size-base));
   overflow: visible; // 确保弹出面板不被裁剪
 
   // ==================== 状态修饰 ====================
@@ -23,9 +23,9 @@
     align-items: center;
     gap: @padding-xs;
     padding: 3px;
-    border: 1px solid var(--soui-color-picker-border-color, @border-color);
-    border-radius: var(--soui-color-picker-border-radius, @border-radius-base);
-    background: var(--soui-color-picker-panel-bg, @bg-color-base);
+    border: 1px solid var(--soui-color-picker-border-color-component, var(--soui-color-picker-border-color, @border-color));
+    border-radius: var(--soui-color-picker-border-radius-component, var(--soui-color-picker-border-radius, @border-radius-base));
+    background: var(--soui-color-picker-panel-bg-component, var(--soui-color-picker-panel-bg, @bg-color-base));
     cursor: pointer;
     transition: border-color @transition-duration @transition-timing-function,
                 box-shadow @transition-duration @transition-timing-function;
@@ -34,26 +34,43 @@
     user-select: none;
 
     &:hover {
-      border-color: var(--soui-color-picker-color-primary, @primary-color);
+      border-color: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
     }
 
     &:focus-visible {
-      outline: 2px solid var(--soui-color-picker-color-primary, @primary-color);
+      outline: 2px solid var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
       outline-offset: 2px;
     }
   }
 
   // 尺寸变体
-  &--small &-trigger  { height: @control-height-sm; padding: 2px; }
-  &--middle &-trigger { height: @control-height-base; padding: 3px; }
-  &--large &-trigger  { height: @control-height-lg; padding: 4px; }
+  &--small {
+    font-size: @font-size-sm;
+
+    .soui-color-picker-trigger { height: @control-height-sm; padding: 2px; }
+    .soui-color-picker-swatch { width: 18px; }
+  }
+
+  &--middle {
+    font-size: @font-size-base;
+
+    .soui-color-picker-trigger { height: @control-height-base; padding: 3px; }
+    .soui-color-picker-swatch { width: 24px; }
+  }
+
+  &--large {
+    font-size: @font-size-lg;
+
+    .soui-color-picker-trigger { height: @control-height-lg; padding: 4px; }
+    .soui-color-picker-swatch { width: 28px; }
+  }
 
   // 色块预览
   &-swatch {
     display: block;
     width: 24px;
     height: 100%;
-    border-radius: calc(var(--soui-color-picker-border-radius, @border-radius-base) - 2px);
+    border-radius: calc(var(--soui-color-picker-border-radius-component, var(--soui-color-picker-border-radius, @border-radius-base)) - 2px);
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
@@ -102,8 +119,8 @@
     position: absolute;
     z-index: @z-index-popover;
     max-width: calc(100vw - 16px);
-    background: var(--soui-color-picker-panel-bg, @bg-color-base);
-    border-radius: var(--soui-color-picker-border-radius, @border-radius-base);
+    background: var(--soui-color-picker-panel-bg-component, var(--soui-color-picker-panel-bg, @bg-color-base));
+    border-radius: var(--soui-color-picker-border-radius-component, var(--soui-color-picker-border-radius, @border-radius-base));
     box-shadow: @box-shadow-secondary;
     padding: @padding-md @padding-md @padding-sm;
     box-sizing: border-box;
@@ -215,7 +232,7 @@
     flex: 1;
     height: 28px;
     padding: 0 @padding-xs;
-    border: 1px solid var(--soui-color-picker-border-color, @border-color);
+    border: 1px solid var(--soui-color-picker-border-color-component, var(--soui-color-picker-border-color, @border-color));
     border-radius: 4px;
     font-size: @font-size-sm;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
@@ -226,7 +243,7 @@
                 box-shadow @transition-duration @transition-timing-function;
 
     &:focus {
-      border-color: var(--soui-color-picker-color-primary, @primary-color);
+      border-color: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
       box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
     }
 
@@ -256,13 +273,22 @@
     transition: all @transition-duration @transition-timing-function;
 
     &:hover {
-      border-color: var(--soui-color-picker-color-primary, @primary-color);
+      border-color: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
     }
 
     &--active {
-      background: var(--soui-color-picker-color-primary, @primary-color);
+      background: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
       color: #fff;
-      border-color: var(--soui-color-picker-color-primary, @primary-color);
+      border-color: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
+    }
+
+    &--disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      &:hover {
+        border-color: @border-color;
+      }
     }
   }
 
@@ -308,12 +334,12 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--soui-color-picker-color-primary, @primary-color);
+      outline: 2px solid var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
       outline-offset: 2px;
     }
 
     &--active {
-      box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--soui-color-picker-color-primary, @primary-color);
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
     }
   }
 }

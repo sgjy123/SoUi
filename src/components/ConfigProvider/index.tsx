@@ -65,6 +65,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const cascaderTheme = mergedTheme.components?.Cascader || {};
     // 获取 TreeSelect 组件级配置
     const treeSelectTheme = mergedTheme.components?.TreeSelect || {};
+    // 获取 ColorPicker 组件级配置
+    const colorPickerTheme = mergedTheme.components?.ColorPicker || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -461,6 +463,14 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-tree-select-option-active-bg': treeSelectTheme.optionActiveBg || 'rgba(0, 0, 0, 0.04)',
       '--soui-tree-select-option-selected-bg': treeSelectTheme.optionSelectedBg || 'rgba(22, 119, 255, 0.08)',
       '--soui-tree-select-tag-bg': treeSelectTheme.tagBg || '#fafafa',
+
+      // ==================== ColorPicker 组件配置 ====================
+      // 第3层: ColorPicker 组件级覆盖 (优先级最高)
+      '--soui-color-picker-font-size-component': colorPickerTheme.fontSize ? `${colorPickerTheme.fontSize}px` : undefined,
+      '--soui-color-picker-border-radius-component': colorPickerTheme.borderRadius ? `${colorPickerTheme.borderRadius}px` : undefined,
+      '--soui-color-picker-color-primary-component': colorPickerTheme.colorPrimary,
+      '--soui-color-picker-border-color-component': colorPickerTheme.colorBorder,
+      '--soui-color-picker-panel-bg-component': colorPickerTheme.colorBg,
     } as any;
   }, [mergedTheme]);
 

@@ -235,6 +235,13 @@
   --soui-skeleton-paragraph-gap: 12px;                                     // Skeleton专属:段落行间距
   --soui-skeleton-avatar-margin: 16px;                                     // Skeleton专属:头像与内容间距
   --soui-skeleton-image-size: 96px;                                        // Skeleton专属:图片占位尺寸
+
+  // === 第2层: ColorPicker 组件配置点 (引用设计令牌) ===
+  --soui-color-picker-font-size: var(--soui-font-size);                    // 引用全局字号
+  --soui-color-picker-border-radius: var(--soui-border-radius);            // 引用全局圆角
+  --soui-color-picker-color-primary: var(--soui-primary-color);            // 引用全局主色
+  --soui-color-picker-border-color: var(--soui-border-color-base);         // 引用全局边框色
+  --soui-color-picker-panel-bg: @bg-color-base;                            // ColorPicker专属:面板背景色
 }
 
 // ==================== Global Styles ====================

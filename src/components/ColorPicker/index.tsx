@@ -1,6 +1,5 @@
-import React, { useState, useRef, useCallback, useEffect, useLayoutEffect, useContext } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import classNames from 'classnames';
-import ConfigContext from '../ConfigProvider/context';
 import {
   parseColor,
   rgbaToHsb,
@@ -255,10 +254,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   children,
   ...rest
 }) => {
-  // --- 主题集成 ---
-  const ctx = useContext(ConfigContext);
-  const theme = (ctx?.components?.ColorPicker || {}) as Record<string, any>;
-
   // --- 受控 / 非受控状态 ---
   const [internalColor, setInternalColor] = useState(defaultValue);
   const [format, setFormat] = useState<ColorFormat>(defaultFormat);
@@ -278,21 +273,12 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
   const currentRgba: RGBA = parseColor(color) ?? { r: 22, g: 119, b: 255, a: 1 };
   const currentHsb = rgbaToHsb(currentRgba);
 
-  // --- CSS 变量注入 ---
-  const cssVars: Record<string, string | number> = {};
-  if (theme.fontSize !== undefined) cssVars['--soui-color-picker-font-size'] = `${theme.fontSize}px`;
-  if (theme.borderRadius !== undefined) cssVars['--soui-color-picker-border-radius'] = `${theme.borderRadius}px`;
-  if (theme.colorPrimary) cssVars['--soui-color-picker-color-primary'] = theme.colorPrimary;
-  if (theme.colorBorder) cssVars['--soui-color-picker-border-color'] = theme.colorBorder;
-  if (theme.colorBg) cssVars['--soui-color-picker-panel-bg'] = theme.colorBg;
-
-  const mergedStyle = { ...cssVars, ...style } as React.CSSProperties;
-
   // --- 颜色更新 ---
   const emitColor = useCallback(
     (rgba: RGBA, complete = false) => {
       const output = formatColor(rgba, currentFormat);
       if (!isControlled) setInternalColor(output);
+      setInputText(output);
       onChange?.(output);
       if (complete) onChangeComplete?.(output);
     },
@@ -463,7 +449,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
         { 'soui-color-picker--disabled': disabled },
         className,
       )}
-      style={mergedStyle}
+      style={style}
       {...rest}
     >
       {/* 触发器 */}
@@ -555,8 +541,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
                   type="button"
                   className={classNames('soui-color-picker-format-btn', {
                     'soui-color-picker-format-btn--active': currentFormat === f,
+                    'soui-color-picker-format-btn--disabled': isFormatControlled && currentFormat !== f,
                   })}
                   onClick={() => handleFormatSwitch(f)}
+                  disabled={isFormatControlled && currentFormat !== f}
                   aria-label={`切换为 ${f.toUpperCase()} 格式`}
                   aria-pressed={currentFormat === f}
                 >
