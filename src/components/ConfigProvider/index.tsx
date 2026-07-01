@@ -483,6 +483,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-date-picker-bg-component': datePickerTheme.colorBg,
       '--soui-date-picker-panel-bg-component': datePickerTheme.panelBg,
       '--soui-date-picker-text-color-component': datePickerTheme.colorText,
+      '--soui-date-picker-control-height-component': datePickerTheme.controlHeight ? `${datePickerTheme.controlHeight}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

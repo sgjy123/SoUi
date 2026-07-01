@@ -276,7 +276,8 @@ Props (style/className) > 组件级配置 > CSS 变量 > Less 变量
 
 3. **样式优先级规则**
    - Props (style/className) > 组件级配置 > CSS 变量 > Less 变量
-   - style.less 使用 `var(--soui-component-xxx, @less-variable)` 实现回退
+   - style.less 使用三层回退链 `var(--soui-component-xxx, var(--soui-global-token, @less-variable))` 实现回退
+   - **共享设计令牌（颜色、字号、文本色、边框色、阴影、过渡动画）必须通过 CSS 变量链引用，禁止直接使用裸 Less 变量**
    - JS 注入的 CSS 变量覆盖 Less 默认值，用户 inline style 覆盖一切
 
 4. **组件结构设计**
@@ -339,15 +340,15 @@ const Component: React.FC<ComponentProps> = ({ className, style, ...rest }) => {
 ```
 
 ```less
-// === style.less：CSS 变量 + Less 回退 ===
+// === style.less：三层 CSS 变量回退链 ===
 @import '../../styles/variables.less';
 
 .soui-component {
-  // JS 注入的 CSS 变量会覆盖 Less 默认值
-  color: var(--soui-component-color-primary, @primary-color);
-  font-size: var(--soui-component-font-size, @font-size-base);
-  border-radius: var(--soui-component-border-radius, @border-radius-base);
-  transition: all @transition-duration @transition-timing-function;
+  // 三层回退：组件级覆盖 > 全局令牌 > Less 默认值
+  color: var(--soui-component-color-primary-component, var(--soui-component-color-primary, @primary-color));
+  font-size: var(--soui-component-font-size, var(--soui-font-size, @font-size-base));
+  border-radius: var(--soui-component-border-radius, var(--soui-border-radius, @border-radius-base));
+  transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 }
 ```
 
@@ -379,7 +380,8 @@ function applyConfigProviderVars(el: HTMLElement): void {
 - ✅ **标准组件**：使用 `useContext(ConfigContext)` 读取主题，通过 inline CSS 变量覆盖 Less 默认值
 - ✅ **Portal 组件**：使用 DOM 桥接 `getComputedStyle` 从 `.soui-config-provider` 复制 CSS 变量
 - ✅ **不要使用** `useComponentTheme` 或 `useTheme`（这些 hook 不存在于当前代码库）
-- ✅ **回退链**：`var(--soui-component-xxx, @less-variable)` — JS 注入覆盖 Less 默认值
+- ✅ **三层回退链**：`var(--soui-component-xxx, var(--soui-global-token, @less-variable))` — 组件级覆盖 > 全局令牌 > Less 默认值
+- ✅ **共享设计令牌必须走 CSS 变量链**：颜色、字号、文本色、边框色、阴影、过渡动画等禁止裸用 Less 变量
 - ✅ **优先级**：Props style > 组件级配置 > CSS 变量 > Less 变量
 
 ### 步骤 1: 创建组件文件
@@ -522,11 +524,11 @@ applyConfigProviderVars(container);
 
 // 主类名
 .soui-component {
-  // 使用 CSS 变量 + Less 变量回退链
-  color: var(--soui-component-color, @text-color);
-  font-size: var(--soui-component-font-size, @font-size-base);
-  border-radius: var(--soui-component-border-radius, @border-radius-base);
-  transition: all @transition-duration @transition-timing-function;
+  // 使用 CSS 变量回退链（三层）— 共享设计令牌必须走 CSS 变量链
+  color: var(--soui-component-color, var(--soui-text-color, @text-color));
+  font-size: var(--soui-component-font-size, var(--soui-font-size, @font-size-base));
+  border-radius: var(--soui-component-border-radius, var(--soui-border-radius, @border-radius-base));
+  transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
   // 变体
   &-variant1 { ... }
@@ -546,10 +548,60 @@ applyConfigProviderVars(container);
 
 **关键规范：**
 1. 必须 `@import '../../styles/variables.less'`
-2. **CSS 变量回退链**：`var(--soui-component-xxx, @less-variable)` — JS 注入的 CSS 变量覆盖 Less 默认值
-3. 过渡动画使用 `@transition-duration` 和 `@transition-timing-function`
+2. **CSS 变量回退链**：`var(--soui-component-xxx, var(--soui-global-token, @less-variable))` — 三层回退，共享设计令牌必须走 CSS 变量链
+3. 过渡动画必须使用 CSS 变量链：`var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function)`
 4. 有退出动画的组件需添加 `-closing` 状态类，transition 覆盖所有动画属性
 5. 避免硬编码颜色值，始终使用变量
+
+**⚠️ CSS 变量链强制规则（style.less 必须遵守）：**
+
+在 `style.less` 中，**所有共享设计令牌（颜色、字号、文本色、边框色、阴影、过渡动画等）必须通过 CSS 变量回退链引用，严禁直接使用裸 Less 变量**。
+
+这是因为全局主题切换依赖 CSS 变量传播——直接使用 Less 变量会绕过主题系统，导致主题切换时组件样式不跟随变化。
+
+**必须使用 CSS 变量链的令牌（禁止裸用 Less 变量）：**
+
+| 属性类别 | ✅ 正确写法 | ❌ 错误写法（禁止！） |
+|---------|-----------|-------------------|
+| 文本色 | `var(--soui-text-color, @text-color)` | `@text-color` |
+| 次要文本色 | `var(--soui-text-color-secondary, @text-color-secondary)` | `@text-color-secondary` |
+| 禁用文本色 | `var(--soui-text-color-disabled, @text-color-disabled)` | `@text-color-disabled` |
+| 反色文本 | `var(--soui-color-text-inverse, #fff)` | `#fff` |
+| 主色 | `var(--soui-component-color-primary-component, var(--soui-component-color-primary, @primary-color))` | `@primary-color` |
+| 字号 | `var(--soui-font-size, @font-size-base)` | `@font-size-base` |
+| 小字号 | `var(--soui-font-size-sm, @font-size-sm)` | `@font-size-sm` |
+| 大字号 | `var(--soui-font-size-lg, @font-size-lg)` | `@font-size-lg` |
+| 边框分割色 | `var(--soui-border-color-split, @border-color-split)` | `@border-color-split` |
+| 阴影 | `var(--soui-box-shadow-secondary, @box-shadow-secondary)` | `@box-shadow-secondary` |
+| 动画时长 | `var(--soui-transition-duration, @transition-duration)` | `@transition-duration` |
+| 动画缓动 | `var(--soui-transition-timing-function, @transition-timing-function)` | `@transition-timing-function` |
+
+**允许直接使用 Less 变量的属性（无对应全局令牌）：**
+
+```less
+// 这些没有全局 CSS 变量对应，可以直接使用 Less 变量
+@bg-color-disable              // 禁用背景色（无全局令牌）
+@control-height-base/sm/lg     // 控件高度（尺寸变体固定值）
+@padding-xs/sm/md/lg           // 间距（4px 基准固定值）
+@margin-xs/sm/md/lg            // 外边距（4px 基准固定值）
+@z-index-picker/popover        // 层级值
+@border-radius-base/sm         // 当用作组件内部固定值而非主题可配值时
+```
+
+**三层回退链格式（组件专属属性，如主色、背景色等）：**
+```less
+// 格式: var(--soui-{组件}-{属性}-component, var(--soui-{组件}-{属性}, @less-fallback))
+color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+background: var(--soui-date-picker-panel-bg-component, var(--soui-date-picker-panel-bg, @bg-color-base));
+```
+
+**两层回退链格式（共享设计令牌，如文本色、字号等）：**
+```less
+// 格式: var(--soui-{全局令牌}, @less-fallback)
+color: var(--soui-text-color, @text-color);
+font-size: var(--soui-font-size-sm, @font-size-sm);
+transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+```
 
 ### 步骤 2: 导出组件
 
@@ -1108,9 +1160,14 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
    - 能通用的变量 → 定义为第1层设计令牌（不带组件前缀）
    - 组件专属变量 → 定义为第2层配置点（带组件前缀）
    - 用户可覆盖的变量 → 生成第3层覆盖变量（带 `-component` 后缀）
-3. 使用 CSS 变量支持主题定制
-4. 考虑响应式适配
-5. 添加过渡动画提升体验
+3. **style.less 中共享设计令牌必须通过 CSS 变量链引用**（强制规则！）
+   - 颜色（@text-color, @primary-color 等）→ `var(--soui-text-color, @text-color)`
+   - 字号（@font-size-sm, @font-size-base 等）→ `var(--soui-font-size-sm, @font-size-sm)`
+   - 边框色、阴影、过渡动画等同理
+   - 仅间距/控件高度/z-index 等无全局令牌的属性可直接使用 Less 变量
+4. 使用 CSS 变量支持主题定制
+5. 考虑响应式适配
+6. 添加过渡动画提升体验
 
 ### 文档编写
 1. 示例代码要可运行
@@ -1136,7 +1193,8 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 - [ ] **主题集成已完成**（重要！）
   - [ ] 使用 `useContext(ConfigContext)` + 可选链读取主题（**不是** `useComponentTheme`）
   - [ ] 主题值通过 CSS 自定义属性注入到根元素 inline style
-  - [ ] style.less 中使用 `var(--soui-component-xxx, @less-variable)` 回退链
+  - [ ] style.less 中使用三层回退链 `var(--soui-component-xxx, var(--soui-global-token, @less-variable))`
+  - [ ] **共享设计令牌（颜色、字号、文本色、边框色、阴影、过渡动画）全部通过 CSS 变量链引用，无裸 Less 变量**
   - [ ] 正确处理配置优先级：Props > 组件级配置 > CSS 变量 > Less 变量
   - [ ] 无 ConfigProvider 时组件正常工作
   - [ ] 在 `ConfigProvider/types.ts` 中添加了组件级配置类型
@@ -1269,11 +1327,12 @@ export default ComponentName;
 @import '../../styles/variables.less';
 
 .soui-component-name {
-  // CSS 变量回退链：JS 注入 > CSS 变量 > Less 默认值
-  color: var(--soui-component-name-color, @primary-color);
-  font-size: var(--soui-component-name-font-size, @font-size-base);
-  border-radius: var(--soui-component-name-border-radius, @border-radius-base);
-  transition: all @transition-duration @transition-timing-function;
+  // CSS 变量回退链（三层）：组件级覆盖 > 全局令牌 > Less 默认值
+  // 共享设计令牌（颜色、字号、边框色等）必须使用 CSS 变量链，禁止直接使用 Less 变量
+  color: var(--soui-component-name-color, var(--soui-text-color, @text-color));
+  font-size: var(--soui-component-name-font-size, var(--soui-font-size, @font-size-base));
+  border-radius: var(--soui-component-name-border-radius, var(--soui-border-radius, @border-radius-base));
+  transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 }
 ```
 

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import classNames from 'classnames';
+import Icon from '../Icon';
 import dayjs, { type Dayjs } from 'dayjs';
 import {
   getDefaultFormat,
@@ -351,7 +352,7 @@ const RangePicker: React.FC<RangePickerProps> = ({
 
   return (
     <div
-      className={classNames('soui-date-picker', 'soui-date-picker--range', `soui-date-picker--${size}`, { 'soui-date-picker--disabled': disabled }, className)}
+      className={classNames('soui-date-picker', 'soui-date-picker--range', `soui-date-picker--${size}`, { 'soui-date-picker--disabled': disabled, 'soui-date-picker--open': open }, className)}
       style={style}
       {...rest}
     >
@@ -376,13 +377,15 @@ const RangePicker: React.FC<RangePickerProps> = ({
           aria-label={ph[1]}
         />
         {allowClear && (startDate || endDate) && !disabled && (
-          <button type="button" className="soui-date-picker-clear" onClick={handleClear} aria-label="清除">×</button>
+          <span className="soui-date-picker-clear" onClick={handleClear}
+            onMouseDown={(e) => e.preventDefault()}
+            role="button" aria-label="清除" tabIndex={-1}
+          >
+            <Icon name="Close" size={12} theme="outline" />
+          </span>
         )}
         <span className="soui-date-picker-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" />
-            <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-          </svg>
+          <Icon name="Calendar" size={16} theme="outline" />
         </span>
       </div>
 

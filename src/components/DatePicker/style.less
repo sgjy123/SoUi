@@ -20,14 +20,14 @@
     display: inline-flex;
     align-items: center;
     position: relative;
-    height: @control-height-base;
+    height: var(--soui-date-picker-control-height-component, var(--soui-date-picker-control-height, @control-height-base));
     padding: 0 11px;
     border: 1px solid var(--soui-date-picker-border-color-component, var(--soui-date-picker-border-color, @border-color));
     border-radius: var(--soui-date-picker-border-radius-component, var(--soui-date-picker-border-radius, @border-radius-base));
     background: var(--soui-date-picker-bg-component, var(--soui-date-picker-bg, @bg-color-base));
     cursor: pointer;
-    transition: border-color @transition-duration @transition-timing-function,
-                box-shadow @transition-duration @transition-timing-function;
+    transition: border-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function),
+                box-shadow var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
     box-sizing: border-box;
     width: 100%;
     min-width: 200px;
@@ -38,7 +38,7 @@
 
     &:focus-within {
       border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+      box-shadow: 0 0 0 2px fade(@primary-color, 10%);
     }
   }
 
@@ -49,39 +49,63 @@
     outline: none;
     background: transparent;
     font-size: inherit;
-    color: var(--soui-date-picker-text-color-component, var(--soui-date-picker-text-color, @text-color));
+    color: var(--soui-date-picker-text-color-component, var(--soui-date-picker-text-color, var(--soui-text-color, @text-color)));
     font-family: inherit;
-    padding: 0;
+    padding: 0 28px 0 0;
     min-width: 0;
 
     &::placeholder {
-      color: @text-color-disabled;
+      color: var(--soui-text-color-disabled, @text-color-disabled);
     }
   }
 
   &-clear {
-    appearance: none;
-    background: transparent;
-    border: none;
-    color: @text-color-disabled;
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    background-color: var(--soui-date-picker-bg-component, var(--soui-date-picker-bg, @bg-color-base));
+    color: rgba(0, 0, 0, 0.25);
     cursor: pointer;
-    font-size: 14px;
-    line-height: 1;
-    padding: 0 4px;
-    transition: color @transition-duration @transition-timing-function;
-    flex-shrink: 0;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 
     &:hover {
-      color: @text-color-secondary;
+      color: rgba(0, 0, 0, 0.45);
+      background-color: rgba(0, 0, 0, 0.06);
     }
   }
 
+  &:hover &-clear,
+  &--open &-clear {
+    opacity: 1;
+    visibility: visible;
+  }
+
   &-icon {
-    display: inline-flex;
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
     align-items: center;
-    color: @text-color-disabled;
-    flex-shrink: 0;
-    margin-left: 4px;
+    color: rgba(0, 0, 0, 0.25);
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  // Hide icon when clear button is visible
+  &:hover &-clear ~ &-icon,
+  &--open &-clear ~ &-icon {
+    opacity: 0;
   }
 
   // ==================== Size variants ====================
@@ -89,12 +113,12 @@
   &--small &-trigger {
     height: @control-height-sm;
     padding: 0 7px;
-    font-size: @font-size-sm;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
     min-width: 160px;
   }
 
   &--middle &-trigger {
-    height: @control-height-base;
+    height: var(--soui-date-picker-control-height-component, var(--soui-date-picker-control-height, @control-height-base));
     padding: 0 11px;
     min-width: 200px;
   }
@@ -102,7 +126,7 @@
   &--large &-trigger {
     height: @control-height-lg;
     padding: 0 11px;
-    font-size: @font-size-lg;
+    font-size: var(--soui-font-size-lg, @font-size-lg);
     min-width: 220px;
   }
 
@@ -110,14 +134,18 @@
 
   &-range-trigger {
     min-width: 320px;
-    gap: 4px;
+    gap: @margin-xs;
+
+    .soui-date-picker-input:first-of-type {
+      padding-right: 0;
+    }
   }
 
   &-range-separator {
-    color: @text-color-disabled;
+    color: var(--soui-text-color-disabled, @text-color-disabled);
     flex-shrink: 0;
-    font-size: @font-size-sm;
-    padding: 0 4px;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    padding: 0 @padding-xs;
   }
 
   // ==================== Panel ====================
@@ -128,7 +156,7 @@
     min-width: 280px;
     background: var(--soui-date-picker-panel-bg-component, var(--soui-date-picker-panel-bg, @bg-color-base));
     border-radius: var(--soui-date-picker-border-radius-component, var(--soui-date-picker-border-radius, @border-radius-base));
-    box-shadow: @box-shadow-secondary;
+    box-shadow: var(--soui-box-shadow-secondary, @box-shadow-secondary);
     padding: @padding-sm;
     box-sizing: border-box;
     user-select: none;
@@ -145,8 +173,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 4px 0 8px;
-    border-bottom: 1px solid @border-color-split;
+    padding: @padding-xs 0 @padding-sm;
+    border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
     margin-bottom: @padding-sm;
   }
 
@@ -156,10 +184,10 @@
     border: none;
     cursor: pointer;
     padding: 2px 6px;
-    color: @text-color-secondary;
-    font-size: 14px;
-    border-radius: 4px;
-    transition: all @transition-duration @transition-timing-function;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    font-size: var(--soui-font-size, @font-size-base);
+    border-radius: @border-radius-sm;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
     &:hover {
       color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
@@ -168,18 +196,18 @@
   }
 
   &-header-title {
-    font-size: @font-size-sm;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
     font-weight: 500;
-    color: @text-color;
-    padding: 2px 8px;
-    border-radius: 4px;
+    color: var(--soui-text-color, @text-color);
+    padding: 2px @padding-sm;
+    border-radius: @border-radius-sm;
     border: none;
     background: transparent;
     cursor: default;
 
     &--clickable {
       cursor: pointer;
-      transition: all @transition-duration @transition-timing-function;
+      transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
       &:hover {
         color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
@@ -191,7 +219,7 @@
   &-header-title-group {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: @margin-xs;
   }
 
   // ==================== Calendar (Date mode) ====================
@@ -203,14 +231,14 @@
   &-weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    margin-bottom: 4px;
+    margin-bottom: @margin-xs;
   }
 
   &-weekday {
     text-align: center;
-    font-size: @font-size-sm;
-    color: @text-color-secondary;
-    padding: 4px 0;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    padding: @padding-xs 0;
     font-weight: 500;
   }
 
@@ -226,21 +254,21 @@
     border: none;
     cursor: pointer;
     padding: 0;
-    height: 32px;
+    height: @control-height-base;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: @font-size-sm;
-    color: @text-color;
-    border-radius: 4px;
-    transition: all 0.15s @transition-timing-function;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-text-color, @text-color);
+    border-radius: @border-radius-sm;
+    transition: all 0.15s var(--soui-transition-timing-function, @transition-timing-function);
 
     &:hover:not(&--disabled):not(&--selected) {
       background: rgba(0, 0, 0, 0.04);
     }
 
     &--other-month {
-      color: @text-color-disabled;
+      color: var(--soui-text-color-disabled, @text-color-disabled);
     }
 
     &--today {
@@ -251,9 +279,9 @@
 
     &--selected {
       background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      color: #fff;
+      color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
-      border-radius: 4px;
+      border-radius: @border-radius-sm;
     }
 
     &--in-range {
@@ -267,7 +295,7 @@
     }
 
     &--disabled {
-      color: @text-color-disabled;
+      color: var(--soui-text-color-disabled, @text-color-disabled);
       background: @bg-color-disable;
       cursor: not-allowed;
       text-decoration: line-through;
@@ -276,7 +304,7 @@
 
   &-day-week {
     font-size: 11px;
-    color: @text-color-secondary;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
   }
 
   // ==================== Month grid ====================
@@ -284,8 +312,8 @@
   &-month-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 8px 0;
+    gap: @padding-sm;
+    padding: @padding-sm 0;
   }
 
   &-month-cell {
@@ -293,11 +321,11 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 8px 4px;
-    font-size: @font-size-sm;
-    color: @text-color;
-    border-radius: 6px;
-    transition: all @transition-duration @transition-timing-function;
+    padding: @padding-sm @padding-xs;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-text-color, @text-color);
+    border-radius: @border-radius-base;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
     &:hover:not(&--selected) {
       background: rgba(0, 0, 0, 0.04);
@@ -310,8 +338,14 @@
 
     &--selected {
       background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      color: #fff;
+      color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
+    }
+
+    &--disabled {
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+      background: @bg-color-disable;
+      cursor: not-allowed;
     }
   }
 
@@ -320,8 +354,8 @@
   &-year-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 8px 0;
+    gap: @padding-sm;
+    padding: @padding-sm 0;
   }
 
   &-year-cell {
@@ -329,41 +363,47 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 8px 4px;
-    font-size: @font-size-sm;
-    color: @text-color;
-    border-radius: 6px;
-    transition: all @transition-duration @transition-timing-function;
+    padding: @padding-sm @padding-xs;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-text-color, @text-color);
+    border-radius: @border-radius-base;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
     &:hover:not(&--selected) {
       background: rgba(0, 0, 0, 0.04);
     }
 
     &--out {
-      color: @text-color-disabled;
+      color: var(--soui-text-color-disabled, @text-color-disabled);
     }
 
     &--selected {
       background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      color: #fff;
+      color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
+    }
+
+    &--disabled {
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+      background: @bg-color-disable;
+      cursor: not-allowed;
     }
   }
 
   // ==================== Time Panel ====================
 
   &-time {
-    padding: 4px 0;
+    padding: @padding-xs 0;
   }
 
   &-time-header {
     text-align: center;
-    font-size: @font-size-sm;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
     font-weight: 500;
-    color: @text-color;
-    padding: 4px 0 8px;
-    border-bottom: 1px solid @border-color-split;
-    margin-bottom: 8px;
+    color: var(--soui-text-color, @text-color);
+    padding: @padding-xs 0 @padding-sm;
+    border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
+    margin-bottom: @padding-sm;
   }
 
   &-time-columns {
@@ -382,7 +422,7 @@
   &-time-label {
     text-align: center;
     font-size: 11px;
-    color: @text-color-secondary;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
     padding: 2px 0;
     flex-shrink: 0;
   }
@@ -390,8 +430,8 @@
   &-time-list {
     flex: 1;
     overflow-y: auto;
-    border: 1px solid @border-color-split;
-    border-radius: 4px;
+    border: 1px solid var(--soui-border-color-split, @border-color-split);
+    border-radius: @border-radius-sm;
     padding: 2px;
 
     &::-webkit-scrollbar {
@@ -410,12 +450,12 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 4px 0;
-    font-size: @font-size-sm;
-    color: @text-color;
+    padding: @padding-xs 0;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-text-color, @text-color);
     text-align: center;
     border-radius: 3px;
-    transition: all 0.15s @transition-timing-function;
+    transition: all 0.15s var(--soui-transition-timing-function, @transition-timing-function);
 
     &:hover:not(&--selected) {
       background: rgba(0, 0, 0, 0.04);
@@ -423,7 +463,7 @@
 
     &--selected {
       background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      color: #fff;
+      color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
     }
   }
@@ -431,7 +471,7 @@
   // ==================== Footer ====================
 
   &-footer {
-    border-top: 1px solid @border-color-split;
+    border-top: 1px solid var(--soui-border-color-split, @border-color-split);
     padding-top: @padding-sm;
     margin-top: @padding-sm;
   }
@@ -440,19 +480,19 @@
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-bottom: 8px;
+    margin-bottom: @padding-sm;
   }
 
   &-preset-btn {
     appearance: none;
     background: transparent;
     border: 1px solid var(--soui-date-picker-border-color-component, var(--soui-date-picker-border-color, @border-color));
-    border-radius: 4px;
+    border-radius: @border-radius-sm;
     cursor: pointer;
-    padding: 2px 8px;
-    font-size: @font-size-sm;
+    padding: 2px @padding-sm;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
     color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-    transition: all @transition-duration @transition-timing-function;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
     &:hover {
       background: fade(@primary-color, 6%);
@@ -464,7 +504,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: @padding-sm;
   }
 
   &-footer-btn {
@@ -472,11 +512,11 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 4px 8px;
-    font-size: @font-size-sm;
+    padding: @padding-xs @padding-sm;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
     color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-    border-radius: 4px;
-    transition: all @transition-duration @transition-timing-function;
+    border-radius: @border-radius-sm;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
     &:hover {
       background: fade(@primary-color, 6%);
@@ -484,9 +524,9 @@
 
     &--primary {
       background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      color: #fff;
-      padding: 4px 12px;
-      border-radius: 4px;
+      color: var(--soui-color-text-inverse, #fff);
+      padding: @padding-xs @padding-md;
+      border-radius: @border-radius-sm;
 
       &:hover {
         opacity: 0.85;
@@ -513,8 +553,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 4px 0 8px;
-    border-bottom: 1px solid @border-color-split;
+    padding: @padding-xs 0 @padding-sm;
+    border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
     margin-bottom: @padding-sm;
   }
 
@@ -524,7 +564,7 @@
 
   &-range-panels-body {
     display: flex;
-    gap: 16px;
+    gap: @padding-md;
   }
 
   &-range-panel {
@@ -533,13 +573,13 @@
 
     .soui-date-picker-header {
       border-bottom: none;
-      margin-bottom: 4px;
-      padding: 0 0 4px;
+      margin-bottom: @margin-xs;
+      padding: 0 0 @padding-xs;
       justify-content: center;
     }
 
     .soui-date-picker-header-title {
-      font-size: @font-size-sm;
+      font-size: var(--soui-font-size-sm, @font-size-sm);
       font-weight: 500;
     }
   }

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect, useLayoutEffect } from 'react';
 import classNames from 'classnames';
+import Icon from '../Icon';
 import dayjs, { type Dayjs } from 'dayjs';
 import {
   getDefaultFormat,
@@ -7,7 +8,6 @@ import {
   getMonths,
   getYearRange,
   getWeekNumber,
-  checkDisabled,
   WEEK_LABELS,
   MONTH_LABELS,
   type PickerMode,
@@ -484,13 +484,17 @@ const DatePicker: React.FC<DatePickerProps> = ({
           {years.map((y) => {
             const inRange = y >= decadeStart && y <= decadeStart + 9;
             const selected = currentValue && currentValue.year() === y;
+            const yearDate = dayjs().year(y).startOf('year');
+            const isYearDisabled = disabledDate ? disabledDate(yearDate) : false;
             return (
               <button key={y} type="button"
                 className={classNames('soui-date-picker-year-cell', {
                   'soui-date-picker-year-cell--out': !inRange,
                   'soui-date-picker-year-cell--selected': selected,
+                  'soui-date-picker-year-cell--disabled': isYearDisabled,
                 })}
-                onClick={() => handleSelectYear(y)}
+                onClick={() => !isYearDisabled && handleSelectYear(y)}
+                disabled={isYearDisabled}
               >{y}</button>
             );
           })}
@@ -504,13 +508,17 @@ const DatePicker: React.FC<DatePickerProps> = ({
           {getMonths().map((m) => {
             const selected = currentValue && currentValue.year() === viewYear && currentValue.month() === m;
             const isNow = dayjs().year() === viewYear && dayjs().month() === m;
+            const monthDate = dayjs().year(viewYear).month(m).startOf('month');
+            const isMonthDisabled = disabledDate ? disabledDate(monthDate) : false;
             return (
               <button key={m} type="button"
                 className={classNames('soui-date-picker-month-cell', {
                   'soui-date-picker-month-cell--selected': selected,
                   'soui-date-picker-month-cell--now': isNow && !selected,
+                  'soui-date-picker-month-cell--disabled': isMonthDisabled,
                 })}
-                onClick={() => handleSelectMonth(m)}
+                onClick={() => !isMonthDisabled && handleSelectMonth(m)}
+                disabled={isMonthDisabled}
               >{MONTH_LABELS[m]}</button>
             );
           })}
@@ -539,7 +547,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
               disabled={day.isDisabled}
               aria-label={day.date.format('YYYY年M月D日')}
             >
-              {picker === 'week' && day.isCurrentMonth && day.day === 1 ? (
+              {picker === 'week' && day.date.isoWeekday() === 1 ? (
                 <span className="soui-date-picker-day-week">W{getWeekNumber(day.date)}</span>
               ) : (
                 day.day
@@ -592,7 +600,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
   return (
     <div
-      className={classNames('soui-date-picker', `soui-date-picker--${size}`, { 'soui-date-picker--disabled': disabled }, className)}
+      className={classNames('soui-date-picker', `soui-date-picker--${size}`, { 'soui-date-picker--disabled': disabled, 'soui-date-picker--open': open }, className)}
       style={style}
       {...rest}
     >
@@ -605,13 +613,15 @@ const DatePicker: React.FC<DatePickerProps> = ({
           readOnly={picker === 'week'} aria-label={placeholder || defaultPlaceholder}
         />
         {allowClear && currentValue && !disabled && (
-          <button type="button" className="soui-date-picker-clear" onClick={handleClear} aria-label="清除日期" tabIndex={0}>×</button>
+          <span className="soui-date-picker-clear" onClick={handleClear}
+            onMouseDown={(e) => e.preventDefault()}
+            role="button" aria-label="清除日期" tabIndex={-1}
+          >
+            <Icon name="Close" size={12} theme="outline" />
+          </span>
         )}
         <span className="soui-date-picker-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" />
-            <line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
-          </svg>
+          <Icon name="Calendar" size={16} theme="outline" />
         </span>
       </div>
 
