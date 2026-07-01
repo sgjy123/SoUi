@@ -57,7 +57,7 @@ const [date, setDate] = useState(null);
 
 ### 禁用日期
 
-通过 `disabledDate` 回调禁用指定日期，参数为 dayjs 对象。
+通过 `disabledDate` 回调禁用指定日期，参数为 dayjs 对象。在日期和周模式下按天判断，在月模式下以每月第一天判断，在年模式下以每年第一天判断。
 
 ```tsx
 import dayjs from 'dayjs';
@@ -173,7 +173,7 @@ const presets = [
 | allowClear | 是否允许清除 | `boolean` | `true` |
 | disabled | 是否禁用 | `boolean` | `false` |
 | size | 尺寸 | `'small' \| 'middle' \| 'large'` | `'middle'` |
-| disabledDate | 不可选择的日期 | `(current: Dayjs) => boolean` | - |
+| disabledDate | 不可选择的日期（支持日期/周/月/年模式） | `(current: Dayjs) => boolean` | - |
 | placement | 面板弹出方向 | `'bottomLeft' \| 'bottomRight' \| 'topLeft' \| 'topRight'` | `'bottomLeft'` |
 | showTime | 是否显示时间选择器 | `boolean` | `false` |
 | showNow | 是否显示"此刻"按钮 | `boolean` | `true` |
@@ -195,7 +195,7 @@ const presets = [
 | allowClear | 是否允许清除 | `boolean` | `true` |
 | disabled | 是否禁用 | `boolean` | `false` |
 | size | 尺寸 | `'small' \| 'middle' \| 'large'` | `'middle'` |
-| disabledDate | 不可选择的日期 | `(current: Dayjs) => boolean` | - |
+| disabledDate | 不可选择的日期（支持日期/周/月/年模式） | `(current: Dayjs) => boolean` | - |
 | placement | 面板弹出方向 | `'bottomLeft' \| 'bottomRight' \| 'topLeft' \| 'topRight'` | `'bottomLeft'` |
 | presets | 预设快捷选项 | `Array<{ label: ReactNode; value: [Date \| Dayjs, Date \| Dayjs] }>` | - |
 | onChange | 范围变化回调 | `(dates: RangeValue, dateStrings: [string, string]) => void` | - |
@@ -208,9 +208,16 @@ const presets = [
 |--------|-------------|
 | date | `YYYY-MM-DD` |
 | date + showTime | `YYYY-MM-DD HH:mm:ss` |
-| week | `YYYY-wo` |
+| week | `YYYY-Ww` |
 | month | `YYYY-MM` |
 | year | `YYYY` |
+
+**周模式 format 说明：** 由于 dayjs 原生的 `w`/`ww` format token 在某些环境下不可靠，DatePicker 对周模式做了后处理——format 字符串中的 `w` 会被替换为实际 ISO 周数（不补零），`ww` 会补零。其余 dayjs token（`YYYY`、`MM`、`DD` 等）正常工作。自定义示例：
+
+```tsx
+<DatePicker picker="week" format="YYYY年第ww周" />  // → "2026年第27周"
+<DatePicker picker="week" format="YYYY/[Week] w" /> // → "2026/Week 27"
+```
 
 ## 主题定制
 
@@ -232,6 +239,7 @@ DatePicker 和 RangePicker 组件支持通过 ConfigProvider 进行主题定制�
         colorBg: '#fff',
         panelBg: '#fafafa',
         colorText: 'rgba(0,0,0,0.88)',
+        controlHeight: 36,
       },
     },
   }}
@@ -252,6 +260,7 @@ DatePicker 和 RangePicker 组件支持通过 ConfigProvider 进行主题定制�
 | colorBg | 背景色 | `string` | `#fff` |
 | panelBg | 面板背景色 | `string` | `#fff` |
 | colorText | 文本颜色 | `string` | `rgba(0,0,0,0.88)` |
+| controlHeight | 控件高度（像素） | `number` | `32` |
 
 ## dayjs 集成
 
