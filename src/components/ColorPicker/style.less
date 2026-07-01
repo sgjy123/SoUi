@@ -1,0 +1,293 @@
+@import '../../styles/variables.less';
+
+// ==================== ColorPicker 颜色选择器 ====================
+
+.soui-color-picker {
+  position: relative;
+  display: inline-block;
+  font-size: var(--soui-color-picker-font-size, @font-size-base);
+
+  &-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    .soui-color-picker-trigger {
+      cursor: not-allowed;
+    }
+  }
+
+  // ===== 触发器 =====
+  &-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: @padding-xs;
+    padding: 0 @padding-sm;
+    border: 1px solid var(--soui-color-picker-border-color, @border-color);
+    border-radius: var(--soui-color-picker-border-radius, @border-radius-base);
+    background: var(--soui-color-picker-trigger-bg, @bg-color-base);
+    cursor: pointer;
+    transition: all @transition-duration @transition-timing-function;
+    height: 32px;
+
+    &:hover {
+      border-color: var(--soui-color-picker-color-primary, @primary-color);
+    }
+  }
+
+  &-small &-trigger {
+    height: 24px;
+    padding: 0 @padding-xs;
+  }
+
+  &-large &-trigger {
+    height: 40px;
+    padding: 0 @padding-md;
+  }
+
+  &-trigger-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  &-trigger-empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 1px;
+    height: 20px;
+    background: #ccc;
+  }
+
+  &-trigger-text {
+    font-size: @font-size-sm;
+    color: @text-color;
+    white-space: nowrap;
+  }
+
+  &-clear {
+    font-size: 14px;
+    color: @text-color-disabled;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 2px;
+
+    &:hover {
+      color: @text-color;
+    }
+  }
+
+  // ===== 弹出面板 =====
+  &-panel {
+    position: absolute;
+    z-index: @z-index-popover;
+    width: 264px;
+    background: var(--soui-color-picker-panel-bg, @bg-color-base);
+    border-radius: var(--soui-color-picker-border-radius, @border-radius-base);
+    box-shadow: @box-shadow-secondary;
+    padding: @padding-sm;
+  }
+
+  &-panel-bottomLeft {
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+  }
+
+  &-panel-bottomRight {
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+  }
+
+  &-panel-topLeft {
+    bottom: 100%;
+    left: 0;
+    margin-bottom: 4px;
+  }
+
+  &-panel-topRight {
+    bottom: 100%;
+    right: 0;
+    margin-bottom: 4px;
+  }
+
+  // ===== 饱和度/亮度面板 =====
+  &-saturation {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    border-radius: 4px;
+    cursor: crosshair;
+    overflow: hidden;
+    margin-bottom: @padding-sm;
+  }
+
+  &-saturation-white {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, #fff, transparent);
+  }
+
+  &-saturation-black {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent, #000);
+  }
+
+  &-saturation-pointer {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  // ===== 滑块 =====
+  &-slider {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: @padding-sm;
+  }
+
+  &-hue {
+    background: linear-gradient(
+      to right,
+      #f00 0%, #ff0 17%, #0f0 33%,
+      #0ff 50%, #00f 67%, #f0f 83%, #f00 100%
+    );
+  }
+
+  &-alpha {
+    background-image:
+      linear-gradient(45deg, #ccc 25%, transparent 25%),
+      linear-gradient(-45deg, #ccc 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ccc 75%),
+      linear-gradient(-45deg, transparent 75%, #ccc 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+  }
+
+  &-slider-handle {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #fff;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  // ===== 输入区域 =====
+  &-input-area {
+    display: flex;
+    align-items: center;
+    gap: @padding-xs;
+    margin-bottom: @padding-sm;
+  }
+
+  &-input {
+    flex: 1;
+    height: 28px;
+    padding: 0 @padding-xs;
+    border: 1px solid @border-color;
+    border-radius: 4px;
+    font-size: @font-size-sm;
+    font-family: monospace;
+    outline: none;
+    transition: border-color @transition-duration @transition-timing-function;
+
+    &:focus {
+      border-color: var(--soui-color-picker-color-primary, @primary-color);
+    }
+
+    &:disabled {
+      background: @bg-color-disable;
+      cursor: not-allowed;
+    }
+  }
+
+  &-formats {
+    display: flex;
+    gap: 2px;
+  }
+
+  &-format-btn {
+    padding: 2px 6px;
+    font-size: 10px;
+    border: 1px solid @border-color;
+    border-radius: 3px;
+    background: transparent;
+    color: @text-color-secondary;
+    cursor: pointer;
+    transition: all @transition-duration @transition-timing-function;
+
+    &:hover {
+      color: var(--soui-color-picker-color-primary, @primary-color);
+      border-color: var(--soui-color-picker-color-primary, @primary-color);
+    }
+
+    &-active {
+      background: var(--soui-color-picker-color-primary, @primary-color);
+      color: #fff;
+      border-color: var(--soui-color-picker-color-primary, @primary-color);
+    }
+  }
+
+  // ===== 预设颜色 =====
+  &-presets {
+    border-top: 1px solid @border-color-split;
+    padding-top: @padding-sm;
+  }
+
+  &-preset-group {
+    margin-bottom: @padding-xs;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &-preset-label {
+    font-size: @font-size-sm;
+    color: @text-color-secondary;
+    margin-bottom: 4px;
+  }
+
+  &-preset-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  &-preset-color {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    transition: transform @transition-duration @transition-timing-function;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &-active {
+      box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--soui-color-picker-color-primary, @primary-color);
+    }
+  }
+}

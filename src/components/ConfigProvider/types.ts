@@ -741,6 +741,19 @@ export interface ComponentThemeConfig {
     /** 大号星星尺寸（像素） */
     starSizeLG?: number;
   };
+  /** 颜色选择器组件配置 */
+  ColorPicker?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 触发器边框颜色 */
+    colorBorder?: string;
+    /** 面板背景色 */
+    colorBg?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

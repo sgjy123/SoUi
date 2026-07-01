@@ -156,6 +156,10 @@ export type { TreeSelectProps, TreeSelectSize, TreeSelectStatus, TreeSelectOptio
 export { default as Rate } from './components/Rate';
 export type { RateProps, RateSize } from './components/Rate';
 
+// ColorPicker Component
+export { default as ColorPicker } from './components/ColorPicker';
+export type { ColorPickerProps, ColorPickerSize, ColorPickerPlacement, PresetColorGroup } from './components/ColorPicker';
+
 // Utils
 export * from './utils';
 

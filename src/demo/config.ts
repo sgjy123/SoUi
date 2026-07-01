@@ -319,6 +319,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'rate-tooltips', label: 'Rate 提示文字', componentPath: 'Rate', exampleName: 'Tooltips', description: '为每个评分项添加提示文字。' },
         ],
       },
+      {
+        key: 'color-picker',
+        label: 'ColorPicker 颜色选择器',
+        icon: 'Palette',
+        items: [
+          { key: 'color-picker-basic', label: 'ColorPicker 基础用法', componentPath: 'ColorPicker', exampleName: 'Basic', description: '基本的颜色选择器，支持 hex/rgb/hsb 格式切换。' },
+          { key: 'color-picker-size', label: 'ColorPicker 尺寸', componentPath: 'ColorPicker', exampleName: 'Size', description: '小、中、大三种尺寸。' },
+          { key: 'color-picker-variant', label: 'ColorPicker 变体', componentPath: 'ColorPicker', exampleName: 'Variant', description: '可清除、显示文本、禁用、无透明度等状态。' },
+          { key: 'color-picker-format', label: 'ColorPicker 格式', componentPath: 'ColorPicker', exampleName: 'Format', description: '指定默认颜色格式。' },
+        ],
+      },
     ],
   },
   {

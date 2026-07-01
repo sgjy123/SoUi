@@ -216,6 +216,7 @@ function sidebarComponents() {
         { text: 'Cascader 级联选择', link: 'cascader' },
         { text: 'TreeSelect 树形下拉', link: 'tree-select' },
         { text: 'Rate 评分', link: 'rate' },
+        { text: 'ColorPicker 颜色选择器', link: 'color-picker' },
       ],
     },
     {

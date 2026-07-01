@@ -33,6 +33,7 @@ import Switch from '../../src/components/Switch';
 import Cascader from '../../src/components/Cascader';
 import TreeSelect from '../../src/components/TreeSelect';
 import Rate from '../../src/components/Rate';
+import ColorPicker from '../../src/components/ColorPicker';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -106,6 +107,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Cascader,
     TreeSelect,
     Rate,
+    ColorPicker,
     ConfigProvider,
     ...scope,
   };
