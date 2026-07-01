@@ -305,13 +305,22 @@
   padding: 4px;
   box-sizing: border-box;
   animation: soui-tree-select-dropdown-in 0.15s ease-out;
+
+  &-topLeft,
+  &-topRight {
+    transform-origin: bottom center;
+  }
+
+  &-bottomLeft,
+  &-bottomRight {
+    transform-origin: top center;
+  }
 }
 
 @keyframes soui-tree-select-dropdown-in {
   from {
     opacity: 0;
     transform: scaleY(0.8);
-    transform-origin: top center;
   }
   to {
     opacity: 1;
@@ -343,8 +352,13 @@
   min-height: calc(var(--soui-ts-local-font-size, @font-size-base) * 1.5715 + 8px);
   box-sizing: border-box;
   line-height: @line-height-base;
+  border-radius: calc(var(--soui-ts-local-border-radius) - 2px);
 
-  &:hover:not(.soui-tree-select-treenode-disabled) {
+  &:hover:not(.soui-tree-select-treenode-disabled):not(.soui-tree-select-treenode-active) {
+    background-color: var(--soui-ts-local-option-active-bg);
+  }
+
+  &-active:not(&-disabled) {
     background-color: var(--soui-ts-local-option-active-bg);
   }
 
@@ -441,6 +455,16 @@
   border-radius: 1px;
 }
 
+// ==================== Node Icon ====================
+.soui-tree-select-node-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+  color: rgba(0, 0, 0, 0.45);
+  flex-shrink: 0;
+}
+
 // ==================== Node Content ====================
 .soui-tree-select-node-content {
   flex: 1;
@@ -449,7 +473,7 @@
   text-overflow: ellipsis;
   padding: 0 4px;
   border-radius: calc(var(--soui-ts-local-border-radius) - 2px);
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 
   &-selected {
     color: var(--soui-primary-color, @primary-color);
@@ -466,7 +490,6 @@
 }
 
 .soui-tree-select-line {
-  // Optional line connector
   position: relative;
 
   &::before {

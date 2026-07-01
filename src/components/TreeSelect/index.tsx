@@ -19,6 +19,7 @@ import './style.less';
 export type TreeSelectSize = 'large' | 'middle' | 'small';
 export type TreeSelectStatus = 'error' | 'warning';
 export type TreeSelectShowCheckedStrategy = 'SHOW_ALL' | 'SHOW_PARENT' | 'SHOW_CHILD';
+export type TreeSelectPlacement = 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight';
 
 export interface TreeSelectOption {
   /** 选项显示文本 */
@@ -31,10 +32,12 @@ export interface TreeSelectOption {
   disabled?: boolean;
   /** 是否可选（树节点为父级时，设为 false 则该节点不可选中） */
   selectable?: boolean;
-  /** 是否为叶子节点 */
+  /** 是否为叶子节点（用于异步加载场景） */
   isLeaf?: boolean;
   /** 自定义 key */
   key?: string | number;
+  /** 节点图标 */
+  icon?: React.ReactNode;
   [key: string]: any;
 }
 
@@ -49,21 +52,28 @@ export interface TreeSelectRef {
   blur: () => void;
 }
 
+export interface LabeledValue {
+  value: string | number;
+  label: React.ReactNode;
+}
+
+export type TreeSelectValue = string | number | (string | number)[] | LabeledValue | LabeledValue[];
+
 export interface TreeSelectProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue' | 'placeholder'> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'defaultValue' | 'placeholder' | 'value'> {
   /** 可选项数据 */
   treeData?: TreeSelectOption[];
   /** 指定选中的值（受控） */
-  value?: (string | number)[] | string | number;
+  value?: TreeSelectValue;
   /** 默认选中的值 */
-  defaultValue?: (string | number)[] | string | number;
+  defaultValue?: TreeSelectValue;
   /** 选中变化回调 */
-  onChange?: (value: any, label?: any) => void;
+  onChange?: (value: any, label?: any, extra?: any) => void;
   /** 是否多选 */
   multiple?: boolean;
-  /** 是否显示复选框（多选模式） */
+  /** 是否显示复选框（启用勾选模式） */
   treeCheckable?: boolean;
-  /** 多选时显示策略 */
+  /** 多选勾选时显示策略 */
   showCheckedStrategy?: TreeSelectShowCheckedStrategy;
   /** 是否禁用 */
   disabled?: boolean;
@@ -107,21 +117,45 @@ export interface TreeSelectProps
   notFoundContent?: React.ReactNode;
   /** 自定义下拉菜单内容 */
   dropdownRender?: (menu: React.ReactElement) => React.ReactElement;
+  /** 下拉菜单自定义样式 */
+  dropdownStyle?: React.CSSProperties;
   /** 控制下拉菜单显隐（受控） */
   open?: boolean;
+  /** 默认下拉菜单显隐 */
+  defaultOpen?: boolean;
   /** 下拉菜单展开/收起回调 */
   onDropdownVisibleChange?: (open: boolean) => void;
+  /** 下拉菜单位置 */
+  placement?: TreeSelectPlacement;
   /** 是否显示树连接线 */
   treeLine?: boolean;
+  /** 是否显示节点图标 */
+  treeIcon?: boolean | ((node: TreeSelectOption) => React.ReactNode);
+  /** 自定义节点标题渲染 */
+  treeTitleRender?: (node: TreeSelectOption) => React.ReactNode;
+  /** 自定义标签渲染 */
+  tagRender?: (props: { label: React.ReactNode; value: string | number; onClose: () => void }) => React.ReactNode;
+  /** 是否显示箭头图标 */
+  showArrow?: boolean;
+  /** 选中后是否自动清空搜索值 */
+  autoClearSearchValue?: boolean;
+  /** 是否把每个选项的 label 包装到 value 中 */
+  labelInValue?: boolean;
+  /** 搜索回调 */
+  onSearch?: (value: string) => void;
+  /** 选中回调 */
+  onSelect?: (value: string | number, node: TreeSelectOption) => void;
+  /** 取消选中回调 */
+  onDeselect?: (value: string | number, node: TreeSelectOption) => void;
+  /** 下拉菜单自定义类名 */
+  popupClassName?: string;
   /** 自定义类名 */
   className?: string;
   /** 自定义样式 */
   style?: React.CSSProperties;
-  /** 下拉菜单自定义类名 */
-  popupClassName?: string;
 }
 
-// ==================== Hooks ====================
+// ==================== Theme Hooks ====================
 
 function useComponentTheme(componentName: string): Record<string, any> {
   const context = useContext(ConfigContext);
@@ -135,7 +169,7 @@ function useGlobalTheme(): Record<string, any> {
   return context.theme as Record<string, any>;
 }
 
-// ==================== Utils ====================
+// ==================== CSS Variables ====================
 
 function buildCssVars(theme: Record<string, any>, globalTheme: Record<string, any>): Record<string, any> {
   const cssVars: Record<string, any> = {};
@@ -200,40 +234,47 @@ function applyConfigProviderVars(el: HTMLElement): void {
   });
 }
 
+// ==================== Field Helpers ====================
+
+function getField<T>(opt: TreeSelectOption, key: string | undefined, defaultKey: keyof TreeSelectOption): T {
+  return (key ? opt[key] : opt[defaultKey]) as T;
+}
+
 function getOptLabel(opt: TreeSelectOption, fn?: TreeSelectFieldNames): React.ReactNode {
-  return opt[fn?.label || 'title'];
+  return getField<React.ReactNode>(opt, fn?.label, 'title');
 }
+
 function getOptValue(opt: TreeSelectOption, fn?: TreeSelectFieldNames): string | number {
-  return opt[fn?.value || 'value'];
+  return getField<string | number>(opt, fn?.value, 'value');
 }
+
 function getOptChildren(opt: TreeSelectOption, fn?: TreeSelectFieldNames): TreeSelectOption[] | undefined {
-  return opt[fn?.children || 'children'];
+  return getField<TreeSelectOption[] | undefined>(opt, fn?.children, 'children');
 }
+
 function hasOptChildren(opt: TreeSelectOption, fn?: TreeSelectFieldNames): boolean {
   const c = getOptChildren(opt, fn);
   return Array.isArray(c) && c.length > 0;
 }
+
 function isLeafOpt(opt: TreeSelectOption, fn?: TreeSelectFieldNames): boolean {
-  if (opt.isLeaf !== undefined) return opt.isLeaf;
+  if (opt.isLeaf === true) return true;
+  if (opt.isLeaf === false) return false;
   return !hasOptChildren(opt, fn);
 }
 
-/** Collect all keys in tree */
-function collectAllKeys(data: TreeSelectOption[], fn?: TreeSelectFieldNames): (string | number)[] {
-  const keys: (string | number)[] = [];
-  const walk = (nodes: TreeSelectOption[]) => {
-    for (const n of nodes) {
-      keys.push(getOptValue(n, fn));
-      const ch = getOptChildren(n, fn);
-      if (ch) walk(ch);
-    }
-  };
-  walk(data);
-  return keys;
+function getLabelStr(opt: TreeSelectOption, fn?: TreeSelectFieldNames): React.ReactNode {
+  const l = getOptLabel(opt, fn);
+  return l !== undefined ? l : String(getOptValue(opt, fn));
 }
 
-/** Find option by value */
-function findOption(data: TreeSelectOption[], val: string | number, fn?: TreeSelectFieldNames): TreeSelectOption | undefined {
+// ==================== Tree Traversal ====================
+
+function findOption(
+  data: TreeSelectOption[],
+  val: string | number,
+  fn?: TreeSelectFieldNames,
+): TreeSelectOption | undefined {
   for (const opt of data) {
     if (getOptValue(opt, fn) === val) return opt;
     const ch = getOptChildren(opt, fn);
@@ -245,22 +286,11 @@ function findOption(data: TreeSelectOption[], val: string | number, fn?: TreeSel
   return undefined;
 }
 
-/** Get all leaf descendant values under a node */
-function getLeafValues(opt: TreeSelectOption, fn?: TreeSelectFieldNames): (string | number)[] {
-  if (isLeafOpt(opt, fn)) return [getOptValue(opt, fn)];
-  const ch = getOptChildren(opt, fn) || [];
-  return ch.flatMap((c) => getLeafValues(c, fn));
-}
-
-/** Get all descendant values under a node (including self) */
-function getAllDescendantValues(opt: TreeSelectOption, fn?: TreeSelectFieldNames): (string | number)[] {
-  const val = getOptValue(opt, fn);
-  const ch = getOptChildren(opt, fn) || [];
-  return [val, ...ch.flatMap((c) => getAllDescendantValues(c, fn))];
-}
-
-/** Build a parent map: childValue -> parentValue */
-function buildParentMap(data: TreeSelectOption[], fn?: TreeSelectFieldNames, parent?: string | number): Map<string | number, string | number | undefined> {
+function buildParentMap(
+  data: TreeSelectOption[],
+  fn?: TreeSelectFieldNames,
+  parent?: string | number,
+): Map<string | number, string | number | undefined> {
   const map = new Map<string | number, string | number | undefined>();
   for (const opt of data) {
     const val = getOptValue(opt, fn);
@@ -274,10 +304,218 @@ function buildParentMap(data: TreeSelectOption[], fn?: TreeSelectFieldNames, par
   return map;
 }
 
-/** Get label string for display */
-function getLabelStr(opt: TreeSelectOption, fn?: TreeSelectFieldNames): string {
-  const l = getOptLabel(opt, fn);
-  return typeof l === 'string' ? l : String(getOptValue(opt, fn));
+function getAllNodes(data: TreeSelectOption[], fn?: TreeSelectFieldNames): TreeSelectOption[] {
+  const result: TreeSelectOption[] = [];
+  const walk = (nodes: TreeSelectOption[]) => {
+    for (const n of nodes) {
+      result.push(n);
+      const ch = getOptChildren(n, fn);
+      if (ch) walk(ch);
+    }
+  };
+  walk(data);
+  return result;
+}
+
+function collectAllKeys(data: TreeSelectOption[], fn?: TreeSelectFieldNames): (string | number)[] {
+  return getAllNodes(data, fn).map((n) => getOptValue(n, fn));
+}
+
+function getLeafValues(opt: TreeSelectOption, fn?: TreeSelectFieldNames): (string | number)[] {
+  if (isLeafOpt(opt, fn)) return [getOptValue(opt, fn)];
+  return (getOptChildren(opt, fn) || []).flatMap((c) => getLeafValues(c, fn));
+}
+
+function isNodeDisabled(opt: TreeSelectOption): boolean {
+  return opt.disabled === true;
+}
+
+function getSelectableLeafValues(opt: TreeSelectOption, fn?: TreeSelectFieldNames): (string | number)[] {
+  if (isLeafOpt(opt, fn)) return isNodeDisabled(opt) ? [] : [getOptValue(opt, fn)];
+  return (getOptChildren(opt, fn) || []).flatMap((c) => getSelectableLeafValues(c, fn));
+}
+
+function isNodeFullySelected(opt: TreeSelectOption, selectedSet: Set<string | number>, fn?: TreeSelectFieldNames): boolean {
+  const leaves = getSelectableLeafValues(opt, fn);
+  if (leaves.length === 0) return selectedSet.has(getOptValue(opt, fn));
+  return leaves.every((v) => selectedSet.has(v));
+}
+
+// ==================== Value Helpers ====================
+
+function normalizeValueList(value: TreeSelectValue | undefined): (string | number)[] {
+  if (value === undefined || value === null) return [];
+  if (Array.isArray(value)) {
+    return value.map((v) => (typeof v === 'object' && v !== null ? v.value : v)).filter((v) => v !== undefined);
+  }
+  if (typeof value === 'object') return [(value as LabeledValue).value];
+  return [value];
+}
+
+function expandValue(
+  values: (string | number)[],
+  strategy: TreeSelectShowCheckedStrategy,
+  data: TreeSelectOption[],
+  fn?: TreeSelectFieldNames,
+): (string | number)[] {
+  if (strategy === 'SHOW_ALL' || values.length === 0) return values.slice();
+  const result = new Set(values);
+  for (const val of values) {
+    const opt = findOption(data, val, fn);
+    if (opt && !isLeafOpt(opt, fn)) {
+      getLeafValues(opt, fn).forEach((v) => result.add(v));
+    }
+  }
+  return Array.from(result);
+}
+
+function compressValue(
+  selectedSet: Set<string | number>,
+  strategy: TreeSelectShowCheckedStrategy,
+  data: TreeSelectOption[],
+  fn?: TreeSelectFieldNames,
+): (string | number)[] {
+  if (strategy === 'SHOW_ALL') return Array.from(selectedSet);
+
+  if (strategy === 'SHOW_CHILD') {
+    return Array.from(selectedSet).filter((v) => {
+      const opt = findOption(data, v, fn);
+      return !opt || isLeafOpt(opt, fn);
+    });
+  }
+
+  // SHOW_PARENT
+  const allNodes = getAllNodes(data, fn);
+  const parentMap = buildParentMap(data, fn);
+  const fullySelected = new Set<string | number>();
+  allNodes.forEach((node) => {
+    if (isNodeFullySelected(node, selectedSet, fn)) {
+      fullySelected.add(getOptValue(node, fn));
+    }
+  });
+
+  return Array.from(fullySelected).filter((v) => {
+    let parentVal = parentMap.get(v);
+    while (parentVal !== undefined) {
+      if (fullySelected.has(parentVal)) return false;
+      parentVal = parentMap.get(parentVal);
+    }
+    return true;
+  });
+}
+
+function formatValue(
+  rawValues: (string | number)[],
+  labelInValue: boolean,
+  multiple: boolean,
+  data: TreeSelectOption[],
+  fn?: TreeSelectFieldNames,
+): any {
+  const labels = rawValues.map((v) => {
+    const opt = findOption(data, v, fn);
+    return opt ? getLabelStr(opt, fn) : String(v);
+  });
+  if (labelInValue) {
+    const labeled = rawValues.map((v, i) => ({ value: v, label: labels[i] }));
+    return multiple ? labeled : labeled[0];
+  }
+  if (multiple) return rawValues;
+  return rawValues[0];
+}
+
+function formatValueWithLabel(
+  rawValues: (string | number)[],
+  data: TreeSelectOption[],
+  fn?: TreeSelectFieldNames,
+): any[] {
+  return rawValues.map((v) => {
+    const opt = findOption(data, v, fn);
+    return opt ? getLabelStr(opt, fn) : String(v);
+  });
+}
+
+// ==================== Search Helpers ====================
+
+function createSearchFilter(
+  searchValue: string,
+  treeNodeFilterProp: 'title' | 'value',
+  filterTreeNode: TreeSelectProps['filterTreeNode'],
+  fn?: TreeSelectFieldNames,
+): (opt: TreeSelectOption) => boolean {
+  const keyword = searchValue.toLowerCase();
+  return (opt: TreeSelectOption) => {
+    if (filterTreeNode) return filterTreeNode(searchValue, opt);
+    const prop = treeNodeFilterProp === 'title' ? getOptLabel(opt, fn) : getOptValue(opt, fn);
+    const str = typeof prop === 'string' ? prop : String(prop);
+    return str.toLowerCase().includes(keyword);
+  };
+}
+
+function nodeOrDescendantMatches(opt: TreeSelectOption, filter: (opt: TreeSelectOption) => boolean, fn?: TreeSelectFieldNames): boolean {
+  if (filter(opt)) return true;
+  return (getOptChildren(opt, fn) || []).some((c) => nodeOrDescendantMatches(c, filter, fn));
+}
+
+function getAncestorKeys(
+  data: TreeSelectOption[],
+  targetValues: Set<string | number>,
+  fn?: TreeSelectFieldNames,
+): (string | number)[] {
+  const keys: (string | number)[] = [];
+  const walk = (nodes: TreeSelectOption[], parentKey?: string | number) => {
+    for (const n of nodes) {
+      const val = getOptValue(n, fn);
+      const ch = getOptChildren(n, fn);
+      if (ch) {
+        const childTargets = ch.some((c) => targetValues.has(getOptValue(c, fn)) || nodeHasDescendantMatch(c, targetValues, fn));
+        if (childTargets) {
+          keys.push(val);
+          walk(ch, val);
+        }
+      }
+    }
+  };
+  walk(data);
+  return keys;
+}
+
+function nodeHasDescendantMatch(
+  opt: TreeSelectOption,
+  targetValues: Set<string | number>,
+  fn?: TreeSelectFieldNames,
+): boolean {
+  if (targetValues.has(getOptValue(opt, fn))) return true;
+  return (getOptChildren(opt, fn) || []).some((c) => nodeHasDescendantMatch(c, targetValues, fn));
+}
+
+// ==================== Visible Nodes ====================
+
+interface FlatNode {
+  node: TreeSelectOption;
+  level: number;
+  parent?: TreeSelectOption;
+}
+
+function flattenVisibleNodes(
+  data: TreeSelectOption[],
+  expandedKeys: (string | number)[],
+  searchFilter: ((opt: TreeSelectOption) => boolean) | null,
+  fn?: TreeSelectFieldNames,
+  level = 0,
+  parent?: TreeSelectOption,
+  result: FlatNode[] = [],
+): FlatNode[] {
+  for (const node of data) {
+    const matches = searchFilter ? nodeOrDescendantMatches(node, searchFilter, fn) : true;
+    if (!matches) continue;
+    result.push({ node, level, parent });
+    const val = getOptValue(node, fn);
+    const ch = getOptChildren(node, fn);
+    if (ch && expandedKeys.includes(val)) {
+      flattenVisibleNodes(ch, expandedKeys, searchFilter, fn, level + 1, node, result);
+    }
+  }
+  return result;
 }
 
 // ==================== Component ====================
@@ -288,7 +526,7 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     value: valueProp,
     defaultValue,
     onChange,
-    multiple = false,
+    multiple: multipleProp = false,
     treeCheckable = false,
     showCheckedStrategy = 'SHOW_ALL',
     disabled = false,
@@ -299,7 +537,7 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     status,
     showSearch = false,
     filterTreeNode,
-    treeNodeFilterProp = 'value',
+    treeNodeFilterProp = 'title',
     treeDefaultExpandAll = false,
     treeDefaultExpandedKeys,
     treeExpandedKeys: treeExpandedKeysProp,
@@ -312,14 +550,28 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     switcherIcon,
     notFoundContent = '暂无数据',
     dropdownRender,
+    dropdownStyle,
     open: openProp,
+    defaultOpen = false,
     onDropdownVisibleChange,
+    placement = 'bottomLeft',
     treeLine = false,
+    treeIcon = false,
+    treeTitleRender,
+    tagRender,
+    showArrow = true,
+    autoClearSearchValue = true,
+    labelInValue = false,
+    onSearch,
+    onSelect,
+    onDeselect,
+    popupClassName,
     className,
     style,
-    popupClassName,
     ...rest
   } = props;
+
+  const isMultiple = multipleProp || treeCheckable;
 
   // Theme
   const treeSelectTheme = useComponentTheme('TreeSelect');
@@ -328,13 +580,17 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
 
   // Open state
   const isOpenControlled = openProp !== undefined;
-  const [innerOpen, setInnerOpen] = useState(false);
+  const [innerOpen, setInnerOpen] = useState(defaultOpen);
   const isOpen = isOpenControlled ? openProp! : innerOpen;
 
   const setOpenState = useCallback(
     (nextOpen: boolean) => {
       if (!isOpenControlled) setInnerOpen(nextOpen);
       onDropdownVisibleChange?.(nextOpen);
+      if (nextOpen) {
+        setSearchValue('');
+        setActiveIndex(-1);
+      }
     },
     [isOpenControlled, onDropdownVisibleChange],
   );
@@ -344,41 +600,15 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     setOpenState(!isOpen);
   }, [disabled, isOpen, setOpenState]);
 
-  // Normalize value
-  const normalizeValue = (v: any): (string | number)[] => {
-    if (v === undefined || v === null) return [];
-    return Array.isArray(v) ? v : [v];
-  };
-
-  // Parent map / flat options (needed for value expansion, declared before state)
-  const parentMap = useMemo(() => buildParentMap(treeData, fieldNames), [treeData, fieldNames]);
-
-  const flatOptions = useMemo(() => {
-    const result: TreeSelectOption[] = [];
-    const walk = (nodes: TreeSelectOption[]) => {
-      for (const n of nodes) {
-        result.push(n);
-        const ch = getOptChildren(n, fieldNames);
-        if (ch) walk(ch);
-      }
-    };
-    walk(treeData);
-    return result;
-  }, [treeData, fieldNames]);
-
+  // Value state
   const isControlled = valueProp !== undefined;
-  const [innerValue, setInnerValue] = useState<(string | number)[]>(
-    () => expandValue(normalizeValue(defaultValue), showCheckedStrategy, flatOptions, fieldNames),
-  );
+  const [innerValue, setInnerValue] = useState<(string | number)[]>(() => normalizeValueList(defaultValue));
   const selectedValues = useMemo(
-    () =>
-      isControlled
-        ? expandValue(normalizeValue(valueProp), showCheckedStrategy, flatOptions, fieldNames)
-        : innerValue,
-    [isControlled, valueProp, innerValue, showCheckedStrategy, flatOptions, fieldNames],
+    () => (isControlled ? normalizeValueList(valueProp) : innerValue),
+    [isControlled, valueProp, innerValue],
   );
 
-  // Expanded keys
+  // Expanded state
   const isTreeExpandedControlled = treeExpandedKeysProp !== undefined;
   const [innerExpandedKeys, setInnerExpandedKeys] = useState<(string | number)[]>(() => {
     if (treeDefaultExpandAll) return collectAllKeys(treeData, fieldNames);
@@ -386,17 +616,16 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
   });
   const expandedKeys = isTreeExpandedControlled ? treeExpandedKeysProp! : innerExpandedKeys;
 
-  // Search
+  // Search state
   const [searchValue, setSearchValue] = useState('');
-
-  // Loading
   const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
+  const [activeIndex, setActiveIndex] = useState(-1);
 
   // Refs
   const wrapperRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, width: 0 });
+  const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0, right: 0, bottom: 0, width: 0 });
 
   useImperativeHandle(ref, () => ({
     focus: () => searchInputRef.current?.focus(),
@@ -406,7 +635,121 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     },
   }));
 
-  // Expand/Collapse
+  // Derived sets
+  const selectedSet = useMemo(() => {
+    if (treeCheckable) {
+      return new Set(expandValue(selectedValues, showCheckedStrategy, treeData, fieldNames));
+    }
+    return new Set(selectedValues);
+  }, [selectedValues, treeCheckable, showCheckedStrategy, treeData, fieldNames]);
+
+  const displayValues = useMemo(() => {
+    if (treeCheckable) {
+      return compressValue(selectedSet, showCheckedStrategy, treeData, fieldNames);
+    }
+    return selectedValues.slice();
+  }, [selectedValues, selectedSet, treeCheckable, showCheckedStrategy, treeData, fieldNames]);
+
+  // Search handling
+  const searchFilter = useMemo(() => {
+    if (!searchValue || !showSearch) return null;
+    return createSearchFilter(searchValue, treeNodeFilterProp, filterTreeNode, fieldNames);
+  }, [searchValue, showSearch, treeNodeFilterProp, filterTreeNode, fieldNames]);
+
+  // Auto expand ancestors of search matches
+  useEffect(() => {
+    if (!searchValue || !isOpen) return;
+    if (!isTreeExpandedControlled) {
+      const matchingValues = new Set<string | number>();
+      const walk = (nodes: TreeSelectOption[]) => {
+        for (const n of nodes) {
+          if (searchFilter && searchFilter(n)) matchingValues.add(getOptValue(n, fieldNames));
+          const ch = getOptChildren(n, fieldNames);
+          if (ch) walk(ch);
+        }
+      };
+      walk(treeData);
+      const ancestorKeys = getAncestorKeys(treeData, matchingValues, fieldNames);
+      setInnerExpandedKeys((prev) => Array.from(new Set([...prev, ...ancestorKeys])));
+    }
+  }, [searchValue, isOpen, isTreeExpandedControlled, treeData, fieldNames, searchFilter]);
+
+  // Visible flat list for keyboard navigation
+  const visibleNodes = useMemo(() => {
+    return flattenVisibleNodes(treeData, expandedKeys, searchFilter, fieldNames);
+  }, [treeData, expandedKeys, searchFilter, fieldNames]);
+
+  // Reset active index when visible list changes
+  useEffect(() => {
+    setActiveIndex((prev) => {
+      if (prev >= visibleNodes.length) return visibleNodes.length - 1;
+      return prev;
+    });
+  }, [visibleNodes.length]);
+
+  // Loading state cleanup when data changes
+  useEffect(() => {
+    if (loadingKeys.size === 0) return;
+    setLoadingKeys((prev) => {
+      const next = new Set(prev);
+      prev.forEach((key) => {
+        const opt = findOption(treeData, key, fieldNames);
+        if (!opt) return;
+        if (hasOptChildren(opt, fieldNames) || opt.isLeaf === true) next.delete(key);
+      });
+      return next;
+    });
+  }, [treeData, fieldNames]);
+
+  // Dropdown positioning
+  const updatePosition = useCallback(() => {
+    if (!wrapperRef.current) return;
+    const rect = wrapperRef.current.getBoundingClientRect();
+    const isTop = placement.startsWith('top');
+    const isRight = placement.endsWith('Right');
+    setDropdownPos({
+      top: isTop ? 0 : rect.bottom + 4,
+      left: isRight ? 0 : rect.left,
+      right: isRight ? window.innerWidth - rect.right : 0,
+      bottom: isTop ? window.innerHeight - rect.top + 4 : 0,
+      width: rect.width,
+    });
+  }, [placement]);
+
+  useEffect(() => {
+    if (isOpen) {
+      updatePosition();
+      const h = () => updatePosition();
+      window.addEventListener('scroll', h, true);
+      window.addEventListener('resize', h);
+      return () => {
+        window.removeEventListener('scroll', h, true);
+        window.removeEventListener('resize', h);
+      };
+    }
+  }, [isOpen, updatePosition]);
+
+  // Click outside to close
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (wrapperRef.current && !wrapperRef.current.contains(t) && dropdownRef.current && !dropdownRef.current.contains(t)) {
+        setOpenState(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [isOpen, setOpenState]);
+
+  // Focus search input when dropdown opens
+  useEffect(() => {
+    if (isOpen && showSearch && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isOpen, showSearch]);
+
+  // Toggle expand
   const toggleExpand = useCallback(
     (key: string | number) => {
       const idx = expandedKeys.indexOf(key);
@@ -417,103 +760,78 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     [expandedKeys, isTreeExpandedControlled, onTreeExpand],
   );
 
-  // Checkbox state for a node
-  const getCheckState = useCallback(
-    (opt: TreeSelectOption): 'all' | 'half' | 'none' => {
-      if (isLeafOpt(opt, fieldNames)) {
-        return selectedValues.includes(getOptValue(opt, fieldNames)) ? 'all' : 'none';
-      }
-      const leafValues = getLeafValues(opt, fieldNames);
-      const selectedCount = leafValues.filter((v) => selectedValues.includes(v)).length;
-      if (selectedCount === 0) return 'none';
-      if (selectedCount === leafValues.length) return 'all';
-      return 'half';
+  // Label lookup
+  const getLabelByValue = useCallback(
+    (val: string | number): React.ReactNode => {
+      const opt = findOption(treeData, val, fieldNames);
+      return opt ? getLabelStr(opt, fieldNames) : String(val);
     },
-    [selectedValues, fieldNames],
+    [treeData, fieldNames],
   );
 
-  // Handle selecting a node (single mode or non-checkable multiple)
-  const handleSelect = useCallback(
-    (opt: TreeSelectOption) => {
-      if (opt.disabled) return;
-      if (opt.selectable === false) return;
-      const val = getOptValue(opt, fieldNames);
+  // Change handler
+  const triggerChange = useCallback(
+    (nextRawValues: (string | number)[], eventInfo?: { selected?: boolean; node?: TreeSelectOption }) => {
+      if (!isControlled) setInnerValue(nextRawValues);
+      const output = formatValue(nextRawValues, labelInValue, isMultiple, treeData, fieldNames);
+      const labels = formatValueWithLabel(nextRawValues, treeData, fieldNames);
+      onChange?.(output, labels, eventInfo);
 
-      if (treeCheckable && multiple) {
-        // Internal state is the full expanded set, so it always includes
-        // all descendants when a parent is "checked". The toggle logic must
-        // operate on leaves + propagate up the ancestor chain, not on
-        // the clicked node alone.
-        const state = getCheckState(opt);
-        const isOptLeaf = isLeafOpt(opt, fieldNames);
-        // Determine the actual node to toggle: a leaf toggles itself,
-        // a non-leaf toggles all its descendants.
-        const targetVals = isOptLeaf ? [val] : getAllDescendantValues(opt, fieldNames).filter((v) => {
-          const o = flatOptions.find((x) => getOptValue(x, fieldNames) === v);
-          return o ? isLeafOpt(o, fieldNames) : true;
-        });
-
-        let nextValues: (string | number)[];
-        if (state === 'all') {
-          // Uncheck: remove the toggled leaves and the clicked (parent) value itself.
-          const removeSet = new Set<(string | number)>([...targetVals, val]);
-          nextValues = selectedValues.filter((v) => !removeSet.has(v));
+      if (eventInfo?.node) {
+        const val = getOptValue(eventInfo.node, fieldNames);
+        if (eventInfo.selected) {
+          onSelect?.(val, eventInfo.node);
         } else {
-          // Check: add the toggled leaves and the clicked (parent) value itself.
-          const addSet = new Set<(string | number)>([...targetVals, val]);
-          // Also include the parent chain so getCheckState stays correct
-          let parentVal = parentMap.get(val);
-          while (parentVal !== undefined) {
-            addSet.add(parentVal);
-            parentVal = parentMap.get(parentVal);
-          }
-          nextValues = Array.from(new Set([...selectedValues, ...addSet]));
+          onDeselect?.(val, eventInfo.node);
         }
-
-        // Apply showCheckedStrategy to compress the output
-        const filtered = applyShowCheckedStrategy(nextValues, showCheckedStrategy, parentMap, flatOptions, fieldNames);
-
-        if (!isControlled) setInnerValue(nextValues);
-        const labels = filtered.map((v) => {
-          const o = findOption(treeData, v, fieldNames);
-          return o ? getLabelStr(o, fieldNames) : String(v);
-        });
-        // Always pass arrays in treeCheckable mode (it is always used with multiple=true)
-        onChange?.(filtered, labels);
-        return;
-      }
-
-      if (multiple) {
-        const idx = selectedValues.indexOf(val);
-        const nextValues = idx >= 0 ? selectedValues.filter((v) => v !== val) : [...selectedValues, val];
-        if (!isControlled) setInnerValue(nextValues);
-        const labels = nextValues.map((v) => {
-          const o = findOption(treeData, v, fieldNames);
-          return o ? getLabelStr(o, fieldNames) : String(v);
-        });
-        onChange?.(nextValues, labels);
-        searchInputRef.current?.focus();
-      } else {
-        const nextValues = [val];
-        if (!isControlled) setInnerValue(nextValues);
-        const label = getLabelStr(opt, fieldNames);
-        onChange?.(val, label);
-        setOpenState(false);
       }
     },
+    [isControlled, labelInValue, isMultiple, treeData, fieldNames, onChange, onSelect, onDeselect],
+  );
+
+  // Selection
+  const handleSelect = useCallback(
+    (node: TreeSelectOption) => {
+      if (disabled || isNodeDisabled(node) || node.selectable === false) return;
+      const val = getOptValue(node, fieldNames);
+
+      if (treeCheckable) {
+        const targetLeaves = getSelectableLeafValues(node, fieldNames);
+        const allSelected = targetLeaves.length > 0 && targetLeaves.every((v) => selectedSet.has(v));
+        const nextSet = new Set(selectedSet);
+        if (allSelected) {
+          targetLeaves.forEach((v) => nextSet.delete(v));
+          nextSet.delete(val);
+        } else {
+          targetLeaves.forEach((v) => nextSet.add(v));
+          if (!isLeafOpt(node, fieldNames)) nextSet.add(val);
+        }
+        const nextRaw = compressValue(nextSet, showCheckedStrategy, treeData, fieldNames);
+        triggerChange(nextRaw, { selected: !allSelected, node });
+      } else if (isMultiple) {
+        const idx = selectedValues.indexOf(val);
+        const nextRaw = idx >= 0 ? selectedValues.filter((v) => v !== val) : [...selectedValues, val];
+        triggerChange(nextRaw, { selected: idx < 0, node });
+      } else {
+        triggerChange([val], { selected: true, node });
+        setOpenState(false);
+      }
+
+      if (autoClearSearchValue) setSearchValue('');
+      searchInputRef.current?.focus();
+    },
     [
+      disabled,
       treeCheckable,
-      multiple,
+      isMultiple,
+      selectedSet,
       selectedValues,
-      isControlled,
-      onChange,
-      setOpenState,
-      getCheckState,
       showCheckedStrategy,
-      parentMap,
-      flatOptions,
-      fieldNames,
       treeData,
+      fieldNames,
+      triggerChange,
+      autoClearSearchValue,
+      setOpenState,
     ],
   );
 
@@ -521,53 +839,37 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
   const handleClear = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      const nextValue: (string | number)[] = [];
-      // Always update innerValue because:
-      // - Uncontrolled: directly updates displayed value
-      // - Single-select controlled: clearing to undefined switches from controlled
-      //   to uncontrolled (valueProp becomes undefined), so innerValue must be
-      //   pre-set to [] to avoid showing stale data on the next render
-      setInnerValue(nextValue);
-      if (multiple) {
-        onChange?.(nextValue, []);
-      } else {
-        onChange?.(undefined, undefined);
-      }
+      const nextRaw: (string | number)[] = [];
+      if (!isControlled) setInnerValue(nextRaw);
       setSearchValue('');
+      const output = formatValue(nextRaw, labelInValue, isMultiple, treeData, fieldNames);
+      const labels = formatValueWithLabel(nextRaw, treeData, fieldNames);
+      onChange?.(output, labels);
       onClear?.();
+      searchInputRef.current?.focus();
     },
-    [multiple, onChange, onClear],
+    [isControlled, labelInValue, isMultiple, treeData, fieldNames, onChange, onClear],
   );
 
   // Remove tag
   const handleRemoveTag = useCallback(
     (val: string | number, e: React.MouseEvent) => {
       e.stopPropagation();
-
-      let nextValues: (string | number)[];
-      const _checkable = treeCheckable && multiple;
-      if (_checkable) {
-        // In treeCheckable mode, removing a parent tag should also uncheck all descendants
+      let nextRaw: (string | number)[];
+      if (treeCheckable) {
         const opt = findOption(treeData, val, fieldNames);
-        const descValues = opt ? getAllDescendantValues(opt, fieldNames) : [val];
-        nextValues = selectedValues.filter((v) => !descValues.includes(v));
+        const descValues = opt ? getSelectableLeafValues(opt, fieldNames) : [val];
+        const nextSet = new Set(selectedSet);
+        descValues.forEach((v) => nextSet.delete(v));
+        nextSet.delete(val);
+        nextRaw = compressValue(nextSet, showCheckedStrategy, treeData, fieldNames);
       } else {
-        nextValues = selectedValues.filter((v) => v !== val);
+        nextRaw = selectedValues.filter((v) => v !== val);
       }
-
-      if (!isControlled) setInnerValue(nextValues);
-
-      // Apply showCheckedStrategy for onChange output
-      const outputValues = _checkable
-        ? applyShowCheckedStrategy(nextValues, showCheckedStrategy, parentMap, flatOptions, fieldNames)
-        : nextValues;
-      const labels = outputValues.map((v) => {
-        const o = findOption(treeData, v, fieldNames);
-        return o ? getLabelStr(o, fieldNames) : String(v);
-      });
-      onChange?.(outputValues, labels);
+      const node = findOption(treeData, val, fieldNames);
+      triggerChange(nextRaw, node ? { selected: false, node } : undefined);
     },
-    [selectedValues, isControlled, treeCheckable, multiple, onChange, treeData, fieldNames, showCheckedStrategy, parentMap, flatOptions],
+    [treeCheckable, selectedSet, selectedValues, showCheckedStrategy, treeData, fieldNames, triggerChange],
   );
 
   // Search input
@@ -575,14 +877,10 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const val = e.target.value;
       setSearchValue(val);
+      onSearch?.(val);
       if (!isOpen) setOpenState(true);
-      // Auto expand all when searching
-      if (val) {
-        const allKeys = collectAllKeys(treeData, fieldNames);
-        if (!isTreeExpandedControlled) setInnerExpandedKeys(allKeys);
-      }
     },
-    [isOpen, setOpenState, treeData, fieldNames, isTreeExpandedControlled],
+    [isOpen, setOpenState, onSearch],
   );
 
   // Load data
@@ -602,70 +900,130 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     (e: React.KeyboardEvent) => {
       if (disabled) return;
       switch (e.key) {
-        case 'ArrowDown':
-        case 'ArrowUp':
+        case 'ArrowDown': {
           e.preventDefault();
-          if (!isOpen) setOpenState(true);
+          if (!isOpen) {
+            setOpenState(true);
+            return;
+          }
+          setActiveIndex((prev) => {
+            let next = prev + 1;
+            while (next < visibleNodes.length && isNodeDisabled(visibleNodes[next].node)) next++;
+            return next < visibleNodes.length ? next : prev;
+          });
           break;
-        case 'Escape':
+        }
+        case 'ArrowUp': {
+          e.preventDefault();
+          if (!isOpen) {
+            setOpenState(true);
+            return;
+          }
+          setActiveIndex((prev) => {
+            let next = prev - 1;
+            while (next >= 0 && isNodeDisabled(visibleNodes[next].node)) next--;
+            return next >= 0 ? next : prev;
+          });
+          break;
+        }
+        case 'ArrowRight': {
+          e.preventDefault();
+          if (!isOpen) {
+            setOpenState(true);
+            return;
+          }
+          const active = visibleNodes[activeIndex];
+          if (!active) return;
+          const val = getOptValue(active.node, fieldNames);
+          if (hasOptChildren(active.node, fieldNames) && !expandedKeys.includes(val)) {
+            toggleExpand(val);
+          } else if (loadData && !isLeafOpt(active.node, fieldNames) && active.node.isLeaf !== true) {
+            handleLoadData(active.node);
+          }
+          break;
+        }
+        case 'ArrowLeft': {
+          e.preventDefault();
+          if (!isOpen) {
+            setOpenState(true);
+            return;
+          }
+          const active = visibleNodes[activeIndex];
+          if (!active) return;
+          const val = getOptValue(active.node, fieldNames);
+          if (hasOptChildren(active.node, fieldNames) && expandedKeys.includes(val)) {
+            toggleExpand(val);
+          } else if (active.parent) {
+            const parentVal = getOptValue(active.parent, fieldNames);
+            const idx = visibleNodes.findIndex((n) => getOptValue(n.node, fieldNames) === parentVal);
+            if (idx >= 0) setActiveIndex(idx);
+          }
+          break;
+        }
+        case 'Enter': {
+          e.preventDefault();
+          if (!isOpen) {
+            setOpenState(true);
+            return;
+          }
+          if (activeIndex >= 0 && activeIndex < visibleNodes.length) {
+            handleSelect(visibleNodes[activeIndex].node);
+          }
+          break;
+        }
+        case 'Escape': {
           e.preventDefault();
           setOpenState(false);
           break;
-        case 'Backspace':
-          if (multiple && searchValue === '' && selectedValues.length > 0) {
+        }
+        case 'Backspace': {
+          if (isMultiple && searchValue === '' && selectedValues.length > 0) {
             const last = selectedValues[selectedValues.length - 1];
             handleRemoveTag(last, e as any);
           }
           break;
+        }
+        case 'Home': {
+          e.preventDefault();
+          if (!isOpen) setOpenState(true);
+          setActiveIndex(0);
+          break;
+        }
+        case 'End': {
+          e.preventDefault();
+          if (!isOpen) setOpenState(true);
+          setActiveIndex(visibleNodes.length - 1);
+          break;
+        }
       }
     },
-    [disabled, isOpen, setOpenState, multiple, searchValue, selectedValues, handleRemoveTag],
+    [
+      disabled,
+      isOpen,
+      setOpenState,
+      visibleNodes,
+      activeIndex,
+      expandedKeys,
+      toggleExpand,
+      loadData,
+      handleLoadData,
+      handleSelect,
+      isMultiple,
+      searchValue,
+      selectedValues,
+      handleRemoveTag,
+    ],
   );
 
-  // Dropdown position
-  const updatePosition = useCallback(() => {
-    if (!wrapperRef.current) return;
-    const rect = wrapperRef.current.getBoundingClientRect();
-    setDropdownPos({ top: rect.bottom + 4, left: rect.left, width: rect.width });
-  }, []);
-
+  // Scroll active node into view
   useEffect(() => {
-    if (isOpen) {
-      updatePosition();
-      const h = () => updatePosition();
-      window.addEventListener('scroll', h, true);
-      window.addEventListener('resize', h);
-      return () => {
-        window.removeEventListener('scroll', h, true);
-        window.removeEventListener('resize', h);
-      };
-    }
-  }, [isOpen, updatePosition]);
-
-  // Click outside
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClick = (e: MouseEvent) => {
-      const t = e.target as Node;
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(t) &&
-        dropdownRef.current &&
-        !dropdownRef.current.contains(t)
-      ) {
-        setOpenState(false);
+    if (isOpen && activeIndex >= 0 && dropdownRef.current) {
+      const activeEls = dropdownRef.current.querySelectorAll('.soui-tree-select-treenode-active');
+      if (activeEls[activeIndex]) {
+        activeEls[activeIndex].scrollIntoView({ block: 'nearest' });
       }
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [isOpen, setOpenState]);
-
-  // Focus search
-  useEffect(() => {
-    if (isOpen && showSearch && searchInputRef.current) {
-      searchInputRef.current.focus();
     }
-  }, [isOpen, showSearch]);
+  }, [activeIndex, isOpen]);
 
   // CSS vars
   const cssVars = buildCssVars(treeSelectTheme, globalTheme);
@@ -674,56 +1032,24 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
   // Computed
   const hasValue = selectedValues.length > 0;
   const showClear = allowClear && hasValue && !disabled;
-  const isCheckable = treeCheckable && multiple;
+  const showArrowIcon = showArrow && !showClear;
 
-  // Search filter
-  const searchFilter = useCallback(
-    (opt: TreeSelectOption): boolean => {
-      if (!searchValue) return true;
-      if (filterTreeNode) return filterTreeNode(searchValue, opt);
-      const prop = treeNodeFilterProp === 'title' ? getOptLabel(opt, fieldNames) : getOptValue(opt, fieldNames);
-      const str = typeof prop === 'string' ? prop : String(prop);
-      return str.toLowerCase().includes(searchValue.toLowerCase());
+  // Check state
+  const getCheckState = useCallback(
+    (opt: TreeSelectOption): 'all' | 'half' | 'none' => {
+      if (!treeCheckable) return 'none';
+      const leaves = getSelectableLeafValues(opt, fieldNames);
+      if (leaves.length === 0) return selectedSet.has(getOptValue(opt, fieldNames)) ? 'all' : 'none';
+      const selectedCount = leaves.filter((v) => selectedSet.has(v)).length;
+      if (selectedCount === 0) return 'none';
+      if (selectedCount === leaves.length) return 'all';
+      return 'half';
     },
-    [searchValue, filterTreeNode, treeNodeFilterProp, fieldNames],
+    [treeCheckable, selectedSet, fieldNames],
   );
 
-  // Check if a node or any descendant matches search
-  const nodeOrDescendantMatches = useCallback(
-    (opt: TreeSelectOption): boolean => {
-      if (searchFilter(opt)) return true;
-      const ch = getOptChildren(opt, fieldNames);
-      if (ch) return ch.some((c) => nodeOrDescendantMatches(c));
-      return false;
-    },
-    [searchFilter, fieldNames],
-  );
-
-  // Display text for single mode
-  const displayText = useMemo(() => {
-    if (multiple || selectedValues.length === 0) return null;
-    const opt = findOption(treeData, selectedValues[0], fieldNames);
-    return opt ? getLabelStr(opt, fieldNames) : String(selectedValues[0]);
-  }, [multiple, selectedValues, treeData, fieldNames]);
-
-  // Classes
-  const wrapperCls = classNames(
-    'soui-tree-select',
-    `soui-tree-select-${mergedSize}`,
-    {
-      'soui-tree-select-open': isOpen,
-      'soui-tree-select-focused': isOpen,
-      'soui-tree-select-disabled': disabled,
-      'soui-tree-select-multiple': multiple,
-      'soui-tree-select-single': !multiple,
-      'soui-tree-select-show-search': showSearch,
-      [`soui-tree-select-status-${status}`]: !!status && !disabled,
-    },
-    className,
-  );
-
-  // Render tree nodes
-  const renderTreeNode = (opt: TreeSelectOption, level: number): React.ReactNode => {
+  // Render tree node
+  const renderTreeNode = (opt: TreeSelectOption, level: number, parent?: TreeSelectOption): React.ReactNode => {
     const val = getOptValue(opt, fieldNames);
     const label = getOptLabel(opt, fieldNames);
     const children = getOptChildren(opt, fieldNames);
@@ -731,93 +1057,90 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     const hasChildren = hasOptChildren(opt, fieldNames);
     const isExpanded = expandedKeys.includes(val);
     const isLoading = loadingKeys.has(val);
-    const isDisabled = opt.disabled;
+    const isDisabled = isNodeDisabled(opt);
+    const checkState = getCheckState(opt);
+    const isSelected = !treeCheckable && selectedSet.has(val);
+    const activeNode = visibleNodes[activeIndex]?.node;
+    const isActive = activeNode ? getOptValue(activeNode, fieldNames) === val : false;
+    const indent = level * 18;
 
-    // Search filtering
-    if (searchValue && !nodeOrDescendantMatches(opt)) return null;
+    const switcherNode = (
+      <span
+        className={classNames('soui-tree-select-switcher', {
+          'soui-tree-select-switcher-open': isExpanded,
+          'soui-tree-select-switcher-close': !isExpanded && (hasChildren || (loadData && opt.isLeaf === false)),
+          'soui-tree-select-switcher-noop': leaf && !(loadData && opt.isLeaf === false),
+        })}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (hasChildren) toggleExpand(val);
+          else if (loadData && opt.isLeaf === false) handleLoadData(opt);
+        }}
+      >
+        {isLoading ? (
+          <Icon name="Loading" size={12} theme="outline" />
+        ) : leaf && !(loadData && opt.isLeaf === false) ? null : switcherIcon !== undefined ? (
+          switcherIcon
+        ) : (
+          <Icon name="Right" size={10} theme="outline" />
+        )}
+      </span>
+    );
 
-    // Selection state
-    const isSelected = selectedValues.includes(val);
-    let checkState: 'all' | 'half' | 'none' = 'none';
-    if (isCheckable) {
-      checkState = getCheckState(opt);
-    }
+    const checkboxNode = treeCheckable ? (
+      <span
+        className={classNames('soui-tree-select-checkbox', {
+          'soui-tree-select-checkbox-checked': checkState === 'all',
+          'soui-tree-select-checkbox-half': checkState === 'half',
+          'soui-tree-select-checkbox-disabled': isDisabled,
+        })}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!isDisabled) handleSelect(opt);
+        }}
+      >
+        {checkState === 'all' && <Icon name="Check" size={12} theme="outline" />}
+        {checkState === 'half' && <span className="soui-tree-select-checkbox-indeterminate" />}
+      </span>
+    ) : null;
 
-    // Indentation
-    const indent = level * 24;
+    const iconNode = treeIcon ? (
+      <span className="soui-tree-select-node-icon">
+        {typeof treeIcon === 'function' ? treeIcon(opt) : opt.icon}
+      </span>
+    ) : null;
+
+    const titleNode = treeTitleRender ? treeTitleRender(opt) : label;
 
     return (
       <React.Fragment key={val}>
         <div
           className={classNames('soui-tree-select-treenode', {
-            'soui-tree-select-treenode-selected': isSelected && !isCheckable,
-            'soui-tree-select-treenode-disabled': isDisabled,
+            'soui-tree-select-treenode-selected': isSelected,
             'soui-tree-select-treenode-checked': checkState === 'all',
             'soui-tree-select-treenode-half-checked': checkState === 'half',
+            'soui-tree-select-treenode-disabled': isDisabled,
+            'soui-tree-select-treenode-active': isActive,
           })}
           style={{ paddingLeft: indent }}
         >
-          {/* Switcher */}
-          <span
-            className={classNames('soui-tree-select-switcher', {
-              'soui-tree-select-switcher-open': isExpanded,
-              'soui-tree-select-switcher-close': !isExpanded && hasChildren,
-              'soui-tree-select-switcher-noop': leaf,
-            })}
-            onClick={(e) => {
-              e.stopPropagation();
-              if (hasChildren) toggleExpand(val);
-              else if (loadData && !leaf) handleLoadData(opt);
-            }}
-          >
-            {isLoading ? (
-              <Icon name="Loading" size={12} theme="outline" />
-            ) : leaf ? null : switcherIcon !== undefined ? (
-              switcherIcon
-            ) : (
-              <Icon name="Right" size={10} theme="outline" />
-            )}
-          </span>
-
-          {/* Checkbox */}
-          {isCheckable && (
-            <span
-              className={classNames('soui-tree-select-checkbox', {
-                'soui-tree-select-checkbox-checked': checkState === 'all',
-                'soui-tree-select-checkbox-half': checkState === 'half',
-                'soui-tree-select-checkbox-disabled': isDisabled,
-              })}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!isDisabled) handleSelect(opt);
-              }}
-            >
-              {checkState === 'all' && <Icon name="Check" size={12} theme="outline" />}
-              {checkState === 'half' && <span className="soui-tree-select-checkbox-indeterminate" />}
-            </span>
-          )}
-
-          {/* Node content */}
+          {switcherNode}
+          {checkboxNode}
+          {iconNode}
           <span
             className={classNames('soui-tree-select-node-content', {
-              'soui-tree-select-node-content-selected': isSelected && !isCheckable,
+              'soui-tree-select-node-content-selected': isSelected,
               'soui-tree-select-node-content-disabled': isDisabled,
             })}
-            onClick={() => {
-              if (!isDisabled) {
-                handleSelect(opt);
-              }
-            }}
-            title={typeof label === 'string' ? label : undefined}
+            onClick={() => !isDisabled && handleSelect(opt)}
+            title={typeof titleNode === 'string' ? titleNode : undefined}
           >
-            {label}
+            {titleNode}
           </span>
         </div>
-
-        {/* Children */}
-        {isExpanded && hasChildren && children && (
+        {isExpanded && (hasChildren || (loadData && opt.isLeaf === false)) && (
           <div className={classNames('soui-tree-select-children', { 'soui-tree-select-line': treeLine })}>
-            {children.map((child) => renderTreeNode(child, level + 1))}
+            {children?.map((child) => renderTreeNode(child, level + 1, opt))}
           </div>
         )}
       </React.Fragment>
@@ -826,39 +1149,38 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
 
   // Render selected content
   const renderSelectorContent = () => {
-    if (multiple) {
-      // Apply showCheckedStrategy for display
-      const displayValues = isCheckable
-        ? applyShowCheckedStrategy(selectedValues, showCheckedStrategy, parentMap, flatOptions, fieldNames)
-        : selectedValues;
-      const displayVisible = maxTagCount !== undefined ? displayValues.slice(0, maxTagCount) : displayValues;
-      const displayOverflow = maxTagCount !== undefined ? Math.max(0, displayValues.length - maxTagCount) : 0;
+    if (isMultiple) {
+      const visibleValues = maxTagCount !== undefined ? displayValues.slice(0, maxTagCount) : displayValues;
+      const overflowCount = maxTagCount !== undefined ? Math.max(0, displayValues.length - maxTagCount) : 0;
 
       return (
         <div className="soui-tree-select-selection-overflow">
-          {displayVisible.map((val) => {
-            const opt = findOption(treeData, val, fieldNames);
-            const lbl = opt ? getLabelStr(opt, fieldNames) : String(val);
+          {visibleValues.map((val) => {
+            const label = getLabelByValue(val);
+            const onClose = () => handleRemoveTag(val, { stopPropagation: () => {} } as any);
+            if (tagRender) {
+              return <React.Fragment key={val}>{tagRender({ label, value: val, onClose })}</React.Fragment>;
+            }
             return (
               <span className="soui-tree-select-selection-item" key={val}>
-                <span className="soui-tree-select-selection-item-content">{lbl}</span>
+                <span className="soui-tree-select-selection-item-content">{label}</span>
                 <span
                   className="soui-tree-select-selection-item-remove"
                   onClick={(e) => handleRemoveTag(val, e)}
                   role="button"
-                  aria-label={`移除 ${lbl}`}
+                  aria-label={`移除 ${label}`}
                 >
                   <Icon name="Close" size={10} theme="outline" />
                 </span>
               </span>
             );
           })}
-          {displayOverflow > 0 && (
+          {overflowCount > 0 && (
             <span className="soui-tree-select-selection-item soui-tree-select-selection-item-overflow">
               <span className="soui-tree-select-selection-item-content">
                 {typeof maxTagPlaceholder === 'function'
                   ? maxTagPlaceholder(displayValues.slice(maxTagCount!))
-                  : `+${displayOverflow}`}
+                  : `+${overflowCount}`}
               </span>
             </span>
           )}
@@ -886,6 +1208,7 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     }
 
     // Single mode
+    const displayText = selectedValues.length > 0 ? getLabelByValue(selectedValues[0]) : null;
     return (
       <>
         {showSearch && isOpen ? (
@@ -901,7 +1224,7 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
               role="combobox"
               aria-expanded={isOpen}
               aria-haspopup="listbox"
-              placeholder={hasValue ? displayText || '' : (typeof placeholder === 'string' ? placeholder : '')}
+              placeholder={hasValue ? (typeof displayText === 'string' ? displayText : '') : typeof placeholder === 'string' ? placeholder : ''}
             />
           </div>
         ) : null}
@@ -910,20 +1233,20 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
             {displayText}
           </span>
         ) : null}
-        {!hasValue && !searchValue ? (
+        {!hasValue && !searchValue && placeholder && (
           <span className="soui-tree-select-selection-placeholder">{placeholder}</span>
-        ) : null}
+        )}
       </>
     );
   };
 
   // Dropdown style
-  const dropdownStyle: React.CSSProperties = {
+  const dropdownInlineStyle: React.CSSProperties = {
     position: 'fixed',
-    top: dropdownPos.top,
-    left: dropdownPos.left,
-    ...(dropdownPos.width ? { minWidth: dropdownPos.width } : {}),
-    minWidth: 120,
+    ...(placement.startsWith('top') ? { bottom: dropdownPos.bottom } : { top: dropdownPos.top }),
+    ...(placement.endsWith('Right') ? { right: dropdownPos.right } : { left: dropdownPos.left }),
+    minWidth: Math.max(dropdownPos.width, 120),
+    ...dropdownStyle,
   };
 
   // Render dropdown
@@ -943,8 +1266,8 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
     const defaultMenu = (
       <div
         ref={dropdownRef}
-        className={classNames('soui-tree-select-dropdown', popupClassName)}
-        style={dropdownStyle}
+        className={classNames('soui-tree-select-dropdown', `soui-tree-select-dropdown-${placement}`, popupClassName)}
+        style={dropdownInlineStyle}
         role="listbox"
       >
         {dropdownRender ? dropdownRender(menuContent as React.ReactElement) : menuContent}
@@ -958,6 +1281,24 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
       document.body,
     );
   };
+
+  const wrapperCls = classNames(
+    'soui-tree-select',
+    `soui-tree-select-${mergedSize}`,
+    `soui-tree-select-${placement}`,
+    {
+      'soui-tree-select-open': isOpen,
+      'soui-tree-select-focused': isOpen,
+      'soui-tree-select-disabled': disabled,
+      'soui-tree-select-multiple': isMultiple,
+      'soui-tree-select-single': !isMultiple,
+      'soui-tree-select-show-search': showSearch,
+      'soui-tree-select-show-arrow': showArrow,
+      'soui-tree-select-tree-checkable': treeCheckable,
+      [`soui-tree-select-status-${status}`]: !!status && !disabled,
+    },
+    className,
+  );
 
   return (
     <div
@@ -985,9 +1326,11 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
         </span>
       )}
 
-      <span className="soui-tree-select-arrow">
-        {suffixIcon !== undefined ? suffixIcon : <Icon name="Down" size={12} theme="outline" />}
-      </span>
+      {showArrowIcon && (
+        <span className="soui-tree-select-arrow">
+          {suffixIcon !== undefined ? suffixIcon : <Icon name="Down" size={12} theme="outline" />}
+        </span>
+      )}
 
       {renderDropdown()}
     </div>
@@ -995,73 +1338,5 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
 });
 
 TreeSelect.displayName = 'TreeSelect';
-
-// ==================== showCheckedStrategy ====================
-
-/** Expand compressed values back to the full internal selection set.
- *  For SHOW_PARENT/SHOW_CHILD, if a non-leaf value is present, all its
- *  descendants are also considered selected so the tree checkboxes render
- *  correctly and interactions stay consistent.
- */
-function expandValue(
-  values: (string | number)[],
-  strategy: TreeSelectShowCheckedStrategy,
-  flatOptions: TreeSelectOption[],
-  fieldNames?: TreeSelectFieldNames,
-): (string | number)[] {
-  if (strategy === 'SHOW_ALL' || values.length === 0) return values;
-
-  const expanded = new Set(values);
-  for (const val of values) {
-    const opt = flatOptions.find((o) => getOptValue(o, fieldNames) === val);
-    if (opt && !isLeafOpt(opt, fieldNames)) {
-      const desc = getAllDescendantValues(opt, fieldNames);
-      desc.forEach((v) => expanded.add(v));
-    }
-  }
-  return Array.from(expanded);
-}
-
-function applyShowCheckedStrategy(
-  values: (string | number)[],
-  strategy: TreeSelectShowCheckedStrategy,
-  parentMap: Map<string | number, string | number | undefined>,
-  flatOptions: TreeSelectOption[],
-  fieldNames?: TreeSelectFieldNames,
-): (string | number)[] {
-  if (strategy === 'SHOW_ALL') return values;
-
-  if (strategy === 'SHOW_PARENT') {
-    // Helper: check if a node is "fully selected" — all its leaf descendants are in values.
-    const isFullySelected = (opt: TreeSelectOption): boolean => {
-      const leaves = getLeafValues(opt, fieldNames);
-      return leaves.length > 0 && leaves.every((lv) => values.includes(lv));
-    };
-
-    // Find the nearest fully-selected ancestor for a value.
-    // Only hide a child when its parent (or higher ancestor) is fully checked.
-    return values.filter((v) => {
-      let parentVal = parentMap.get(v);
-      while (parentVal !== undefined) {
-        if (values.includes(parentVal)) {
-          const parentOpt = flatOptions.find((o) => getOptValue(o, fieldNames) === parentVal);
-          if (parentOpt && isFullySelected(parentOpt)) return false;
-        }
-        parentVal = parentMap.get(parentVal);
-      }
-      return true;
-    });
-  }
-
-  if (strategy === 'SHOW_CHILD') {
-    // Only keep leaf nodes
-    return values.filter((v) => {
-      const opt = flatOptions.find((o) => getOptValue(o, fieldNames) === v);
-      return opt ? isLeafOpt(opt, fieldNames) : true;
-    });
-  }
-
-  return values;
-}
 
 export default TreeSelect;
