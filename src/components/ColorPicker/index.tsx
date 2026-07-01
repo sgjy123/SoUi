@@ -401,29 +401,51 @@ const ColorPicker: React.FC<ColorPickerProps> = ({
     const PANEL_H = 420; // 预估面板高度
     const gap = 8;
 
-    // 水平方向：左对齐还是右对齐
-    const spaceRight = viewportWidth - triggerRect.left - gap;
-    const spaceLeft = triggerRect.right - gap;
-    const useLeft = spaceRight >= PANEL_W;
-    const useRight = !useLeft && spaceLeft >= PANEL_W;
+    // 解析用户指定的 placement
+    const [userVAlign, userHAlign] = placement.split(/(?=[A-Z])/); // 'bottomLeft' -> ['bottom', 'Left']
+    let vAlign: 'top' | 'bottom' = userVAlign as 'top' | 'bottom';
+    let hAlign: 'Left' | 'Right' = userHAlign as 'Left' | 'Right';
 
-    let hAlign: 'Left' | 'Right';
-    let maxW: number;
-    if (useLeft) {
-      hAlign = 'Left';
-      maxW = Math.min(PANEL_W, spaceRight);
-    } else if (useRight) {
-      hAlign = 'Right';
-      maxW = Math.min(PANEL_W, spaceLeft);
-    } else {
-      hAlign = spaceRight >= spaceLeft ? 'Left' : 'Right';
-      maxW = Math.max(200, Math.max(spaceRight, spaceLeft));
+    // 垂直方向：检查是否溢出，必要时翻转
+    const spaceBelow = viewportHeight - triggerRect.bottom - gap;
+    const spaceAbove = triggerRect.top - gap;
+    if (vAlign === 'bottom' && spaceBelow < PANEL_H && spaceAbove > spaceBelow) {
+      vAlign = 'top';
+    } else if (vAlign === 'top' && spaceAbove < PANEL_H && spaceBelow > spaceAbove) {
+      vAlign = 'bottom';
     }
 
-    // 垂直方向：向上弹还是向下弹
-    let vAlign: 'top' | 'bottom' = 'bottom';
-    if (viewportHeight - triggerRect.bottom - gap < PANEL_H && triggerRect.top - gap > viewportHeight - triggerRect.bottom - gap) {
-      vAlign = 'top';
+    // 水平方向：检查是否溢出，必要时翻转
+    const spaceRight = viewportWidth - triggerRect.left - gap;
+    const spaceLeft = triggerRect.right - gap;
+    let maxW = PANEL_W;
+
+    if (hAlign === 'Left') {
+      if (spaceRight < PANEL_W && spaceLeft >= PANEL_W) {
+        hAlign = 'Right';
+        maxW = Math.min(PANEL_W, spaceLeft);
+      } else {
+        maxW = Math.min(PANEL_W, spaceRight);
+      }
+    } else {
+      // hAlign === 'Right'
+      if (spaceLeft < PANEL_W && spaceRight >= PANEL_W) {
+        hAlign = 'Left';
+        maxW = Math.min(PANEL_W, spaceRight);
+      } else {
+        maxW = Math.min(PANEL_W, spaceLeft);
+      }
+    }
+
+    // 如果两个方向都不够，选择空间更大的方向
+    if (maxW < 200) {
+      if (spaceRight >= spaceLeft) {
+        hAlign = 'Left';
+        maxW = Math.max(200, spaceRight);
+      } else {
+        hAlign = 'Right';
+        maxW = Math.max(200, spaceLeft);
+      }
     }
 
     const cls = `soui-color-picker-panel--${vAlign}${hAlign}`;

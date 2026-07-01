@@ -18,7 +18,7 @@ export default () => {
       style={{
         display: 'flex',
         gap: 16,
-        padding: '280px 20px',
+        padding: '380px 20px',
         justifyContent: 'center',
       }}
     >
