@@ -67,6 +67,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const treeSelectTheme = mergedTheme.components?.TreeSelect || {};
     // 获取 ColorPicker 组件级配置
     const colorPickerTheme = mergedTheme.components?.ColorPicker || {};
+    // 获取 DatePicker 组件级配置
+    const datePickerTheme = mergedTheme.components?.DatePicker || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -471,6 +473,16 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-color-picker-color-primary-component': colorPickerTheme.colorPrimary,
       '--soui-color-picker-border-color-component': colorPickerTheme.colorBorder,
       '--soui-color-picker-panel-bg-component': colorPickerTheme.colorBg,
+
+      // ==================== DatePicker 组件配置 ====================
+      // 第3层: DatePicker 组件级覆盖 (优先级最高)
+      '--soui-date-picker-font-size-component': datePickerTheme.fontSize ? `${datePickerTheme.fontSize}px` : undefined,
+      '--soui-date-picker-border-radius-component': datePickerTheme.borderRadius ? `${datePickerTheme.borderRadius}px` : undefined,
+      '--soui-date-picker-color-primary-component': datePickerTheme.colorPrimary,
+      '--soui-date-picker-border-color-component': datePickerTheme.colorBorder,
+      '--soui-date-picker-bg-component': datePickerTheme.colorBg,
+      '--soui-date-picker-panel-bg-component': datePickerTheme.panelBg,
+      '--soui-date-picker-text-color-component': datePickerTheme.colorText,
     } as any;
   }, [mergedTheme]);
 

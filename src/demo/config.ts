@@ -322,7 +322,7 @@ export const docsConfig: MenuGroup[] = [
       {
         key: 'color-picker',
         label: 'ColorPicker 颜色选择器',
-        icon: 'Palette',
+        icon: 'Fill',
         items: [
           { key: 'color-picker-basic', label: 'ColorPicker 基础用法', componentPath: 'ColorPicker', exampleName: 'Basic', description: '基本的颜色选择器，支持 hex/rgb/hsb 格式切换。' },
           { key: 'color-picker-size', label: 'ColorPicker 尺寸', componentPath: 'ColorPicker', exampleName: 'Size', description: '小、中、大三种尺寸。' },
@@ -332,6 +332,30 @@ export const docsConfig: MenuGroup[] = [
           { key: 'color-picker-custom-trigger', label: 'ColorPicker 自定义触发器', componentPath: 'ColorPicker', exampleName: 'CustomTrigger', description: '通过 children 替换默认触发器。' },
           { key: 'color-picker-placement', label: 'ColorPicker 弹出方向', componentPath: 'ColorPicker', exampleName: 'Placement', description: '四个弹出方向，自动检测视口溢出。' },
           { key: 'color-picker-theme', label: 'ColorPicker 主题定制', componentPath: 'ColorPicker', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题样式。' },
+        ],
+      },
+      {
+        key: 'date-picker',
+        label: 'DatePicker 日期选择',
+        icon: 'Calendar',
+        items: [
+          { key: 'date-picker-basic', label: 'DatePicker 基础用法', componentPath: 'DatePicker', exampleName: 'Basic', description: '基本的日期选择器。' },
+          { key: 'date-picker-size', label: 'DatePicker 尺寸', componentPath: 'DatePicker', exampleName: 'Size', description: '小、中、大三种尺寸。' },
+          { key: 'date-picker-picker-mode', label: 'DatePicker 选择模式', componentPath: 'DatePicker', exampleName: 'PickerMode', description: '支持日期、周、月、年四种选择模式。' },
+          { key: 'date-picker-variant', label: 'DatePicker 变体', componentPath: 'DatePicker', exampleName: 'Variant', description: '禁用、不可清除、自定义占位、自定义格式。' },
+          { key: 'date-picker-disabled-date', label: 'DatePicker 禁用日期', componentPath: 'DatePicker', exampleName: 'DisabledDate', description: '通过 disabledDate 禁用指定日期。' },
+          { key: 'date-picker-show-time', label: 'DatePicker 时间选择', componentPath: 'DatePicker', exampleName: 'ShowTime', description: '开启 showTime 后支持选择时分秒。' },
+          { key: 'date-picker-presets', label: 'DatePicker 预设日期', componentPath: 'DatePicker', exampleName: 'Presets', description: '通过 presets 提供快捷日期选项。' },
+          { key: 'date-picker-theme', label: 'DatePicker 主题定制', componentPath: 'DatePicker', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题样式。' },
+        ],
+      },
+      {
+        key: 'range-picker',
+        label: 'RangePicker 范围选择',
+        icon: 'Calendar',
+        items: [
+          { key: 'range-picker-basic', label: 'RangePicker 基础用法', componentPath: 'DatePicker', exampleName: 'RangePickerBasic', description: '基本的日期范围选择器，双面板联动。' },
+          { key: 'range-picker-presets', label: 'RangePicker 预设范围', componentPath: 'DatePicker', exampleName: 'RangePickerPresets', description: '通过 presets 提供快捷范围选项（今天、本周、本月等）。' },
         ],
       },
     ],

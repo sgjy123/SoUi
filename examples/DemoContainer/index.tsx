@@ -34,6 +34,9 @@ import Cascader from '../../src/components/Cascader';
 import TreeSelect from '../../src/components/TreeSelect';
 import Rate from '../../src/components/Rate';
 import ColorPicker from '../../src/components/ColorPicker';
+import DatePicker from '../../src/components/DatePicker';
+import RangePicker from '../../src/components/DatePicker/RangePicker';
+import dayjs from 'dayjs';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
 
@@ -108,6 +111,9 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     TreeSelect,
     Rate,
     ColorPicker,
+    DatePicker,
+    RangePicker,
+    dayjs,
     ConfigProvider,
     ...scope,
   };

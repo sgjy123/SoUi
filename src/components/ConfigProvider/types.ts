@@ -756,6 +756,25 @@ export interface ComponentThemeConfig {
     /** 面板宽度（像素） */
     panelWidth?: number;
   };
+  /** 日期选择器组件配置 */
+  DatePicker?: {
+    /** 主色（选中态、今日标记） */
+    colorPrimary?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 触发器边框颜色 */
+    colorBorder?: string;
+    /** 触发器背景色 */
+    colorBg?: string;
+    /** 面板背景色 */
+    panelBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 控件高度（像素） */
+    controlHeight?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 

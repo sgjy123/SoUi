@@ -1,0 +1,546 @@
+@import '../../styles/variables.less';
+
+// ==================== DatePicker 日期选择器 ====================
+
+.soui-date-picker {
+  position: relative;
+  display: inline-block;
+  font-size: var(--soui-date-picker-font-size-component, var(--soui-date-picker-font-size, @font-size-base));
+  overflow: visible;
+
+  &--disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // ==================== Trigger ====================
+
+  &-trigger {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    height: @control-height-base;
+    padding: 0 11px;
+    border: 1px solid var(--soui-date-picker-border-color-component, var(--soui-date-picker-border-color, @border-color));
+    border-radius: var(--soui-date-picker-border-radius-component, var(--soui-date-picker-border-radius, @border-radius-base));
+    background: var(--soui-date-picker-bg-component, var(--soui-date-picker-bg, @bg-color-base));
+    cursor: pointer;
+    transition: border-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 200px;
+
+    &:hover {
+      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+    }
+
+    &:focus-within {
+      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+    }
+  }
+
+  &-input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: inherit;
+    color: var(--soui-date-picker-text-color-component, var(--soui-date-picker-text-color, @text-color));
+    font-family: inherit;
+    padding: 0;
+    min-width: 0;
+
+    &::placeholder {
+      color: @text-color-disabled;
+    }
+  }
+
+  &-clear {
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: @text-color-disabled;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color @transition-duration @transition-timing-function;
+    flex-shrink: 0;
+
+    &:hover {
+      color: @text-color-secondary;
+    }
+  }
+
+  &-icon {
+    display: inline-flex;
+    align-items: center;
+    color: @text-color-disabled;
+    flex-shrink: 0;
+    margin-left: 4px;
+  }
+
+  // ==================== Size variants ====================
+
+  &--small &-trigger {
+    height: @control-height-sm;
+    padding: 0 7px;
+    font-size: @font-size-sm;
+    min-width: 160px;
+  }
+
+  &--middle &-trigger {
+    height: @control-height-base;
+    padding: 0 11px;
+    min-width: 200px;
+  }
+
+  &--large &-trigger {
+    height: @control-height-lg;
+    padding: 0 11px;
+    font-size: @font-size-lg;
+    min-width: 220px;
+  }
+
+  // ==================== Range Trigger ====================
+
+  &-range-trigger {
+    min-width: 320px;
+    gap: 4px;
+  }
+
+  &-range-separator {
+    color: @text-color-disabled;
+    flex-shrink: 0;
+    font-size: @font-size-sm;
+    padding: 0 4px;
+  }
+
+  // ==================== Panel ====================
+
+  &-panel {
+    position: absolute;
+    z-index: @z-index-picker;
+    min-width: 280px;
+    background: var(--soui-date-picker-panel-bg-component, var(--soui-date-picker-panel-bg, @bg-color-base));
+    border-radius: var(--soui-date-picker-border-radius-component, var(--soui-date-picker-border-radius, @border-radius-base));
+    box-shadow: @box-shadow-secondary;
+    padding: @padding-sm;
+    box-sizing: border-box;
+    user-select: none;
+
+    &--bottomLeft  { top: calc(100% + 4px); left: 0; }
+    &--bottomRight { top: calc(100% + 4px); right: 0; }
+    &--topLeft     { bottom: calc(100% + 4px); left: 0; }
+    &--topRight    { bottom: calc(100% + 4px); right: 0; }
+  }
+
+  // ==================== Header ====================
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0 8px;
+    border-bottom: 1px solid @border-color-split;
+    margin-bottom: @padding-sm;
+  }
+
+  &-header-btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 2px 6px;
+    color: @text-color-secondary;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all @transition-duration @transition-timing-function;
+
+    &:hover {
+      color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  &-header-title {
+    font-size: @font-size-sm;
+    font-weight: 500;
+    color: @text-color;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: none;
+    background: transparent;
+    cursor: default;
+
+    &--clickable {
+      cursor: pointer;
+      transition: all @transition-duration @transition-timing-function;
+
+      &:hover {
+        color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+        background: rgba(0, 0, 0, 0.04);
+      }
+    }
+  }
+
+  &-header-title-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  // ==================== Calendar (Date mode) ====================
+
+  &-calendar {
+    width: 100%;
+  }
+
+  &-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 4px;
+  }
+
+  &-weekday {
+    text-align: center;
+    font-size: @font-size-sm;
+    color: @text-color-secondary;
+    padding: 4px 0;
+    font-weight: 500;
+  }
+
+  &-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+
+  &-day {
+    appearance: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: @font-size-sm;
+    color: @text-color;
+    border-radius: 4px;
+    transition: all 0.15s @transition-timing-function;
+
+    &:hover:not(&--disabled):not(&--selected) {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    &--other-month {
+      color: @text-color-disabled;
+    }
+
+    &--today {
+      color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      font-weight: 600;
+      box-shadow: inset 0 0 0 1px var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+    }
+
+    &--selected {
+      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: #fff;
+      font-weight: 500;
+      border-radius: 4px;
+    }
+
+    &--in-range {
+      background: fade(@primary-color, 10%);
+      border-radius: 0;
+    }
+
+    &--range-hover {
+      background: fade(@primary-color, 6%);
+      border-radius: 0;
+    }
+
+    &--disabled {
+      color: @text-color-disabled;
+      background: @bg-color-disable;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+  }
+
+  &-day-week {
+    font-size: 11px;
+    color: @text-color-secondary;
+  }
+
+  // ==================== Month grid ====================
+
+  &-month-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  &-month-cell {
+    appearance: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 4px;
+    font-size: @font-size-sm;
+    color: @text-color;
+    border-radius: 6px;
+    transition: all @transition-duration @transition-timing-function;
+
+    &:hover:not(&--selected) {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    &--now {
+      color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      font-weight: 600;
+    }
+
+    &--selected {
+      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: #fff;
+      font-weight: 500;
+    }
+  }
+
+  // ==================== Year grid ====================
+
+  &-year-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  &-year-cell {
+    appearance: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px 4px;
+    font-size: @font-size-sm;
+    color: @text-color;
+    border-radius: 6px;
+    transition: all @transition-duration @transition-timing-function;
+
+    &:hover:not(&--selected) {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    &--out {
+      color: @text-color-disabled;
+    }
+
+    &--selected {
+      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: #fff;
+      font-weight: 500;
+    }
+  }
+
+  // ==================== Time Panel ====================
+
+  &-time {
+    padding: 4px 0;
+  }
+
+  &-time-header {
+    text-align: center;
+    font-size: @font-size-sm;
+    font-weight: 500;
+    color: @text-color;
+    padding: 4px 0 8px;
+    border-bottom: 1px solid @border-color-split;
+    margin-bottom: 8px;
+  }
+
+  &-time-columns {
+    display: flex;
+    gap: 2px;
+    height: 200px;
+  }
+
+  &-time-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &-time-label {
+    text-align: center;
+    font-size: 11px;
+    color: @text-color-secondary;
+    padding: 2px 0;
+    flex-shrink: 0;
+  }
+
+  &-time-list {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid @border-color-split;
+    border-radius: 4px;
+    padding: 2px;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 2px;
+    }
+  }
+
+  &-time-cell {
+    appearance: none;
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 0;
+    font-size: @font-size-sm;
+    color: @text-color;
+    text-align: center;
+    border-radius: 3px;
+    transition: all 0.15s @transition-timing-function;
+
+    &:hover:not(&--selected) {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    &--selected {
+      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: #fff;
+      font-weight: 500;
+    }
+  }
+
+  // ==================== Footer ====================
+
+  &-footer {
+    border-top: 1px solid @border-color-split;
+    padding-top: @padding-sm;
+    margin-top: @padding-sm;
+  }
+
+  &-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  &-preset-btn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--soui-date-picker-border-color-component, var(--soui-date-picker-border-color, @border-color));
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 2px 8px;
+    font-size: @font-size-sm;
+    color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+    transition: all @transition-duration @transition-timing-function;
+
+    &:hover {
+      background: fade(@primary-color, 6%);
+      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+    }
+  }
+
+  &-footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &-footer-btn {
+    appearance: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: @font-size-sm;
+    color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+    border-radius: 4px;
+    transition: all @transition-duration @transition-timing-function;
+
+    &:hover {
+      background: fade(@primary-color, 6%);
+    }
+
+    &--primary {
+      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: #fff;
+      padding: 4px 12px;
+      border-radius: 4px;
+
+      &:hover {
+        opacity: 0.85;
+        background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      }
+    }
+  }
+
+  // ==================== Range Picker Panels ====================
+
+  &--range &-trigger {
+    min-width: 320px;
+  }
+
+  &--range&--small &-trigger {
+    min-width: 260px;
+  }
+
+  &-range-panels {
+    min-width: 560px;
+  }
+
+  &-range-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 0 8px;
+    border-bottom: 1px solid @border-color-split;
+    margin-bottom: @padding-sm;
+  }
+
+  &-range-nav-spacer {
+    flex: 1;
+  }
+
+  &-range-panels-body {
+    display: flex;
+    gap: 16px;
+  }
+
+  &-range-panel {
+    flex: 1;
+    min-width: 0;
+
+    .soui-date-picker-header {
+      border-bottom: none;
+      margin-bottom: 4px;
+      padding: 0 0 4px;
+      justify-content: center;
+    }
+
+    .soui-date-picker-header-title {
+      font-size: @font-size-sm;
+      font-weight: 500;
+    }
+  }
+}

@@ -161,6 +161,13 @@ export { default as ColorPicker } from './components/ColorPicker';
 export type { ColorPickerProps, ColorPickerSize, ColorPickerPlacement, PresetColorGroup } from './components/ColorPicker';
 export type { ColorFormat } from './components/ColorPicker/utils';
 
+// DatePicker Component
+export { default as DatePicker } from './components/DatePicker';
+export type { DatePickerProps, DatePickerSize, DatePickerPlacement } from './components/DatePicker';
+export { default as RangePicker } from './components/DatePicker/RangePicker';
+export type { RangePickerProps, RangeValue } from './components/DatePicker/RangePicker';
+export type { PickerMode } from './components/DatePicker/utils';
+
 // Utils
 export * from './utils';
 
