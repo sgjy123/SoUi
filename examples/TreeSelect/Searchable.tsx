@@ -1,87 +1,75 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TreeSelect } from '../../src';
 
 const treeData = [
   {
-    title: '技术部',
-    value: 'tech',
+    value: 'zhejiang',
+    label: '浙江',
     children: [
       {
-        title: '前端组',
-        value: 'frontend',
+        value: 'hangzhou',
+        label: '杭州',
         children: [
-          { title: '张三', value: 'zhangsan' },
-          { title: '李四', value: 'lisi' },
-          { title: '王五', value: 'wangwu' },
+          { value: 'xihu', label: '西湖区' },
+          { value: 'yuhang', label: '余杭区' },
         ],
       },
       {
-        title: '后端组',
-        value: 'backend',
+        value: 'ningbo',
+        label: '宁波',
         children: [
-          { title: '赵六', value: 'zhaoliu' },
-          { title: '孙七', value: 'sunqi' },
+          { value: 'haishu', label: '海曙区' },
+          { value: 'jiangbei', label: '江北区' },
         ],
       },
     ],
   },
   {
-    title: '产品部',
-    value: 'product',
+    value: 'jiangsu',
+    label: '江苏',
     children: [
-      { title: '周八', value: 'zhouba' },
-      { title: '吴九', value: 'wujiu' },
-    ],
-  },
-  {
-    title: '设计部',
-    value: 'design',
-    children: [
-      { title: '郑十', value: 'zhengshi' },
+      {
+        value: 'nanjing',
+        label: '南京',
+        children: [
+          { value: 'xuanwu', label: '玄武区' },
+          { value: 'qinhuai', label: '秦淮区' },
+        ],
+      },
+      {
+        value: 'suzhou',
+        label: '苏州',
+        children: [
+          { value: 'gusu', label: '姑苏区' },
+          { value: 'wuzhong', label: '吴中区' },
+        ],
+      },
     ],
   },
 ];
 
 export default () => {
-  const [value, setValue] = useState<string | number>();
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <TreeSelect
-        treeData={treeData}
-        value={value}
-        onChange={(val) => setValue(val)}
-        placeholder="搜索选择（输入关键词过滤）"
-        showSearch
-        treeNodeFilterProp="title"
-        style={{ width: 300 }}
-        treeDefaultExpandAll
-        allowClear
-      />
-      <TreeSelect
-        treeData={treeData}
-        placeholder="搜索多选"
-        multiple
-        showSearch
-        treeNodeFilterProp="title"
-        style={{ width: 400 }}
-        treeDefaultExpandAll
-        allowClear
-      />
-      <TreeSelect
-        treeData={treeData}
-        placeholder="错误状态"
-        status="error"
-        style={{ width: 300 }}
-        treeDefaultExpandAll
-      />
-      <TreeSelect
-        treeData={treeData}
-        placeholder="警告状态"
-        status="warning"
-        style={{ width: 300 }}
-        treeDefaultExpandAll
-      />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
+      <div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>可搜索</p>
+        <TreeSelect allowClear showSearch treeData={treeData} placeholder="输入关键词搜索" />
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>状态校验</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <TreeSelect showSearch treeData={treeData} status="error" placeholder="错误状态" />
+          <TreeSelect showSearch treeData={treeData} status="warning" placeholder="警告状态" />
+        </div>
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>不同尺寸</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <TreeSelect showSearch treeData={treeData} size="small" placeholder="小号" />
+          <TreeSelect showSearch treeData={treeData} size="middle" placeholder="中号（默认）" />
+          <TreeSelect showSearch treeData={treeData} size="large" placeholder="大号" />
+        </div>
+      </div>
     </div>
   );
 };

@@ -452,7 +452,7 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-tree-select-color-border-hover': treeSelectTheme.colorBorderHover || mergedTheme.primaryHoverColor,
       '--soui-tree-select-color-border-focus': treeSelectTheme.colorBorderFocus || mergedTheme.primaryColor,
       '--soui-tree-select-color-bg': treeSelectTheme.colorBg || '#fff',
-      '--soui-tree-select-color-text': treeSelectTheme.colorText || mergedTheme.textColor,
+      '--soui-tree-select-color-text': treeSelectTheme.colorText || 'rgba(0, 0, 0, 0.88)',
       '--soui-tree-select-color-bg-disabled': treeSelectTheme.colorBgDisabled || '#f5f5f5',
       '--soui-tree-select-color-text-disabled': treeSelectTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
       '--soui-tree-select-color-error': treeSelectTheme.colorError || mergedTheme.errorColor,

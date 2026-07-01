@@ -3,75 +3,77 @@ import { TreeSelect } from '../../src';
 
 const treeData = [
   {
-    title: '技术部',
-    value: 'tech',
+    value: 'zhejiang',
+    label: '浙江',
     children: [
       {
-        title: '前端组',
-        value: 'frontend',
+        value: 'hangzhou',
+        label: '杭州',
         children: [
-          { title: '张三', value: 'zhangsan' },
-          { title: '李四', value: 'lisi' },
-          { title: '王五', value: 'wangwu' },
+          { value: 'xihu', label: '西湖区' },
+          { value: 'yuhang', label: '余杭区' },
         ],
       },
       {
-        title: '后端组',
-        value: 'backend',
+        value: 'ningbo',
+        label: '宁波',
         children: [
-          { title: '赵六', value: 'zhaoliu' },
-          { title: '孙七', value: 'sunqi' },
+          { value: 'haishu', label: '海曙区' },
+          { value: 'jiangbei', label: '江北区' },
         ],
       },
     ],
   },
   {
-    title: '产品部',
-    value: 'product',
+    value: 'jiangsu',
+    label: '江苏',
     children: [
-      { title: '周八', value: 'zhouba' },
-      { title: '吴九', value: 'wujiu' },
-    ],
-  },
-  {
-    title: '设计部',
-    value: 'design',
-    disabled: true,
-    children: [
-      { title: '郑十', value: 'zhengshi' },
+      {
+        value: 'nanjing',
+        label: '南京',
+        children: [
+          { value: 'xuanwu', label: '玄武区' },
+          { value: 'qinhuai', label: '秦淮区' },
+        ],
+      },
+      {
+        value: 'suzhou',
+        label: '苏州',
+        children: [
+          { value: 'gusu', label: '姑苏区' },
+          { value: 'wuzhong', label: '吴中区' },
+        ],
+      },
     ],
   },
 ];
 
 export default () => {
-  const [value, setValue] = useState<string | number>();
+  const [value, setValue] = useState('zhejiang');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <TreeSelect
-        treeData={treeData}
-        value={value}
-        onChange={(val) => {
-          console.log('TreeSelect onChange:', val);
-          setValue(val)
-        }}
-        placeholder="请选择部门成员"
-        style={{ width: 300 }}
-        treeDefaultExpandAll
-      />
-      <TreeSelect
-        treeData={treeData}
-        defaultValue="lisi"
-        placeholder="默认选中李四"
-        style={{ width: 300 }}
-        treeDefaultExpandAll
-      />
-      <TreeSelect
-        treeData={treeData}
-        placeholder="禁用状态"
-        disabled
-        style={{ width: 300 }}
-      />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
+      <div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>基础用法</p>
+        <TreeSelect allowClear treeData={treeData} placeholder="请选择" onChange={(val) => setValue(val)} />
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>受控模式</p>
+        <TreeSelect treeData={treeData} value={value} onChange={(val) => setValue(val)} placeholder="请选择" />
+        <p style={{ marginTop: 8, fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>已选: {value}</p>
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>默认值</p>
+        <TreeSelect treeData={treeData} defaultValue="jiangsu" placeholder="请选择" />
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>禁用状态</p>
+        <TreeSelect treeData={treeData} defaultValue="zhejiang" disabled placeholder="请选择" />
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>默认展开全部</p>
+        <TreeSelect treeData={treeData} treeDefaultExpandAll placeholder="请选择" />
+      </div>
     </div>
   );
 };

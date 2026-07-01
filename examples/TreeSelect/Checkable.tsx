@@ -3,107 +3,92 @@ import { TreeSelect } from '../../src';
 
 const treeData = [
   {
-    title: '技术部',
-    value: 'tech',
+    value: 'zhejiang',
+    label: '浙江',
     children: [
       {
-        title: '前端组',
-        value: 'frontend',
+        value: 'hangzhou',
+        label: '杭州',
         children: [
-          { title: '张三', value: 'zhangsan' },
-          { title: '李四', value: 'lisi' },
-          { title: '王五', value: 'wangwu' },
+          { value: 'xihu', label: '西湖区' },
+          { value: 'yuhang', label: '余杭区' },
         ],
       },
       {
-        title: '后端组',
-        value: 'backend',
+        value: 'ningbo',
+        label: '宁波',
         children: [
-          { title: '赵六', value: 'zhaoliu' },
-          { title: '孙七', value: 'sunqi' },
+          { value: 'haishu', label: '海曙区' },
+          { value: 'jiangbei', label: '江北区' },
         ],
       },
     ],
   },
   {
-    title: '产品部',
-    value: 'product',
+    value: 'jiangsu',
+    label: '江苏',
     children: [
-      { title: '周八', value: 'zhouba' },
-      { title: '吴九', value: 'wujiu' },
-    ],
-  },
-  {
-    title: '设计部',
-    value: 'design',
-    children: [
-      { title: '郑十', value: 'zhengshi' },
+      {
+        value: 'nanjing',
+        label: '南京',
+        children: [
+          { value: 'xuanwu', label: '玄武区' },
+          { value: 'qinhuai', label: '秦淮区' },
+        ],
+      },
+      {
+        value: 'suzhou',
+        label: '苏州',
+        children: [
+          { value: 'gusu', label: '姑苏区' },
+          { value: 'wuzhong', label: '吴中区' },
+        ],
+      },
     ],
   },
 ];
 
 export default () => {
-  const [value1, setValue1] = useState<(string | number)[]>([]);
-  const [value2, setValue2] = useState<(string | number)[]>([]);
-  const [value3, setValue3] = useState<(string | number)[]>([]);
+  const [value1, setValue1] = useState(['xihu', 'yuhang']);
+  const [value2, setValue2] = useState(['zhejiang']);
+  const [value3, setValue3] = useState(['hangzhou', 'xuanwu']);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 500 }}>
       <div>
-        <div style={{ marginBottom: 8, color: 'rgba(0,0,0,0.65)' }}>SHOW_ALL - 显示所有选中节点</div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>可勾选（SHOW_CHILD，默认显示子节点）</p>
         <TreeSelect
+          treeCheckable
           treeData={treeData}
           value={value1}
-          onChange={(val) => setValue1(Array.isArray(val) ? val : [val])}
-          placeholder="可勾选（SHOW_ALL）"
-          treeCheckable
-          multiple
-          showCheckedStrategy="SHOW_ALL"
-          style={{ width: 400 }}
-          treeDefaultExpandAll
-          allowClear
+          onChange={(val) => setValue1(val)}
+          placeholder="请勾选节点"
         />
-        <div style={{ marginTop: 4, fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>
-          选中值: {JSON.stringify(value1)}
-        </div>
+        <p style={{ marginTop: 8, fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>已选: {value1.join(', ')}</p>
       </div>
-
       <div>
-        <div style={{ marginBottom: 8, color: 'rgba(0,0,0,0.65)' }}>SHOW_PARENT - 只显示父节点</div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>显示父节点（SHOW_PARENT）</p>
         <TreeSelect
+          treeCheckable
+          showCheckedStrategy="SHOW_PARENT"
           treeData={treeData}
           value={value2}
-          onChange={(val) => setValue2(Array.isArray(val) ? val : [val])}
-          placeholder="可勾选（SHOW_PARENT）"
-          treeCheckable
-          multiple
-          showCheckedStrategy="SHOW_PARENT"
-          style={{ width: 400 }}
-          treeDefaultExpandAll
-          allowClear
+          onChange={(val) => setValue2(val)}
+          placeholder="请勾选节点"
         />
-        <div style={{ marginTop: 4, fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>
-          选中值: {JSON.stringify(value2)}
-        </div>
+        <p style={{ marginTop: 8, fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>已选: {value2.join(', ')}</p>
       </div>
-
       <div>
-        <div style={{ marginBottom: 8, color: 'rgba(0,0,0,0.65)' }}>SHOW_CHILD - 只显示叶子节点</div>
+        <p style={{ marginBottom: 8, color: 'rgba(0,0,0,0.45)', fontSize: 12 }}>严格受控（treeCheckStrictly）</p>
         <TreeSelect
+          treeCheckable
+          treeCheckStrictly
           treeData={treeData}
           value={value3}
-          onChange={(val) => setValue3(Array.isArray(val) ? val : [val])}
-          placeholder="可勾选（SHOW_CHILD）"
-          treeCheckable
-          multiple
-          showCheckedStrategy="SHOW_CHILD"
-          style={{ width: 400 }}
-          treeDefaultExpandAll
-          allowClear
+          onChange={(val) => setValue3(val)}
+          placeholder="独立勾选节点"
         />
-        <div style={{ marginTop: 4, fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>
-          选中值: {JSON.stringify(value3)}
-        </div>
+        <p style={{ marginTop: 8, fontSize: 12, color: 'rgba(0,0,0,0.45)' }}>已选: {value3.join(', ')}</p>
       </div>
     </div>
   );
