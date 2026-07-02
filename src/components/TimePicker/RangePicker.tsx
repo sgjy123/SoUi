@@ -47,6 +47,8 @@ export interface TimeRangePickerProps extends Omit<React.HTMLAttributes<HTMLDivE
   hideSeconds?: boolean;
   /** 分隔符 */
   separator?: React.ReactNode;
+  /** 自定义后缀图标 */
+  suffixIcon?: React.ReactNode;
 }
 
 // ==================== Helpers ====================
@@ -83,6 +85,7 @@ const RangePicker: React.FC<TimeRangePickerProps> = ({
   status,
   hideSeconds = false,
   separator,
+  suffixIcon,
   className,
   style,
   ...rest
@@ -393,11 +396,7 @@ const RangePicker: React.FC<TimeRangePickerProps> = ({
           onClick={handleStartClick}
         />
         <span className="soui-time-picker-range-separator">
-          {separator || (
-            <svg viewBox="0 0 1024 1024" width="10" height="10" fill="currentColor">
-              <path d="M838.4 160.4L185.6 512l652.8 351.6c5.6 3 12.4-1.2 12.4-7.6V168c0-6.4-6.8-10.6-12.4-7.6z" transform="rotate(90 512 512)" />
-            </svg>
-          )}
+          {separator || '~'}
         </span>
         <input
           className={classNames('soui-time-picker-input', { 'soui-time-picker-input--active': isOpen && activeInput === 'end' })}
@@ -413,10 +412,9 @@ const RangePicker: React.FC<TimeRangePickerProps> = ({
               <Icon name="Close" size={14} theme="outline" />
             </span>
           ) : (
-            <svg viewBox="0 0 1024 1024" width="1em" height="1em" fill="currentColor">
-              <path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" />
-              <path d="M686.7 638.6L544.1 535.5V288c0-4.4-3.6-8-8-8H488c-4.4 0-8 3.6-8 8v275.4c0 2.6 1.2 5 3.3 6.5l165.4 120.6c3.6 2.6 8.6 1.8 11.2-1.7l28.6-39c2.6-3.7 1.8-8.7-1.8-11.2z" />
-            </svg>
+              suffixIcon || (
+                  <Icon name="Time" size={14} theme="outline" />
+              )
           )}
         </span>
       </div>

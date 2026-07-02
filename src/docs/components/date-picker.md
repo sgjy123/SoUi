@@ -185,6 +185,17 @@ const presets = [
 </ConfigProvider>
 ```
 
+### 自定义后缀图标
+
+通过 `suffixIcon` 属性自定义输入框右侧的图标。
+
+```tsx
+import Icon from 'soui/Icon';
+
+<DatePicker suffixIcon={<Icon name="Calendar" size={14} />} />
+<DatePicker suffixIcon={<span>📅</span>} />
+```
+
 ---
 
 # RangePicker 范围选择器
@@ -307,6 +318,19 @@ const [range, setRange] = useState(null);
 />
 ```
 
+### 自定义分隔符和后缀图标
+
+通过 `separator` 属性自定义开始和结束日期之间的分隔符，通过 `suffixIcon` 自定义后缀图标。
+
+```tsx
+import Icon from 'soui/Icon';
+
+<RangePicker separator="至" />
+<RangePicker separator={<span>→</span>} />
+<RangePicker suffixIcon={<Icon name="Calendar" size={14} />} />
+<RangePicker separator="到" suffixIcon={<span>📅</span>} />
+```
+
 ## API
 
 ### DatePicker 属性
@@ -327,6 +351,7 @@ const [range, setRange] = useState(null);
 | showNow | 是否显示"此刻"按钮 | `boolean` | `true` |
 | showToday | 是否显示"今天"按钮 | `boolean` | `true` |
 | presets | 预设快捷选项 | `Array<{ label: ReactNode; value: Date \| Dayjs }>` | - |
+| suffixIcon | 自定义后缀图标 | `ReactNode` | - |
 | onChange | 日期变化回调 | `(date: Date \| null, dateString: string) => void` | - |
 | onOpenChange | 面板打开/关闭回调 | `(open: boolean) => void` | - |
 | onPanelChange | 面板日期变化回调 | `(date: Date, mode: PickerMode) => void` | - |
@@ -348,6 +373,8 @@ const [range, setRange] = useState(null);
 | showTime | 是否显示时间选择器 | `boolean` | `false` |
 | showNow | 是否显示"此刻"按钮 | `boolean` | `true` |
 | presets | 预设快捷选项 | `Array<{ label: ReactNode; value: [Date \| Dayjs, Date \| Dayjs] }>` | - |
+| separator | 自定义分隔符 | `ReactNode` | `'~'` |
+| suffixIcon | 自定义后缀图标 | `ReactNode` | - |
 | onChange | 范围变化回调 | `(dates: RangeValue, dateStrings: [string, string]) => void` | - |
 | onOpenChange | 面板打开/关闭回调 | `(open: boolean) => void` | - |
 | onCalendarChange | 日历变化回调 | `(dates: RangeDayjsValue, dateStrings: [string, string]) => void` | - |

@@ -50,6 +50,8 @@ export interface DatePickerProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   showToday?: boolean;
   /** 预设快捷选项 */
   presets?: Array<{ label: React.ReactNode; value: Date | Dayjs }>;
+  /** 自定义后缀图标 */
+  suffixIcon?: React.ReactNode;
   /** 日期变化回调 */
   onChange?: (date: Date | null, dateString: string) => void;
   /** 面板打开/关闭回调 */
@@ -84,6 +86,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   showNow = true,
   showToday = true,
   presets,
+  suffixIcon,
   onChange,
   onOpenChange,
   onPanelChange,
@@ -644,7 +647,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           </span>
         )}
         <span className="soui-date-picker-icon" aria-hidden="true">
-          <Icon name="Calendar" size={16} theme="outline" />
+          {suffixIcon || <Icon name="Calendar" size={14} theme="outline" />}
         </span>
       </div>
 

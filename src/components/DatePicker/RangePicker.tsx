@@ -42,6 +42,10 @@ export interface RangePickerProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   showNow?: boolean;
   /** 预设快捷选项 */
   presets?: Array<{ label: React.ReactNode; value: [Date | Dayjs, Date | Dayjs] }>;
+  /** 自定义后缀图标 */
+  suffixIcon?: React.ReactNode;
+  /** 分隔符 */
+  separator?: React.ReactNode;
   /** 范围变化回调 */
   onChange?: (dates: RangeValue, dateStrings: [string, string]) => void;
   /** 面板打开/关闭回调 */
@@ -82,6 +86,8 @@ const RangePicker: React.FC<RangePickerProps> = ({
   showTime = false,
   showNow = true,
   presets,
+  separator,
+  suffixIcon,
   onChange,
   onOpenChange,
   onCalendarChange,
@@ -592,7 +598,9 @@ const RangePicker: React.FC<RangePickerProps> = ({
           placeholder={ph[0]} disabled={disabled}
           aria-label={ph[0]}
         />
-        <span className="soui-date-picker-range-separator">~</span>
+        <span className="soui-date-picker-range-separator">
+          {separator || '~'}
+        </span>
         <input className="soui-date-picker-input" value={endText}
           onChange={(e) => handleInputChange(e, 'end')}
           onBlur={() => handleInputBlur('end')}
@@ -610,7 +618,7 @@ const RangePicker: React.FC<RangePickerProps> = ({
           </span>
         )}
         <span className="soui-date-picker-icon" aria-hidden="true">
-          <Icon name="Calendar" size={16} theme="outline" />
+          {suffixIcon || <Icon name="Calendar" size={14} theme="outline" />}
         </span>
       </div>
 

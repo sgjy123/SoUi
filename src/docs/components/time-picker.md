@@ -74,6 +74,17 @@ const disabledMinutes = (h) => h === 9 ? Array.from({ length: 30 }, (_, i) => i)
 </ConfigProvider>
 ```
 
+### 自定义后缀图标
+
+通过 `suffixIcon` 属性自定义输入框右侧的图标。
+
+```tsx
+import Icon from 'soui/Icon';
+
+<TimePicker suffixIcon={<Icon name="Clock" size={14} />} />
+<TimePicker suffixIcon={<span>⏰</span>} />
+```
+
 ## API
 
 ### TimePicker Props
@@ -130,6 +141,19 @@ const RangePicker = TimePicker.RangePicker;
 <RangePicker use12Hours format="hh:mm A" hideSeconds />
 ```
 
+### 自定义分隔符和后缀图标
+
+通过 `separator` 属性自定义开始和结束时间之间的分隔符，通过 `suffixIcon` 自定义后缀图标。
+
+```tsx
+import Icon from 'soui/Icon';
+
+<RangePicker separator="至" />
+<RangePicker separator={<span>→</span>} />
+<RangePicker suffixIcon={<Icon name="Clock" size={14} />} />
+<RangePicker separator="到" suffixIcon={<span>⏰</span>} />
+```
+
 ### RangePicker Props
 
 | 参数 | 说明 | 类型 | 默认值 |
@@ -149,7 +173,8 @@ const RangePicker = TimePicker.RangePicker;
 | placeholder | 占位文字 | `[string, string]` | `['开始时间', '结束时间']` |
 | placement | 面板弹出方向 | `'bottomLeft' \| 'bottomRight' \| 'topLeft' \| 'topRight'` | `'bottomLeft'` |
 | hideSeconds | 隐藏秒列 | `boolean` | `false` |
-| separator | 分隔符 | `ReactNode` | - |
+| separator | 自定义分隔符 | `ReactNode` | `'~'` |
+| suffixIcon | 自定义后缀图标 | `ReactNode` | - |
 
 ## 主题定制
 
