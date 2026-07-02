@@ -1,0 +1,279 @@
+@import '../../styles/variables.less';
+
+// ==================== Local Alias Mixin ====================
+.transfer-css-variable-aliases() {
+  --soui-transfer-local-font-size: var(--soui-transfer-font-size, @font-size-base);
+  --soui-transfer-local-border-radius: var(--soui-transfer-border-radius, @border-radius-base);
+  --soui-transfer-local-color-primary: var(--soui-transfer-color-primary, @primary-color);
+  --soui-transfer-local-color-primary-hover: var(--soui-transfer-color-primary-hover, @primary-hover-color);
+  --soui-transfer-local-color-border: var(--soui-transfer-color-border, @border-color);
+  --soui-transfer-local-color-bg: var(--soui-transfer-color-bg, @bg-color-base);
+  --soui-transfer-local-header-bg: var(--soui-transfer-header-bg, @bg-color-layout);
+  --soui-transfer-local-color-text: var(--soui-transfer-color-text, @text-color);
+  --soui-transfer-local-color-text-disabled: var(--soui-transfer-color-text-disabled, @text-color-disabled);
+  --soui-transfer-local-item-hover-bg: var(--soui-transfer-item-hover-bg, rgba(0, 0, 0, 0.04));
+  --soui-transfer-local-item-active-bg: var(--soui-transfer-item-active-bg, rgba(22, 119, 255, 0.06));
+}
+
+// ==================== Transfer ====================
+.soui-transfer {
+  .transfer-css-variable-aliases();
+
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  font-size: var(--soui-transfer-local-font-size);
+  color: var(--soui-transfer-local-color-text);
+
+  &-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+// ==================== List Panel ====================
+.soui-transfer-list {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  height: 320px;
+  border: 1px solid var(--soui-transfer-local-color-border);
+  border-radius: var(--soui-transfer-local-border-radius);
+  background: var(--soui-transfer-local-color-bg);
+  overflow: hidden;
+
+  // --- Header ---
+  &-header {
+    display: flex;
+    align-items: center;
+    gap: @padding-sm;
+    padding: @padding-xs @padding-sm;
+    min-height: 40px;
+    background: var(--soui-transfer-local-header-bg);
+    border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
+    flex-shrink: 0;
+
+    &-title {
+      font-weight: 600;
+      color: var(--soui-transfer-local-color-text);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &-count {
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+      color: var(--soui-text-color-secondary, @text-color-secondary);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  // --- Search ---
+  &-search-wrapper {
+    position: relative;
+    padding: @padding-sm;
+    border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
+    flex-shrink: 0;
+  }
+
+  &-search-icon {
+    position: absolute;
+    left: @padding-sm + 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--soui-text-color-disabled, @text-color-disabled);
+    pointer-events: none;
+  }
+
+  &-search {
+    width: 100%;
+    height: 32px;
+    padding: 4px 28px 4px 28px;
+    border: 1px solid var(--soui-transfer-local-color-border);
+    border-radius: calc(var(--soui-transfer-local-border-radius) - 2px);
+    background: var(--soui-transfer-local-color-bg);
+    color: var(--soui-transfer-local-color-text);
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    outline: none;
+    transition: border-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &::placeholder {
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+    }
+
+    &:hover {
+      border-color: var(--soui-transfer-local-color-primary-hover);
+    }
+
+    &:focus {
+      border-color: var(--soui-transfer-local-color-primary);
+      box-shadow: 0 0 0 2px var(--soui-transfer-primary-color-10, rgba(22, 119, 255, 0.1));
+    }
+
+    &:disabled {
+      background: @bg-color-disable;
+      cursor: not-allowed;
+    }
+  }
+
+  &-search-clear {
+    position: absolute;
+    right: @padding-sm + 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.15);
+    color: #fff;
+    cursor: pointer;
+    transition: background var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  // --- Body ---
+  &-body {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: @padding-sm;
+    height: 100%;
+    color: var(--soui-text-color-disabled, @text-color-disabled);
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+  }
+
+  &-content {
+    flex: 1;
+    overflow-y: auto;
+    margin: 0;
+    padding: @padding-xs 0;
+    list-style: none;
+  }
+
+  // --- Item ---
+  &-item {
+    display: flex;
+    align-items: center;
+    gap: @padding-sm;
+    padding: 4px @padding-sm 4px @padding-xs;
+    cursor: pointer;
+    transition: background var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    min-height: 32px;
+    line-height: 1.5;
+
+    &:hover {
+      background: var(--soui-transfer-local-item-hover-bg);
+    }
+
+    &-checked {
+      background: var(--soui-transfer-local-item-active-bg);
+
+      &:hover {
+        background: var(--soui-transfer-local-item-active-bg);
+      }
+    }
+
+    &-disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    &-text {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--soui-transfer-local-color-text);
+    }
+  }
+
+  // --- Footer ---
+  &-footer {
+    border-top: 1px solid var(--soui-border-color-split, @border-color-split);
+    flex-shrink: 0;
+  }
+}
+
+// ==================== Operation Buttons ====================
+.soui-transfer-operation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: @padding-sm;
+  padding: 0 @padding-sm;
+  flex-shrink: 0;
+
+  &-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--soui-transfer-local-color-border);
+    border-radius: var(--soui-transfer-local-border-radius);
+    background: var(--soui-transfer-local-color-bg);
+    color: var(--soui-text-color-disabled, @text-color-disabled);
+    cursor: not-allowed;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:disabled {
+      opacity: 0.4;
+    }
+
+    &-active {
+      border-color: var(--soui-transfer-local-color-primary);
+      color: #fff;
+      background: var(--soui-transfer-local-color-primary);
+      cursor: pointer;
+
+      &:hover {
+        background: var(--soui-transfer-local-color-primary-hover);
+        border-color: var(--soui-transfer-local-color-primary-hover);
+      }
+
+      &:active {
+        background: var(--soui-transfer-local-color-primary);
+        filter: brightness(0.9);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &-text {
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    white-space: nowrap;
+  }
+}
+
+// ==================== One-way mode ====================
+.soui-transfer-one-way {
+  .soui-transfer-operation {
+    gap: 0;
+  }
+}

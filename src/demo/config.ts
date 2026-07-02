@@ -383,6 +383,18 @@ export const docsConfig: MenuGroup[] = [
           { key: 'time-picker-range-variant', label: 'TimePicker.RangePicker 变体', componentPath: 'TimePicker', exampleName: 'RangeVariant', description: '隐藏秒列、禁用、12小时制等变体。' },
         ],
       },
+      {
+        key: 'transfer',
+        label: 'Transfer 穿梭框',
+        icon: 'Transfer',
+        items: [
+          { key: 'transfer-basic', label: 'Transfer 基础用法', componentPath: 'Transfer', exampleName: 'Basic', description: '基本的穿梭框，支持全选、单选和批量移动。' },
+          { key: 'transfer-search', label: 'Transfer 带搜索', componentPath: 'Transfer', exampleName: 'Search', description: '开启搜索功能，支持自定义过滤逻辑。' },
+          { key: 'transfer-one-way', label: 'Transfer 单向模式', componentPath: 'Transfer', exampleName: 'OneWay', description: '单向穿梭，仅允许从左向右移动。' },
+          { key: 'transfer-custom-render', label: 'Transfer 自定义渲染', componentPath: 'Transfer', exampleName: 'CustomRender', description: '自定义列表项的渲染内容和搜索匹配。' },
+          { key: 'transfer-theme', label: 'Transfer 主题定制', componentPath: 'Transfer', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题样式。' },
+        ],
+      },
     ],
   },
   {

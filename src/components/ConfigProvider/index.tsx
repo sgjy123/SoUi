@@ -71,6 +71,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const datePickerTheme = mergedTheme.components?.DatePicker || {};
     // 获取 TimePicker 组件级配置
     const timePickerTheme = mergedTheme.components?.TimePicker || {};
+    // 获取 Transfer 组件级配置
+    const transferTheme = mergedTheme.components?.Transfer || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -556,6 +558,35 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-time-picker-control-height-component': timePickerTheme.controlHeight ? `${timePickerTheme.controlHeight}px` : undefined,
       '--soui-time-picker-primary-color-10-component': timePickerTheme.colorPrimary ? addOpacityToColor(timePickerTheme.colorPrimary, 0.1) : undefined,
       '--soui-time-picker-primary-color-6-component': timePickerTheme.colorPrimary ? addOpacityToColor(timePickerTheme.colorPrimary, 0.06) : undefined,
+
+      // ==================== Transfer 组件配置 ====================
+      // 第2层: Transfer 配置点 (引用设计令牌)
+      '--soui-transfer-font-size': transferTheme.fontSize ? `${transferTheme.fontSize}px` : undefined,
+      '--soui-transfer-border-radius': transferTheme.borderRadius ? `${transferTheme.borderRadius}px` : undefined,
+      '--soui-transfer-color-primary': transferTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-transfer-color-primary-hover': transferTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-transfer-color-border': transferTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-transfer-color-bg': transferTheme.colorBg || '#fff',
+      '--soui-transfer-header-bg': transferTheme.headerBg || '#f5f5f5',
+      '--soui-transfer-color-text': transferTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-transfer-color-text-disabled': transferTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
+      '--soui-transfer-item-hover-bg': transferTheme.itemHoverBg || 'rgba(0, 0, 0, 0.04)',
+      '--soui-transfer-item-active-bg': transferTheme.itemActiveBg || addOpacityToColor(transferTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.06),
+      '--soui-transfer-primary-color-10': addOpacityToColor(transferTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.1),
+
+      // 第3层: Transfer 组件级覆盖 (优先级最高)
+      '--soui-transfer-font-size-component': transferTheme.fontSize ? `${transferTheme.fontSize}px` : undefined,
+      '--soui-transfer-border-radius-component': transferTheme.borderRadius ? `${transferTheme.borderRadius}px` : undefined,
+      '--soui-transfer-color-primary-component': transferTheme.colorPrimary,
+      '--soui-transfer-color-primary-hover-component': transferTheme.colorPrimaryHover,
+      '--soui-transfer-color-border-component': transferTheme.colorBorder,
+      '--soui-transfer-color-bg-component': transferTheme.colorBg,
+      '--soui-transfer-header-bg-component': transferTheme.headerBg,
+      '--soui-transfer-color-text-component': transferTheme.colorText,
+      '--soui-transfer-color-text-disabled-component': transferTheme.colorTextDisabled,
+      '--soui-transfer-item-hover-bg-component': transferTheme.itemHoverBg,
+      '--soui-transfer-item-active-bg-component': transferTheme.itemActiveBg,
+      '--soui-transfer-primary-color-10-component': transferTheme.colorPrimary ? addOpacityToColor(transferTheme.colorPrimary, 0.1) : undefined,
     } as any;
   }, [mergedTheme]);
 

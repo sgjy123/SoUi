@@ -816,6 +816,31 @@ export interface ComponentThemeConfig {
     /** 控件高度（像素） */
     controlHeight?: number;
   };
+  /** 穿梭框组件配置 */
+  Transfer?: {
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 主色 */
+    colorPrimary?: string;
+    /** hover 主色 */
+    colorPrimaryHover?: string;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 背景色 */
+    colorBg?: string;
+    /** 标题栏背景色 */
+    headerBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 禁用文本颜色 */
+    colorTextDisabled?: string;
+    /** 列表项悬停背景色 */
+    itemHoverBg?: string;
+    /** 列表项选中背景色 */
+    itemActiveBg?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

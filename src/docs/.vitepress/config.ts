@@ -219,6 +219,7 @@ function sidebarComponents() {
         { text: 'ColorPicker 颜色选择器', link: 'color-picker' },
         { text: 'DatePicker 日期选择器', link: 'date-picker' },
         { text: 'TimePicker 时间选择器', link: 'time-picker' },
+        { text: 'Transfer 穿梭框', link: 'transfer' },
       ],
     },
     {

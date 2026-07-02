@@ -174,6 +174,10 @@ export type { TimePickerProps, TimePickerSize, TimePickerPlacement, TimePickerSt
 export { RangePicker as TimePickerRange } from './components/TimePicker';
 export type { TimeRangePickerProps, TimeRangeValue } from './components/TimePicker';
 
+// Transfer Component
+export { default as Transfer } from './components/Transfer';
+export type { TransferProps, TransferItem, TransferKey, TransferDirection, RenderResult, TransferLocale } from './components/Transfer';
+
 // Utils
 export * from './utils';
 

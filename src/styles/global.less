@@ -278,6 +278,20 @@
   --soui-date-picker-control-height: @control-height-base;                   // DatePicker专属:控件高度
   --soui-date-picker-primary-color-10: rgba(22, 119, 255, 0.1);             // 主色10%透明
   --soui-date-picker-primary-color-6: rgba(22, 119, 255, 0.06);             // 主色6%透明
+
+  // === 第2层: Transfer 组件配置点 (引用设计令牌) ===
+  --soui-transfer-font-size: var(--soui-font-size);                            // 引用全局字号
+  --soui-transfer-border-radius: var(--soui-border-radius);                    // 引用全局圆角
+  --soui-transfer-color-primary: var(--soui-primary-color);                    // 引用全局主色
+  --soui-transfer-color-primary-hover: var(--soui-primary-hover-color);        // 引用全局主色-hover
+  --soui-transfer-color-border: var(--soui-border-color-base);                 // 引用全局边框色
+  --soui-transfer-color-bg: @bg-color-base;                                    // Transfer专属:背景色
+  --soui-transfer-header-bg: @bg-color-layout;                                 // Transfer专属:标题栏背景
+  --soui-transfer-color-text: @text-color;                                     // Transfer专属:文本颜色
+  --soui-transfer-color-text-disabled: @text-color-disabled;                   // Transfer专属:禁用文本色
+  --soui-transfer-item-hover-bg: rgba(0, 0, 0, 0.04);                         // Transfer专属:悬停背景
+  --soui-transfer-item-active-bg: rgba(22, 119, 255, 0.06);                   // Transfer专属:选中背景
+  --soui-transfer-primary-color-10: rgba(22, 119, 255, 0.1);                  // 主色10%透明
 }
 
 // ==================== Global Styles ====================
