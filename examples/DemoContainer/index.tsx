@@ -36,6 +36,7 @@ import Rate from '../../src/components/Rate';
 import ColorPicker from '../../src/components/ColorPicker';
 import DatePicker from '../../src/components/DatePicker';
 import RangePicker from '../../src/components/DatePicker/RangePicker';
+import TimePicker from '../../src/components/TimePicker';
 import dayjs from 'dayjs';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
@@ -113,6 +114,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     ColorPicker,
     DatePicker,
     RangePicker,
+    TimePicker,
     dayjs,
     ConfigProvider,
     ...scope,

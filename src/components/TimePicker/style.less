@@ -1,0 +1,390 @@
+@import '../../styles/variables.less';
+
+// ==================== TimePicker Variables ====================
+// Local alias layer: maps --soui-time-picker-* to --soui-time-picker-local-* with Less fallbacks.
+.time-picker-css-variable-aliases() {
+  --soui-time-picker-local-font-size: var(--soui-time-picker-font-size, @font-size-base);
+  --soui-time-picker-local-border-radius: var(--soui-time-picker-border-radius, @border-radius-base);
+  --soui-time-picker-local-control-height: var(--soui-time-picker-control-height, @control-height-base);
+  --soui-time-picker-local-color-primary: var(--soui-time-picker-color-primary, @primary-color);
+  --soui-time-picker-local-color-primary-hover: var(--soui-time-picker-color-primary-hover, @primary-hover-color);
+  --soui-time-picker-local-color-border: var(--soui-time-picker-border-color, @border-color);
+  --soui-time-picker-local-color-border-hover: var(--soui-time-picker-color-border-hover, @primary-hover-color);
+  --soui-time-picker-local-color-border-focus: var(--soui-time-picker-color-border-focus, @primary-color);
+  --soui-time-picker-local-bg: var(--soui-time-picker-bg, @bg-color-base);
+  --soui-time-picker-local-panel-bg: var(--soui-time-picker-panel-bg, @bg-color-base);
+  --soui-time-picker-local-color-text: var(--soui-time-picker-text-color, @text-color);
+  --soui-time-picker-local-primary-color-10: var(--soui-time-picker-primary-color-10, rgba(22, 119, 255, 0.1));
+  --soui-time-picker-local-primary-color-6: var(--soui-time-picker-primary-color-6, rgba(22, 119, 255, 0.06));
+}
+
+// ==================== TimePicker ====================
+
+.soui-time-picker {
+  .time-picker-css-variable-aliases();
+  position: relative;
+  display: inline-block;
+  font-size: var(--soui-time-picker-local-font-size);
+
+  // ==================== States ====================
+
+  &--disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &--error .soui-time-picker-trigger {
+    border-color: @error-color;
+
+    &:hover { border-color: @error-hover-color; }
+    &:focus-within {
+      border-color: @error-color;
+      box-shadow: 0 0 0 2px fade(@error-color, 10%);
+    }
+  }
+
+  &--warning .soui-time-picker-trigger {
+    border-color: @warning-color;
+
+    &:hover { border-color: @warning-color; }
+    &:focus-within {
+      border-color: @warning-color;
+      box-shadow: 0 0 0 2px fade(@warning-color, 10%);
+    }
+  }
+
+  // ==================== Trigger ====================
+
+  &-trigger {
+    display: inline-flex;
+    align-items: center;
+    height: var(--soui-time-picker-local-control-height);
+    padding: 0 @padding-sm;
+    border: 1px solid var(--soui-time-picker-local-color-border);
+    border-radius: var(--soui-time-picker-local-border-radius);
+    background: var(--soui-time-picker-local-bg);
+    cursor: pointer;
+    transition: border-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
+    box-sizing: border-box;
+    gap: @padding-xs;
+    min-width: 120px;
+
+    &:hover {
+      border-color: var(--soui-time-picker-local-color-border-hover);
+    }
+
+    &:focus-within {
+      border-color: var(--soui-time-picker-local-color-border-focus);
+      box-shadow: 0 0 0 2px var(--soui-time-picker-local-primary-color-10);
+    }
+  }
+
+  // ==================== Input ====================
+
+  &-input {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--soui-time-picker-local-color-text);
+    font-size: inherit;
+    font-family: inherit;
+    padding: 0;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: @text-color-disabled;
+    }
+  }
+
+  // ==================== Suffix / Clear ====================
+
+  &-suffix {
+    display: inline-flex;
+    align-items: center;
+    color: @text-color-disabled;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  &-clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    border-radius: 2px;
+    flex-shrink: 0;
+    transition: color @transition-duration @transition-timing-function,
+                background-color @transition-duration @transition-timing-function;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.45);
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  // ==================== Size Variants ====================
+
+  &--small {
+    .soui-time-picker-trigger {
+      height: @control-height-sm;
+      padding: 0 @padding-xs;
+      min-width: 100px;
+      font-size: @font-size-sm;
+    }
+    .soui-time-picker-suffix,
+    .soui-time-picker-clear { font-size: 12px; }
+  }
+
+  &--large {
+    .soui-time-picker-trigger {
+      height: @control-height-lg;
+      padding: 0 @padding-md;
+      min-width: 140px;
+      font-size: @font-size-lg;
+    }
+    .soui-time-picker-suffix,
+    .soui-time-picker-clear { font-size: 16px; }
+  }
+
+  // ==================== Panel ====================
+
+  &-panel {
+    position: absolute;
+    z-index: @z-index-picker;
+    background: var(--soui-time-picker-local-panel-bg);
+    border-radius: var(--soui-time-picker-local-border-radius);
+    box-shadow: @box-shadow-secondary;
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-top: 4px;
+
+    // Placement
+    &--bottomLeft  { top: 100%; left: 0; margin-top: 4px; }
+    &--bottomRight { top: 100%; right: 0; margin-top: 4px; }
+    &--topLeft     { bottom: 100%; left: 0; margin-bottom: 4px; }
+    &--topRight    { bottom: 100%; right: 0; margin-bottom: 4px; }
+  }
+
+  // ==================== Columns ====================
+
+  &-columns {
+    display: flex;
+    border-bottom: 1px solid @border-color-split;
+  }
+
+  &-column {
+    flex: 1;
+    min-width: 56px;
+    height: 192px; // 6 visible items * 32px
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 2px;
+    }
+
+    & + & {
+      border-left: 1px solid @border-color-split;
+    }
+
+    &--ampm {
+      min-width: 48px;
+    }
+
+    &-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 0 @padding-xs;
+    cursor: pointer;
+    color: var(--soui-time-picker-local-color-text);
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    transition: background @transition-duration @transition-timing-function;
+    user-select: none;
+    box-sizing: border-box;
+
+    &:hover:not(&--selected):not(&--disabled):not(&--spacer) {
+      background: var(--soui-time-picker-local-primary-color-6);
+    }
+
+    &--selected {
+      background: var(--soui-time-picker-local-primary-color-10);
+      color: var(--soui-time-picker-local-color-primary);
+      font-weight: 600;
+    }
+
+    &--disabled {
+      color: @text-color-disabled;
+      cursor: not-allowed;
+      background: @bg-color-disable;
+    }
+
+    &--spacer {
+      height: 80px; // ~2.5 cells padding for first/last item centering
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  // ==================== Footer ====================
+
+  &-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @padding-xs @padding-sm;
+    gap: @padding-xs;
+  }
+
+  &-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: @padding-sm;
+    margin-left: auto;
+  }
+
+  &-now-btn {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--soui-time-picker-local-color-primary);
+    cursor: pointer;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    padding: 2px 4px;
+    border-radius: @border-radius-sm;
+    transition: color @transition-duration @transition-timing-function;
+
+    &:hover {
+      color: var(--soui-time-picker-local-color-primary-hover);
+    }
+  }
+
+  &-ok-btn {
+    appearance: none;
+    border: none;
+    background: var(--soui-time-picker-local-color-primary);
+    color: #fff;
+    cursor: pointer;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    padding: 4px 12px;
+    border-radius: @border-radius-sm;
+    transition: background @transition-duration @transition-timing-function;
+    line-height: 1.4;
+
+    &:hover {
+      background: var(--soui-time-picker-local-color-primary-hover);
+    }
+  }
+
+  // ==================== Range Picker ====================
+
+  &-range {
+    .soui-time-picker-trigger {
+      min-width: auto;
+      padding: 0;
+    }
+    &-input {
+      text-align: center;
+
+      &--active {
+        color: var(--soui-time-picker-local-color-primary);
+      }
+    }
+  }
+
+  &-range-trigger {
+    display: inline-flex;
+    align-items: center;
+    height: var(--soui-time-picker-local-control-height);
+    padding: 0 @padding-sm;
+    border: 1px solid var(--soui-time-picker-local-color-border);
+    border-radius: var(--soui-time-picker-local-border-radius);
+    background: var(--soui-time-picker-local-bg);
+    cursor: pointer;
+    transition: border-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
+    box-sizing: border-box;
+    gap: 0;
+    min-width: 220px;
+
+    &:hover {
+      border-color: var(--soui-time-picker-local-color-border-hover);
+    }
+
+    &:focus-within {
+      border-color: var(--soui-time-picker-local-color-border-focus);
+      box-shadow: 0 0 0 2px var(--soui-time-picker-local-primary-color-10);
+    }
+  }
+
+  &-range-separator {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 @padding-xs;
+    color: @text-color-disabled;
+    flex-shrink: 0;
+  }
+
+  &-range-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: @padding-xs 0;
+    border-bottom: 1px solid @border-color-split;
+    gap: @padding-xs;
+  }
+
+  &-range-tab {
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: @text-color-disabled;
+    padding: 2px @padding-xs;
+    border-radius: @border-radius-sm;
+    transition: color @transition-duration @transition-timing-function;
+
+    &--active {
+      color: var(--soui-time-picker-local-color-primary);
+      font-weight: 600;
+    }
+  }
+
+  &-range-sep {
+    color: @text-color-disabled;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+  }
+
+  // Range size adjustments
+  &--small {
+    .soui-time-picker-range-trigger {
+      height: @control-height-sm;
+      min-width: 180px;
+      font-size: @font-size-sm;
+    }
+  }
+
+  &--large {
+    .soui-time-picker-range-trigger {
+      height: @control-height-lg;
+      min-width: 260px;
+      font-size: @font-size-lg;
+    }
+  }
+}

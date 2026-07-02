@@ -168,6 +168,12 @@ export { default as RangePicker } from './components/DatePicker/RangePicker';
 export type { RangePickerProps, RangeValue } from './components/DatePicker/RangePicker';
 export type { PickerMode } from './components/DatePicker/utils';
 
+// TimePicker Component
+export { default as TimePicker } from './components/TimePicker';
+export type { TimePickerProps, TimePickerSize, TimePickerPlacement, TimePickerStatus } from './components/TimePicker';
+export { RangePicker as TimePickerRange } from './components/TimePicker';
+export type { TimeRangePickerProps, TimeRangeValue } from './components/TimePicker';
+
 // Utils
 export * from './utils';
 

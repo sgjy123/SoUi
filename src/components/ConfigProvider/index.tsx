@@ -69,6 +69,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const colorPickerTheme = mergedTheme.components?.ColorPicker || {};
     // 获取 DatePicker 组件级配置
     const datePickerTheme = mergedTheme.components?.DatePicker || {};
+    // 获取 TimePicker 组件级配置
+    const timePickerTheme = mergedTheme.components?.TimePicker || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -358,8 +360,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-input-color-error': inputTheme.colorError || mergedTheme.errorColor,
       '--soui-input-color-warning': inputTheme.colorWarning || mergedTheme.warningColor,
       '--soui-input-color-success': inputTheme.colorSuccess || mergedTheme.successColor,
-      '--soui-input-color-icon': inputTheme.colorIcon || 'rgba(0, 0, 0, 0.45)',
-      '--soui-input-color-icon-hover': inputTheme.colorIconHover || 'rgba(0, 0, 0, 0.65)',
+      '--soui-input-color-icon': inputTheme.colorIcon || 'rgba(0, 0, 0, 0.25)',
+      '--soui-input-color-icon-hover': inputTheme.colorIconHover || 'rgba(0, 0, 0, 0.45)',
       '--soui-input-color-addon-bg': inputTheme.colorAddonBg || '#fafafa',
       '--soui-input-color-addon-text': inputTheme.colorAddonText || 'rgba(0, 0, 0, 0.88)',
 
@@ -523,6 +525,37 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-date-picker-control-height-component': datePickerTheme.controlHeight ? `${datePickerTheme.controlHeight}px` : undefined,
       '--soui-date-picker-primary-color-10-component': datePickerTheme.colorPrimary ? addOpacityToColor(datePickerTheme.colorPrimary, 0.1) : undefined,
       '--soui-date-picker-primary-color-6-component': datePickerTheme.colorPrimary ? addOpacityToColor(datePickerTheme.colorPrimary, 0.06) : undefined,
+
+      // ==================== TimePicker 组件配置 ====================
+      // 第2层: TimePicker 配置点 (引用设计令牌)
+      '--soui-time-picker-font-size': timePickerTheme.fontSize ? `${timePickerTheme.fontSize}px` : undefined,
+      '--soui-time-picker-border-radius': timePickerTheme.borderRadius ? `${timePickerTheme.borderRadius}px` : undefined,
+      '--soui-time-picker-color-primary': timePickerTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-time-picker-color-primary-hover': timePickerTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-time-picker-border-color': timePickerTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-time-picker-color-border-hover': timePickerTheme.colorBorderHover || mergedTheme.primaryHoverColor,
+      '--soui-time-picker-color-border-focus': timePickerTheme.colorBorderFocus || mergedTheme.primaryColor,
+      '--soui-time-picker-bg': timePickerTheme.colorBg || '#fff',
+      '--soui-time-picker-panel-bg': timePickerTheme.panelBg || '#fff',
+      '--soui-time-picker-text-color': timePickerTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-time-picker-control-height': timePickerTheme.controlHeight ? `${timePickerTheme.controlHeight}px` : '32px',
+      '--soui-time-picker-primary-color-10': addOpacityToColor(timePickerTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.1),
+      '--soui-time-picker-primary-color-6': addOpacityToColor(timePickerTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.06),
+
+      // 第3层: TimePicker 组件级覆盖 (优先级最高)
+      '--soui-time-picker-font-size-component': timePickerTheme.fontSize ? `${timePickerTheme.fontSize}px` : undefined,
+      '--soui-time-picker-border-radius-component': timePickerTheme.borderRadius ? `${timePickerTheme.borderRadius}px` : undefined,
+      '--soui-time-picker-color-primary-component': timePickerTheme.colorPrimary,
+      '--soui-time-picker-color-primary-hover-component': timePickerTheme.colorPrimaryHover,
+      '--soui-time-picker-border-color-component': timePickerTheme.colorBorder,
+      '--soui-time-picker-color-border-hover-component': timePickerTheme.colorBorderHover,
+      '--soui-time-picker-color-border-focus-component': timePickerTheme.colorBorderFocus,
+      '--soui-time-picker-bg-component': timePickerTheme.colorBg,
+      '--soui-time-picker-panel-bg-component': timePickerTheme.panelBg,
+      '--soui-time-picker-text-color-component': timePickerTheme.colorText,
+      '--soui-time-picker-control-height-component': timePickerTheme.controlHeight ? `${timePickerTheme.controlHeight}px` : undefined,
+      '--soui-time-picker-primary-color-10-component': timePickerTheme.colorPrimary ? addOpacityToColor(timePickerTheme.colorPrimary, 0.1) : undefined,
+      '--soui-time-picker-primary-color-6-component': timePickerTheme.colorPrimary ? addOpacityToColor(timePickerTheme.colorPrimary, 0.06) : undefined,
     } as any;
   }, [mergedTheme]);
 

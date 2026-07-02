@@ -367,6 +367,22 @@ export const docsConfig: MenuGroup[] = [
           { key: 'range-picker-calendar-change', label: 'RangePicker 日历回调', componentPath: 'DatePicker', exampleName: 'RangePickerCalendarChange', description: '通过 onCalendarChange 实时监听面板日期变化。' },
         ],
       },
+      {
+        key: 'time-picker',
+        label: 'TimePicker 时间选择',
+        icon: 'Time',
+        items: [
+          { key: 'time-picker-basic', label: 'TimePicker 基础用法', componentPath: 'TimePicker', exampleName: 'Basic', description: '基本的时间选择器，支持滚动列选择和手动输入。' },
+          { key: 'time-picker-size', label: 'TimePicker 尺寸', componentPath: 'TimePicker', exampleName: 'Size', description: '小、中、大三种尺寸。' },
+          { key: 'time-picker-controlled', label: 'TimePicker 受控模式', componentPath: 'TimePicker', exampleName: 'Controlled', description: '通过 value 和 onChange 实现受控，支持外部操作。' },
+          { key: 'time-picker-disabled-time', label: 'TimePicker 禁用时间', componentPath: 'TimePicker', exampleName: 'DisabledTime', description: '通过 disabledHours/disabledMinutes/disabledSeconds 禁用特定时间。' },
+          { key: 'time-picker-format', label: 'TimePicker 格式与步长', componentPath: 'TimePicker', exampleName: 'Format', description: '自定义格式、12小时制和步长。' },
+          { key: 'time-picker-theme', label: 'TimePicker 主题定制', componentPath: 'TimePicker', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题样式。' },
+          { key: 'time-picker-range-basic', label: 'TimePicker.RangePicker 基础用法', componentPath: 'TimePicker', exampleName: 'RangeBasic', description: '时间范围选择器，选择开始和结束时间。' },
+          { key: 'time-picker-range-size', label: 'TimePicker.RangePicker 尺寸', componentPath: 'TimePicker', exampleName: 'RangeSize', description: '范围选择器小、中、大三种尺寸。' },
+          { key: 'time-picker-range-variant', label: 'TimePicker.RangePicker 变体', componentPath: 'TimePicker', exampleName: 'RangeVariant', description: '隐藏秒列、禁用、12小时制等变体。' },
+        ],
+      },
     ],
   },
   {

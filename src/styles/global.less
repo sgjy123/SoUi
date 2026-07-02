@@ -249,6 +249,21 @@
   --soui-color-picker-text-color-disabled: @text-color-disabled;           // ColorPicker专属:禁用文本色
   --soui-color-picker-primary-color-10: rgba(22, 119, 255, 0.1);          // 主色10%透明
 
+  // === 第2层: TimePicker 组件配置点 (引用设计令牌) ===
+  --soui-time-picker-font-size: var(--soui-font-size);                       // 引用全局字号
+  --soui-time-picker-border-radius: var(--soui-border-radius);               // 引用全局圆角
+  --soui-time-picker-color-primary: var(--soui-primary-color);               // 引用全局主色
+  --soui-time-picker-color-primary-hover: var(--soui-primary-hover-color);   // 引用全局主色-hover
+  --soui-time-picker-border-color: var(--soui-border-color-base);            // 引用全局边框色
+  --soui-time-picker-color-border-hover: var(--soui-primary-hover-color);    // hover 边框色
+  --soui-time-picker-color-border-focus: var(--soui-primary-color);          // focus 边框色
+  --soui-time-picker-bg: @bg-color-base;                                     // TimePicker专属:触发器背景色
+  --soui-time-picker-panel-bg: @bg-color-base;                               // TimePicker专属:面板背景色
+  --soui-time-picker-text-color: @text-color;                                // TimePicker专属:文本颜色
+  --soui-time-picker-control-height: @control-height-base;                   // TimePicker专属:控件高度
+  --soui-time-picker-primary-color-10: rgba(22, 119, 255, 0.1);             // 主色10%透明
+  --soui-time-picker-primary-color-6: rgba(22, 119, 255, 0.06);             // 主色6%透明
+
   // === 第2层: DatePicker 组件配置点 (引用设计令牌) ===
   --soui-date-picker-font-size: var(--soui-font-size);                       // 引用全局字号
   --soui-date-picker-border-radius: var(--soui-border-radius);               // 引用全局圆角
