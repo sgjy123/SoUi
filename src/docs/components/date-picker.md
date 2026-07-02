@@ -23,6 +23,22 @@ const [date, setDate] = useState(null);
 <DatePicker value={date} onChange={(d) => setDate(d)} />
 ```
 
+### 受控模式
+
+通过 `value` 和 `onChange` 实现受控，支持外部设置日期、清除等操作。
+
+```tsx
+import dayjs from 'dayjs';
+
+const [date, setDate] = useState(null);
+
+<div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+  <DatePicker value={date} onChange={(d) => setDate(d)} />
+  <button onClick={() => setDate(dayjs())}>设为今天</button>
+  <button onClick={() => setDate(null)}>清除</button>
+</div>
+```
+
 ### 尺寸
 
 支持 `small`、`middle`、`large` 三种尺寸，与 Input 组件保持一致。
@@ -55,9 +71,22 @@ const [date, setDate] = useState(null);
 <DatePicker format="YYYY/MM/DD" />
 ```
 
+### 弹出方向
+
+通过 `placement` 控制面板弹出位置，支持四个方向。组件会自动检测视口空间，空间不足时自动翻转。
+
+```tsx
+<DatePicker placement="bottomLeft" placeholder="bottomLeft" />
+<DatePicker placement="bottomRight" placeholder="bottomRight" />
+<DatePicker placement="topLeft" placeholder="topLeft" />
+<DatePicker placement="topRight" placeholder="topRight" />
+```
+
 ### 禁用日期
 
 通过 `disabledDate` 回调禁用指定日期，参数为 dayjs 对象。在日期和周模式下按天判断，在月模式下以每月第一天判断，在年模式下以每年第一天判断。
+
+禁用今天之前的日期：
 
 ```tsx
 import dayjs from 'dayjs';
@@ -67,6 +96,28 @@ const disabledDate = (current) => {
 };
 
 <DatePicker disabledDate={disabledDate} />
+```
+
+禁用周末：
+
+```tsx
+const disabledWeekends = (current) => {
+  return current.day() === 0 || current.day() === 6;
+};
+
+<DatePicker disabledDate={disabledWeekends} />
+```
+
+限制可选范围（前后 30 天内）：
+
+```tsx
+const disabledRange = (current) => {
+  const tooEarly = current.isBefore(dayjs().subtract(30, 'day'), 'day');
+  const tooLate = current.isAfter(dayjs().add(30, 'day'), 'day');
+  return tooEarly || tooLate;
+};
+
+<DatePicker disabledDate={disabledRange} />
 ```
 
 ### 时间选择
@@ -93,6 +144,25 @@ const presets = [
 ];
 
 <DatePicker presets={presets} />
+```
+
+### 手动输入
+
+除了点击面板选择日期，也可以直接在输入框中键入日期。输入内容需与 `format` 格式一致，失焦后自动解析。
+
+```tsx
+<DatePicker format="YYYY/MM/DD" placeholder="输入 2026/07/02" />
+```
+
+### 周模式自定义格式
+
+周模式支持通过 `format` 中的 `w`（不补零）和 `ww`（补零）自定义显示格式。
+
+```tsx
+<DatePicker picker="week" />                                  // → "2026-W27"
+<DatePicker picker="week" format="YYYY年第ww周" />             // → "2026年第27周"
+<DatePicker picker="week" format="YYYY/[Week] w" />           // → "2026/Week 27"
+<DatePicker picker="week" format="第ww周 / YYYY" />           // → "第27周 / 2026"
 ```
 
 ### 主题定制
@@ -142,6 +212,16 @@ const [range, setRange] = useState(null);
 />
 ```
 
+### 尺寸
+
+支持 `small`、`middle`、`large` 三种尺寸。
+
+```tsx
+<RangePicker size="small" />
+<RangePicker size="middle" />
+<RangePicker size="large" />
+```
+
 ### 预设范围
 
 通过 `presets` 提供快捷范围选项。
@@ -157,6 +237,74 @@ const presets = [
 ];
 
 <RangePicker presets={presets} />
+```
+
+### 禁用日期范围
+
+通过 `disabledDate` 禁用不可选的日期，同样适用于范围选择器。
+
+```tsx
+import dayjs from 'dayjs';
+
+// 禁用今天之前的日期
+const disabledDate = (current) => {
+  return current.isBefore(dayjs().startOf('day'));
+};
+
+<RangePicker disabledDate={disabledDate} />
+```
+
+### 自定义格式
+
+通过 `format` 自定义日期显示格式，范围选择器同样支持。
+
+```tsx
+<RangePicker format="YYYY/MM/DD" />
+<RangePicker format="MM-DD-YYYY" />
+```
+
+### 日期时间范围
+
+开启 `showTime` 后，选择完起止日期后会进入时间选择面板，支持分别为开始和结束时间设置时、分、秒。
+
+```tsx
+<RangePicker
+  showTime
+  onChange={(dates, strings) => console.log('范围:', strings)}
+/>
+```
+
+### 受控范围
+
+通过 `value` 和 `onChange` 实现受控模式，支持外部操作日期范围。
+
+```tsx
+import dayjs from 'dayjs';
+
+const [range, setRange] = useState(null);
+
+<div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+  <RangePicker value={range} onChange={(dates) => setRange(dates)} />
+  <button onClick={() => setRange([dayjs().startOf('day'), dayjs().endOf('day')])}>
+    选择今天
+  </button>
+  <button onClick={() => setRange(null)}>清除</button>
+</div>
+```
+
+### 日历变化回调
+
+通过 `onCalendarChange` 监听面板中日期变化（不同于 `onChange` 在最终确认后才触发），适用于需要实时响应面板操作的场景。
+
+```tsx
+<RangePicker
+  onCalendarChange={(dates, dateStrings) => {
+    console.log('面板变化:', dateStrings);
+  }}
+  onChange={(dates, dateStrings) => {
+    console.log('最终确认:', dateStrings);
+  }}
+/>
 ```
 
 ## API
@@ -197,6 +345,8 @@ const presets = [
 | size | 尺寸 | `'small' \| 'middle' \| 'large'` | `'middle'` |
 | disabledDate | 不可选择的日期（支持日期/周/月/年模式） | `(current: Dayjs) => boolean` | - |
 | placement | 面板弹出方向 | `'bottomLeft' \| 'bottomRight' \| 'topLeft' \| 'topRight'` | `'bottomLeft'` |
+| showTime | 是否显示时间选择器 | `boolean` | `false` |
+| showNow | 是否显示"此刻"按钮 | `boolean` | `true` |
 | presets | 预设快捷选项 | `Array<{ label: ReactNode; value: [Date \| Dayjs, Date \| Dayjs] }>` | - |
 | onChange | 范围变化回调 | `(dates: RangeValue, dateStrings: [string, string]) => void` | - |
 | onOpenChange | 面板打开/关闭回调 | `(open: boolean) => void` | - |

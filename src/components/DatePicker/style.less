@@ -583,4 +583,48 @@
       font-weight: 500;
     }
   }
+
+  // ==================== Range Time Panel ====================
+
+  &-range-time {
+    padding: @padding-xs 0;
+  }
+
+  &-range-time-tabs {
+    display: flex;
+    gap: @padding-sm;
+    justify-content: center;
+    padding: @padding-xs 0 @padding-sm;
+  }
+
+  &-range-time-tab {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--soui-date-picker-border-color-component, var(--soui-date-picker-border-color, @border-color));
+    border-radius: @border-radius-sm;
+    cursor: pointer;
+    padding: @padding-xs @padding-md;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-text-color, @text-color);
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover:not(&--active) {
+      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+    }
+
+    &--active {
+      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: var(--soui-color-text-inverse, #fff);
+      font-weight: 500;
+    }
+  }
+
+  // Footer left group
+  &-footer-left {
+    display: flex;
+    align-items: center;
+    gap: @padding-sm;
+  }
 }

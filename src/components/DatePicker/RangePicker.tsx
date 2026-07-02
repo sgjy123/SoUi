@@ -5,7 +5,6 @@ import dayjs, { type Dayjs } from 'dayjs';
 import {
   getDefaultFormat,
   getCalendarDays,
-  checkDisabled,
   WEEK_LABELS,
   type PickerMode,
   type CalendarDay,
@@ -37,6 +36,10 @@ export interface RangePickerProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   disabledDate?: (currentDate: Dayjs) => boolean;
   /** 面板弹出方向 */
   placement?: 'bottomLeft' | 'bottomRight' | 'topLeft' | 'topRight';
+  /** 是否显示时间选择器 */
+  showTime?: boolean;
+  /** 是否显示"此刻"按钮 */
+  showNow?: boolean;
   /** 预设快捷选项 */
   presets?: Array<{ label: React.ReactNode; value: [Date | Dayjs, Date | Dayjs] }>;
   /** 范围变化回调 */
@@ -76,6 +79,8 @@ const RangePicker: React.FC<RangePickerProps> = ({
   size = 'middle',
   disabledDate,
   placement = 'bottomLeft',
+  showTime = false,
+  showNow = true,
   presets,
   onChange,
   onOpenChange,
@@ -84,7 +89,7 @@ const RangePicker: React.FC<RangePickerProps> = ({
   style,
   ...rest
 }) => {
-  const format = userFormat || getDefaultFormat(picker);
+  const format = userFormat || getDefaultFormat(picker, showTime);
 
   // Range value
   const [internalRange, setInternalRange] = useState<RangeDayjsValue>(() => toDayjsRange(defaultValue ?? null));
@@ -98,6 +103,20 @@ const RangePicker: React.FC<RangePickerProps> = ({
   const [endText, setEndText] = useState('');
   const [hoverDate, setHoverDate] = useState<Dayjs | null>(null);
   const [placementClass, setPlacementClass] = useState(`soui-date-picker-panel--${placement}`);
+
+  // Time panel state
+  const [showTimePanel, setShowTimePanel] = useState(false);
+  const [activeTimeFor, setActiveTimeFor] = useState<'start' | 'end'>('start');
+
+  // Start time state
+  const [startTimeHour, setStartTimeHour] = useState(() => startDate ? startDate.hour() : 0);
+  const [startTimeMinute, setStartTimeMinute] = useState(() => startDate ? startDate.minute() : 0);
+  const [startTimeSecond, setStartTimeSecond] = useState(() => startDate ? startDate.second() : 0);
+
+  // End time state
+  const [endTimeHour, setEndTimeHour] = useState(() => endDate ? endDate.hour() : 23);
+  const [endTimeMinute, setEndTimeMinute] = useState(() => endDate ? endDate.minute() : 59);
+  const [endTimeSecond, setEndTimeSecond] = useState(() => endDate ? endDate.second() : 59);
 
   // Left panel view state
   const [leftYear, setLeftYear] = useState(() => (startDate || dayjs()).year());
@@ -115,6 +134,23 @@ const RangePicker: React.FC<RangePickerProps> = ({
     setStartText(startDate ? startDate.format(format) : '');
     setEndText(endDate ? endDate.format(format) : '');
   }, [startDate, endDate, format]);
+
+  // Sync time state from range value
+  useEffect(() => {
+    if (startDate) {
+      setStartTimeHour(startDate.hour());
+      setStartTimeMinute(startDate.minute());
+      setStartTimeSecond(startDate.second());
+    }
+  }, [startDate]);
+
+  useEffect(() => {
+    if (endDate) {
+      setEndTimeHour(endDate.hour());
+      setEndTimeMinute(endDate.minute());
+      setEndTimeSecond(endDate.second());
+    }
+  }, [endDate]);
 
   // Emit value
   const emitValue = useCallback(
@@ -135,12 +171,20 @@ const RangePicker: React.FC<RangePickerProps> = ({
   const handleSelectDay = useCallback(
     (day: CalendarDay) => {
       if (day.isDisabled) return;
-      const d = day.date;
+      let d = day.date;
+
+      // When showTime, merge current time state into the date
+      if (showTime) {
+        if (activeInput === 'start') {
+          d = d.hour(startTimeHour).minute(startTimeMinute).second(startTimeSecond);
+        } else {
+          d = d.hour(endTimeHour).minute(endTimeMinute).second(endTimeSecond);
+        }
+      }
 
       if (activeInput === 'start') {
         // 选起点
         if (endDate && d.isAfter(endDate, 'day')) {
-          // 起点晚于终点，交换
           emitValue([d, null]);
           setActiveInput('end');
         } else {
@@ -150,17 +194,21 @@ const RangePicker: React.FC<RangePickerProps> = ({
       } else {
         // 选终点
         if (startDate && d.isBefore(startDate, 'day')) {
-          // 终点早于起点，交换
           emitValue([d, null]);
           setActiveInput('end');
         } else {
           emitValue([startDate, d]);
-          setOpen(false);
-          onOpenChange?.(false);
+          if (showTime) {
+            // Both dates selected, switch to time panel
+            setShowTimePanel(true);
+          } else {
+            setOpen(false);
+            onOpenChange?.(false);
+          }
         }
       }
     },
-    [activeInput, startDate, endDate, emitValue, onOpenChange],
+    [activeInput, startDate, endDate, emitValue, onOpenChange, showTime, startTimeHour, startTimeMinute, startTimeSecond, endTimeHour, endTimeMinute, endTimeSecond],
   );
 
   // Navigation
@@ -189,6 +237,7 @@ const RangePicker: React.FC<RangePickerProps> = ({
         setLeftMonth(v.month());
         setPlacementClass(`soui-date-picker-panel--${placement}`);
         setHoverDate(null);
+        setShowTimePanel(false);
       }
     },
     [disabled, open, onOpenChange, startDate, placement],
@@ -260,11 +309,79 @@ const RangePicker: React.FC<RangePickerProps> = ({
       const s = val[0] instanceof Date ? dayjs(val[0]) : val[0];
       const e = val[1] instanceof Date ? dayjs(val[1]) : val[1];
       emitValue([s, e]);
+      setShowTimePanel(false);
       setOpen(false);
       onOpenChange?.(false);
     },
     [emitValue, onOpenChange],
   );
+
+  // Time change for start or end
+  const handleTimeChange = useCallback(
+    (target: 'start' | 'end', type: 'hour' | 'minute' | 'second', val: number) => {
+      if (target === 'start') {
+        if (type === 'hour') setStartTimeHour(val);
+        else if (type === 'minute') setStartTimeMinute(val);
+        else setStartTimeSecond(val);
+
+        if (startDate) {
+          const h = type === 'hour' ? val : startTimeHour;
+          const m = type === 'minute' ? val : startTimeMinute;
+          const s = type === 'second' ? val : startTimeSecond;
+          const updatedStart = startDate.hour(h).minute(m).second(s);
+          // Ensure end is not before start
+          const effectiveEnd = endDate && endDate.isBefore(updatedStart) ? updatedStart : endDate;
+          emitValue([updatedStart, effectiveEnd]);
+        }
+      } else {
+        if (type === 'hour') setEndTimeHour(val);
+        else if (type === 'minute') setEndTimeMinute(val);
+        else setEndTimeSecond(val);
+
+        if (endDate) {
+          const h = type === 'hour' ? val : endTimeHour;
+          const m = type === 'minute' ? val : endTimeMinute;
+          const s = type === 'second' ? val : endTimeSecond;
+          const updatedEnd = endDate.hour(h).minute(m).second(s);
+          // Ensure end is not before start
+          const effectiveStart = startDate && updatedEnd.isBefore(startDate) ? updatedEnd : startDate;
+          emitValue([effectiveStart, updatedEnd]);
+        }
+      }
+    },
+    [startDate, endDate, startTimeHour, startTimeMinute, startTimeSecond, endTimeHour, endTimeMinute, endTimeSecond, emitValue],
+  );
+
+  // Confirm time selection
+  const handleConfirmTime = useCallback(() => {
+    // Apply final time values to the range
+    if (startDate && endDate) {
+      const finalStart = startDate.hour(startTimeHour).minute(startTimeMinute).second(startTimeSecond);
+      const finalEnd = endDate.hour(endTimeHour).minute(endTimeMinute).second(endTimeSecond);
+      emitValue([finalStart, finalEnd]);
+    }
+    setShowTimePanel(false);
+    setOpen(false);
+    onOpenChange?.(false);
+  }, [startDate, endDate, startTimeHour, startTimeMinute, startTimeSecond, endTimeHour, endTimeMinute, endTimeSecond, emitValue, onOpenChange]);
+
+  // Now — set current time for active time target
+  const handleNow = useCallback(() => {
+    const now = dayjs();
+    if (activeTimeFor === 'start' && startDate) {
+      const updated = startDate.hour(now.hour()).minute(now.minute()).second(now.second());
+      setStartTimeHour(now.hour());
+      setStartTimeMinute(now.minute());
+      setStartTimeSecond(now.second());
+      emitValue([updated, endDate]);
+    } else if (activeTimeFor === 'end' && endDate) {
+      const updated = endDate.hour(now.hour()).minute(now.minute()).second(now.second());
+      setEndTimeHour(now.hour());
+      setEndTimeMinute(now.minute());
+      setEndTimeSecond(now.second());
+      emitValue([startDate, updated]);
+    }
+  }, [activeTimeFor, startDate, endDate, emitValue]);
 
   // Outside click
   useEffect(() => {
@@ -289,7 +406,7 @@ const RangePicker: React.FC<RangePickerProps> = ({
     const panel = panelRef.current;
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const vh = window.innerHeight;
-    const PANEL_H = 400;
+    const PANEL_H = showTime ? 500 : 400;
     const gap = 8;
 
     const [userVAlign, userHAlign] = placement.split(/(?=[A-Z])/);
@@ -302,7 +419,7 @@ const RangePicker: React.FC<RangePickerProps> = ({
     else if (vAlign === 'top' && spaceAbove < PANEL_H && spaceBelow > spaceAbove) vAlign = 'bottom';
 
     setPlacementClass(`soui-date-picker-panel--${vAlign}${hAlign}`);
-  }, [open, placement]);
+  }, [open, placement, showTime]);
 
   // Render one panel
   const renderPanel = (year: number, month: number, label: string) => {
@@ -343,6 +460,114 @@ const RangePicker: React.FC<RangePickerProps> = ({
             ))}
           </div>
         </div>
+      </div>
+    );
+  };
+
+  // Render time panel for range (start/end tabs)
+  const renderTimePanel = () => {
+    const hours = Array.from({ length: 24 }, (_, i) => i);
+    const minutes = Array.from({ length: 60 }, (_, i) => i);
+    const seconds = Array.from({ length: 60 }, (_, i) => i);
+
+    const isStart = activeTimeFor === 'start';
+    const curHour = isStart ? startTimeHour : endTimeHour;
+    const curMinute = isStart ? startTimeMinute : endTimeMinute;
+    const curSecond = isStart ? startTimeSecond : endTimeSecond;
+    const curDate = isStart ? startDate : endDate;
+
+    return (
+      <div className="soui-date-picker-time soui-date-picker-range-time">
+        <div className="soui-date-picker-time-header">
+          {curDate ? curDate.format('YYYY-MM-DD') : '--'} {String(curHour).padStart(2, '0')}:{String(curMinute).padStart(2, '0')}:{String(curSecond).padStart(2, '0')}
+        </div>
+        <div className="soui-date-picker-range-time-tabs">
+          <button
+            type="button"
+            className={classNames('soui-date-picker-range-time-tab', { 'soui-date-picker-range-time-tab--active': isStart })}
+            onClick={() => setActiveTimeFor('start')}
+          >开始时间</button>
+          <button
+            type="button"
+            className={classNames('soui-date-picker-range-time-tab', { 'soui-date-picker-range-time-tab--active': !isStart })}
+            onClick={() => setActiveTimeFor('end')}
+          >结束时间</button>
+        </div>
+        <div className="soui-date-picker-time-columns">
+          <div className="soui-date-picker-time-column">
+            <div className="soui-date-picker-time-label">时</div>
+            <div className="soui-date-picker-time-list">
+              {hours.map((h) => (
+                <button key={h} type="button"
+                  className={classNames('soui-date-picker-time-cell', { 'soui-date-picker-time-cell--selected': h === curHour })}
+                  onClick={() => handleTimeChange(activeTimeFor, 'hour', h)}
+                >{String(h).padStart(2, '0')}</button>
+              ))}
+            </div>
+          </div>
+          <div className="soui-date-picker-time-column">
+            <div className="soui-date-picker-time-label">分</div>
+            <div className="soui-date-picker-time-list">
+              {minutes.map((m) => (
+                <button key={m} type="button"
+                  className={classNames('soui-date-picker-time-cell', { 'soui-date-picker-time-cell--selected': m === curMinute })}
+                  onClick={() => handleTimeChange(activeTimeFor, 'minute', m)}
+                >{String(m).padStart(2, '0')}</button>
+              ))}
+            </div>
+          </div>
+          <div className="soui-date-picker-time-column">
+            <div className="soui-date-picker-time-label">秒</div>
+            <div className="soui-date-picker-time-list">
+              {seconds.map((s) => (
+                <button key={s} type="button"
+                  className={classNames('soui-date-picker-time-cell', { 'soui-date-picker-time-cell--selected': s === curSecond })}
+                  onClick={() => handleTimeChange(activeTimeFor, 'second', s)}
+                >{String(s).padStart(2, '0')}</button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Footer
+  const showFooter = showTime || (presets && presets.length > 0);
+
+  const renderFooter = () => {
+    if (!showFooter) return null;
+    return (
+      <div className="soui-date-picker-footer">
+        {presets && presets.length > 0 && !showTimePanel && (
+          <div className="soui-date-picker-presets">
+            {presets.map((p, i) => (
+              <button key={i} type="button" className="soui-date-picker-preset-btn" onClick={() => handlePreset(p.value)}>
+                {p.label}
+              </button>
+            ))}
+          </div>
+        )}
+        {showTime && (
+          <div className="soui-date-picker-footer-actions">
+            <div className="soui-date-picker-footer-left">
+              {showNow && showTimePanel && (
+                <button type="button" className="soui-date-picker-footer-btn" onClick={handleNow}>此刻</button>
+              )}
+              <button type="button" className="soui-date-picker-footer-btn" onClick={() => {
+                setShowTimePanel(!showTimePanel);
+                if (!showTimePanel && startDate) {
+                  setActiveTimeFor('start');
+                }
+              }}>
+                {showTimePanel ? '选择日期' : '选择时间'}
+              </button>
+            </div>
+            {showTimePanel && (
+              <button type="button" className="soui-date-picker-footer-btn soui-date-picker-footer-btn--primary" onClick={handleConfirmTime}>确定</button>
+            )}
+          </div>
+        )}
       </div>
     );
   };
@@ -391,28 +616,24 @@ const RangePicker: React.FC<RangePickerProps> = ({
 
       {open && (
         <div ref={panelRef} className={classNames('soui-date-picker-panel', 'soui-date-picker-range-panels', placementClass)} role="dialog" aria-label="范围选择面板">
-          <div className="soui-date-picker-range-nav">
-            <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevYear} aria-label="上一年">«</button>
-            <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevMonth} aria-label="上一月">‹</button>
-            <span className="soui-date-picker-range-nav-spacer" />
-            <button type="button" className="soui-date-picker-header-btn" onClick={handleNextMonth} aria-label="下一月">›</button>
-            <button type="button" className="soui-date-picker-header-btn" onClick={handleNextYear} aria-label="下一年">»</button>
-          </div>
-          <div className="soui-date-picker-range-panels-body">
-            {renderPanel(leftYear, leftMonth, `${leftYear}年 ${leftMonth + 1}月`)}
-            {renderPanel(rightYear, rightMonth, `${rightYear}年 ${rightMonth + 1}月`)}
-          </div>
-          {presets && presets.length > 0 && (
-            <div className="soui-date-picker-footer">
-              <div className="soui-date-picker-presets">
-                {presets.map((p, i) => (
-                  <button key={i} type="button" className="soui-date-picker-preset-btn" onClick={() => handlePreset(p.value)}>
-                    {p.label}
-                  </button>
-                ))}
-              </div>
+          {!showTimePanel && (
+            <div className="soui-date-picker-range-nav">
+              <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevYear} aria-label="上一年">«</button>
+              <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevMonth} aria-label="上一月">‹</button>
+              <span className="soui-date-picker-range-nav-spacer" />
+              <button type="button" className="soui-date-picker-header-btn" onClick={handleNextMonth} aria-label="下一月">›</button>
+              <button type="button" className="soui-date-picker-header-btn" onClick={handleNextYear} aria-label="下一年">»</button>
             </div>
           )}
+          {showTimePanel ? (
+            renderTimePanel()
+          ) : (
+            <div className="soui-date-picker-range-panels-body">
+              {renderPanel(leftYear, leftMonth, `${leftYear}年 ${leftMonth + 1}月`)}
+              {renderPanel(rightYear, rightMonth, `${rightYear}年 ${rightMonth + 1}月`)}
+            </div>
+          )}
+          {renderFooter()}
         </div>
       )}
     </div>
