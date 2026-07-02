@@ -467,23 +467,62 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-tree-select-tag-bg': treeSelectTheme.tagBg || '#fafafa',
 
       // ==================== ColorPicker 组件配置 ====================
+      // 第2层: ColorPicker 配置点 (引用设计令牌)
+      '--soui-color-picker-font-size': colorPickerTheme.fontSize ? `${colorPickerTheme.fontSize}px` : undefined,
+      '--soui-color-picker-border-radius': colorPickerTheme.borderRadius ? `${colorPickerTheme.borderRadius}px` : undefined,
+      '--soui-color-picker-color-primary': colorPickerTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-color-picker-color-primary-hover': colorPickerTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-color-picker-border-color': colorPickerTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-color-picker-color-border-hover': colorPickerTheme.colorBorderHover || mergedTheme.primaryHoverColor,
+      '--soui-color-picker-color-border-focus': colorPickerTheme.colorBorderFocus || mergedTheme.primaryColor,
+      '--soui-color-picker-panel-bg': colorPickerTheme.colorBg || '#fff',
+      '--soui-color-picker-text-color': colorPickerTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-color-picker-text-color-disabled': colorPickerTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
+      '--soui-color-picker-primary-color-10': addOpacityToColor(colorPickerTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.1),
+
       // 第3层: ColorPicker 组件级覆盖 (优先级最高)
       '--soui-color-picker-font-size-component': colorPickerTheme.fontSize ? `${colorPickerTheme.fontSize}px` : undefined,
       '--soui-color-picker-border-radius-component': colorPickerTheme.borderRadius ? `${colorPickerTheme.borderRadius}px` : undefined,
       '--soui-color-picker-color-primary-component': colorPickerTheme.colorPrimary,
+      '--soui-color-picker-color-primary-hover-component': colorPickerTheme.colorPrimaryHover,
       '--soui-color-picker-border-color-component': colorPickerTheme.colorBorder,
+      '--soui-color-picker-color-border-hover-component': colorPickerTheme.colorBorderHover,
+      '--soui-color-picker-color-border-focus-component': colorPickerTheme.colorBorderFocus,
       '--soui-color-picker-panel-bg-component': colorPickerTheme.colorBg,
+      '--soui-color-picker-text-color-component': colorPickerTheme.colorText,
+      '--soui-color-picker-text-color-disabled-component': colorPickerTheme.colorTextDisabled,
+      '--soui-color-picker-primary-color-10-component': colorPickerTheme.colorPrimary ? addOpacityToColor(colorPickerTheme.colorPrimary, 0.1) : undefined,
 
       // ==================== DatePicker 组件配置 ====================
+      // 第2层: DatePicker 配置点 (引用设计令牌)
+      '--soui-date-picker-font-size': datePickerTheme.fontSize ? `${datePickerTheme.fontSize}px` : undefined,
+      '--soui-date-picker-border-radius': datePickerTheme.borderRadius ? `${datePickerTheme.borderRadius}px` : undefined,
+      '--soui-date-picker-color-primary': datePickerTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-date-picker-color-primary-hover': datePickerTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-date-picker-border-color': datePickerTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-date-picker-color-border-hover': datePickerTheme.colorBorderHover || mergedTheme.primaryHoverColor,
+      '--soui-date-picker-color-border-focus': datePickerTheme.colorBorderFocus || mergedTheme.primaryColor,
+      '--soui-date-picker-bg': datePickerTheme.colorBg || '#fff',
+      '--soui-date-picker-panel-bg': datePickerTheme.panelBg || '#fff',
+      '--soui-date-picker-text-color': datePickerTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-date-picker-control-height': datePickerTheme.controlHeight ? `${datePickerTheme.controlHeight}px` : '32px',
+      '--soui-date-picker-primary-color-10': addOpacityToColor(datePickerTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.1),
+      '--soui-date-picker-primary-color-6': addOpacityToColor(datePickerTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.06),
+
       // 第3层: DatePicker 组件级覆盖 (优先级最高)
       '--soui-date-picker-font-size-component': datePickerTheme.fontSize ? `${datePickerTheme.fontSize}px` : undefined,
       '--soui-date-picker-border-radius-component': datePickerTheme.borderRadius ? `${datePickerTheme.borderRadius}px` : undefined,
       '--soui-date-picker-color-primary-component': datePickerTheme.colorPrimary,
+      '--soui-date-picker-color-primary-hover-component': datePickerTheme.colorPrimaryHover,
       '--soui-date-picker-border-color-component': datePickerTheme.colorBorder,
+      '--soui-date-picker-color-border-hover-component': datePickerTheme.colorBorderHover,
+      '--soui-date-picker-color-border-focus-component': datePickerTheme.colorBorderFocus,
       '--soui-date-picker-bg-component': datePickerTheme.colorBg,
       '--soui-date-picker-panel-bg-component': datePickerTheme.panelBg,
       '--soui-date-picker-text-color-component': datePickerTheme.colorText,
       '--soui-date-picker-control-height-component': datePickerTheme.controlHeight ? `${datePickerTheme.controlHeight}px` : undefined,
+      '--soui-date-picker-primary-color-10-component': datePickerTheme.colorPrimary ? addOpacityToColor(datePickerTheme.colorPrimary, 0.1) : undefined,
+      '--soui-date-picker-primary-color-6-component': datePickerTheme.colorPrimary ? addOpacityToColor(datePickerTheme.colorPrimary, 0.06) : undefined,
     } as any;
   }, [mergedTheme]);
 

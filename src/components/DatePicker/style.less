@@ -1,11 +1,30 @@
 @import '../../styles/variables.less';
 
+// ==================== DatePicker Variables ====================
+// Local alias layer: maps --soui-date-picker-* (from ConfigProvider/inline) to --soui-date-picker-local-* with Less fallbacks.
+.date-picker-css-variable-aliases() {
+  --soui-date-picker-local-font-size: var(--soui-date-picker-font-size, @font-size-base);
+  --soui-date-picker-local-border-radius: var(--soui-date-picker-border-radius, @border-radius-base);
+  --soui-date-picker-local-control-height: var(--soui-date-picker-control-height, @control-height-base);
+  --soui-date-picker-local-color-primary: var(--soui-date-picker-color-primary, @primary-color);
+  --soui-date-picker-local-color-primary-hover: var(--soui-date-picker-color-primary-hover, @primary-hover-color);
+  --soui-date-picker-local-color-border: var(--soui-date-picker-border-color, @border-color);
+  --soui-date-picker-local-color-border-hover: var(--soui-date-picker-color-border-hover, @primary-hover-color);
+  --soui-date-picker-local-color-border-focus: var(--soui-date-picker-color-border-focus, @primary-color);
+  --soui-date-picker-local-color-bg: var(--soui-date-picker-bg, @bg-color-base);
+  --soui-date-picker-local-panel-bg: var(--soui-date-picker-panel-bg, @bg-color-base);
+  --soui-date-picker-local-color-text: var(--soui-date-picker-text-color, @text-color);
+  --soui-date-picker-local-primary-color-10: var(--soui-date-picker-primary-color-10, rgba(22, 119, 255, 0.1));
+  --soui-date-picker-local-primary-color-6: var(--soui-date-picker-primary-color-6, rgba(22, 119, 255, 0.06));
+}
+
 // ==================== DatePicker 日期选择器 ====================
 
 .soui-date-picker {
+  .date-picker-css-variable-aliases();
   position: relative;
   display: inline-block;
-  font-size: var(--soui-date-picker-font-size-component, var(--soui-date-picker-font-size, @font-size-base));
+  font-size: var(--soui-date-picker-local-font-size);
   overflow: visible;
 
   &--disabled {
@@ -20,25 +39,25 @@
     display: inline-flex;
     align-items: center;
     position: relative;
-    height: var(--soui-date-picker-control-height-component, var(--soui-date-picker-control-height, @control-height-base));
+    height: var(--soui-date-picker-local-control-height);
     padding: 0 11px;
-    border: 1px solid var(--soui-date-picker-border-color-component, var(--soui-date-picker-border-color, @border-color));
-    border-radius: var(--soui-date-picker-border-radius-component, var(--soui-date-picker-border-radius, @border-radius-base));
-    background: var(--soui-date-picker-bg-component, var(--soui-date-picker-bg, @bg-color-base));
+    border: 1px solid var(--soui-date-picker-local-color-border);
+    border-radius: var(--soui-date-picker-local-border-radius);
+    background: var(--soui-date-picker-local-color-bg);
     cursor: pointer;
-    transition: border-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function),
-                box-shadow var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    transition: border-color @transition-duration @transition-timing-function,
+                box-shadow @transition-duration @transition-timing-function;
     box-sizing: border-box;
     width: 100%;
     min-width: 200px;
 
     &:hover {
-      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      border-color: var(--soui-date-picker-local-color-border-hover);
     }
 
     &:focus-within {
-      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      box-shadow: 0 0 0 2px fade(@primary-color, 10%);
+      border-color: var(--soui-date-picker-local-color-border-focus);
+      box-shadow: 0 0 0 2px var(--soui-date-picker-local-primary-color-10);
     }
   }
 
@@ -49,7 +68,7 @@
     outline: none;
     background: transparent;
     font-size: inherit;
-    color: var(--soui-date-picker-text-color-component, var(--soui-date-picker-text-color, var(--soui-text-color, @text-color)));
+    color: var(--soui-date-picker-local-color-text);
     font-family: inherit;
     padding: 0 28px 0 0;
     min-width: 0;
@@ -70,7 +89,7 @@
     width: 16px;
     height: 16px;
     border-radius: 2px;
-    background-color: var(--soui-date-picker-bg-component, var(--soui-date-picker-bg, @bg-color-base));
+    background-color: var(--soui-date-picker-local-color-bg);
     color: rgba(0, 0, 0, 0.25);
     cursor: pointer;
     z-index: 1;
@@ -118,7 +137,7 @@
   }
 
   &--middle &-trigger {
-    height: var(--soui-date-picker-control-height-component, var(--soui-date-picker-control-height, @control-height-base));
+    height: var(--soui-date-picker-local-control-height);
     padding: 0 11px;
     min-width: 200px;
   }
@@ -154,8 +173,8 @@
     position: absolute;
     z-index: @z-index-picker;
     min-width: 280px;
-    background: var(--soui-date-picker-panel-bg-component, var(--soui-date-picker-panel-bg, @bg-color-base));
-    border-radius: var(--soui-date-picker-border-radius-component, var(--soui-date-picker-border-radius, @border-radius-base));
+    background: var(--soui-date-picker-local-panel-bg);
+    border-radius: var(--soui-date-picker-local-border-radius);
     box-shadow: var(--soui-box-shadow-secondary, @box-shadow-secondary);
     padding: @padding-sm;
     box-sizing: border-box;
@@ -187,10 +206,13 @@
     color: var(--soui-text-color-secondary, @text-color-secondary);
     font-size: var(--soui-font-size, @font-size-base);
     border-radius: @border-radius-sm;
-    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    transition: all @transition-duration @transition-timing-function;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
 
     &:hover {
-      color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: var(--soui-date-picker-local-color-primary);
       background: rgba(0, 0, 0, 0.04);
     }
   }
@@ -207,10 +229,10 @@
 
     &--clickable {
       cursor: pointer;
-      transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+      transition: all @transition-duration @transition-timing-function;
 
       &:hover {
-        color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+        color: var(--soui-date-picker-local-color-primary);
         background: rgba(0, 0, 0, 0.04);
       }
     }
@@ -259,9 +281,9 @@
     align-items: center;
     justify-content: center;
     font-size: var(--soui-font-size-sm, @font-size-sm);
-    color: var(--soui-text-color, @text-color);
+    color: var(--soui-date-picker-local-color-text);
     border-radius: @border-radius-sm;
-    transition: all 0.15s var(--soui-transition-timing-function, @transition-timing-function);
+    transition: all 0.15s @transition-timing-function;
 
     &:hover:not(&--disabled):not(&--selected) {
       background: rgba(0, 0, 0, 0.04);
@@ -272,25 +294,25 @@
     }
 
     &--today {
-      color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: var(--soui-date-picker-local-color-primary);
       font-weight: 600;
-      box-shadow: inset 0 0 0 1px var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      box-shadow: inset 0 0 0 1px var(--soui-date-picker-local-color-primary);
     }
 
     &--selected {
-      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      background: var(--soui-date-picker-local-color-primary);
       color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
       border-radius: @border-radius-sm;
     }
 
     &--in-range {
-      background: fade(@primary-color, 10%);
+      background: var(--soui-date-picker-local-primary-color-10);
       border-radius: 0;
     }
 
     &--range-hover {
-      background: fade(@primary-color, 6%);
+      background: var(--soui-date-picker-local-primary-color-6);
       border-radius: 0;
     }
 
@@ -323,21 +345,21 @@
     cursor: pointer;
     padding: @padding-sm @padding-xs;
     font-size: var(--soui-font-size-sm, @font-size-sm);
-    color: var(--soui-text-color, @text-color);
+    color: var(--soui-date-picker-local-color-text);
     border-radius: @border-radius-base;
-    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    transition: all @transition-duration @transition-timing-function;
 
     &:hover:not(&--selected) {
       background: rgba(0, 0, 0, 0.04);
     }
 
     &--now {
-      color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      color: var(--soui-date-picker-local-color-primary);
       font-weight: 600;
     }
 
     &--selected {
-      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      background: var(--soui-date-picker-local-color-primary);
       color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
     }
@@ -365,9 +387,9 @@
     cursor: pointer;
     padding: @padding-sm @padding-xs;
     font-size: var(--soui-font-size-sm, @font-size-sm);
-    color: var(--soui-text-color, @text-color);
+    color: var(--soui-date-picker-local-color-text);
     border-radius: @border-radius-base;
-    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    transition: all @transition-duration @transition-timing-function;
 
     &:hover:not(&--selected) {
       background: rgba(0, 0, 0, 0.04);
@@ -378,7 +400,7 @@
     }
 
     &--selected {
-      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      background: var(--soui-date-picker-local-color-primary);
       color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
     }
@@ -400,7 +422,7 @@
     text-align: center;
     font-size: var(--soui-font-size-sm, @font-size-sm);
     font-weight: 500;
-    color: var(--soui-text-color, @text-color);
+    color: var(--soui-date-picker-local-color-text);
     padding: @padding-xs 0 @padding-sm;
     border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
     margin-bottom: @padding-sm;
@@ -452,17 +474,17 @@
     cursor: pointer;
     padding: @padding-xs 0;
     font-size: var(--soui-font-size-sm, @font-size-sm);
-    color: var(--soui-text-color, @text-color);
+    color: var(--soui-date-picker-local-color-text);
     text-align: center;
     border-radius: 3px;
-    transition: all 0.15s var(--soui-transition-timing-function, @transition-timing-function);
+    transition: all 0.15s @transition-timing-function;
 
     &:hover:not(&--selected) {
       background: rgba(0, 0, 0, 0.04);
     }
 
     &--selected {
-      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      background: var(--soui-date-picker-local-color-primary);
       color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
     }
@@ -486,17 +508,17 @@
   &-preset-btn {
     appearance: none;
     background: transparent;
-    border: 1px solid var(--soui-date-picker-border-color-component, var(--soui-date-picker-border-color, @border-color));
+    border: 1px solid var(--soui-date-picker-local-color-border);
     border-radius: @border-radius-sm;
     cursor: pointer;
     padding: 2px @padding-sm;
     font-size: var(--soui-font-size-sm, @font-size-sm);
-    color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    color: var(--soui-date-picker-local-color-primary);
+    transition: all @transition-duration @transition-timing-function;
 
     &:hover {
-      background: fade(@primary-color, 6%);
-      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      background: var(--soui-date-picker-local-primary-color-6);
+      border-color: var(--soui-date-picker-local-color-primary);
     }
   }
 
@@ -514,23 +536,23 @@
     cursor: pointer;
     padding: @padding-xs @padding-sm;
     font-size: var(--soui-font-size-sm, @font-size-sm);
-    color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+    color: var(--soui-date-picker-local-color-primary);
     border-radius: @border-radius-sm;
-    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    transition: all @transition-duration @transition-timing-function;
 
     &:hover {
-      background: fade(@primary-color, 6%);
+      background: var(--soui-date-picker-local-primary-color-6);
     }
 
     &--primary {
-      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      background: var(--soui-date-picker-local-color-primary);
       color: var(--soui-color-text-inverse, #fff);
       padding: @padding-xs @padding-md;
       border-radius: @border-radius-sm;
 
       &:hover {
         opacity: 0.85;
-        background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+        background: var(--soui-date-picker-local-color-primary);
       }
     }
   }
@@ -600,22 +622,22 @@
   &-range-time-tab {
     appearance: none;
     background: transparent;
-    border: 1px solid var(--soui-date-picker-border-color-component, var(--soui-date-picker-border-color, @border-color));
+    border: 1px solid var(--soui-date-picker-local-color-border);
     border-radius: @border-radius-sm;
     cursor: pointer;
     padding: @padding-xs @padding-md;
     font-size: var(--soui-font-size-sm, @font-size-sm);
-    color: var(--soui-text-color, @text-color);
-    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    color: var(--soui-date-picker-local-color-text);
+    transition: all @transition-duration @transition-timing-function;
 
     &:hover:not(&--active) {
-      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      border-color: var(--soui-date-picker-local-color-primary);
+      color: var(--soui-date-picker-local-color-primary);
     }
 
     &--active {
-      background: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
-      border-color: var(--soui-date-picker-color-primary-component, var(--soui-date-picker-color-primary, @primary-color));
+      background: var(--soui-date-picker-local-color-primary);
+      border-color: var(--soui-date-picker-local-color-primary);
       color: var(--soui-color-text-inverse, #fff);
       font-weight: 500;
     }

@@ -1,11 +1,28 @@
 @import '../../styles/variables.less';
 
+// ==================== ColorPicker Variables ====================
+// Local alias layer: maps --soui-color-picker-* (from ConfigProvider/inline) to --soui-color-picker-local-* with Less fallbacks.
+.color-picker-css-variable-aliases() {
+  --soui-color-picker-local-font-size: var(--soui-color-picker-font-size, @font-size-base);
+  --soui-color-picker-local-border-radius: var(--soui-color-picker-border-radius, @border-radius-base);
+  --soui-color-picker-local-color-primary: var(--soui-color-picker-color-primary, @primary-color);
+  --soui-color-picker-local-color-primary-hover: var(--soui-color-picker-color-primary-hover, @primary-hover-color);
+  --soui-color-picker-local-color-border: var(--soui-color-picker-border-color, @border-color);
+  --soui-color-picker-local-color-border-hover: var(--soui-color-picker-color-border-hover, @primary-hover-color);
+  --soui-color-picker-local-color-border-focus: var(--soui-color-picker-color-border-focus, @primary-color);
+  --soui-color-picker-local-panel-bg: var(--soui-color-picker-panel-bg, @bg-color-base);
+  --soui-color-picker-local-color-text: var(--soui-color-picker-text-color, @text-color);
+  --soui-color-picker-local-color-text-disabled: var(--soui-color-picker-text-color-disabled, @text-color-disabled);
+  --soui-color-picker-local-primary-color-10: var(--soui-color-picker-primary-color-10, rgba(22, 119, 255, 0.1));
+}
+
 // ==================== ColorPicker 颜色选择器 ====================
 
 .soui-color-picker {
+  .color-picker-css-variable-aliases();
   position: relative;
   display: inline-block;
-  font-size: var(--soui-color-picker-font-size-component, var(--soui-color-picker-font-size, @font-size-base));
+  font-size: var(--soui-color-picker-local-font-size);
   overflow: visible; // 确保弹出面板不被裁剪
 
   // ==================== 状态修饰 ====================
@@ -23,9 +40,9 @@
     align-items: center;
     gap: @padding-xs;
     padding: 3px;
-    border: 1px solid var(--soui-color-picker-border-color-component, var(--soui-color-picker-border-color, @border-color));
-    border-radius: var(--soui-color-picker-border-radius-component, var(--soui-color-picker-border-radius, @border-radius-base));
-    background: var(--soui-color-picker-panel-bg-component, var(--soui-color-picker-panel-bg, @bg-color-base));
+    border: 1px solid var(--soui-color-picker-local-color-border);
+    border-radius: var(--soui-color-picker-local-border-radius);
+    background: var(--soui-color-picker-local-panel-bg);
     cursor: pointer;
     transition: border-color @transition-duration @transition-timing-function,
                 box-shadow @transition-duration @transition-timing-function;
@@ -34,11 +51,11 @@
     user-select: none;
 
     &:hover {
-      border-color: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
+      border-color: var(--soui-color-picker-local-color-border-hover);
     }
 
     &:focus-visible {
-      outline: 2px solid var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
+      outline: 2px solid var(--soui-color-picker-local-color-border-focus);
       outline-offset: 2px;
     }
   }
@@ -70,7 +87,7 @@
     display: block;
     width: 24px;
     height: 100%;
-    border-radius: calc(var(--soui-color-picker-border-radius-component, var(--soui-color-picker-border-radius, @border-radius-base)) - 2px);
+    border-radius: calc(var(--soui-color-picker-local-border-radius) - 2px);
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
@@ -91,7 +108,7 @@
   // 颜色文本标签
   &-label {
     font-size: @font-size-sm;
-    color: @text-color;
+    color: var(--soui-color-picker-local-color-text);
     white-space: nowrap;
     padding-right: @padding-xs;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
@@ -103,14 +120,14 @@
     appearance: none;
     background: transparent;
     border: none;
-    color: @text-color-disabled;
+    color: var(--soui-color-picker-local-color-text-disabled);
     cursor: pointer;
     font-size: 16px;
     line-height: 1;
     padding: 0 4px;
     transition: color @transition-duration @transition-timing-function;
 
-    &:hover { color: @text-color; }
+    &:hover { color: var(--soui-color-picker-local-color-text); }
   }
 
   // ==================== 弹出面板 ====================
@@ -119,8 +136,8 @@
     position: absolute;
     z-index: @z-index-popover;
     max-width: calc(100vw - 16px);
-    background: var(--soui-color-picker-panel-bg-component, var(--soui-color-picker-panel-bg, @bg-color-base));
-    border-radius: var(--soui-color-picker-border-radius-component, var(--soui-color-picker-border-radius, @border-radius-base));
+    background: var(--soui-color-picker-local-panel-bg);
+    border-radius: var(--soui-color-picker-local-border-radius);
     box-shadow: @box-shadow-secondary;
     padding: @padding-md @padding-md @padding-sm;
     box-sizing: border-box;
@@ -232,24 +249,24 @@
     flex: 1;
     height: 28px;
     padding: 0 @padding-xs;
-    border: 1px solid var(--soui-color-picker-border-color-component, var(--soui-color-picker-border-color, @border-color));
+    border: 1px solid var(--soui-color-picker-local-color-border);
     border-radius: 4px;
     font-size: @font-size-sm;
     font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-    color: @text-color;
-    background: @bg-color-base;
+    color: var(--soui-color-picker-local-color-text);
+    background: var(--soui-color-picker-local-panel-bg);
     outline: none;
     transition: border-color @transition-duration @transition-timing-function,
                 box-shadow @transition-duration @transition-timing-function;
 
     &:focus {
-      border-color: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
-      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+      border-color: var(--soui-color-picker-local-color-border-focus);
+      box-shadow: 0 0 0 2px var(--soui-color-picker-local-primary-color-10);
     }
 
     &:disabled {
       background: @bg-color-disable;
-      color: @text-color-disabled;
+      color: var(--soui-color-picker-local-color-text-disabled);
       cursor: not-allowed;
     }
   }
@@ -265,21 +282,21 @@
     padding: 3px 7px;
     font-size: 11px;
     font-weight: 500;
-    border: 1px solid @border-color;
+    border: 1px solid var(--soui-color-picker-local-color-border);
     border-radius: 4px;
     background: transparent;
-    color: @text-color-secondary;
+    color: var(--soui-color-picker-local-color-text);
     cursor: pointer;
     transition: all @transition-duration @transition-timing-function;
 
     &:hover {
-      border-color: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
+      border-color: var(--soui-color-picker-local-color-primary-hover);
     }
 
     &--active {
-      background: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
+      background: var(--soui-color-picker-local-color-primary);
       color: #fff;
-      border-color: var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
+      border-color: var(--soui-color-picker-local-color-primary);
     }
 
     &--disabled {
@@ -287,7 +304,7 @@
       cursor: not-allowed;
 
       &:hover {
-        border-color: @border-color;
+        border-color: var(--soui-color-picker-local-color-border);
       }
     }
   }
@@ -306,7 +323,7 @@
 
     &-label {
       font-size: @font-size-sm;
-      color: @text-color-secondary;
+      color: var(--soui-color-picker-local-color-text-disabled);
       margin-bottom: 6px;
       line-height: 1;
     }
@@ -334,12 +351,12 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
+      outline: 2px solid var(--soui-color-picker-local-color-border-focus);
       outline-offset: 2px;
     }
 
     &--active {
-      box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--soui-color-picker-color-primary-component, var(--soui-color-picker-color-primary, @primary-color));
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--soui-color-picker-local-color-primary);
     }
   }
 }

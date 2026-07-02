@@ -745,14 +745,24 @@ export interface ComponentThemeConfig {
   ColorPicker?: {
     /** 主色（格式按钮激活色、聚焦环色） */
     colorPrimary?: string;
+    /** hover 主色 */
+    colorPrimaryHover?: string;
     /** 圆角大小（像素） */
     borderRadius?: number;
     /** 字体大小（像素） */
     fontSize?: number;
     /** 触发器边框颜色 */
     colorBorder?: string;
+    /** hover 边框颜色 */
+    colorBorderHover?: string;
+    /** focus 边框颜色 */
+    colorBorderFocus?: string;
     /** 面板背景色 */
     colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 禁用文本颜色 */
+    colorTextDisabled?: string;
     /** 面板宽度（像素） */
     panelWidth?: number;
   };
@@ -760,12 +770,18 @@ export interface ComponentThemeConfig {
   DatePicker?: {
     /** 主色（选中态、今日标记） */
     colorPrimary?: string;
+    /** 主色-hover（面板按钮 hover 态） */
+    colorPrimaryHover?: string;
     /** 圆角大小（像素） */
     borderRadius?: number;
     /** 字体大小（像素） */
     fontSize?: number;
     /** 触发器边框颜色 */
     colorBorder?: string;
+    /** 触发器 hover 边框颜色 */
+    colorBorderHover?: string;
+    /** 触发器 focus 边框颜色 */
+    colorBorderFocus?: string;
     /** 触发器背景色 */
     colorBg?: string;
     /** 面板背景色 */
