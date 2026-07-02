@@ -618,11 +618,19 @@ const RangePicker: React.FC<RangePickerProps> = ({
         <div ref={panelRef} className={classNames('soui-date-picker-panel', 'soui-date-picker-range-panels', placementClass)} role="dialog" aria-label="范围选择面板">
           {!showTimePanel && (
             <div className="soui-date-picker-range-nav">
-              <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevYear} aria-label="上一年">«</button>
-              <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevMonth} aria-label="上一月">‹</button>
+              <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevYear} aria-label="上一年">
+                <Icon name="DoubleLeft" size={14} theme="outline" />
+              </button>
+              <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevMonth} aria-label="上一月">
+                <Icon name="Left" size={14} theme="outline" />
+              </button>
               <span className="soui-date-picker-range-nav-spacer" />
-              <button type="button" className="soui-date-picker-header-btn" onClick={handleNextMonth} aria-label="下一月">›</button>
-              <button type="button" className="soui-date-picker-header-btn" onClick={handleNextYear} aria-label="下一年">»</button>
+              <button type="button" className="soui-date-picker-header-btn" onClick={handleNextMonth} aria-label="下一月">
+                <Icon name="Right" size={14} theme="outline" />
+              </button>
+              <button type="button" className="soui-date-picker-header-btn" onClick={handleNextYear} aria-label="下一年">
+                <Icon name="DoubleRight" size={14} theme="outline" />
+              </button>
             </div>
           )}
           {showTimePanel ? (

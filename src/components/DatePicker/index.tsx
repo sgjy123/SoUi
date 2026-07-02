@@ -394,9 +394,13 @@ const DatePicker: React.FC<DatePickerProps> = ({
     if (panelMode === 'year') {
       return (
         <div className="soui-date-picker-header">
-          <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevDecade} aria-label="上十年">«</button>
+          <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevDecade} aria-label="上十年">
+            <Icon name="DoubleLeft" size={14} theme="outline" />
+          </button>
           <span className="soui-date-picker-header-title">{decadeStart} - {decadeStart + 9}</span>
-          <button type="button" className="soui-date-picker-header-btn" onClick={handleNextDecade} aria-label="下十年">»</button>
+          <button type="button" className="soui-date-picker-header-btn" onClick={handleNextDecade} aria-label="下十年">
+            <Icon name="DoubleRight" size={14} theme="outline" />
+          </button>
         </div>
       );
     }
@@ -404,23 +408,35 @@ const DatePicker: React.FC<DatePickerProps> = ({
     if (panelMode === 'month') {
       return (
         <div className="soui-date-picker-header">
-          <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevYear} aria-label="上一年">‹</button>
+          <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevYear} aria-label="上一年">
+            <Icon name="Left" size={14} theme="outline" />
+          </button>
           <button type="button" className="soui-date-picker-header-title soui-date-picker-header-title--clickable" onClick={() => setPanelMode('year')}>{viewYear}年</button>
-          <button type="button" className="soui-date-picker-header-btn" onClick={handleNextYear} aria-label="下一年">›</button>
+          <button type="button" className="soui-date-picker-header-btn" onClick={handleNextYear} aria-label="下一年">
+            <Icon name="Right" size={14} theme="outline" />
+          </button>
         </div>
       );
     }
 
     return (
       <div className="soui-date-picker-header">
-        <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevYear} aria-label="上一年">«</button>
-        <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevMonth} aria-label="上一月">‹</button>
+        <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevYear} aria-label="上一年">
+          <Icon name="DoubleLeft" size={14} theme="outline" />
+        </button>
+        <button type="button" className="soui-date-picker-header-btn" onClick={handlePrevMonth} aria-label="上一月">
+          <Icon name="Left" size={14} theme="outline" />
+        </button>
         <div className="soui-date-picker-header-title-group">
           <button type="button" className="soui-date-picker-header-title soui-date-picker-header-title--clickable" onClick={() => setPanelMode('year')}>{viewYear}年</button>
           <button type="button" className="soui-date-picker-header-title soui-date-picker-header-title--clickable" onClick={() => setPanelMode('month')}>{viewMonth + 1}月</button>
         </div>
-        <button type="button" className="soui-date-picker-header-btn" onClick={handleNextMonth} aria-label="下一月">›</button>
-        <button type="button" className="soui-date-picker-header-btn" onClick={handleNextYear} aria-label="下一年">»</button>
+        <button type="button" className="soui-date-picker-header-btn" onClick={handleNextMonth} aria-label="下一月">
+          <Icon name="Right" size={14} theme="outline" />
+        </button>
+        <button type="button" className="soui-date-picker-header-btn" onClick={handleNextYear} aria-label="下一年">
+          <Icon name="DoubleRight" size={14} theme="outline" />
+        </button>
       </div>
     );
   };
