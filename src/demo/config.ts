@@ -399,7 +399,7 @@ export const docsConfig: MenuGroup[] = [
       {
         key: 'slider',
         label: 'Slider 滑块',
-        icon: 'Slide',
+        icon: 'HandDrag',
         items: [
           { key: 'slider-basic', label: 'Slider 基础用法', componentPath: 'Slider', exampleName: 'Basic', description: '基本的滑块选择器。' },
           { key: 'slider-range', label: 'Slider 范围选择', componentPath: 'Slider', exampleName: 'Range', description: '双滑块范围选择模式。' },
