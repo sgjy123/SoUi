@@ -467,7 +467,7 @@ const Slider: React.FC<SliderProps> = ({
               posStyle = isStart
                 ? { bottom: 0 }
                 : isEnd
-                  ? { top: 0 }
+                  ? { bottom: '100%' }
                   : { bottom: `${markPct}%` };
             } else {
               posStyle = isStart

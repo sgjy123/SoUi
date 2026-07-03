@@ -85,14 +85,26 @@
       transform: translate(-50%, 50%);
     }
 
-    .soui-slider-mark {
-      left: 18px;
-      transform: translateY(50%);
-    }
-
     .soui-slider-dot {
       left: 50%;
       transform: translate(-50%, 50%);
+    }
+
+    .soui-slider-marks {
+      left: calc(100% + 8px);
+      width: auto;
+    }
+
+    .soui-slider-mark {
+      flex-direction: row;
+      align-items: center;
+      left: 0;
+      transform: translateY(50%);
+
+      &-dot {
+        margin-bottom: 0;
+        margin-right: @padding-xs;
+      }
     }
   }
 
@@ -232,15 +244,6 @@
     pointer-events: none;
   }
 
-  &-marks {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
-
   &-mark {
     position: absolute;
     display: flex;
@@ -265,57 +268,29 @@
     }
   }
 
-  // Edge dots: align to the rail edge so they don't overflow
+  // Edge dots: align to the rail edge so they don't overflow (horizontal only)
   &-horizontal &-dot-start,
-  &-horizontal &-dot-end {
+  &-horizontal &-dot-end
+   {
     transform: translateY(-50%) !important;
   }
 
   &-vertical &-dot-start,
-  &-vertical &-dot-end {
+  &-vertical &-dot-end
+   {
     transform: translateX(-50%) !important;
   }
 
-  // Edge marks: align content to the edge so text doesn't overflow the rail
-  &-mark-start {
+  // Edge marks: align content to the edge so text doesn't overflow the rail (horizontal only)
+  &-horizontal &-mark-start
+   {
     transform: none !important;
     align-items: flex-start !important;
   }
 
-  &-mark-end {
+  &-horizontal &-mark-end {
     transform: none !important;
     align-items: flex-end !important;
-  }
-
-  // ========== Vertical Mode ==========
-  &-vertical {
-    .soui-slider-marks {
-      left: calc(100% + 8px);
-      width: auto;
-      transform: none;
-    }
-
-    .soui-slider-mark {
-      flex-direction: row;
-      align-items: center;
-      left: 0 !important;
-      transform: translateY(-50%) !important;
-
-      &-dot {
-        margin-bottom: 0;
-        margin-right: @padding-xs;
-      }
-    }
-
-    .soui-slider-mark-start {
-      top: 0 !important;
-      bottom: auto !important;
-    }
-
-    .soui-slider-mark-end {
-      bottom: 0 !important;
-      top: auto !important;
-    }
   }
 
   // ========== Disabled ==========
