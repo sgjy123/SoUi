@@ -52,6 +52,8 @@ const App = () => {
 
 通过 `marks` 设置刻度标记，`dots` 显示刻度点。`step={null}` 时仅可选标记点。
 
+> **注意**：位于 0% 和 100% 的刻度标记与刻度点会自动贴边对齐，避免文本或圆点超出 rail 范围。
+
 ```tsx
 import React from 'react';
 import Slider from 'soui/Slider';
@@ -118,6 +120,77 @@ const App = () => (
     </ConfigProvider>
   </div>
 );
+```
+
+### 提示气泡
+
+通过 `tooltip` 配置悬浮提示，可自定义格式化内容。
+
+```tsx
+import React, { useState } from 'react';
+import Slider from 'soui/Slider';
+
+const App = () => {
+  const [value, setValue] = useState(30);
+  return (
+    <div style={{ width: 400 }}>
+      <Slider
+        value={value}
+        onChange={(v) => setValue(v as number)}
+        tooltip={{ open: true, formatter: (v) => `${v}%` }}
+      />
+      <Slider
+        defaultValue={60}
+        tooltip={{ formatter: (v) => `温度: ${v}°C` }}
+        style={{ marginTop: 24 }}
+      />
+    </div>
+  );
+};
+```
+
+### 反向坐标轴
+
+设置 `reverse` 反转坐标轴方向。
+
+```tsx
+import React, { useState } from 'react';
+import Slider from 'soui/Slider';
+
+const App = () => {
+  const [value, setValue] = useState(30);
+  return (
+    <div style={{ width: 400 }}>
+      <Slider value={value} onChange={(v) => setValue(v as number)} reverse />
+      <Slider range defaultValue={[20, 80]} reverse style={{ marginTop: 24 }} />
+    </div>
+  );
+};
+```
+
+### 事件回调
+
+`onChange` 在值变化时实时触发，`onChangeComplete` 在拖拽或键盘操作结束时触发。
+
+```tsx
+import React, { useState } from 'react';
+import Slider from 'soui/Slider';
+
+const App = () => {
+  const [changeValue, setChangeValue] = useState(30);
+  const [completeValue, setCompleteValue] = useState(30);
+  return (
+    <div style={{ width: 400 }}>
+      <p>onChange: {changeValue}</p>
+      <p>onChangeComplete: {completeValue}</p>
+      <Slider
+        value={changeValue}
+        onChange={(v) => setChangeValue(v as number)}
+        onChangeComplete={(v) => setCompleteValue(v as number)}
+      />
+    </div>
+  );
+};
 ```
 
 ## API

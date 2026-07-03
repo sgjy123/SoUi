@@ -460,12 +460,31 @@ const Slider: React.FC<SliderProps> = ({
         <div className="soui-slider-marks">
           {markEntries.map(({ key, config }) => {
             const markPct = toPercent(key, min, max);
+            const isStart = markPct === 0;
+            const isEnd = markPct === 100;
+            let posStyle: React.CSSProperties;
+            if (isVertical) {
+              posStyle = isStart
+                ? { bottom: 0 }
+                : isEnd
+                  ? { top: 0 }
+                  : { bottom: `${markPct}%` };
+            } else {
+              posStyle = isStart
+                ? { left: 0 }
+                : isEnd
+                  ? { right: 0 }
+                  : { left: `${markPct}%` };
+            }
             return (
               <div
                 key={key}
-                className="soui-slider-mark"
+                className={classNames('soui-slider-mark', {
+                  'soui-slider-mark-start': isStart,
+                  'soui-slider-mark-end': isEnd,
+                })}
                 style={{
-                  ...(isVertical ? { bottom: `${markPct}%` } : { left: `${markPct}%` }),
+                  ...posStyle,
                   ...(config.style || {}),
                 }}
               >
