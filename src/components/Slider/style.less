@@ -201,7 +201,6 @@
       transform: translateY(-50%);
       border: 4px solid transparent;
       border-right-color: var(--soui-color-bg-default, rgba(0, 0, 0, 0.88));
-      border-top-color: transparent;
     }
   }
 
@@ -224,6 +223,15 @@
   }
 
   // ========== Marks ==========
+  &-marks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
   &-marks {
     position: absolute;
     top: 0;
@@ -277,6 +285,37 @@
   &-mark-end {
     transform: none !important;
     align-items: flex-end !important;
+  }
+
+  // ========== Vertical Mode ==========
+  &-vertical {
+    .soui-slider-marks {
+      left: calc(100% + 8px);
+      width: auto;
+      transform: none;
+    }
+
+    .soui-slider-mark {
+      flex-direction: row;
+      align-items: center;
+      left: 0 !important;
+      transform: translateY(-50%) !important;
+
+      &-dot {
+        margin-bottom: 0;
+        margin-right: @padding-xs;
+      }
+    }
+
+    .soui-slider-mark-start {
+      top: 0 !important;
+      bottom: auto !important;
+    }
+
+    .soui-slider-mark-end {
+      bottom: 0 !important;
+      top: auto !important;
+    }
   }
 
   // ========== Disabled ==========

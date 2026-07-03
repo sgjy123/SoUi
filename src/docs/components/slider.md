@@ -75,16 +75,33 @@ const App = () => (
 
 ### 垂直模式
 
-设置 `orientation="vertical"` 切换为垂直方向。
+设置 `orientation="vertical"` 切换为垂直方向，支持刻度标记、范围选择等。
 
 ```tsx
-import React from 'react';
+import React, { useState } from 'react';
 import Slider from 'soui/Slider';
 
+const marks = {
+  0: '0',
+  25: '25',
+  50: '50',
+  75: '75',
+  100: '100',
+};
+
+const temperatureMarks = {
+  0: '0°C',
+  26: '26°C',
+  37: '37°C',
+  100: { label: '100°C', style: { color: '#f50' } },
+};
+
 const App = () => (
-  <div style={{ display: 'flex', gap: 32, height: 260 }}>
+  <div style={{ display: 'flex', gap: 48, height: 300 }}>
     <Slider orientation="vertical" defaultValue={30} />
     <Slider orientation="vertical" range defaultValue={[20, 70]} />
+    <Slider orientation="vertical" marks={marks} defaultValue={50} dots />
+    <Slider orientation="vertical" marks={temperatureMarks} defaultValue={37} />
     <Slider orientation="vertical" defaultValue={50} disabled />
   </div>
 );
