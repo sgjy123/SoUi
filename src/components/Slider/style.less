@@ -26,7 +26,6 @@
   &-horizontal {
     height: 12px;
     margin: 10px 0;
-    padding: 0 calc(var(--soui-slider-local-handle-size) / 2);
 
     .soui-slider-rail {
       position: absolute;
@@ -54,7 +53,7 @@
 
     .soui-slider-dot {
       top: 50%;
-      transform: translateY(-50%);
+      transform: translate(-50%, -50%);
     }
   }
 
@@ -256,6 +255,28 @@
       white-space: nowrap;
       user-select: none;
     }
+  }
+
+  // Edge dots: align to the rail edge so they don't overflow
+  &-horizontal &-dot-start,
+  &-horizontal &-dot-end {
+    transform: translateY(-50%) !important;
+  }
+
+  &-vertical &-dot-start,
+  &-vertical &-dot-end {
+    transform: translateX(-50%) !important;
+  }
+
+  // Edge marks: align content to the edge so text doesn't overflow the rail
+  &-mark-start {
+    transform: none !important;
+    align-items: flex-start !important;
+  }
+
+  &-mark-end {
+    transform: none !important;
+    align-items: flex-end !important;
   }
 
   // ========== Disabled ==========

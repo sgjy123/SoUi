@@ -420,16 +420,36 @@ const Slider: React.FC<SliderProps> = ({
         Array.from({ length: Math.round((max - min) / step) + 1 }).map((_, i) => {
           const dotVal = min + i * step;
           const dotPct = toPercent(dotVal, min, max);
+          const isDotStart = dotPct === 0;
+          const isDotEnd = dotPct === 100;
           const active = included && (
             isRange && percents.length === 2
               ? dotPct >= Math.min(percents[0], percents[1]) && dotPct <= Math.max(percents[0], percents[1])
               : dotPct <= percents[0]
           );
+          let dotStyle: React.CSSProperties;
+          if (isVertical) {
+            dotStyle = isDotStart
+              ? { bottom: 0 }
+              : isDotEnd
+                ? { top: 0 }
+                : { bottom: `${dotPct}%` };
+          } else {
+            dotStyle = isDotStart
+              ? { left: 0 }
+              : isDotEnd
+                ? { right: 0 }
+                : { left: `${dotPct}%` };
+          }
           return (
             <div
               key={i}
-              className={classNames('soui-slider-dot', { 'soui-slider-dot-active': active })}
-              style={isVertical ? { bottom: `${dotPct}%` } : { left: `${dotPct}%` }}
+              className={classNames('soui-slider-dot', {
+                'soui-slider-dot-active': active,
+                'soui-slider-dot-start': isDotStart,
+                'soui-slider-dot-end': isDotEnd,
+              })}
+              style={dotStyle}
             />
           );
         })
