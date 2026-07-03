@@ -178,6 +178,10 @@ export type { TimeRangePickerProps, TimeRangeValue } from './components/TimePick
 export { default as Transfer } from './components/Transfer';
 export type { TransferProps, TransferItem, TransferKey, TransferDirection, RenderResult, TransferLocale } from './components/Transfer';
 
+// Empty Component
+export { default as Empty } from './components/Empty';
+export type { EmptyProps } from './components/Empty';
+
 // Utils
 export * from './utils';
 

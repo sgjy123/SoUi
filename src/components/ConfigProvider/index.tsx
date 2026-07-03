@@ -73,6 +73,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const timePickerTheme = mergedTheme.components?.TimePicker || {};
     // 获取 Transfer 组件级配置
     const transferTheme = mergedTheme.components?.Transfer || {};
+    // 获取 Empty 组件级配置
+    const emptyTheme = mergedTheme.components?.Empty || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -587,6 +589,31 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-transfer-item-hover-bg-component': transferTheme.itemHoverBg,
       '--soui-transfer-item-active-bg-component': transferTheme.itemActiveBg,
       '--soui-transfer-primary-color-10-component': transferTheme.colorPrimary ? addOpacityToColor(transferTheme.colorPrimary, 0.1) : undefined,
+
+      // ==================== Empty 组件配置 ====================
+      // 第2层: Empty 配置点 (引用设计令牌)
+      '--soui-empty-font-size': emptyTheme.fontSize ? `${emptyTheme.fontSize}px` : undefined,
+      '--soui-empty-description-color': emptyTheme.descriptionColor || 'rgba(0, 0, 0, 0.65)',
+      '--soui-empty-image-height': emptyTheme.imageHeight ? `${emptyTheme.imageHeight}px` : undefined,
+      '--soui-empty-icon-color': emptyTheme.iconColor || mergedTheme.primaryColor,
+      '--soui-empty-icon-bg': emptyTheme.iconBg || addOpacityToColor(mergedTheme.primaryColor || '#1677ff', 0.08),
+      '--soui-empty-border-color': emptyTheme.borderColor || mergedTheme.borderColorBase,
+      '--soui-empty-panel-bg': emptyTheme.panelBg || '#f5f5f5',
+      '--soui-empty-content-bg': emptyTheme.contentBg || '#f5f5f5',
+      '--soui-empty-detail-color': emptyTheme.detailColor || '#f0f0f0',
+      '--soui-empty-shadow-color': emptyTheme.shadowColor || 'rgba(0, 0, 0, 0.06)',
+
+      // 第3层: Empty 组件级覆盖 (优先级最高)
+      '--soui-empty-font-size-component': emptyTheme.fontSize ? `${emptyTheme.fontSize}px` : undefined,
+      '--soui-empty-description-color-component': emptyTheme.descriptionColor,
+      '--soui-empty-image-height-component': emptyTheme.imageHeight ? `${emptyTheme.imageHeight}px` : undefined,
+      '--soui-empty-icon-color-component': emptyTheme.iconColor,
+      '--soui-empty-icon-bg-component': emptyTheme.iconBg,
+      '--soui-empty-border-color-component': emptyTheme.borderColor,
+      '--soui-empty-panel-bg-component': emptyTheme.panelBg,
+      '--soui-empty-content-bg-component': emptyTheme.contentBg,
+      '--soui-empty-detail-color-component': emptyTheme.detailColor,
+      '--soui-empty-shadow-color-component': emptyTheme.shadowColor,
     } as any;
   }, [mergedTheme]);
 

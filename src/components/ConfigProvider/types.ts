@@ -841,6 +841,29 @@ export interface ComponentThemeConfig {
     /** 列表项选中背景色 */
     itemActiveBg?: string;
   };
+  /** 空状态组件配置 */
+  Empty?: {
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 描述文本颜色 */
+    descriptionColor?: string;
+    /** 图片区域高度（像素） */
+    imageHeight?: number;
+    /** 装饰图标颜色 */
+    iconColor?: string;
+    /** 装饰图标背景色 */
+    iconBg?: string;
+    /** 插图边框颜色 */
+    borderColor?: string;
+    /** 插图面板背景色 */
+    panelBg?: string;
+    /** 插图内容背景色 */
+    contentBg?: string;
+    /** 插图细节线条颜色 */
+    detailColor?: string;
+    /** 插图阴影颜色 */
+    shadowColor?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

@@ -292,6 +292,18 @@
   --soui-transfer-item-hover-bg: rgba(0, 0, 0, 0.04);                         // Transfer专属:悬停背景
   --soui-transfer-item-active-bg: rgba(22, 119, 255, 0.06);                   // Transfer专属:选中背景
   --soui-transfer-primary-color-10: rgba(22, 119, 255, 0.1);                  // 主色10%透明
+
+  // === 第2层: Empty 组件配置点 (引用设计令牌) ===
+  --soui-empty-font-size: var(--soui-font-size);                                 // 引用全局字号
+  --soui-empty-description-color: var(--soui-text-color-secondary);              // 引用全局次要文本色
+  --soui-empty-image-height: 120px;                                              // Empty专属:图片高度
+  --soui-empty-icon-color: var(--soui-primary-color);                            // 引用全局主色
+  --soui-empty-icon-bg: rgba(22, 119, 255, 0.08);                               // Empty专属:图标背景
+  --soui-empty-border-color: var(--soui-border-color-base);                      // 引用全局边框色
+  --soui-empty-panel-bg: @bg-color-layout;                                       // Empty专属:面板背景
+  --soui-empty-content-bg: @bg-color-layout;                                     // Empty专属:内容背景
+  --soui-empty-detail-color: @border-color-split;                                // 引用全局分割线色
+  --soui-empty-shadow-color: rgba(0, 0, 0, 0.06);                                // Empty专属:阴影色
 }
 
 // ==================== Global Styles ====================

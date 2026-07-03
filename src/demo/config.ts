@@ -147,7 +147,7 @@ export const docsConfig: MenuGroup[] = [
       {
         key: 'steps',
         label: 'Steps 步骤条',
-        icon: 'Steps',
+        icon: 'BabyFeet',
         items: [
           { key: 'steps-basic', label: 'Steps 基础用法', componentPath: 'Steps', exampleName: 'Basic', description: '最简单的步骤条用法。' },
           { key: 'steps-vertical', label: 'Steps 垂直方向', componentPath: 'Steps', exampleName: 'Vertical', description: '垂直方向的步骤条。' },
@@ -451,6 +451,18 @@ export const docsConfig: MenuGroup[] = [
           { key: 'table-pagination', label: 'Table 分页', componentPath: 'Table', exampleName: 'Pagination', description: '带分页的表格。' },
           { key: 'table-loading', label: 'Table 加载中', componentPath: 'Table', exampleName: 'Loading', description: '加载状态展示。' },
           { key: 'table-fixed-header', label: 'Table 固定表头', componentPath: 'Table', exampleName: 'FixedHeader', description: '固定表头，支持横向滚动。' },
+        ],
+      },
+      {
+        key: 'empty',
+        label: 'Empty 空状态',
+        icon: 'InternalData',
+        items: [
+          { key: 'empty-basic', label: 'Empty 基础用法', componentPath: 'Empty', exampleName: 'Basic', description: '默认空状态，展示内置插图和描述。' },
+          { key: 'empty-simple', label: 'Empty 简约模式', componentPath: 'Empty', exampleName: 'Simple', description: '使用简约插图，更紧凑的布局。' },
+          { key: 'empty-with-action', label: 'Empty 带操作', componentPath: 'Empty', exampleName: 'WithAction', description: '底部添加操作按钮引导用户。' },
+          { key: 'empty-custom-image', label: 'Empty 自定义图片', componentPath: 'Empty', exampleName: 'CustomImage', description: '支持 URL 或 React 节点自定义图片。' },
+          { key: 'empty-theme', label: 'Empty 主题定制', componentPath: 'Empty', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题样式。' },
         ],
       },
     ],
