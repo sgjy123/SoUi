@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo, useRef, useContext, useEffect } 
 import classNames from 'classnames';
 import Icon from '../Icon';
 import Checkbox from '../Checkbox';
+import Empty from '../Empty';
 import ConfigContext from '../ConfigProvider/context';
 import './style.less';
 
@@ -222,10 +223,9 @@ const TransferList: React.FC<TransferListProps> = ({
       {/* Body */}
       <div className={`${listCls}-body`}>
         {filteredItems.length === 0 ? (
-          <div className={`${listCls}-empty`}>
-            <Icon name="Remind" size={32} style={{ opacity: 0.25 } as React.CSSProperties} />
-            <span>{locale.notFoundContent || '暂无数据'}</span>
-          </div>
+          <Empty
+            description={locale.notFoundContent || '暂无数据'}
+          />
         ) : (
           <ul className={`${listCls}-content soui-scrollbar`} onScroll={onScroll}>
             {filteredItems.map((item) => {
@@ -247,7 +247,9 @@ const TransferList: React.FC<TransferListProps> = ({
                     disabled={isDisabled}
                     onChange={() => !isDisabled && onItemSelect(item.key, !isChecked)}
                   />
-                  <span className={`${listCls}-item-text`}>{label}</span>
+                  <span className={`${listCls}-item-text`} title={typeof label === 'string' ? label : item.title}>
+                    {label}
+                  </span>
                 </li>
               );
             })}

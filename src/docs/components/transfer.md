@@ -16,7 +16,28 @@
 最基本的穿梭框用法，支持全选、单选和批量移动。
 
 ```tsx
+import React, { useState } from 'react';
 import { Transfer } from '@soui/ui';
+
+const mockData = Array.from({ length: 20 }).map((_, i) => ({
+  key: i.toString(),
+  title: `内容 ${i + 1}`,
+  description: `这是第 ${i + 1} 项的描述`,
+}));
+
+const Demo = () => {
+  const [targetKeys, setTargetKeys] = useState(['3', '4', '5']);
+
+  return (
+    <Transfer
+      dataSource={mockData}
+      titles={['待选项', '已选项']}
+      targetKeys={targetKeys}
+      onChange={(nextTargetKeys) => setTargetKeys(nextTargetKeys)}
+      render={(item) => item.title}
+    />
+  );
+};
 ```
 
 ### 带搜索
@@ -24,7 +45,34 @@ import { Transfer } from '@soui/ui';
 通过 `showSearch` 开启搜索功能，可配合 `filterOption` 自定义过滤逻辑。
 
 ```tsx
+import React, { useState } from 'react';
 import { Transfer } from '@soui/ui';
+
+const mockData = Array.from({ length: 30 }).map((_, i) => ({
+  key: i.toString(),
+  title: `项目 ${i + 1}`,
+  description: `项目 ${i + 1} 的详细描述信息`,
+}));
+
+const Demo = () => {
+  const [targetKeys, setTargetKeys] = useState(['5', '6', '7']);
+
+  const filterOption = (inputValue, item) => {
+    return item.title.includes(inputValue) || item.description.includes(inputValue);
+  };
+
+  return (
+    <Transfer
+      dataSource={mockData}
+      titles={['待选项', '已选项']}
+      targetKeys={targetKeys}
+      onChange={(nextTargetKeys) => setTargetKeys(nextTargetKeys)}
+      showSearch
+      filterOption={filterOption}
+      render={(item) => `${item.title} - ${item.description}`}
+    />
+  );
+};
 ```
 
 ### 单向模式
@@ -32,7 +80,28 @@ import { Transfer } from '@soui/ui';
 使用 `oneWay` 属性开启单向穿梭，仅允许从左向右移动。
 
 ```tsx
+import React, { useState } from 'react';
 import { Transfer } from '@soui/ui';
+
+const mockData = Array.from({ length: 15 }).map((_, i) => ({
+  key: i.toString(),
+  title: `选项 ${i + 1}`,
+}));
+
+const Demo = () => {
+  const [targetKeys, setTargetKeys] = useState([]);
+
+  return (
+    <Transfer
+      dataSource={mockData}
+      titles={['待选项', '已选项']}
+      targetKeys={targetKeys}
+      onChange={(nextTargetKeys) => setTargetKeys(nextTargetKeys)}
+      oneWay
+      render={(item) => item.title}
+    />
+  );
+};
 ```
 
 ### 自定义渲染
@@ -40,7 +109,37 @@ import { Transfer } from '@soui/ui';
 通过 `render` 属性自定义列表项的渲染内容，返回对象时可指定搜索匹配的 `value`。
 
 ```tsx
+import React, { useState } from 'react';
 import { Transfer } from '@soui/ui';
+
+const mockData = Array.from({ length: 12 }).map((_, i) => ({
+  key: i.toString(),
+  title: `用户 ${i + 1}`,
+  description: `user${i + 1}@example.com`,
+}));
+
+const Demo = () => {
+  const [targetKeys, setTargetKeys] = useState([]);
+
+  return (
+    <Transfer
+      dataSource={mockData}
+      titles={['待选项', '已选项']}
+      targetKeys={targetKeys}
+      onChange={(nextTargetKeys) => setTargetKeys(nextTargetKeys)}
+      showSearch
+      render={(item) => ({
+        label: (
+          <div>
+            <div>{item.title}</div>
+            <div style={{ fontSize: 12, color: '#999' }}>{item.description}</div>
+          </div>
+        ),
+        value: `${item.title} ${item.description}`,
+      })}
+    />
+  );
+};
 ```
 
 ### 主题定制
@@ -49,6 +148,30 @@ import { Transfer } from '@soui/ui';
 
 ```tsx
 import { Transfer, ConfigProvider } from '@soui/ui';
+
+<ConfigProvider
+  theme={{
+    components: {
+      Transfer: {
+        borderRadius: 8,
+        colorPrimary: '#722ed1',
+        headerBg: '#f9f0ff',
+      },
+    },
+  }}
+>
+  <Transfer dataSource={[]} titles={['待选项', '已选项']} />
+</ConfigProvider>;
+```
+
+### 空状态
+
+当数据源为空时，穿梭框会显示空状态提示。
+
+```tsx
+import { Transfer } from '@soui/ui';
+
+<Transfer dataSource={[]} titles={['待选项', '已选项']} />
 ```
 
 ## API

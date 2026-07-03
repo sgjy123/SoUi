@@ -220,6 +220,7 @@ function sidebarComponents() {
         { text: 'DatePicker 日期选择器', link: 'date-picker' },
         { text: 'TimePicker 时间选择器', link: 'time-picker' },
         { text: 'Transfer 穿梭框', link: 'transfer' },
+        { text: 'Slider 滑块', link: 'slider' },
       ],
     },
     {

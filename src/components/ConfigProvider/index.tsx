@@ -75,6 +75,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const transferTheme = mergedTheme.components?.Transfer || {};
     // 获取 Empty 组件级配置
     const emptyTheme = mergedTheme.components?.Empty || {};
+    // 获取 Slider 组件级配置
+    const sliderTheme = mergedTheme.components?.Slider || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -614,6 +616,31 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-empty-content-bg-component': emptyTheme.contentBg,
       '--soui-empty-detail-color-component': emptyTheme.detailColor,
       '--soui-empty-shadow-color-component': emptyTheme.shadowColor,
+
+      // ==================== Slider 组件配置 ====================
+      // 第2层: Slider 配置点 (引用设计令牌)
+      '--soui-slider-color-primary': sliderTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-slider-color-primary-hover': sliderTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-slider-handle-size': sliderTheme.handleSize ? `${sliderTheme.handleSize}px` : undefined,
+      '--soui-slider-rail-size': sliderTheme.railSize ? `${sliderTheme.railSize}px` : undefined,
+      '--soui-slider-dot-size': sliderTheme.dotSize ? `${sliderTheme.dotSize}px` : undefined,
+      '--soui-slider-rail-bg': sliderTheme.railBg,
+      '--soui-slider-track-bg': sliderTheme.trackBg || mergedTheme.primaryColor,
+      '--soui-slider-handle-color': sliderTheme.handleColor || '#fff',
+      '--soui-slider-handle-active-color': sliderTheme.handleActiveColor || mergedTheme.primaryHoverColor,
+      '--soui-slider-primary-color-10': addOpacityToColor(sliderTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.1),
+
+      // 第3层: Slider 组件级覆盖 (优先级最高)
+      '--soui-slider-color-primary-component': sliderTheme.colorPrimary,
+      '--soui-slider-color-primary-hover-component': sliderTheme.colorPrimaryHover,
+      '--soui-slider-handle-size-component': sliderTheme.handleSize ? `${sliderTheme.handleSize}px` : undefined,
+      '--soui-slider-rail-size-component': sliderTheme.railSize ? `${sliderTheme.railSize}px` : undefined,
+      '--soui-slider-dot-size-component': sliderTheme.dotSize ? `${sliderTheme.dotSize}px` : undefined,
+      '--soui-slider-rail-bg-component': sliderTheme.railBg,
+      '--soui-slider-track-bg-component': sliderTheme.trackBg,
+      '--soui-slider-handle-color-component': sliderTheme.handleColor,
+      '--soui-slider-handle-active-color-component': sliderTheme.handleActiveColor,
+      '--soui-slider-primary-color-10-component': sliderTheme.colorPrimary ? addOpacityToColor(sliderTheme.colorPrimary, 0.1) : undefined,
     } as any;
   }, [mergedTheme]);
 

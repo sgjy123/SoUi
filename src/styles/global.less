@@ -304,6 +304,18 @@
   --soui-empty-content-bg: @bg-color-layout;                                     // Empty专属:内容背景
   --soui-empty-detail-color: @border-color-split;                                // 引用全局分割线色
   --soui-empty-shadow-color: rgba(0, 0, 0, 0.06);                                // Empty专属:阴影色
+
+  // === 第2层: Slider 组件配置点 (引用设计令牌) ===
+  --soui-slider-color-primary: var(--soui-primary-color);                            // 引用全局主色
+  --soui-slider-color-primary-hover: var(--soui-primary-hover-color);                // 引用全局主色-hover
+  --soui-slider-handle-size: 14px;                                                  // Slider专属:滑块尺寸
+  --soui-slider-rail-size: 4px;                                                     // Slider专属:轨道粗细
+  --soui-slider-dot-size: 6px;                                                      // Slider专属:刻度点尺寸
+  --soui-slider-rail-bg: @border-color-split;                                       // Slider专属:轨道背景
+  --soui-slider-track-bg: var(--soui-primary-color);                                 // Slider专属:已选轨道
+  --soui-slider-handle-color: #fff;                                                  // Slider专属:滑块背景
+  --soui-slider-handle-active-color: var(--soui-primary-hover-color);                // Slider专属:滑块激活态
+  --soui-slider-primary-color-10: rgba(22, 119, 255, 0.1);                          // 主色10%透明
 }
 
 // ==================== Global Styles ====================

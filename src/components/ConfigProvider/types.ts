@@ -864,6 +864,27 @@ export interface ComponentThemeConfig {
     /** 插图阴影颜色 */
     shadowColor?: string;
   };
+  /** 滑块组件配置 */
+  Slider?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 主色悬停 */
+    colorPrimaryHover?: string;
+    /** 滑块尺寸（像素） */
+    handleSize?: number;
+    /** 轨道粗细（像素） */
+    railSize?: number;
+    /** 刻度点尺寸（像素） */
+    dotSize?: number;
+    /** 轨道背景色 */
+    railBg?: string;
+    /** 已选轨道背景色 */
+    trackBg?: string;
+    /** 滑块手柄背景色 */
+    handleColor?: string;
+    /** 滑块手柄激活态背景色 */
+    handleActiveColor?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

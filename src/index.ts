@@ -182,6 +182,10 @@ export type { TransferProps, TransferItem, TransferKey, TransferDirection, Rende
 export { default as Empty } from './components/Empty';
 export type { EmptyProps } from './components/Empty';
 
+// Slider Component
+export { default as Slider } from './components/Slider';
+export type { SliderProps, SliderOrientation, SliderMarks, SliderMark, SliderTooltipConfig, SliderRangeConfig } from './components/Slider';
+
 // Utils
 export * from './utils';
 
