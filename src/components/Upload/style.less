@@ -1,0 +1,413 @@
+@import '../../styles/variables.less';
+
+// ==================== Local Alias Mixin ====================
+.upload-css-variable-aliases() {
+  --soui-upload-local-color-primary: var(--soui-upload-color-primary, @primary-color);
+  --soui-upload-local-color-primary-hover: var(--soui-upload-color-primary-hover, @primary-hover-color);
+  --soui-upload-local-border-radius: var(--soui-upload-border-radius, @border-radius-base);
+  --soui-upload-local-color-border: var(--soui-upload-color-border, @border-color);
+  --soui-upload-local-color-bg: var(--soui-upload-color-bg, @bg-color-base);
+  --soui-upload-local-font-size: var(--soui-upload-font-size, @font-size-base);
+  --soui-upload-local-text-color: var(--soui-upload-text-color, @text-color);
+  --soui-upload-local-text-color-secondary: var(--soui-upload-text-color-secondary, @text-color-secondary);
+  --soui-upload-local-text-color-disabled: var(--soui-upload-text-color-disabled, @text-color-disabled);
+  --soui-upload-local-color-error: var(--soui-upload-color-error, @error-color);
+  --soui-upload-local-color-success: var(--soui-upload-color-success, @success-color);
+}
+
+// ==================== Upload ====================
+// IMPORTANT: single root block — ALL rules nested inside, closing } at the very end
+.soui-upload {
+  .upload-css-variable-aliases();
+
+  position: relative;
+  display: inline-block;
+  font-size: var(--soui-upload-local-font-size);
+  color: var(--soui-upload-local-text-color);
+
+  // ========== Trigger (button mode) ==========
+  &-trigger {
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  &-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: @padding-xs;
+    height: @control-height-base;
+    padding: 0 @padding-md;
+    font-size: var(--soui-upload-local-font-size);
+    color: var(--soui-upload-local-text-color);
+    background: var(--soui-upload-local-color-bg);
+    border: 1px solid var(--soui-upload-local-color-border);
+    border-radius: var(--soui-upload-local-border-radius);
+    cursor: pointer;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    outline: none;
+
+    &:hover {
+      color: var(--soui-upload-local-color-primary);
+      border-color: var(--soui-upload-local-color-primary);
+    }
+
+    &:disabled {
+      color: var(--soui-upload-local-text-color-disabled);
+      border-color: var(--soui-upload-local-color-border);
+      background: @bg-color-disable;
+      cursor: not-allowed;
+    }
+  }
+
+  // ========== Dragger ==========
+  &-drag {
+    display: block;
+    width: 100%;
+  }
+
+  &-dragger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    padding: @padding-lg;
+    background: var(--soui-upload-local-color-bg);
+    border: 2px dashed var(--soui-upload-local-color-border);
+    border-radius: var(--soui-upload-local-border-radius);
+    cursor: pointer;
+    transition: border-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover {
+      border-color: var(--soui-upload-local-color-primary);
+    }
+
+    &-disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+
+      &:hover {
+        border-color: var(--soui-upload-local-color-border);
+      }
+    }
+  }
+
+  &-drag-over &-dragger {
+    border-color: var(--soui-upload-local-color-primary);
+    background: rgba(22, 119, 255, 0.02);
+  }
+
+  &-dragger-text {
+    margin-top: @padding-sm;
+    font-size: var(--soui-upload-local-font-size);
+    color: var(--soui-upload-local-text-color);
+  }
+
+  &-dragger-hint {
+    margin-top: @padding-xs;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-upload-local-text-color-secondary);
+  }
+
+  // ========== Disabled ==========
+  &-disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  // ========== Upload List (text / picture) ==========
+  &-list {
+    margin-top: @padding-sm;
+
+    &-item {
+      display: flex;
+      align-items: center;
+      padding: @padding-xs @padding-sm;
+      margin-bottom: @padding-xs;
+      border-radius: var(--soui-upload-local-border-radius);
+      transition: background var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+      position: relative;
+      overflow: hidden;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.03);
+
+        .soui-upload-list-item-actions {
+          opacity: 1;
+        }
+      }
+
+      &-icon {
+        display: inline-flex;
+        align-items: center;
+        margin-right: @padding-xs;
+        flex-shrink: 0;
+      }
+
+      &-name {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: var(--soui-upload-local-font-size);
+        color: var(--soui-upload-local-text-color);
+        cursor: default;
+      }
+
+      &-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: @padding-xs;
+        margin-left: @padding-sm;
+        opacity: 0;
+        transition: opacity var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+        flex-shrink: 0;
+      }
+
+      &-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        cursor: pointer;
+        color: var(--soui-upload-local-text-color-secondary);
+        transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+        &:hover {
+          color: var(--soui-upload-local-color-error);
+          background: rgba(0, 0, 0, 0.04);
+        }
+      }
+
+      &-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.06);
+
+        &-bar {
+          height: 100%;
+          background: var(--soui-upload-local-color-primary);
+          transition: width 0.3s ease;
+        }
+      }
+
+      // Status
+      &.soui-upload-list-item-done {
+        .soui-upload-list-item-name {
+          cursor: pointer;
+          color: var(--soui-upload-local-color-primary);
+
+          &:hover {
+            color: var(--soui-upload-local-color-primary-hover);
+          }
+        }
+      }
+
+      &.soui-upload-list-item-error {
+        .soui-upload-list-item-name {
+          color: var(--soui-upload-local-color-error);
+        }
+
+        .soui-upload-list-item-action:hover {
+          color: var(--soui-upload-local-color-error);
+        }
+      }
+
+      &.soui-upload-list-item-uploading {
+        .soui-upload-list-item-name {
+          color: var(--soui-upload-local-text-color-secondary);
+        }
+      }
+    }
+  }
+
+  // ========== Picture List ==========
+  &-list-picture {
+    .soui-upload-list-item {
+      &-thumbnail {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        margin-right: @padding-sm;
+        border-radius: var(--soui-upload-local-border-radius);
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      &-fallback-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: var(--soui-upload-local-text-color-secondary);
+      }
+    }
+  }
+
+  // ========== Picture-Card List ==========
+  &-picture-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: @padding-sm;
+
+    .soui-upload-list-item {
+      position: relative;
+      width: 104px;
+      height: 104px;
+      padding: @padding-xs;
+      margin-bottom: 0;
+      border: 1px solid var(--soui-upload-local-color-border);
+      border-radius: var(--soui-upload-local-border-radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      .soui-upload-list-item-actions {
+        margin-left: 0;
+      }
+
+      &:hover {
+        background: transparent;
+
+        .soui-upload-list-item-actions {
+          opacity: 1;
+        }
+      }
+
+      &-thumbnail {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: calc(var(--soui-upload-local-border-radius) - 2px);
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      &-fallback-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--soui-upload-local-text-color-secondary);
+      }
+
+      &-progress {
+        position: absolute;
+        bottom: 24px;
+        left: @padding-xs;
+        right: @padding-xs;
+        height: 2px;
+        background: rgba(0, 0, 0, 0.06);
+
+        &-bar {
+          height: 100%;
+          background: var(--soui-upload-local-color-primary);
+          transition: width 0.3s ease;
+        }
+      }
+
+      &-error-overlay {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 77, 79, 0.1);
+        color: var(--soui-upload-local-color-error);
+      }
+
+      &-name {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 2px @padding-xs;
+        font-size: var(--soui-font-size-sm, @font-size-sm);
+        text-align: center;
+        background: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        z-index: 1;
+      }
+
+      // Override status colors for picture-card (name should always be white on dark bg)
+      &.soui-upload-list-item-done .soui-upload-list-item-name,
+      &.soui-upload-list-item-error .soui-upload-list-item-name,
+      &.soui-upload-list-item-uploading .soui-upload-list-item-name {
+        color: #fff;
+      }
+
+      &-actions {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: @padding-sm;
+        background: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        z-index: 2;
+        transition: opacity var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+        .soui-upload-list-item-action {
+          color: #fff;
+          width: 28px;
+          height: 28px;
+
+          &:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.2);
+          }
+        }
+      }
+    }
+  }
+
+  // ========== Picture-Card Select Trigger ==========
+  &-select-picture-card {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 104px;
+    height: 104px;
+    border: 1px dashed var(--soui-upload-local-color-border);
+    border-radius: var(--soui-upload-local-border-radius);
+    cursor: pointer;
+    background: var(--soui-upload-local-color-bg);
+    transition: border-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    color: var(--soui-upload-local-text-color-secondary);
+    gap: @padding-xs;
+
+    &:hover {
+      border-color: var(--soui-upload-local-color-primary);
+      color: var(--soui-upload-local-color-primary);
+    }
+  }
+
+  &-select-text {
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+  }
+}

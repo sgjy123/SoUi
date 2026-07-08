@@ -411,6 +411,21 @@ export const docsConfig: MenuGroup[] = [
           { key: 'slider-theme', label: 'Slider 主题定制', componentPath: 'Slider', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'upload',
+        label: 'Upload 上传',
+        icon: 'Upload',
+        items: [
+          { key: 'upload-basic', label: 'Upload 基础用法', componentPath: 'Upload', exampleName: 'Basic', description: '基本的文件上传功能，支持点击和禁用。' },
+          { key: 'upload-dragger', label: 'Upload 拖拽上传', componentPath: 'Upload', exampleName: 'Dragger', description: '拖拽文件到指定区域上传。' },
+          { key: 'upload-picture-card', label: 'Upload 照片墙', componentPath: 'Upload', exampleName: 'PictureCard', description: '图片卡片列表展示，支持预览和删除。' },
+          { key: 'upload-picture-list', label: 'Upload 图片列表', componentPath: 'Upload', exampleName: 'PictureList', description: 'picture 列表模式，图片显示缩略图。' },
+          { key: 'upload-manual', label: 'Upload 手动上传', componentPath: 'Upload', exampleName: 'ManualUpload', description: '手动上传、上传前校验和限制数量。' },
+          { key: 'upload-custom-request', label: 'Upload 自定义请求', componentPath: 'Upload', exampleName: 'CustomRequest', description: '使用 customRequest 模拟上传进度和随机失败。' },
+          { key: 'upload-before-upload', label: 'Upload 上传前校验', componentPath: 'Upload', exampleName: 'BeforeUpload', description: '文件大小、类型限制和异步校验。' },
+          { key: 'upload-theme', label: 'Upload 主题定制', componentPath: 'Upload', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题样式。' },
+        ],
+      },
     ],
   },
   {

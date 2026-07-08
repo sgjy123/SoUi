@@ -21,7 +21,7 @@ const Vertical: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', gap: 48, height: 300, alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: 48, height: 400, alignItems: 'flex-start' }}>
       {/* 基础垂直滑块 */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, height: '100%' }}>
         <Slider orientation="vertical" value={val} onChange={(v) => setVal(v as number)} />

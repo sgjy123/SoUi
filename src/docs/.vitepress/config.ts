@@ -221,6 +221,7 @@ function sidebarComponents() {
         { text: 'TimePicker 时间选择器', link: 'time-picker' },
         { text: 'Transfer 穿梭框', link: 'transfer' },
         { text: 'Slider 滑块', link: 'slider' },
+        { text: 'Upload 上传', link: 'upload' },
       ],
     },
     {

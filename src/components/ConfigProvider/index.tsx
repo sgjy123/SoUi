@@ -77,6 +77,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const emptyTheme = mergedTheme.components?.Empty || {};
     // 获取 Slider 组件级配置
     const sliderTheme = mergedTheme.components?.Slider || {};
+    // 获取 Upload 组件级配置
+    const uploadTheme = mergedTheme.components?.Upload || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -641,6 +643,33 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-slider-handle-color-component': sliderTheme.handleColor,
       '--soui-slider-handle-active-color-component': sliderTheme.handleActiveColor,
       '--soui-slider-primary-color-10-component': sliderTheme.colorPrimary ? addOpacityToColor(sliderTheme.colorPrimary, 0.1) : undefined,
+
+      // ==================== Upload 组件配置 ====================
+      // 第2层: Upload 配置点 (引用设计令牌)
+      '--soui-upload-color-primary': uploadTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-upload-color-primary-hover': uploadTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-upload-border-radius': uploadTheme.borderRadius ? `${uploadTheme.borderRadius}px` : undefined,
+      '--soui-upload-color-border': uploadTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-upload-color-bg': uploadTheme.colorBg || '#fff',
+      '--soui-upload-font-size': uploadTheme.fontSize ? `${uploadTheme.fontSize}px` : undefined,
+      '--soui-upload-text-color': uploadTheme.text || 'rgba(0, 0, 0, 0.88)',
+      '--soui-upload-text-color-secondary': uploadTheme.textSecondary || 'rgba(0, 0, 0, 0.65)',
+      '--soui-upload-text-color-disabled': uploadTheme.textDisabled || 'rgba(0, 0, 0, 0.25)',
+      '--soui-upload-color-error': uploadTheme.colorError || mergedTheme.errorColor,
+      '--soui-upload-color-success': uploadTheme.colorSuccess || mergedTheme.successColor,
+
+      // 第3层: Upload 组件级覆盖 (优先级最高)
+      '--soui-upload-color-primary-component': uploadTheme.colorPrimary,
+      '--soui-upload-color-primary-hover-component': uploadTheme.colorPrimaryHover,
+      '--soui-upload-border-radius-component': uploadTheme.borderRadius ? `${uploadTheme.borderRadius}px` : undefined,
+      '--soui-upload-color-border-component': uploadTheme.colorBorder,
+      '--soui-upload-color-bg-component': uploadTheme.colorBg,
+      '--soui-upload-font-size-component': uploadTheme.fontSize ? `${uploadTheme.fontSize}px` : undefined,
+      '--soui-upload-text-color-component': uploadTheme.text,
+      '--soui-upload-text-color-secondary-component': uploadTheme.textSecondary,
+      '--soui-upload-text-color-disabled-component': uploadTheme.textDisabled,
+      '--soui-upload-color-error-component': uploadTheme.colorError,
+      '--soui-upload-color-success-component': uploadTheme.colorSuccess,
     } as any;
   }, [mergedTheme]);
 

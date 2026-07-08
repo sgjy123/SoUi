@@ -186,6 +186,10 @@ export type { EmptyProps } from './components/Empty';
 export { default as Slider } from './components/Slider';
 export type { SliderProps, SliderOrientation, SliderMarks, SliderMark, SliderTooltipConfig, SliderRangeConfig } from './components/Slider';
 
+// Upload Component
+export { default as Upload } from './components/Upload';
+export type { UploadProps, UploadFile, UploadFileStatus, UploadListType, UploadChangeParam, UploadRequestOption } from './components/Upload';
+
 // Utils
 export * from './utils';
 

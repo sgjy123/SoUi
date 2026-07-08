@@ -885,6 +885,31 @@ export interface ComponentThemeConfig {
     /** 滑块手柄激活态背景色 */
     handleActiveColor?: string;
   };
+  /** 上传组件配置 */
+  Upload?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 主色悬停 */
+    colorPrimaryHover?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 背景色 */
+    colorBg?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 文本颜色 */
+    text?: string;
+    /** 次要文本颜色 */
+    textSecondary?: string;
+    /** 禁用文本颜色 */
+    textDisabled?: string;
+    /** 错误色 */
+    colorError?: string;
+    /** 成功色 */
+    colorSuccess?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 
