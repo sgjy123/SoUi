@@ -435,7 +435,7 @@ const Upload: React.FC<UploadProps> & { Dragger: React.FC<DraggerProps> } = ({
   const uploadTheme = (context?.components?.Upload || {}) as ComponentThemeConfig['Upload'];
 
   const [innerFileList, setInnerFileList] = useState<UploadFile[]>(defaultFileList || []);
-  const fileList = controlledFileList !== undefined ? controlledFileList : innerFileList;
+  const fileList = (controlledFileList !== undefined && controlledFileList !== null) ? controlledFileList : innerFileList;
   const fileListRef = useRef(fileList);
   fileListRef.current = fileList;
 

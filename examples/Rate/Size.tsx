@@ -12,7 +12,7 @@ export default () => {
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <span style={{ minWidth: 60, fontSize: 14 }}>中号：</span>
-        <Rate size="medium" value={value} onChange={setValue} />
+        <Rate size="middle" value={value} onChange={setValue} />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <span style={{ minWidth: 60, fontSize: 14 }}>大号：</span>

@@ -341,29 +341,93 @@ const checkEmail = (_rule, value) => {
 
 export const customControlCode = `const [form] = Form.useForm();
 
+const cityOptions = [
+  { label: '浙江省', value: 'zhejiang', children: [
+    { label: '杭州市', value: 'hangzhou', children: [
+      { label: '西湖区', value: 'xihu' }, { label: '滨江区', value: 'binjiang' },
+    ]},
+  ]},
+  { label: '江苏省', value: 'jiangsu', children: [
+    { label: '南京市', value: 'nanjing', children: [
+      { label: '玄武区', value: 'xuanwu' }, { label: '鼓楼区', value: 'gulou' },
+    ]},
+  ]},
+];
+const treeData = [
+  { label: '技术部', value: 'tech', children: [
+    { label: '前端组', value: 'frontend' }, { label: '后端组', value: 'backend' },
+  ]},
+  { label: '产品部', value: 'product', children: [
+    { label: '产品设计', value: 'design' }, { label: '产品运营', value: 'operation' },
+  ]},
+];
+const transferData = Array.from({ length: 10 }).map((_, i) => ({
+  key: String(i), title: \`选项 \${i + 1}\`, description: \`描述\`,
+}));
+
 <Form form={form} layout="vertical"
-  initialValues={{ enableNotify: true, gender: 'male', hobbies: ['reading'], satisfaction: 3, volume: 50 }}
+  initialValues={{
+    nickname: '', city: undefined, age: undefined, gender: 'male',
+    hobbies: ['reading'], enableNotify: true, satisfaction: 3, volume: 50,
+    birthday: null, alarmTime: null, address: [], themeColor: '#1677ff',
+    department: undefined, assignedItems: ['1', '3'], avatar: [], bio: '',
+  }}
   onFinish={(v) => { Message.success('提交成功！'); console.log(v); }}>
+  {/* Input */}
   <Form.Item name="nickname" label="昵称" rules={[{ required: true, message: '请输入昵称' }]}>
     <Input placeholder="请输入昵称" />
   </Form.Item>
+  {/* Select */}
   <Form.Item name="city" label="城市">
-    <Select placeholder="请选择城市" options={[{ label: '北京', value: 'beijing' }, { label: '上海', value: 'shanghai' }, { label: '广州', value: 'guangzhou' }, { label: '深圳', value: 'shenzhen' }]} />
+    <Select placeholder="请选择城市" options={[{ label: '北京', value: 'beijing' }, { label: '上海', value: 'shanghai' }]} />
   </Form.Item>
+  {/* InputNumber */}
   <Form.Item name="age" label="年龄">
     <InputNumber placeholder="请输入年龄" style={{ width: '100%' }} min={0} max={150} />
   </Form.Item>
+  {/* Radio.Group */}
   <Form.Item name="gender" label="性别">
     <Radio.Group options={[{ label: '男', value: 'male' }, { label: '女', value: 'female' }, { label: '保密', value: 'secret' }]} />
   </Form.Item>
+  {/* Checkbox.Group */}
   <Form.Item name="hobbies" label="兴趣爱好">
-    <Checkbox.Group options={[{ label: '阅读', value: 'reading' }, { label: '运动', value: 'sports' }, { label: '音乐', value: 'music' }, { label: '旅行', value: 'travel' }]} />
+    <Checkbox.Group options={[{ label: '阅读', value: 'reading' }, { label: '运动', value: 'sports' }, { label: '音乐', value: 'music' }]} />
   </Form.Item>
+  {/* Switch */}
   <Form.Item name="enableNotify" label="开启通知" valuePropName="checked">
     <Switch />
   </Form.Item>
+  {/* Rate */}
   <Form.Item name="satisfaction" label="满意度"><Rate /></Form.Item>
+  {/* Slider */}
   <Form.Item name="volume" label="音量"><Slider /></Form.Item>
+  {/* DatePicker */}
+  <Form.Item name="birthday" label="出生日期">
+    <DatePicker placeholder="请选择日期" style={{ width: '100%' }} />
+  </Form.Item>
+  {/* TimePicker */}
+  <Form.Item name="alarmTime" label="提醒时间">
+    <TimePicker placeholder="请选择时间" style={{ width: '100%' }} />
+  </Form.Item>
+  {/* Cascader */}
+  <Form.Item name="address" label="所在地区">
+    <Cascader options={cityOptions} placeholder="请选择省市区" changeOnSelect />
+  </Form.Item>
+  {/* ColorPicker */}
+  <Form.Item name="themeColor" label="主题颜色"><ColorPicker /></Form.Item>
+  {/* TreeSelect */}
+  <Form.Item name="department" label="所属部门">
+    <TreeSelect treeData={treeData} placeholder="请选择部门" allowClear style={{ width: '100%' }} />
+  </Form.Item>
+  {/* Transfer */}
+  <Form.Item name="assignedItems" label="穿梭框" valuePropName="targetKeys">
+    <Transfer dataSource={transferData} titles={['待选项', '已选项']} render={(item) => item.title} />
+  </Form.Item>
+  {/* Upload */}
+  <Form.Item name="avatar" label="上传附件" valuePropName="fileList">
+    <Upload action="#"><Button>点击上传</Button></Upload>
+  </Form.Item>
+  {/* TextArea */}
   <Form.Item name="bio" label="个人简介" rules={[{ max: 200, message: '简介不超过200字' }]}>
     <Input.TextArea placeholder="介绍一下自己..." rows={3} />
   </Form.Item>

@@ -7,7 +7,7 @@ import './style.less';
 // ==================== Types ====================
 
 /** 评分尺寸 */
-export type RateSize = 'small' | 'medium' | 'large';
+export type RateSize = 'small' | 'middle' | 'large';
 
 /** 评分属性 */
 export interface RateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
@@ -103,7 +103,7 @@ const StarSVG: React.FC<{
 
 const sizeMap: Record<RateSize, number> = {
   small: 16,
-  medium: 20,
+  middle: 20,
   large: 25,
 };
 
@@ -123,7 +123,7 @@ const Rate: React.FC<RateProps> = ({
   disabled = false,
   character,
   tooltips,
-  size = 'medium',
+  size = 'middle',
   onChange,
   onHoverChange,
   className,
@@ -136,7 +136,7 @@ const Rate: React.FC<RateProps> = ({
   // 受控 / 非受控
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [hoverValue, setHoverValue] = useState(0);
-  const isControlled = controlledValue !== undefined;
+  const isControlled = controlledValue !== undefined && controlledValue !== null;
   const currentValue = isControlled ? controlledValue : internalValue;
 
   const starRefs = useRef<(HTMLDivElement | null)[]>([]);

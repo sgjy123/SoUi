@@ -343,9 +343,10 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
   const isOpen = isOpenControlled ? openProp! : innerOpen;
 
   // Value state
-  const isControlled = valueProp !== undefined;
+  const isControlled = valueProp !== undefined && valueProp !== null;
   const [innerValue, setInnerValue] = useState<(string | number)[]>(() => normalizeValue(defaultValue));
-  const selectedValues = isControlled ? normalizeValue(valueProp) : innerValue;
+  const normalizedProp = useMemo(() => normalizeValue(valueProp), [valueProp]);
+  const selectedValues = isControlled ? normalizedProp : innerValue;
 
   // Search & expand state
   const [searchValue, setSearchValue] = useState('');
@@ -515,20 +516,27 @@ const TreeSelect = forwardRef<TreeSelectRef, TreeSelectProps>((props, ref) => {
   }, [showSearch, searchValue, allNodes, treeNodeFilterProp, fieldNames]);
 
   // Expand to selected values when opened
+  const valueMapRef = useRef(valueMap);
+  valueMapRef.current = valueMap;
+
   useEffect(() => {
     if (!isOpen || treeExpandedKeys !== undefined) return;
     setInnerExpandedKeys((prev) => {
       const next = new Set(prev);
+      let changed = false;
       selectedValues.forEach((v) => {
-        let node = valueMap.get(v);
+        let node = valueMapRef.current.get(v);
         while (node?.parent) {
-          next.add(node.parent.value);
+          if (!next.has(node.parent.value)) {
+            next.add(node.parent.value);
+            changed = true;
+          }
           node = node.parent;
         }
       });
-      return next;
+      return changed ? next : prev;
     });
-  }, [isOpen, treeExpandedKeys, selectedValues, valueMap]);
+  }, [isOpen, treeExpandedKeys, selectedValues]);
 
   // Dropdown positioning
   const updatePosition = useCallback(() => {

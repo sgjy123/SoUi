@@ -800,10 +800,16 @@ const FormItem: React.FC<FormItemProps> = ({
 
       childProps.onChange = (...args: any[]) => {
         const val = args[0];
-        const extracted =
-          val && typeof val === 'object' && 'target' in val
-            ? val.target.value
-            : val;
+        let extracted: any;
+        if (val && typeof val === 'object' && 'target' in val) {
+          // Native input event: { target: { value: ... } }
+          extracted = val.target.value;
+        } else if (propName === 'fileList' && val && typeof val === 'object' && 'fileList' in val) {
+          // Upload onChange: { file, fileList }
+          extracted = val.fileList;
+        } else {
+          extracted = val;
+        }
         triggerChange(extracted);
         if ((child.props as any).onChange) {
           (child.props as any).onChange(...args);

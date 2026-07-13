@@ -82,7 +82,7 @@ const [value, setValue] = useState(3);
 
 ### 尺寸
 
-支持 `small`、`medium`、`large` 三种尺寸。
+支持 `small`、`middle`、`large` 三种尺寸。
 
 ```tsx
 const [value, setValue] = useState(3);
@@ -94,7 +94,7 @@ const [value, setValue] = useState(3);
   </div>
   <div>
     <span>中号：</span>
-    <Rate size="medium" value={value} onChange={setValue} />
+    <Rate size="middle" value={value} onChange={setValue} />
   </div>
   <div>
     <span>大号：</span>
@@ -131,7 +131,7 @@ const [value, setValue] = useState(0);
 | disabled | 是否禁用 | `boolean` | `false` |
 | character | 自定义字符 | `ReactNode` | 星星图标 |
 | tooltips | 每项的提示文字 | `string[]` | - |
-| size | 尺寸 | `'small' \| 'medium' \| 'large'` | `'medium'` |
+| size | 尺寸 | `'small' \| 'middle' \| 'large'` | `'middle'` |
 
 ### 事件
 

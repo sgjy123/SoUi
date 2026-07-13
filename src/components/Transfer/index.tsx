@@ -320,8 +320,8 @@ const TransferOperation: React.FC<TransferOperationProps> = ({
 
 const Transfer: React.FC<TransferProps> = ({
   dataSource = [],
-  targetKeys: targetKeysProp = [],
-  selectedKeys: selectedKeysProp,
+  targetKeys: rawTargetKeys,
+  selectedKeys: rawSelectedKeys,
   onChange,
   onSelectChange,
   onSearch,
@@ -341,6 +341,10 @@ const Transfer: React.FC<TransferProps> = ({
 }) => {
   const context = useContext(ConfigContext);
   const componentTheme = (context?.components?.Transfer || {}) as Record<string, any>;
+
+  // Normalize null/undefined to empty arrays
+  const targetKeysProp: TransferKey[] = rawTargetKeys || [];
+  const selectedKeysProp = rawSelectedKeys || undefined;
 
   // CSS variable injection
   const cssVars: React.CSSProperties & Record<string, any> = {};

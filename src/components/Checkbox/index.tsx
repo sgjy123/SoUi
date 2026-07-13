@@ -86,7 +86,7 @@ const CheckboxInner: React.FC<CheckboxProps> = ({
   // Determine checked state
   let isChecked: boolean;
   if (groupContext) {
-    isChecked = groupContext.value.includes(value!);
+    isChecked = (groupContext.value || []).includes(value!);
   } else {
     isChecked = isControlled ? checkedProp! : innerChecked;
   }
@@ -150,7 +150,7 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
 }) => {
   const isControlled = valueProp !== undefined;
   const [innerValue, setInnerValue] = useState<Array<string | number | boolean>>(defaultValue || []);
-  const currentValue = isControlled ? valueProp! : innerValue;
+  const currentValue = isControlled ? (valueProp || []) : innerValue;
 
   const handleChange = (
     val: string | number | boolean,
