@@ -642,6 +642,15 @@ const FormItem: React.FC<FormItemProps> = ({
         : ctx.validateTrigger,
     }));
 
+    // Auto-inject required rule when `required` prop is set and no rule already covers it
+    if (required && !ruleList.some((r) => r.required)) {
+      ruleList.unshift({
+        required: true,
+        message: `${label || nameKey}不能为空`,
+        validateTrigger: ctx.validateTrigger,
+      });
+    }
+
     const unregister = store.registerField(namePath, ruleList, String(label || nameKey));
 
     // Set initial value if provided
@@ -657,7 +666,7 @@ const FormItem: React.FC<FormItemProps> = ({
       unregister();
       store.unregisterItemRef(namePath);
     };
-  }, [namePath.join('.'), rules, ctx.validateTrigger]);
+  }, [namePath.join('.'), rules, required, label, ctx.validateTrigger]);
 
   // Register item ref
   useEffect(() => {
@@ -726,7 +735,14 @@ const FormItem: React.FC<FormItemProps> = ({
     ? required
     : rules?.some((r) => r.required) || false;
 
-  const showRequiredMark = isRequired && ctx.requiredMark !== false;
+  let showRequiredMark = false;
+  let showOptionalMark = false;
+  if (ctx.requiredMark === 'optional') {
+    // 'optional' mode: no asterisk, show "(选填)" on non-required fields that have a name
+    showOptionalMark = !isRequired && namePath.length > 0;
+  } else {
+    showRequiredMark = isRequired && ctx.requiredMark !== false;
+  }
 
   // Layout
   const itemLayout = layout || ctx.layout;
@@ -876,6 +892,7 @@ const FormItem: React.FC<FormItemProps> = ({
         >
           <label className={classNames({ 'soui-form-item-required': showRequiredMark })}>
             {label}
+            {showOptionalMark && <span className="soui-form-item-optional">(选填)</span>}
           </label>
         </div>
       )}
@@ -894,6 +911,7 @@ const FormItem: React.FC<FormItemProps> = ({
           >
             <label className={classNames({ 'soui-form-item-required': showRequiredMark })}>
               {label}
+              {showOptionalMark && <span className="soui-form-item-optional">(选填)</span>}
             </label>
           </div>
         )}
