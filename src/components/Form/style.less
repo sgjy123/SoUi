@@ -21,9 +21,13 @@
       flex-shrink: 0;
 
       > label {
+        display: inline-block;
+        width: 100%;
         font-size: var(--soui-form-label-font-size, var(--soui-font-size, @font-size-base));
         color: var(--soui-form-label-color, var(--soui-text-color, @text-color));
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &.soui-form-item-required {
           &::before {
@@ -41,12 +45,12 @@
         }
       }
 
-      &.soui-form-item-label-left {
-        justify-content: left;
+      &.soui-form-item-label-left > label {
+        text-align: left;
       }
 
-      &.soui-form-item-label-right {
-        justify-content: right;
+      &.soui-form-item-label-right > label {
+        text-align: right;
         padding-right: 5px;
       }
 

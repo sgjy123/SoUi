@@ -896,7 +896,7 @@ const FormItem: React.FC<FormItemProps> = ({
           })}
           style={mergedLabelCol?.span ? labelStyle : undefined}
         >
-          <label className={classNames({ 'soui-form-item-required': showRequiredMark })}>
+          <label className={classNames({ 'soui-form-item-required': showRequiredMark })} title={typeof label === 'string' ? label : undefined}>
             {label}
             {showOptionalMark && <span className="soui-form-item-optional">(选填)</span>}
           </label>
@@ -915,7 +915,7 @@ const FormItem: React.FC<FormItemProps> = ({
               [`soui-form-item-label-${mergedLabelAlign}`]: true,
             })}
           >
-            <label className={classNames({ 'soui-form-item-required': showRequiredMark })}>
+            <label className={classNames({ 'soui-form-item-required': showRequiredMark })} title={typeof label === 'string' ? label : undefined}>
               {label}
               {showOptionalMark && <span className="soui-form-item-optional">(选填)</span>}
             </label>
