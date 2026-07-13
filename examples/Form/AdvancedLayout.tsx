@@ -56,14 +56,14 @@ const AdvancedLayout: React.FC = () => {
         <h4 style={{ marginBottom: 16 }}>标签对齐方式</h4>
         <div style={{ display: 'flex', gap: 40 }}>
           <div style={{ flex: 1, maxWidth: 320 }}>
-            <div style={{ marginBottom: 8, fontSize: 13, color: '#666' }}>labelAlign="right"（默认）</div>
+            <div style={{ marginBottom: 8, fontSize: 13, color: '#666' }}>labelAlign="right"</div>
             <Form layout="horizontal" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} labelAlign="right">
               <Form.Item name="a" label="姓名"><Input placeholder="右对齐" /></Form.Item>
               <Form.Item name="b" label="年龄"><Input placeholder="右对齐" /></Form.Item>
             </Form>
           </div>
           <div style={{ flex: 1, maxWidth: 320 }}>
-            <div style={{ marginBottom: 8, fontSize: 13, color: '#666' }}>labelAlign="left"</div>
+            <div style={{ marginBottom: 8, fontSize: 13, color: '#666' }}>labelAlign="left"（默认）</div>
             <Form layout="horizontal" labelCol={{ span: 8 }} wrapperCol={{ span: 16 }} labelAlign="left">
               <Form.Item name="c" label="姓名"><Input placeholder="左对齐" /></Form.Item>
               <Form.Item name="d" label="年龄"><Input placeholder="左对齐" /></Form.Item>

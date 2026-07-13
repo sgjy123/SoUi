@@ -252,7 +252,7 @@ export default () => {
 
 ### 条件字段显示
 
-通过 `shouldUpdate` + `children` 渲染函数，根据其它字段的值动态渲染/隐藏表单项。
+通过 `shouldUpdate` + `children` 渲染函数，根据其它字段的值动态渲染/隐藏表单项。渲染函数接收当前 Form 的 form 实例作为参数，通过它读取字段值。
 
 ```tsx
 import { Form, Input, Select, Button, Message } from '@soui/ui';
@@ -271,8 +271,8 @@ export default () => {
       </Form.Item>
 
       <Form.Item noStyle shouldUpdate={(prev, cur) => prev.accountType !== cur.accountType}>
-        {() => {
-          const accountType = form.getFieldValue('accountType');
+        {(f) => {
+          const accountType = f.getFieldValue('accountType');
           if (accountType === 'personal') {
             return (
               <Form.Item name="idCard" label="身份证号"
@@ -307,6 +307,76 @@ export default () => {
 };
 ```
 
+### 自定义控件
+
+Form.Item 自动注入 `value` / `onChange` 给子控件，兼容所有 SoUi 表单组件。对于值属性名不是 `value` 的组件，使用 `valuePropName` 指定：
+
+```tsx
+import { Form, Input, InputNumber, Select, Radio, Checkbox, Switch,
+  Slider, Rate, DatePicker, TimePicker, Cascader, ColorPicker,
+  TreeSelect, Transfer, Upload, Button, Message } from '@soui/ui';
+
+export default () => {
+  const [form] = Form.useForm();
+
+  return (
+    <Form form={form} layout="vertical"
+      initialValues={{
+        gender: 'male', hobbies: ['reading'], enableNotify: true,
+        satisfaction: 3, volume: 50, themeColor: '#1677ff',
+        assignedItems: ['1', '3'], avatar: [],
+      }}
+      onFinish={(v) => { Message.success('提交成功！'); console.log(v); }}>
+      {/* 标准 value/onChange 控件 */}
+      <Form.Item name="nickname" label="昵称" rules={[{ required: true, message: '请输入昵称' }]}>
+        <Input placeholder="请输入昵称" />
+      </Form.Item>
+      <Form.Item name="age" label="年龄">
+        <InputNumber placeholder="请输入年龄" style={{ width: '100%' }} />
+      </Form.Item>
+      <Form.Item name="gender" label="性别">
+        <Radio.Group options={[{ label: '男', value: 'male' }, { label: '女', value: 'female' }]} />
+      </Form.Item>
+      <Form.Item name="hobbies" label="兴趣爱好">
+        <Checkbox.Group options={[{ label: '阅读', value: 'reading' }, { label: '运动', value: 'sports' }]} />
+      </Form.Item>
+      <Form.Item name="satisfaction" label="满意度"><Rate /></Form.Item>
+      <Form.Item name="volume" label="音量"><Slider /></Form.Item>
+      <Form.Item name="birthday" label="出生日期">
+        <DatePicker style={{ width: '100%' }} />
+      </Form.Item>
+      <Form.Item name="themeColor" label="主题颜色"><ColorPicker /></Form.Item>
+      <Form.Item name="department" label="所属部门">
+        <TreeSelect treeData={[{ label: '技术部', value: 'tech', children: [{ label: '前端', value: 'fe' }] }]}
+          placeholder="请选择" allowClear style={{ width: '100%' }} />
+      </Form.Item>
+
+      {/* Switch 使用 valuePropName="checked" */}
+      <Form.Item name="enableNotify" label="开启通知" valuePropName="checked">
+        <Switch />
+      </Form.Item>
+
+      {/* Transfer 使用 valuePropName="targetKeys" */}
+      <Form.Item name="assignedItems" label="穿梭框" valuePropName="targetKeys">
+        <Transfer dataSource={[...]} titles={['待选', '已选']} render={(item) => item.title} />
+      </Form.Item>
+
+      {/* Upload 使用 valuePropName="fileList" */}
+      <Form.Item name="avatar" label="上传附件" valuePropName="fileList">
+        <Upload action="#"><Button>点击上传</Button></Upload>
+      </Form.Item>
+
+      <Form.Item>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <Button type="primary" htmlType="submit">提交</Button>
+          <Button onClick={() => form.resetFields()}>重置</Button>
+        </div>
+      </Form.Item>
+    </Form>
+  );
+};
+```
+
 ## API
 
 ### Form
@@ -318,7 +388,7 @@ export default () => {
 | size | 表单尺寸 | `'large' \| 'middle' \| 'small'` | `'middle'` |
 | labelCol | 标签列宽（horizontal 布局） | `{ span?: number; offset?: number }` | - |
 | wrapperCol | 控件列宽（horizontal 布局） | `{ span?: number; offset?: number }` | - |
-| labelAlign | 标签对齐方式 | `'left' \| 'right'` | `'right'` |
+| labelAlign | 标签对齐方式 | `'left' \| 'right'` | `'left'` |
 | initialValues | 表单初始值 | `Record<string, any>` | - |
 | disabled | 禁用所有表单项 | `boolean` | `false` |
 | requiredMark | 必填标记模式 | `boolean \| 'optional'` | `true` |
@@ -333,7 +403,7 @@ export default () => {
 |------|------|------|--------|
 | name | 字段名，支持嵌套路径 | `string \| number \| (string \| number)[]` | - |
 | label | 标签文本 | `ReactNode` | - |
-| required | 是否必填 | `boolean` | - |
+| required | 是否必填（同时自动注入 `{ required: true }` 校验规则） | `boolean` | - |
 | rules | 校验规则 | `RuleConfig[]` | - |
 | dependencies | 依赖字段（变化时触发本字段重新校验） | `(string \| number \| (string \| number)[])[]` | - |
 | shouldUpdate | 字段值变化时是否重新渲染（常配合 `children` 为函数使用） | `boolean \| ((prev, cur) => boolean)` | - |
@@ -345,7 +415,7 @@ export default () => {
 | labelAlign | 标签对齐方式 | `'left' \| 'right'` | - |
 | layout | 布局覆盖 | `'horizontal' \| 'vertical'` | - |
 | noStyle | 无样式模式（不渲染标签和包裹，但仍收集值和显示校验错误） | `boolean` | `false` |
-| valuePropName | 子元素值属性名（默认 `value`，如 Switch 用 `checked`） | `string` | `'value'` |
+| valuePropName | 子元素值属性名（Switch 用 `checked`，Transfer 用 `targetKeys`，Upload 用 `fileList`） | `string` | `'value'` |
 | hasFeedback | 显示反馈图标 | `boolean` | `false` |
 | children | 子元素（可以是 ReactNode 或渲染函数） | `ReactNode \| ((form: FormInstance) => ReactNode)` | - |
 
@@ -517,3 +587,28 @@ Form 作为标准 React 组件渲染在 ConfigProvider 的 DOM 树内，通过 C
 
 - **条件渲染**：用 `shouldUpdate={(prev, cur) => prev.x !== cur.x}` + `children` 为函数，避免无关字段变化导致的无效渲染
 - **联动校验**：用 `dependencies={['password']}`，依赖字段变化时自动触发当前字段重新校验，无需手写 shouldUpdate
+
+### 如何集成 Transfer、Upload 等非标准控件？
+
+部分组件的值属性名不是 `value`，需要通过 `valuePropName` 指定。Form 会自动识别 `valuePropName` 并在 `onChange` 回调中提取对应的值：
+
+```tsx
+{/* Switch — checked 属性 */}
+<Form.Item name="enableNotify" label="开启通知" valuePropName="checked">
+  <Switch />
+</Form.Item>
+
+{/* Transfer — targetKeys 属性 */}
+<Form.Item name="selectedKeys" label="穿梭框" valuePropName="targetKeys">
+  <Transfer dataSource={data} render={(item) => item.title} />
+</Form.Item>
+
+{/* Upload — fileList 属性 */}
+<Form.Item name="files" label="附件" valuePropName="fileList">
+  <Upload action="/api/upload">
+    <Button>点击上传</Button>
+  </Upload>
+</Form.Item>
+```
+
+> **注意：** `required` 属性不仅控制必填星号的显示，还会自动注入 `{ required: true }` 校验规则，无需在 `rules` 中重复声明。
