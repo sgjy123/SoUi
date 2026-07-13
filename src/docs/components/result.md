@@ -234,7 +234,7 @@ Result 作为标准 React 组件渲染在 ConfigProvider 的 DOM 树内，通过
 <Result subTitle="一些描述" />
 
 // 不要在 content 区域放置过多内容，应该使用 extra 放置操作按钮
-<Result><ComplexForm /></Result>
+<Result><ComplexContent /></Result>
 ```
 
 ## 无障碍访问

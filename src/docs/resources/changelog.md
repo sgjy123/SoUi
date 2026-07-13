@@ -136,7 +136,6 @@ npm install @soui/ui@latest
 ## 计划中的功能
 
 ### v1.1.0（预计 2024-04）
-- [ ] Form 表单组件增强
 - [ ] Select 选择器组件
 - [ ] DatePicker 日期选择器
 - [ ] Table 表格组件

@@ -96,23 +96,28 @@ import { Input } from '@soui/input';
 
 ## 第一个组件
 
-让我们创建一个简单的登录表单：
+让我们创建一个简单的用户信息卡片：
 
 ```tsx
 import { useState } from 'react';
-import { Card, Form, Input, Button, Message } from '@soui/ui';
+import { Card, Input, Button, Message } from '@soui/ui';
 
-export default function LoginForm() {
+export default function UserInfo() {
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async () => {
+    if (!name) {
+      Message.warning('请输入用户名');
+      return;
+    }
     setLoading(true);
     try {
-      // 模拟登录请求
+      // 模拟提交请求
       await new Promise(resolve => setTimeout(resolve, 1000));
-      Message.success('登录成功');
+      Message.success('提交成功');
     } catch (error) {
-      Message.error('登录失败');
+      Message.error('提交失败');
     } finally {
       setLoading(false);
     }
@@ -126,36 +131,23 @@ export default function LoginForm() {
     }}>
       <Card style={{ width: 400 }}>
         <h2 style={{ marginBottom: 24, textAlign: 'center' }}>
-          用户登录
+          用户信息
         </h2>
-        <Form onFinish={handleSubmit}>
-          <Form.Item
-            label="用户名"
-            name="username"
-            rules={[{ required: true, message: '请输入用户名' }]}
-          >
-            <Input placeholder="请输入用户名" />
-          </Form.Item>
-          
-          <Form.Item
-            label="密码"
-            name="password"
-            rules={[{ required: true, message: '请输入密码' }]}
-          >
-            <Input.Password placeholder="请输入密码" />
-          </Form.Item>
-          
-          <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
-              loading={loading}
-              block
-            >
-              登录
-            </Button>
-          </Form.Item>
-        </Form>
+        <div style={{ marginBottom: 16 }}>
+          <Input 
+            placeholder="请输入用户名" 
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <Button 
+          type="primary" 
+          onClick={handleSubmit}
+          loading={loading}
+          block
+        >
+          提交
+        </Button>
       </Card>
     </div>
   );

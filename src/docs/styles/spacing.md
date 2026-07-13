@@ -161,26 +161,28 @@ p {
 }
 ```
 
-### 表单布局
+### 列表布局
 
 ```tsx
-<Form>
-  <Form.Item label="用户名">
+<div className="user-list">
+  <div className="list-item">
+    <span className="label">用户名</span>
     <Input />
-  </Form.Item>
-  <Form.Item label="邮箱">
+  </div>
+  <div className="list-item">
+    <span className="label">邮箱</span>
     <Input />
-  </Form.Item>
-  <Form.Item>
+  </div>
+  <div className="button-group">
     <Button type="primary">提交</Button>
     <Button style={{ marginLeft: 8 }}>取消</Button>
-  </Form.Item>
-</Form>
+  </div>
+</div>
 ```
 
 ```less
-.form {
-  .form-item {
+.user-list {
+  .list-item {
     margin-bottom: @margin-md; // 16px
     
     .label {

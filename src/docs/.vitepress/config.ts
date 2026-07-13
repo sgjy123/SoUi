@@ -222,7 +222,6 @@ function sidebarComponents() {
         { text: 'Transfer 穿梭框', link: 'transfer' },
         { text: 'Slider 滑块', link: 'slider' },
         { text: 'Upload 上传', link: 'upload' },
-        { text: 'Form 表单', link: 'form' },
       ],
     },
     {
