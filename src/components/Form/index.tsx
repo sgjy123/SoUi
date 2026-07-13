@@ -530,6 +530,7 @@ const InternalForm: React.FC<FormProps> = ({
   // Initialize store with current values
   useEffect(() => {
     store.setStore(initialValues);
+    store.notify();
   }, []);
 
   // Keep callbacks in sync
@@ -708,7 +709,7 @@ const FormItem: React.FC<FormItemProps> = ({
   }
 
   // Get value
-  const value = namePath.length > 0 ? store.getFieldValue(namePath) : undefined;
+  const value = namePath.length > 0 ? (store.getFieldValue(namePath) ?? null) : undefined;
 
   // Get errors
   const errors = nameKey ? (store.errors[nameKey] || []) : [];
@@ -721,7 +722,7 @@ const FormItem: React.FC<FormItemProps> = ({
     ? required
     : rules?.some((r) => r.required) || false;
 
-  const showRequiredMark = ctx.requiredMark === true || (ctx.requiredMark !== false && isRequired);
+  const showRequiredMark = isRequired && ctx.requiredMark !== false;
 
   // Layout
   const itemLayout = layout || ctx.layout;

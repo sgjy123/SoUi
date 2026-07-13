@@ -120,35 +120,6 @@
     }
   }
 
-  // ==================== Disabled ====================
-  &-disabled {
-    background-color: var(--soui-input-number-color-bg-disabled, #f5f5f5);
-    cursor: not-allowed;
-
-    .soui-input-number-input {
-      color: @text-color-disabled;
-      cursor: not-allowed;
-
-      &::placeholder {
-        color: @text-color-disabled;
-      }
-    }
-
-    .soui-input-number-controls {
-      button {
-        cursor: not-allowed;
-        color: @text-color-disabled;
-      }
-    }
-  }
-
-  // ==================== Read Only ====================
-  &-readonly {
-    .soui-input-number-controls {
-      display: none;
-    }
-  }
-
   // ==================== Sizes ====================
   &.soui-input-number-small {
     height: @control-height-sm;
@@ -160,6 +131,35 @@
     height: @control-height-lg;
     padding: 0 14px;
     font-size: @font-size-lg;
+  }
+}
+
+// ==================== Disabled (outside nesting — JS class is soui-input-number-disabled, not soui-input-number-wrapper-disabled) ====================
+.soui-input-number-wrapper.soui-input-number-disabled {
+  background-color: var(--soui-input-number-color-bg-disabled, #f5f5f5);
+  cursor: not-allowed;
+
+  .soui-input-number-input {
+    color: @text-color-disabled;
+    cursor: not-allowed;
+
+    &::placeholder {
+      color: @text-color-disabled;
+    }
+  }
+
+  .soui-input-number-controls {
+    button {
+      cursor: not-allowed;
+      color: @text-color-disabled;
+    }
+  }
+}
+
+// ==================== Read Only (outside nesting — JS class is soui-input-number-readonly) ====================
+.soui-input-number-wrapper.soui-input-number-readonly {
+  .soui-input-number-controls {
+    display: none;
   }
 }
 
