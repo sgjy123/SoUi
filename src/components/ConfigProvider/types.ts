@@ -932,6 +932,8 @@ export interface ComponentThemeConfig {
     labelColor?: string;
     /** 次要文本颜色 */
     textSecondary?: string;
+    /** 表单项底部间距（像素） */
+    itemMarginBottom?: number;
   };
   // 可以继续添加其他组件的配置
 }
