@@ -426,6 +426,28 @@ export const docsConfig: MenuGroup[] = [
           { key: 'upload-theme', label: 'Upload 主题定制', componentPath: 'Upload', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题样式。' },
         ],
       },
+      {
+        key: 'form',
+        label: 'Form 表单',
+        icon: 'Form',
+        items: [
+          { key: 'form-basic', label: 'Form 基础用法', componentPath: 'Form', exampleName: 'Basic', description: '基本的水平布局表单，包含输入框、密码框、单选和下拉。' },
+          { key: 'form-vertical', label: 'Form 垂直布局', componentPath: 'Form', exampleName: 'Vertical', description: '垂直布局表单，标签在输入框上方。' },
+          { key: 'form-inline', label: 'Form 行内布局', componentPath: 'Form', exampleName: 'Inline', description: '行内布局表单，所有字段在一行显示。' },
+          { key: 'form-size', label: 'Form 尺寸', componentPath: 'Form', exampleName: 'Size', description: '通过 size 属性控制表单元素尺寸。' },
+          { key: 'form-horizontal-size', label: 'Form 水平布局尺寸', componentPath: 'Form', exampleName: 'HorizontalSize', description: '水平布局下不同尺寸的表单展示效果。' },
+          { key: 'form-disabled', label: 'Form 禁用', componentPath: 'Form', exampleName: 'Disabled', description: '全局禁用表单所有字段的交互。' },
+          { key: 'form-validation', label: 'Form 校验规则', componentPath: 'Form', exampleName: 'Validation', description: '丰富的校验规则：必填、长度、正则、邮箱、URL、自定义校验。' },
+          { key: 'form-async-validation', label: 'Form 异步校验', componentPath: 'Form', exampleName: 'AsyncValidation', description: '异步校验适用于需要服务端验证的场景，如用户名是否已注册。' },
+          { key: 'form-dynamic', label: 'Form 动态字段', componentPath: 'Form', exampleName: 'DynamicFields', description: '使用 Form.List 动态增删表单字段。' },
+          { key: 'form-dependencies', label: 'Form 字段联动', componentPath: 'Form', exampleName: 'Dependencies', description: '通过 dependencies 实现字段间的联动校验与更新。' },
+          { key: 'form-instance', label: 'Form 实例方法', componentPath: 'Form', exampleName: 'FormInstanceDemo', description: '使用 useForm 获取表单实例，调用 setFieldsValue、resetFields 等方法。' },
+          { key: 'form-required-mark', label: 'Form 必填标记', componentPath: 'Form', exampleName: 'RequiredMark', description: '通过 requiredMark 控制必填星号的显示方式。' },
+          { key: 'form-custom-control', label: 'Form 自定义控件', componentPath: 'Form', exampleName: 'CustomControl', description: '使用 valuePropName 和自定义控件集成表单。' },
+          { key: 'form-advanced-layout', label: 'Form 复杂布局', componentPath: 'Form', exampleName: 'AdvancedLayout', description: '使用 labelCol/wrapperCol 实现复杂的表单布局。' },
+          { key: 'form-theme', label: 'Form 主题定制', componentPath: 'Form', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义表单主题样式。' },
+        ],
+      }
     ],
   },
   {

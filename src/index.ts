@@ -190,6 +190,21 @@ export type { SliderProps, SliderOrientation, SliderMarks, SliderMark, SliderToo
 export { default as Upload } from './components/Upload';
 export type { UploadProps, UploadFile, UploadFileStatus, UploadListType, UploadChangeParam, UploadRequestOption } from './components/Upload';
 
+// Form Component
+export { default as Form, useForm } from './components/Form';
+export type {
+  FormProps,
+  FormItemProps,
+  FormListProps,
+  FormInstance,
+  FormLayout,
+  FormSize,
+  FormListFieldData,
+  FormListOperations,
+  RuleConfig,
+  Rule,
+} from './components/Form';
+
 // Utils
 export * from './utils';
 
