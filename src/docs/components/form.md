@@ -250,6 +250,63 @@ export default () => {
 };
 ```
 
+### 条件字段显示
+
+通过 `shouldUpdate` + `children` 渲染函数，根据其它字段的值动态渲染/隐藏表单项。
+
+```tsx
+import { Form, Input, Select, Button, Message } from '@soui/ui';
+
+export default () => {
+  const [form] = Form.useForm();
+
+  return (
+    <Form form={form} layout="vertical" onFinish={(v) => Message.success('注册成功')}>
+      <Form.Item name="accountType" label="注册类型"
+        rules={[{ required: true, message: '请选择注册类型' }]}>
+        <Select placeholder="请选择" options={[
+          { label: '个人', value: 'personal' },
+          { label: '企业', value: 'company' },
+        ]} />
+      </Form.Item>
+
+      <Form.Item noStyle shouldUpdate={(prev, cur) => prev.accountType !== cur.accountType}>
+        {() => {
+          const accountType = form.getFieldValue('accountType');
+          if (accountType === 'personal') {
+            return (
+              <Form.Item name="idCard" label="身份证号"
+                rules={[{ required: true, message: '请输入身份证号' }]}>
+                <Input placeholder="请输入身份证号" />
+              </Form.Item>
+            );
+          }
+          if (accountType === 'company') {
+            return (
+              <>
+                <Form.Item name="companyName" label="企业名称"
+                  rules={[{ required: true, message: '请输入企业名称' }]}>
+                  <Input placeholder="请输入企业名称" />
+                </Form.Item>
+                <Form.Item name="taxId" label="税号"
+                  rules={[{ required: true, message: '请输入税号' }]}>
+                  <Input placeholder="请输入税号" />
+                </Form.Item>
+              </>
+            );
+          }
+          return null;
+        }}
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit">注册</Button>
+      </Form.Item>
+    </Form>
+  );
+};
+```
+
 ## API
 
 ### Form
@@ -278,15 +335,19 @@ export default () => {
 | label | 标签文本 | `ReactNode` | - |
 | required | 是否必填 | `boolean` | - |
 | rules | 校验规则 | `RuleConfig[]` | - |
-| dependencies | 依赖字段 | `(string \| number \| (string \| number)[])[]` | - |
+| dependencies | 依赖字段（变化时触发本字段重新校验） | `(string \| number \| (string \| number)[])[]` | - |
+| shouldUpdate | 字段值变化时是否重新渲染（常配合 `children` 为函数使用） | `boolean \| ((prev, cur) => boolean)` | - |
+| initialValue | 字段初始值 | `any` | - |
 | extra | 额外提示信息 | `ReactNode` | - |
 | validateStatus | 校验状态 | `'error' \| 'warning' \| 'success' \| 'validating'` | - |
 | labelCol | 标签列宽（覆盖 Form） | `{ span?: number; offset?: number }` | - |
 | wrapperCol | 控件列宽（覆盖 Form） | `{ span?: number; offset?: number }` | - |
 | labelAlign | 标签对齐方式 | `'left' \| 'right'` | - |
+| layout | 布局覆盖 | `'horizontal' \| 'vertical'` | - |
 | noStyle | 无样式模式（不渲染标签和包裹，但仍收集值和显示校验错误） | `boolean` | `false` |
 | valuePropName | 子元素值属性名（默认 `value`，如 Switch 用 `checked`） | `string` | `'value'` |
 | hasFeedback | 显示反馈图标 | `boolean` | `false` |
+| children | 子元素（可以是 ReactNode 或渲染函数） | `ReactNode \| ((form: FormInstance) => ReactNode)` | - |
 
 ### Form.List
 
@@ -440,3 +501,19 @@ Form 作为标准 React 组件渲染在 ConfigProvider 的 DOM 树内，通过 C
   }
 </Form.Item>
 ```
+
+### shouldUpdate 和 dependencies 有什么区别？
+
+两者都用于响应其他字段的变化，但用途不同：
+
+| 特性 | `shouldUpdate` | `dependencies` |
+|------|----------------|----------------|
+| 用途 | 控制当前 FormItem 是否重新渲染 | 依赖字段变化时触发当前字段重新校验 |
+| 适用场景 | 渲染函数（`children` 为函数）中动态显示/隐藏字段、切换 UI | 跨字段联动校验（如确认密码依赖密码） |
+| 子元素形式 | 必须是函数 | 必须是 ReactNode（受控表单控件） |
+| 类型 | `boolean \| ((prev, cur) => boolean)` | `(string \| number \| (string \| number)[])[]` |
+
+推荐用法：
+
+- **条件渲染**：用 `shouldUpdate={(prev, cur) => prev.x !== cur.x}` + `children` 为函数，避免无关字段变化导致的无效渲染
+- **联动校验**：用 `dependencies={['password']}`，依赖字段变化时自动触发当前字段重新校验，无需手写 shouldUpdate

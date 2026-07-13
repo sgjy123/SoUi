@@ -184,7 +184,7 @@ const handleResetSingle = () => { form.resetFields(['email']); Message.info('已
   <Button onClick={handleClearValidate}>clearValidate</Button>
   <Button onClick={handleReset}>resetFields</Button>
   <Button onClick={handleResetSingle}>resetFields(['email'])</Button>
-  <Button type="primary" onClick={() => form.submit()}>submit</Button>
+  <Button type="primary" onClick={() => form.submit().catch(() => {})}>submit</Button>
 </div>`;
 
 export const sizeCode = `const [size, setSize] = React.useState('middle');

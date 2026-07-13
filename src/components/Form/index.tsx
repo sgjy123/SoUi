@@ -583,7 +583,7 @@ const InternalForm: React.FC<FormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    store.submit();
+    store.submit().catch(() => {});
   };
 
   return (
@@ -683,7 +683,8 @@ const FormItem: React.FC<FormItemProps> = ({
 
   // Handle render-function children (for shouldUpdate / dependencies pattern)
   if (typeof children === 'function') {
-    // Build a mini form instance for the render function
+    // Build a mini form instance for the render function — this points to the
+    // Form that owns this FormItem, NOT any outer useForm() instance.
     const renderForm = {
       getFieldValue: (n: string) => store.getFieldValue(normalizeName(n)),
       getFieldsValue: (nList?: any[]) => {
@@ -698,13 +699,15 @@ const FormItem: React.FC<FormItemProps> = ({
       },
     };
 
+    const rendered = (children as Function)(renderForm);
+
     if (noStyle) {
-      return <>{(children as Function)(renderForm)}</>;
+      return <>{rendered}</>;
     }
 
     return (
       <div ref={itemRef} className={classNames('soui-form-item', className)} style={style}>
-        {(children as Function)(renderForm)}
+        {rendered}
       </div>
     );
   }
@@ -812,8 +815,13 @@ const FormItem: React.FC<FormItemProps> = ({
       <>
         <div style={{ display: 'block' }}>{controlledChildren}</div>
         {errors.length > 0 && (
-          <div className="soui-form-item-explain">
-            <div className="soui-form-item-explain-error">{errors[0]}</div>
+          <div
+            className="soui-form-item soui-form-item-no-style-explain"
+            style={{ marginBottom: 0, display: 'block' }}
+          >
+            <div className="soui-form-item-explain">
+              <div className="soui-form-item-explain-error">{errors[0]}</div>
+            </div>
           </div>
         )}
       </>

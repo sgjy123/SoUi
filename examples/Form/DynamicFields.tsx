@@ -47,14 +47,17 @@ const DynamicFields: React.FC = () => {
                   }}
                 >
                   <div style={{ flex: 1 }}>
-                    <Form.Item
-                      name={[field.name, 'name']}
-                      rules={[{ required: true, message: '请输入姓名' }]}
-                      noStyle
-                    >
-                      <Input placeholder="联系人姓名" style={{ marginBottom: 8 }} />
-                    </Form.Item>
-                    <Form.Item
+                    <div style={{ marginBottom: 8 }}>
+                      <Form.Item
+                          name={[field.name, 'name']}
+                          rules={[{ required: true, message: '请输入姓名' }]}
+                          noStyle
+                      >
+                        <Input placeholder="联系人姓名" />
+                      </Form.Item>
+                    </div>
+                    <div style={{ marginBottom: 8 }}>
+                      <Form.Item
                       name={[field.name, 'email']}
                       rules={[
                         { required: true, message: '请输入邮箱' },
@@ -64,6 +67,7 @@ const DynamicFields: React.FC = () => {
                     >
                       <Input placeholder="联系人邮箱" />
                     </Form.Item>
+                    </div>
                   </div>
                   <Button
                     type="default"

@@ -52,7 +52,7 @@ const FormInstanceDemo: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    form.submit();
+    form.submit().catch(() => {});
   };
 
   return (

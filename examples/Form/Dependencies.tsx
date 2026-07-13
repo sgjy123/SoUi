@@ -82,8 +82,8 @@ const Dependencies: React.FC = () => {
             </Form.Item>
 
             <Form.Item noStyle shouldUpdate={(prev, cur) => prev.accountType !== cur.accountType}>
-              {() => {
-                const accountType = form.getFieldValue('accountType');
+              {(f) => {
+                const accountType = f.getFieldValue('accountType');
                 if (accountType === 'personal') {
                   return (
                     <Form.Item name="idCard" label="身份证号" rules={[{ required: true, message: '请输入身份证号' }]}>
