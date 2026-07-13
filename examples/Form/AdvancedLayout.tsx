@@ -77,11 +77,11 @@ const AdvancedLayout: React.FC = () => {
         <h4 style={{ marginBottom: 16 }}>字段级别 labelAlign 覆盖</h4>
         <div style={{ maxWidth: 480 }}>
           <Form layout="horizontal" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
-            <Form.Item name="x" label="默认对齐" labelAlign="right">
-              <Input placeholder="右对齐 (默认)" />
+            <Form.Item name="x" label="默认对齐" labelAlign="left">
+              <Input placeholder="左对齐 (默认)" />
             </Form.Item>
-            <Form.Item name="y" label="左对齐" labelAlign="left">
-              <Input placeholder="左对齐 (覆盖)" />
+            <Form.Item name="y" label="右对齐" labelAlign="right">
+              <Input placeholder="右对齐 (覆盖)" />
             </Form.Item>
           </Form>
         </div>
