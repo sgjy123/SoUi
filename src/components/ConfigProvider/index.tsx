@@ -79,6 +79,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const sliderTheme = mergedTheme.components?.Slider || {};
     // 获取 Upload 组件级配置
     const uploadTheme = mergedTheme.components?.Upload || {};
+    // 获取 Form 组件级配置
+    const formTheme = mergedTheme.components?.Form || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -670,6 +672,31 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-upload-text-color-disabled-component': uploadTheme.textDisabled,
       '--soui-upload-color-error-component': uploadTheme.colorError,
       '--soui-upload-color-success-component': uploadTheme.colorSuccess,
+
+      // ==================== Form 组件配置 ====================
+      // 第2层: Form 配置点 (引用设计令牌)
+      '--soui-form-color-primary': formTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-form-color-error': formTheme.colorError || mergedTheme.errorColor,
+      '--soui-form-color-warning': formTheme.colorWarning || mergedTheme.warningColor,
+      '--soui-form-color-success': formTheme.colorSuccess || mergedTheme.successColor,
+      '--soui-form-border-radius': formTheme.borderRadius ? `${formTheme.borderRadius}px` : undefined,
+      '--soui-form-font-size': formTheme.fontSize ? `${formTheme.fontSize}px` : undefined,
+      '--soui-form-label-font-size': formTheme.labelFontSize ? `${formTheme.labelFontSize}px` : undefined,
+      '--soui-form-label-width': formTheme.labelWidth ? `${formTheme.labelWidth}px` : undefined,
+      '--soui-form-label-color': formTheme.labelColor,
+      '--soui-form-text-color-secondary': formTheme.textSecondary || 'rgba(0, 0, 0, 0.65)',
+
+      // 第3层: Form 组件级覆盖 (优先级最高)
+      '--soui-form-color-primary-component': formTheme.colorPrimary,
+      '--soui-form-color-error-component': formTheme.colorError,
+      '--soui-form-color-warning-component': formTheme.colorWarning,
+      '--soui-form-color-success-component': formTheme.colorSuccess,
+      '--soui-form-border-radius-component': formTheme.borderRadius ? `${formTheme.borderRadius}px` : undefined,
+      '--soui-form-font-size-component': formTheme.fontSize ? `${formTheme.fontSize}px` : undefined,
+      '--soui-form-label-font-size-component': formTheme.labelFontSize ? `${formTheme.labelFontSize}px` : undefined,
+      '--soui-form-label-width-component': formTheme.labelWidth ? `${formTheme.labelWidth}px` : undefined,
+      '--soui-form-label-color-component': formTheme.labelColor,
+      '--soui-form-text-color-secondary-component': formTheme.textSecondary,
     } as any;
   }, [mergedTheme]);
 

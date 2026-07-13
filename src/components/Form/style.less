@@ -1,0 +1,284 @@
+@import '../../styles/variables.less';
+
+// ==================== Form ====================
+.soui-form {
+  font-size: var(--soui-form-font-size, var(--soui-font-size, @font-size-base));
+  color: var(--soui-form-text-color, var(--soui-text-color, @text-color));
+  line-height: @line-height-base;
+
+  // ========== Form Item ==========
+  &-item {
+    margin-bottom: @padding-lg;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+
+    &-hidden {
+      display: none;
+    }
+
+    // Label column
+    &-label-col {
+      flex-shrink: 0;
+      padding-top: 4px;
+      padding-right: @padding-sm;
+    }
+
+    // Label
+    &-label {
+      display: inline-block;
+      font-size: var(--soui-form-label-font-size, var(--soui-form-font-size, var(--soui-font-size, @font-size-base)));
+      color: var(--soui-form-label-color, var(--soui-text-color, @text-color));
+      line-height: @control-height-base;
+      height: @control-height-base;
+      white-space: nowrap;
+      position: relative;
+
+      &-required::before {
+        content: '*';
+        color: var(--soui-form-color-error, var(--soui-error-color, @error-color));
+        margin-right: 4px;
+        font-size: 14px;
+        font-family: SimSun, sans-serif;
+        line-height: 1;
+        position: relative;
+        top: 1px;
+      }
+
+      &-right {
+        text-align: right;
+      }
+
+      &-left {
+        text-align: left;
+      }
+    }
+
+    // Wrapper column
+    &-wrapper-col {
+      flex: 1;
+      min-width: 0;
+    }
+
+    // Control area
+    &-control {
+      flex: 1;
+      min-width: 0;
+
+      // Make child controls full width by default
+      > .soui-input,
+      > .soui-input-wrapper,
+      > .soui-select,
+      > .soui-select-trigger,
+      > .soui-input-number,
+      > .soui-cascader,
+      > .soui-tree-select,
+      > .soui-date-picker,
+      > .soui-time-picker {
+        width: 100%;
+      }
+
+      > .soui-textarea {
+        width: 100%;
+      }
+    }
+
+    // Explain / help text
+    &-explain {
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+      color: var(--soui-form-text-color-secondary, var(--soui-text-color-secondary, @text-color-secondary));
+      margin-top: 2px;
+      line-height: @line-height-sm;
+      min-height: 22px;
+
+      &-error {
+        color: var(--soui-form-color-error, var(--soui-error-color, @error-color));
+      }
+
+      &-item {
+        font-size: var(--soui-font-size-sm, @font-size-sm);
+        line-height: @line-height-sm;
+        margin-top: 2px;
+      }
+    }
+
+    // Extra text
+    &-extra {
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+      color: var(--soui-form-text-color-secondary, var(--soui-text-color-secondary, @text-color-secondary));
+      margin-top: 2px;
+      line-height: @line-height-sm;
+    }
+
+    // Optional tag
+    &-optional {
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+      color: var(--soui-form-text-color-secondary, var(--soui-text-color-secondary, @text-color-secondary));
+      margin-left: 4px;
+    }
+
+    // ========== Status Styles ==========
+    &-has-error {
+      .soui-form-item-explain {
+        color: var(--soui-form-color-error, var(--soui-error-color, @error-color));
+      }
+
+      // Apply error border to form controls
+      .soui-input-wrapper,
+      .soui-select-trigger,
+      .soui-input-number,
+      .soui-cascader-selector,
+      .soui-tree-select-selector {
+        border-color: var(--soui-form-color-error, var(--soui-error-color, @error-color)) !important;
+      }
+
+      .soui-input-wrapper:hover,
+      .soui-select-trigger:hover,
+      .soui-input-number:hover,
+      .soui-cascader-selector:hover,
+      .soui-tree-select-selector:hover {
+        border-color: var(--soui-form-color-error, var(--soui-error-color, @error-color)) !important;
+      }
+
+      .soui-input-wrapper:focus-within,
+      .soui-select-trigger-focused,
+      .soui-input-number-focused,
+      .soui-cascader-focused,
+      .soui-tree-select-focused {
+        box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1) !important;
+      }
+    }
+
+    &-has-warning {
+      .soui-form-item-explain {
+        color: var(--soui-form-color-warning, var(--soui-warning-color, @warning-color));
+      }
+
+      .soui-input-wrapper,
+      .soui-select-trigger,
+      .soui-input-number {
+        border-color: var(--soui-form-color-warning, var(--soui-warning-color, @warning-color)) !important;
+      }
+
+      .soui-input-wrapper:hover,
+      .soui-select-trigger:hover,
+      .soui-input-number:hover {
+        border-color: var(--soui-form-color-warning, var(--soui-warning-color, @warning-color)) !important;
+      }
+    }
+
+    &-has-success {
+      .soui-form-item-explain {
+        color: var(--soui-form-color-success, var(--soui-success-color, @success-color));
+      }
+    }
+
+    &-is-validating {
+      .soui-form-item-explain {
+        color: var(--soui-form-color-primary, var(--soui-primary-color, @primary-color));
+      }
+    }
+  }
+
+  // ========== Horizontal Layout ==========
+  &-horizontal {
+    .soui-form-item {
+      flex-direction: row;
+    }
+
+    .soui-form-item-label-col {
+      width: var(--soui-form-label-width, auto);
+      flex-shrink: 0;
+    }
+
+    .soui-form-item-wrapper-col {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  // ========== Vertical Layout ==========
+  &-vertical {
+    .soui-form-item {
+      flex-direction: column;
+    }
+
+    .soui-form-item-label-col {
+      padding-right: 0;
+      padding-bottom: @padding-xs;
+      width: auto;
+      flex: none;
+    }
+
+    .soui-form-item-label {
+      height: auto;
+      line-height: @line-height-base;
+    }
+
+    .soui-form-item-wrapper-col {
+      flex: none;
+      width: 100%;
+    }
+  }
+
+  // ========== Inline Layout ==========
+  &-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 @padding-md;
+
+    .soui-form-item {
+      margin-bottom: @padding-md;
+      flex-direction: row;
+      flex-shrink: 0;
+    }
+
+    .soui-form-item-label-col {
+      width: auto;
+      flex-shrink: 0;
+    }
+
+    .soui-form-item-wrapper-col {
+      flex: none;
+      width: auto;
+    }
+
+    .soui-form-item-explain {
+      position: absolute;
+      white-space: nowrap;
+    }
+
+    .soui-form-item {
+      position: relative;
+      margin-bottom: @padding-lg + 8px; // Extra space for error messages
+    }
+  }
+
+  // ========== Size Variants ==========
+  &-size-small {
+    font-size: @font-size-sm;
+
+    .soui-form-item-label {
+      font-size: @font-size-sm;
+      height: @control-height-sm;
+      line-height: @control-height-sm;
+    }
+  }
+
+  &-size-large {
+    font-size: @font-size-lg;
+
+    .soui-form-item-label {
+      font-size: @font-size-lg;
+      height: @control-height-lg;
+      line-height: @control-height-lg;
+    }
+  }
+
+  // ========== Disabled State ==========
+  &-disabled {
+    .soui-form-item-label {
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+    }
+  }
+}

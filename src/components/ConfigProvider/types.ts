@@ -910,6 +910,29 @@ export interface ComponentThemeConfig {
     /** 成功色 */
     colorSuccess?: string;
   };
+  /** 表单组件配置 */
+  Form?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 错误色 */
+    colorError?: string;
+    /** 警告色 */
+    colorWarning?: string;
+    /** 成功色 */
+    colorSuccess?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 标签字体大小（像素） */
+    labelFontSize?: number;
+    /** 标签宽度（像素，horizontal 布局） */
+    labelWidth?: number;
+    /** 标签颜色 */
+    labelColor?: string;
+    /** 次要文本颜色 */
+    textSecondary?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 
