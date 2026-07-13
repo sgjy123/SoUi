@@ -41,7 +41,6 @@ import Transfer from '../../src/components/Transfer';
 import Empty from '../../src/components/Empty';
 import Slider from '../../src/components/Slider';
 import Upload from '../../src/components/Upload';
-import Form from '../../src/components/Form';
 import dayjs from 'dayjs';
 import ConfigProvider from '../../src/components/ConfigProvider';
 import './style.less';
@@ -124,12 +123,6 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Empty,
     Slider,
     Upload,
-    Form,
-    FormItem: Form.Item,
-    FormList: Form.List,
-    FormProvider: Form.Provider,
-    useForm: Form.useForm,
-    useWatch: Form.useWatch,
     dayjs,
     ConfigProvider,
     ...scope,
