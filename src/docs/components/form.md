@@ -112,33 +112,92 @@ export default () => (
 
 ### 校验规则
 
-支持多种校验规则：必填、长度限制、正则表达式、邮箱、手机号、URL 等。
+支持多种校验规则：必填、长度限制、正则表达式、邮箱、手机号、URL、自定义同步/异步校验、跨字段校验等。
 
 ```tsx
 import { Form, Input, Button, Space, Message } from '@soui/ui';
 
-export default () => (
-  <Form layout="vertical" onFinish={(v) => Message.success('校验通过！')} onFinishFailed={() => Message.error('请修正表单中的错误')}>
-    <Form.Item name="username" label="用户名"
-      rules={[{ required: true, message: '用户名不能为空' }, { min: 3, max: 20, message: '3-20个字符' }, { pattern: /^[a-zA-Z0-9_]+$/, message: '只能包含字母、数字和下划线' }]}>
-      <Input placeholder="3-20位字母、数字或下划线" />
-    </Form.Item>
-    <Form.Item name="email" label="邮箱"
-      rules={[{ required: true, message: '邮箱不能为空' }, { type: 'email', message: '请输入有效的邮箱' }]}>
-      <Input placeholder="example@email.com" />
-    </Form.Item>
-    <Form.Item name="phone" label="手机号"
-      rules={[{ required: true, message: '手机号不能为空' }, { type: 'phone', message: '请输入有效的手机号' }]}>
-      <Input placeholder="请输入手机号" />
-    </Form.Item>
-    <Form.Item>
-      <Space>
-        <Button type="primary" htmlType="submit">提交</Button>
-        <Button onClick={() => form.resetFields()}>重置</Button>
-      </Space>
-    </Form.Item>
-  </Form>
-);
+export default () => {
+  const [form] = Form.useForm();
+
+  return (
+    <Form layout="vertical" form={form}
+      onFinish={(v) => Message.success('校验通过！')}
+      onFinishFailed={() => Message.error('请修正表单中的错误')}>
+      <Form.Item name="username" label="用户名"
+        rules={[
+          { required: true, message: '用户名不能为空' },
+          { min: 3, max: 20, message: '用户名 3-20 个字符' },
+          { pattern: /^[a-zA-Z0-9_]+$/, message: '只能包含字母、数字和下划线' },
+        ]}>
+        <Input placeholder="3-20位字母、数字或下划线" />
+      </Form.Item>
+      <Form.Item name="email" label="邮箱"
+        rules={[{ required: true, message: '邮箱不能为空' }, { type: 'email', message: '请输入有效的邮箱' }]}>
+        <Input placeholder="example@email.com" />
+      </Form.Item>
+      <Form.Item name="phone" label="手机号"
+        rules={[{ required: true, message: '手机号不能为空' }, { type: 'phone', message: '请输入有效的手机号' }]}>
+        <Input placeholder="请输入手机号" />
+      </Form.Item>
+      <Form.Item name="password" label="密码"
+        rules={[
+          { required: true, message: '密码不能为空' },
+          { min: 6, message: '密码至少6个字符' },
+          {
+            validator: (_rule, value) => {
+              if (value && !/(?=.*[a-zA-Z])(?=.*\d)/.test(value)) {
+                return Promise.reject(new Error('密码须包含字母和数字'));
+              }
+              return Promise.resolve();
+            },
+          },
+        ]}>
+        <Input.Password placeholder="至少6位，包含字母和数字" />
+      </Form.Item>
+      <Form.Item name="confirm" label="确认密码" dependencies={['password']}
+        rules={[
+          { required: true, message: '请确认密码' },
+          {
+            validator: (_rule, value) => {
+              if (value && value !== form.getFieldValue('password')) {
+                return Promise.reject(new Error('两次输入的密码不一致'));
+              }
+              return Promise.resolve();
+            },
+          },
+        ]}>
+        <Input.Password placeholder="再次输入密码" />
+      </Form.Item>
+      <Form.Item name="inviteCode" label="邀请码"
+        rules={[
+          { required: true, message: '请输入邀请码' },
+          {
+            asyncValidator: (_rule, value) => {
+              return new Promise<void>((resolve, reject) => {
+                setTimeout(() => {
+                  const validCodes = ['SOUI2024', 'WELCOME', 'DEMO888'];
+                  if (validCodes.includes(value?.toUpperCase())) {
+                    resolve();
+                  } else {
+                    reject(new Error('邀请码无效或已过期'));
+                  }
+                }, 600);
+              });
+            },
+          },
+        ]}>
+        <Input placeholder="输入邀请码（试试 SOUI2024）" />
+      </Form.Item>
+      <Form.Item>
+        <Space>
+          <Button type="primary" htmlType="submit">提交</Button>
+          <Button onClick={() => form.resetFields()}>重置</Button>
+        </Space>
+      </Form.Item>
+    </Form>
+  );
+};
 ```
 
 ### 动态字段
@@ -225,7 +284,7 @@ export default () => {
 | labelCol | 标签列宽（覆盖 Form） | `{ span?: number; offset?: number }` | - |
 | wrapperCol | 控件列宽（覆盖 Form） | `{ span?: number; offset?: number }` | - |
 | labelAlign | 标签对齐方式 | `'left' \| 'right'` | - |
-| noStyle | 无样式模式，仅收集值 | `boolean` | `false` |
+| noStyle | 无样式模式（不渲染标签和包裹，但仍收集值和显示校验错误） | `boolean` | `false` |
 | valuePropName | 子元素值属性名（默认 `value`，如 Switch 用 `checked`） | `string` | `'value'` |
 | hasFeedback | 显示反馈图标 | `boolean` | `false` |
 
@@ -281,8 +340,9 @@ children: (fields: FormListFieldData[], operations: FormListOperations) => React
 | min | 最小值/最小长度 | `number` |
 | max | 最大值/最大长度 | `number` |
 | pattern | 正则表达式 | `RegExp` |
-| validator | 自定义同步校验器 | `(value, rule) => Promise<void> \| void` |
-| asyncValidator | 自定义异步校验器 | `(value, rule) => Promise<void>` |
+| whitespace | 不允许纯空格 | `boolean` |
+| validator | 自定义同步校验器（Ant Design 风格：`(rule, value) => Promise<void> \| void`） | `(rule: RuleConfig, value: any) => Promise<void> \| void` |
+| asyncValidator | 自定义异步校验器（Ant Design 风格：`(rule, value) => Promise<void>`） | `(rule: RuleConfig, value: any) => Promise<void>` |
 | validateTrigger | 校验触发时机 | `string \| string[]` |
 
 ## 主题定制

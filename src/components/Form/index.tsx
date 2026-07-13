@@ -431,7 +431,8 @@ class FormStore {
       if (this.onFinishFailed && err.errorFields) {
         this.onFinishFailed({ errorFields: err.errorFields });
       }
-      throw err;
+      // Don't re-throw — validation failure is already communicated via onFinishFailed callback.
+      // The caller (handleSubmit) has no .catch() and this would cause an unhandled rejection.
     }
   }
 
@@ -806,7 +807,18 @@ const FormItem: React.FC<FormItemProps> = ({
 
   const controlledChildren = getControlled(children);
 
-  if (noStyle) return <>{controlledChildren}</>;
+  if (noStyle) {
+    return (
+      <>
+        <div style={{ display: 'block' }}>{controlledChildren}</div>
+        {errors.length > 0 && (
+          <div className="soui-form-item-explain">
+            <div className="soui-form-item-explain-error">{errors[0]}</div>
+          </div>
+        )}
+      </>
+    );
+  }
 
   // Form item class names
   const itemClassName = classNames(

@@ -70,6 +70,68 @@ const Validation: React.FC = () => {
           <Input placeholder="https://example.com" />
         </Form.Item>
 
+        <Form.Item
+          name="password"
+          label="密码"
+          rules={[
+            { required: true, message: '密码不能为空' },
+            { min: 6, message: '密码至少6个字符' },
+            {
+              validator: (_rule, value) => {
+                if (value && !/(?=.*[a-zA-Z])(?=.*\d)/.test(value)) {
+                  return Promise.reject(new Error('密码须包含字母和数字'));
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
+          <Input.Password placeholder="至少6位，包含字母和数字" />
+        </Form.Item>
+
+        <Form.Item
+          name="confirm"
+          label="确认密码"
+          dependencies={['password']}
+          rules={[
+            { required: true, message: '请确认密码' },
+            {
+              validator: (_rule, value) => {
+                if (value && value !== form.getFieldValue('password')) {
+                  return Promise.reject(new Error('两次输入的密码不一致'));
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
+        >
+          <Input.Password placeholder="再次输入密码" />
+        </Form.Item>
+
+        <Form.Item
+          name="inviteCode"
+          label="邀请码"
+          rules={[
+            { required: true, message: '请输入邀请码' },
+            {
+              asyncValidator: (_rule, value) => {
+                return new Promise<void>((resolve, reject) => {
+                  setTimeout(() => {
+                    const validCodes = ['SOUI2024', 'WELCOME', 'DEMO888'];
+                    if (validCodes.includes(value?.toUpperCase())) {
+                      resolve();
+                    } else {
+                      reject(new Error('邀请码无效或已过期'));
+                    }
+                  }, 600);
+                });
+              },
+            },
+          ]}
+        >
+          <Input placeholder="输入邀请码（试试 SOUI2024）" />
+        </Form.Item>
+
         <Form.Item>
           <Space>
             <Button type="primary" htmlType="submit">
