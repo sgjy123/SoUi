@@ -5,6 +5,7 @@ import Space from '../../src/components/Space';
 import Icon from '../../src/components/Icon';
 import Typography from '../../src/components/Typography';
 import Tooltip from '../../src/components/Tooltip';
+import Popconfirm from '../../src/components/Popconfirm';
 import Divider from '../../src/components/Divider';
 import { Row, Col } from '../../src/components/Grid';
 import Layout from '../../src/components/Layout';
@@ -77,6 +78,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Text: Typography.Text,
     Link: Typography.Link,
     Tooltip,
+    Popconfirm,
     Divider,
     Row,
     Col,

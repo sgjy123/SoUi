@@ -234,6 +234,7 @@ function sidebarComponents() {
         { text: 'Badge 徽标', link: 'badge' },
         { text: 'Tooltip 文字提示', link: 'tooltip' },
         { text: 'Popover 弹出提示', link: 'popover' },
+        { text: 'Popconfirm 气泡确认框', link: 'popconfirm' },
         { text: 'Table 表格', link: 'table' },
         { text: 'Pagination 分页', link: 'pagination' },
         { text: 'Empty 空状态', link: 'empty' },

@@ -36,6 +36,10 @@ export type {
 export { default as Tooltip } from './components/Tooltip';
 export type { TooltipProps, TooltipPlacement, TooltipTrigger } from './components/Tooltip';
 
+// Popconfirm Component
+export { default as Popconfirm } from './components/Popconfirm';
+export type { PopconfirmProps, PopconfirmPlacement, PopconfirmTrigger } from './components/Popconfirm';
+
 // Divider Component
 export { default as Divider } from './components/Divider';
 export type { DividerProps, DividerType, DividerOrientation } from './components/Divider';

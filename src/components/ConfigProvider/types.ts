@@ -211,6 +211,25 @@ export interface ComponentThemeConfig {
     /** 动画缓动函数 */
     animationTimingFunction?: string;
   };
+  /** Popconfirm 气泡确认框组件配置 */
+  Popconfirm?: {
+    /** 背景色 */
+    colorBg?: string;
+    /** 标题文本颜色 */
+    titleColor?: string;
+    /** 描述文本颜色 */
+    descriptionColor?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 圆角（像素） */
+    borderRadius?: number;
+    /** 阴影 */
+    boxShadow?: string;
+    /** 警告图标颜色 */
+    colorWarning?: string;
+    /** 主色 */
+    colorPrimary?: string;
+  };
   /** Divider 分割线组件配置 */
   Divider?: {
     /** 边框颜色 */

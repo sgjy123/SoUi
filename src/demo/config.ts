@@ -484,6 +484,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tooltip-disabled', label: 'Tooltip 禁用', componentPath: 'Tooltip', exampleName: 'Disabled', description: '禁用状态处理。' },
         ],
       },
+      {
+        key: 'popconfirm',
+        label: 'Popconfirm 气泡确认框',
+        icon: 'Caution',
+        items: [
+          { key: 'popconfirm-basic', label: 'Popconfirm 基础用法', componentPath: 'Popconfirm', exampleName: 'Basic', description: '基本的气泡确认框用法。' },
+          { key: 'popconfirm-placement', label: 'Popconfirm 弹出方向', componentPath: 'Popconfirm', exampleName: 'Placement', description: '12 个不同的弹出位置。' },
+          { key: 'popconfirm-custom', label: 'Popconfirm 自定义内容', componentPath: 'Popconfirm', exampleName: 'CustomContent', description: '自定义图标、描述、按钮等。' },
+          { key: 'popconfirm-async', label: 'Popconfirm 异步关闭', componentPath: 'Popconfirm', exampleName: 'AsyncClose', description: 'Promise 异步关闭确认框。' },
+        ],
+      },
     ],
   },
   {

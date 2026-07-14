@@ -23,6 +23,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const typographyTheme = mergedTheme.components?.Typography || {};
     // 获取 Tooltip 组件级配置
     const tooltipTheme = mergedTheme.components?.Tooltip || {};
+    // 获取 Popconfirm 组件级配置
+    const popconfirmTheme = mergedTheme.components?.Popconfirm || {};
     // 获取 Divider 组件级配置
     const dividerTheme = mergedTheme.components?.Divider || {};
     // 获取 Layout 组件级配置
@@ -216,6 +218,28 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-tooltip-z-index-component': tooltipTheme.zIndex?.toString(),
       '--soui-tooltip-animation-duration-component': tooltipTheme.animationDuration ? `${tooltipTheme.animationDuration}s` : undefined,
       '--soui-tooltip-animation-timing-function': tooltipTheme.animationTimingFunction,
+
+      // ==================== Popconfirm 组件配置 ====================
+      // 第2层: Popconfirm 配置点 (引用设计令牌)
+      '--soui-popconfirm-bg-color': popconfirmTheme.colorBg || '#fff',
+      '--soui-popconfirm-title-color': popconfirmTheme.titleColor || 'rgba(0, 0, 0, 0.88)',
+      '--soui-popconfirm-description-color': popconfirmTheme.descriptionColor || 'rgba(0, 0, 0, 0.65)',
+      '--soui-popconfirm-font-size': popconfirmTheme.fontSize ? `${popconfirmTheme.fontSize}px` : undefined,
+      '--soui-popconfirm-border-radius': popconfirmTheme.borderRadius ? `${popconfirmTheme.borderRadius}px` : undefined,
+      '--soui-popconfirm-box-shadow': popconfirmTheme.boxShadow,
+      '--soui-popconfirm-color-warning': popconfirmTheme.colorWarning || mergedTheme.warningColor,
+      '--soui-popconfirm-color-primary': popconfirmTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-popconfirm-color-primary-hover': popconfirmTheme.colorPrimary || mergedTheme.primaryHoverColor,
+
+      // 第3层: Popconfirm 组件级覆盖
+      '--soui-popconfirm-bg-color-component': popconfirmTheme.colorBg,
+      '--soui-popconfirm-title-color-component': popconfirmTheme.titleColor,
+      '--soui-popconfirm-description-color-component': popconfirmTheme.descriptionColor,
+      '--soui-popconfirm-font-size-component': popconfirmTheme.fontSize ? `${popconfirmTheme.fontSize}px` : undefined,
+      '--soui-popconfirm-border-radius-component': popconfirmTheme.borderRadius ? `${popconfirmTheme.borderRadius}px` : undefined,
+      '--soui-popconfirm-box-shadow-component': popconfirmTheme.boxShadow,
+      '--soui-popconfirm-color-warning-component': popconfirmTheme.colorWarning,
+      '--soui-popconfirm-color-primary-component': popconfirmTheme.colorPrimary,
 
       // ==================== Divider 组件配置 ====================
       // 第2层: Divider 配置点 (引用设计令牌)

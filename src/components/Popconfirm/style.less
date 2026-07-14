@@ -1,0 +1,201 @@
+@import '../../styles/variables.less';
+
+// ==================== Keyframes ====================
+
+@keyframes soui-popconfirm-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ==================== Main Popconfirm ====================
+
+.soui-popconfirm {
+  position: fixed;
+  box-sizing: border-box;
+  font-size: var(--soui-popconfirm-font-size, var(--soui-font-size, @font-size-base));
+  line-height: var(--soui-line-height, @line-height-base);
+  color: var(--soui-popconfirm-title-color, var(--soui-text-color, @text-color));
+  animation: soui-popconfirm-fade-in var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+  z-index: var(--soui-z-index-popover, 1050);
+}
+
+.soui-popconfirm-inner {
+  min-width: 200px;
+  max-width: 350px;
+  padding: 12px 16px;
+  border-radius: var(--soui-popconfirm-border-radius, var(--soui-border-radius, @border-radius-base));
+  background: var(--soui-popconfirm-bg-color, #fff);
+  box-shadow: var(--soui-popconfirm-box-shadow, var(--soui-box-shadow-secondary, @box-shadow-secondary));
+  box-sizing: border-box;
+}
+
+// ==================== Arrow ====================
+
+.soui-popconfirm-arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--soui-popconfirm-bg-color, #fff);
+  transform: rotate(45deg);
+}
+
+// ==================== Placement - Top ====================
+
+.soui-popconfirm-placement-top,
+.soui-popconfirm-placement-topLeft,
+.soui-popconfirm-placement-topRight {
+  .soui-popconfirm-arrow {
+    bottom: -4px;
+  }
+}
+
+.soui-popconfirm-placement-top .soui-popconfirm-arrow {
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.soui-popconfirm-placement-topLeft .soui-popconfirm-arrow {
+  left: 16px;
+}
+
+.soui-popconfirm-placement-topRight .soui-popconfirm-arrow {
+  right: 16px;
+}
+
+// ==================== Placement - Bottom ====================
+
+.soui-popconfirm-placement-bottom,
+.soui-popconfirm-placement-bottomLeft,
+.soui-popconfirm-placement-bottomRight {
+  .soui-popconfirm-arrow {
+    top: -4px;
+  }
+}
+
+.soui-popconfirm-placement-bottom .soui-popconfirm-arrow {
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.soui-popconfirm-placement-bottomLeft .soui-popconfirm-arrow {
+  left: 16px;
+}
+
+.soui-popconfirm-placement-bottomRight .soui-popconfirm-arrow {
+  right: 16px;
+}
+
+// ==================== Placement - Left ====================
+
+.soui-popconfirm-placement-left,
+.soui-popconfirm-placement-leftTop,
+.soui-popconfirm-placement-leftBottom {
+  .soui-popconfirm-arrow {
+    right: -4px;
+  }
+}
+
+.soui-popconfirm-placement-left .soui-popconfirm-arrow {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.soui-popconfirm-placement-leftTop .soui-popconfirm-arrow {
+  top: 16px;
+}
+
+.soui-popconfirm-placement-leftBottom .soui-popconfirm-arrow {
+  bottom: 16px;
+}
+
+// ==================== Placement - Right ====================
+
+.soui-popconfirm-placement-right,
+.soui-popconfirm-placement-rightTop,
+.soui-popconfirm-placement-rightBottom {
+  .soui-popconfirm-arrow {
+    left: -4px;
+  }
+}
+
+.soui-popconfirm-placement-right .soui-popconfirm-arrow {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.soui-popconfirm-placement-rightTop .soui-popconfirm-arrow {
+  top: 16px;
+}
+
+.soui-popconfirm-placement-rightBottom .soui-popconfirm-arrow {
+  bottom: 16px;
+}
+
+// ==================== Message ====================
+
+.soui-popconfirm-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  &-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    color: var(--soui-popconfirm-color-warning, var(--soui-warning-color, @warning-color));
+
+    svg {
+      fill: var(--soui-popconfirm-color-warning, var(--soui-warning-color, @warning-color));
+      stroke: var(--soui-popconfirm-color-warning, var(--soui-warning-color, @warning-color));
+    }
+  }
+
+  &-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &-title {
+    font-weight: 600;
+    font-size: var(--soui-popconfirm-font-size, var(--soui-font-size, @font-size-base));
+    color: var(--soui-popconfirm-title-color, var(--soui-text-color, @text-color));
+    line-height: 22px;
+  }
+
+  &-description {
+    margin-top: 4px;
+    font-size: var(--soui-popconfirm-font-size, var(--soui-font-size-sm, @font-size-sm));
+    color: var(--soui-popconfirm-description-color, var(--soui-text-color-secondary, @text-color-secondary));
+    line-height: var(--soui-line-height-sm, @line-height-sm);
+  }
+}
+
+// ==================== Buttons ====================
+
+.soui-popconfirm-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+// ==================== Trigger ====================
+
+.soui-popconfirm-trigger {
+  display: inline-flex;
+}
+
+// ==================== Warning Icon ====================
+
+.soui-popconfirm-warning-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
