@@ -709,6 +709,7 @@ const Table = <RecordType extends any = any>({
             )}
             style={{
               width: column.width,
+              ...(column.ellipsis && column.width ? { minWidth: column.width, maxWidth: column.width } : {}),
               ...headerCellProps.style,
             }}
             rowSpan={hasChildren ? 1 : undefined}
@@ -848,7 +849,10 @@ const Table = <RecordType extends any = any>({
                           'soui-table-td-fixed-right': column.fixed === 'right',
                         }
                       )}
-                      style={{ width: column.width }}
+                      style={{
+                        width: column.width,
+                        ...(column.ellipsis && column.width ? { minWidth: column.width, maxWidth: column.width } : {}),
+                      }}
                       {...cellProps}
                     >
                       {content}
