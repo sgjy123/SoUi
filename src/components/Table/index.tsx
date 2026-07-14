@@ -56,6 +56,8 @@ export interface ColumnType<RecordType = any> {
   filterSearch?: boolean;
   /** 列自定义类名 */
   className?: string;
+  /** 表头列合并列数 */
+  colSpan?: number;
   /** 列自定义样式 */
   onCell?: (record: RecordType, index: number) => React.TdHTMLAttributes<HTMLTableCellElement>;
   /** 表头自定义样式 */
@@ -679,11 +681,14 @@ const Table = <RecordType extends any = any>({
     const renderColumns = (cols: ColumnType<RecordType>[], level: number = 0): React.ReactNode => {
       return cols.map((column, colIndex) => {
         const hasChildren = column.children && column.children.length > 0;
-        const colSpan = hasChildren ? 1 : 1;
+        const colSpan = column.colSpan || (hasChildren ? 1 : 1);
         const headerCellProps = column.onHeaderCell?.(column) || {};
         const field = column.dataIndex || column.key || '';
         const isSorted = sortStates.some(s => s.field === field && s.order !== null);
         const hasFilter = !!column.filters?.length;
+
+        // colSpan=0 时跳过渲染表头（被合并的列）
+        if (colSpan === 0 || headerCellProps.colSpan === 0) return null;
 
         return (
           <th
@@ -822,6 +827,10 @@ const Table = <RecordType extends any = any>({
                 {flatColumns.map((column, colIndex) => {
                   const cellValue = getCellValue(record, column.dataIndex);
                   const cellProps = column.onCell?.(record, rowIndex) || {};
+
+                  // colSpan=0 或 rowSpan=0 时跳过渲染（被合并的单元格）
+                  if (cellProps.colSpan === 0 || cellProps.rowSpan === 0) return null;
+
                   const content = column.render
                     ? column.render(cellValue, record, rowIndex)
                     : cellValue;

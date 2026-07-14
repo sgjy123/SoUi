@@ -33,12 +33,6 @@ export default () => {
         dataSource={data}
         striped
         bordered
-        emptyText={
-          <Empty
-            description="暂无数据，请点击加载数据按钮"
-            image="empty"
-          />
-        }
       />
     </div>
   );

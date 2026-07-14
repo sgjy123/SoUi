@@ -115,7 +115,7 @@ Pagination 作为标准 React 组件渲染在 ConfigProvider 的 DOM 树内，�
 | borderRadius | 圆角大小（像素） | `number` | `6` |
 | fontSize | 字体大小（像素） | `number` | `14` |
 | itemBg | 页码项背景色 | `string` | `#fff` |
-| colorPrimary | 主色 | `string` | `#1677ff` |
+| colorPrimary | 主色（未设置时跟随全局主题 `primaryColor`） | `string` | `#1677ff` |
 | borderColor | 边框颜色 | `string` | `#d9d9d9` |
 
 ## 无障碍访问

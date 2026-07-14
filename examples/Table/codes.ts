@@ -279,7 +279,26 @@ const dataSource = [
 
 <Table columns={columns} dataSource={dataSource} />`;
 
-export const customRenderCode = `const statusColors = { active: 'green', inactive: 'red', pending: 'orange' };
+export const customRenderCode = `const StatusBadge = ({ color, children }) => (
+  <span style={{
+    display: 'inline-block', padding: '2px 8px', fontSize: 12, borderRadius: 4,
+    background: color === 'green' ? '#f6ffed' : color === 'red' ? '#fff2f0' : '#fff7e6',
+    color: color === 'green' ? '#52c41a' : color === 'red' ? '#ff4d4f' : '#faad14',
+    border: \`1px solid \${color === 'green' ? '#b7eb8f' : color === 'red' ? '#ffccc7' : '#ffd591'}\`,
+  }}>
+    {children}
+  </span>
+);
+
+const RoleBadge = ({ children }) => (
+  <span style={{
+    display: 'inline-block', padding: '2px 8px', fontSize: 12,
+    borderRadius: 4, background: '#f0f5ff', color: '#2f54eb',
+    border: '1px solid #adc6ff',
+  }}>
+    {children}
+  </span>
+);
 
 const columns = [
   {
@@ -290,7 +309,7 @@ const columns = [
           width: 32, height: 32, borderRadius: '50%',
           background: record.avatar, display: 'flex',
           alignItems: 'center', justifyContent: 'center',
-          color: '#fff', fontSize: 14,
+          color: '#fff', fontSize: 14, fontWeight: 600,
         }}>
           {record.name[0]}
         </div>
@@ -300,11 +319,19 @@ const columns = [
   },
   {
     title: '状态', dataIndex: 'status',
-    render: (status) => <Tag color={statusColors[status]}>{status}</Tag>,
+    render: (status) => (
+      <StatusBadge color={status === 'active' ? 'green' : status === 'inactive' ? 'red' : 'orange'}>
+        {status === 'active' ? '活跃' : status === 'inactive' ? '停用' : '待审'}
+      </StatusBadge>
+    ),
   },
   {
     title: '完成度', dataIndex: 'progress',
     render: (val) => <Progress percent={val} size="small" />,
+  },
+  {
+    title: '角色', dataIndex: 'role',
+    render: (role) => <RoleBadge>{role}</RoleBadge>,
   },
   {
     title: '操作',
@@ -352,8 +379,23 @@ const columns = [
     title: '姓名', dataIndex: 'name',
     onCell: (_, index) => ({ rowSpan: getRowSpan(dataSource, 'name', index) }),
   },
+  {
+    title: '年龄', dataIndex: 'age',
+    onCell: (_, index) => ({ rowSpan: getRowSpan(dataSource, 'age', index) }),
+  },
+  {
+    title: '城市', dataIndex: 'city',
+    onCell: (_, index) => ({ rowSpan: getRowSpan(dataSource, 'city', index) }),
+  },
   { title: '区域', dataIndex: 'district' },
-  { title: '电话', dataIndex: 'phone' },
+  {
+    title: '联系方式', key: 'contact', colSpan: 2,
+    render: (_, record) => \`\${record.phone} / \${record.email}\`,
+  },
+  {
+    dataIndex: 'email', colSpan: 0,
+    onHeaderCell: () => ({ colSpan: 0 }),
+  },
 ];
 
 <Table columns={columns} dataSource={dataSource} bordered />`;

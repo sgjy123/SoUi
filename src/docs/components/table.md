@@ -218,15 +218,31 @@ const columns = [
 
 ### 自定义渲染
 
-通过列的 `render` 属性自定义单元格内容，可渲染头像、标签、进度条、操作按钮等任意元素。
+通过列的 `render` 属性自定义单元格内容，可渲染头像、状态徽标、进度条、角色标签、操作按钮等任意元素。
 
 ```tsx
+const StatusBadge = ({ color, children }) => (
+  <span style={{
+    display: 'inline-block', padding: '2px 8px', fontSize: 12, borderRadius: 4,
+    background: color === 'green' ? '#f6ffed' : color === 'red' ? '#fff2f0' : '#fff7e6',
+    color: color === 'green' ? '#52c41a' : color === 'red' ? '#ff4d4f' : '#faad14',
+    border: `1px solid ${color === 'green' ? '#b7eb8f' : color === 'red' ? '#ffccc7' : '#ffd591'}`,
+  }}>
+    {children}
+  </span>
+);
+
 const columns = [
   {
     title: '用户', dataIndex: 'name',
     render: (_, record) => (
       <Space>
-        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#1677ff' }}>
+        <div style={{
+          width: 32, height: 32, borderRadius: '50%',
+          background: record.avatar, display: 'flex',
+          alignItems: 'center', justifyContent: 'center',
+          color: '#fff', fontSize: 14, fontWeight: 600,
+        }}>
           {record.name[0]}
         </div>
         <span>{record.name}</span>
@@ -235,7 +251,11 @@ const columns = [
   },
   {
     title: '状态', dataIndex: 'status',
-    render: (status) => <Tag color={status === 'active' ? 'green' : 'red'}>{status}</Tag>,
+    render: (status) => (
+      <StatusBadge color={status === 'active' ? 'green' : status === 'inactive' ? 'red' : 'orange'}>
+        {status === 'active' ? '活跃' : status === 'inactive' ? '停用' : '待审'}
+      </StatusBadge>
+    ),
   },
   {
     title: '完成度', dataIndex: 'progress',
@@ -255,17 +275,42 @@ const columns = [
 
 ### 合并单元格
 
-通过列的 `onCell` 回调返回 `rowSpan` 或 `colSpan` 属性实现单元格合并。
+通过列的 `onCell` 回调返回 `rowSpan` 或 `colSpan` 属性实现单元格合并。`rowSpan` 用于纵向合并相邻相同值的行，`colSpan` 用于横向合并列。当 `colSpan` 或 `rowSpan` 设为 `0` 时，该单元格将被跳过不渲染。
 
 ```tsx
+const getRowSpan = (data, field, index) => {
+  const current = data[index][field];
+  if (index > 0 && data[index - 1][field] === current) return 0;
+  let count = 1;
+  for (let i = index + 1; i < data.length; i++) {
+    if (data[i][field] === current) count++;
+    else break;
+  }
+  return count;
+};
+
 const columns = [
   {
     title: '姓名', dataIndex: 'name',
-    onCell: (_, index) => ({
-      rowSpan: getRowSpan(dataSource, 'name', index),
-    }),
+    onCell: (_, index) => ({ rowSpan: getRowSpan(dataSource, 'name', index) }),
+  },
+  {
+    title: '年龄', dataIndex: 'age',
+    onCell: (_, index) => ({ rowSpan: getRowSpan(dataSource, 'age', index) }),
+  },
+  {
+    title: '城市', dataIndex: 'city',
+    onCell: (_, index) => ({ rowSpan: getRowSpan(dataSource, 'city', index) }),
   },
   { title: '区域', dataIndex: 'district' },
+  {
+    title: '联系方式', key: 'contact', colSpan: 2,
+    render: (_, record) => `${record.phone} / ${record.email}`,
+  },
+  {
+    dataIndex: 'email', colSpan: 0,                    // colSpan: 0 跳过渲染
+    onHeaderCell: () => ({ colSpan: 0 }),              // 表头也跳过
+  },
 ];
 
 <Table columns={columns} dataSource={dataSource} bordered />
@@ -365,6 +410,7 @@ const loadData = async (page, pageSize, sort, filters) => {
 | width | 列宽度 | `number \| string` | - | - |
 | align | 对齐方式 | `'left' \| 'center' \| 'right'` | - | - |
 | fixed | 是否固定列 | `'left' \| 'right' \| boolean` | - | - |
+| colSpan | 列头跨列数（表头合并） | `number` | - | - |
 | sorter | 排序函数 | `((a, b) => number) \| boolean` | - | - |
 | multiple | 多列排序优先级 | `number` | - | - |
 | sortOrder | 受控排序方向 | `'ascend' \| 'descend' \| null` | - | - |
