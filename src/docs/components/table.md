@@ -53,6 +53,70 @@ const columns = [
 <Table columns={columns} dataSource={dataSource} />
 ```
 
+### 多列排序
+
+为列添加 `multiple` 属性启用多列排序，数字表示排序优先级。点击不同列头可同时按优先级排列多个排序条件，排序图标旁会显示优先级序号。
+
+```tsx
+const columns = [
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    sorter: (a, b) => a.name.localeCompare(b.name),
+    multiple: 2,
+  },
+  {
+    title: '年龄',
+    dataIndex: 'age',
+    sorter: (a, b) => a.age - b.age,
+    multiple: 1,
+  },
+  {
+    title: '分数',
+    dataIndex: 'score',
+    sorter: (a, b) => a.score - b.score,
+    multiple: 3,
+  },
+];
+
+<Table
+  columns={columns}
+  dataSource={dataSource}
+  onChange={(pagination, sorter) => console.log(sorter)}
+/>
+```
+
+### 列过滤
+
+为列配置 `filters` 和 `onFilter` 属性启用列过滤功能。点击过滤图标可选择过滤条件，支持搜索过滤项。
+
+```tsx
+const columns = [
+  { title: '姓名', dataIndex: 'name', sorter: (a, b) => a.name.localeCompare(b.name) },
+  {
+    title: '性别',
+    dataIndex: 'gender',
+    filters: [
+      { text: '男', value: 'male' },
+      { text: '女', value: 'female' },
+    ],
+    onFilter: (value, record) => record.gender === value,
+  },
+  {
+    title: '部门',
+    dataIndex: 'department',
+    filters: [
+      { text: '技术部', value: 'tech' },
+      { text: '产品部', value: 'product' },
+    ],
+    onFilter: (value, record) => record.department === value,
+    filterSearch: true,
+  },
+];
+
+<Table columns={columns} dataSource={dataSource} />
+```
+
 ### 行选择
 
 通过 `rowSelection` 配置行选择功能，支持 checkbox 和 radio 两种模式。
@@ -135,6 +199,137 @@ const rowSelection = {
 />
 ```
 
+### 固定列
+
+为列配置 `fixed: 'left'` 或 `fixed: 'right'` 可将列固定在左侧或右侧，配合 `scroll.x` 实现横向滚动时固定关键列。
+
+```tsx
+const columns = [
+  { title: '姓名', dataIndex: 'name', fixed: 'left', width: 120 },
+  { title: '年龄', dataIndex: 'age', width: 80 },
+  { title: '部门', dataIndex: 'department', width: 120 },
+  { title: '薪资', dataIndex: 'salary', width: 120 },
+  { title: '操作', fixed: 'right', width: 150,
+    render: () => <Space><Button type="link" size="small">编辑</Button></Space> },
+];
+
+<Table columns={columns} dataSource={dataSource} scroll={{ x: 1100 }} bordered />
+```
+
+### 自定义渲染
+
+通过列的 `render` 属性自定义单元格内容，可渲染头像、标签、进度条、操作按钮等任意元素。
+
+```tsx
+const columns = [
+  {
+    title: '用户', dataIndex: 'name',
+    render: (_, record) => (
+      <Space>
+        <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#1677ff' }}>
+          {record.name[0]}
+        </div>
+        <span>{record.name}</span>
+      </Space>
+    ),
+  },
+  {
+    title: '状态', dataIndex: 'status',
+    render: (status) => <Tag color={status === 'active' ? 'green' : 'red'}>{status}</Tag>,
+  },
+  {
+    title: '完成度', dataIndex: 'progress',
+    render: (val) => <Progress percent={val} size="small" />,
+  },
+  {
+    title: '操作',
+    render: () => (
+      <Space>
+        <Button type="link" size="small">编辑</Button>
+        <Button type="link" size="small" danger>删除</Button>
+      </Space>
+    ),
+  },
+];
+```
+
+### 合并单元格
+
+通过列的 `onCell` 回调返回 `rowSpan` 或 `colSpan` 属性实现单元格合并。
+
+```tsx
+const columns = [
+  {
+    title: '姓名', dataIndex: 'name',
+    onCell: (_, index) => ({
+      rowSpan: getRowSpan(dataSource, 'name', index),
+    }),
+  },
+  { title: '区域', dataIndex: 'district' },
+];
+
+<Table columns={columns} dataSource={dataSource} bordered />
+```
+
+### 总结栏
+
+通过 `summary` 属性渲染表格底部的总结行，可展示合计、平均值等统计信息。
+
+```tsx
+<Table
+  columns={columns}
+  dataSource={dataSource}
+  bordered
+  summary={() => (
+    <tr className="soui-table-tr" style={{ fontWeight: 600 }}>
+      <td colSpan={2} className="soui-table-td" style={{ textAlign: 'right' }}>合计</td>
+      <td className="soui-table-td" style={{ textAlign: 'right' }}>{totalAmount}</td>
+    </tr>
+  )}
+/>
+```
+
+### 动态列
+
+通过状态控制 `columns` 数组的过滤，实现列的显示/隐藏切换。
+
+```tsx
+const [columnConfig, setColumnConfig] = useState(allColumns);
+const visibleColumns = columnConfig.filter(c => c.visible);
+
+<Space>
+  {columnConfig.map(col => (
+    <Checkbox key={col.key} checked={col.visible}
+      onChange={() => toggleColumn(col.key)}>{col.title}</Checkbox>
+  ))}
+</Space>
+<Table columns={visibleColumns} dataSource={dataSource} />
+```
+
+### 服务端数据
+
+当数据量较大时，推荐通过服务端处理分页、排序和过滤。利用 `pagination` 的受控模式和 `onChange` 回调发起请求。
+
+```tsx
+const [data, setData] = useState([]);
+const [loading, setLoading] = useState(false);
+
+const loadData = async (page, pageSize, sort, filters) => {
+  setLoading(true);
+  const result = await fetchData({ page, pageSize, sort, filters });
+  setData(result.data);
+  setLoading(false);
+};
+
+<Table
+  columns={columns}
+  dataSource={data}
+  loading={loading}
+  pagination={{ current: page, total: total }}
+  onChange={(pag, sorter) => loadData(pag.current, pag.pageSize, sorter)}
+/>
+```
+
 ## API
 
 ### 属性
@@ -171,6 +366,14 @@ const rowSelection = {
 | align | 对齐方式 | `'left' \| 'center' \| 'right'` | - | - |
 | fixed | 是否固定列 | `'left' \| 'right' \| boolean` | - | - |
 | sorter | 排序函数 | `((a, b) => number) \| boolean` | - | - |
+| multiple | 多列排序优先级 | `number` | - | - |
+| sortOrder | 受控排序方向 | `'ascend' \| 'descend' \| null` | - | - |
+| defaultSortOrder | 默认排序方向 | `'ascend' \| 'descend'` | - | - |
+| filters | 过滤选项 | `{ text: ReactNode; value: string \| number \| boolean }[]` | - | - |
+| onFilter | 过滤回调 | `(value, record) => boolean` | - | - |
+| filteredValue | 受控过滤值 | `(string \| number \| boolean)[]` | - | - |
+| filterMultiple | 是否多选过滤 | `boolean` | `true` | - |
+| filterSearch | 过滤搜索 | `boolean` | `false` | - |
 | render | 自定义渲染 | `(text, record, index) => ReactNode` | - | - |
 | ellipsis | 是否省略溢出内容 | `boolean` | `false` | - |
 | children | 子列（分组表头） | `ColumnType[]` | - | - |

@@ -6,6 +6,7 @@ import Radio from '../Radio';
 import Empty from '../Empty';
 import Loading from '../Loading';
 import Pagination from '../Pagination';
+import Icon from '../Icon';
 import './style.less';
 
 // ==================== Types ====================
@@ -37,10 +38,22 @@ export interface ColumnType<RecordType = any> {
   render?: (text: any, record: RecordType, index: number) => React.ReactNode;
   /** 排序函数 */
   sorter?: ((a: RecordType, b: RecordType) => number) | boolean;
+  /** 多列排序优先级（数字越大优先级越高） */
+  multiple?: number;
   /** 排序方向（受控） */
   sortOrder?: SortOrder;
   /** 默认排序方向 */
   defaultSortOrder?: SortOrder;
+  /** 过滤选项 */
+  filters?: FilterItemType[];
+  /** 过滤回调 */
+  onFilter?: (value: string | number | boolean, record: RecordType) => boolean;
+  /** 受控过滤值 */
+  filteredValue?: (string | number | boolean)[];
+  /** 是否多选过滤 */
+  filterMultiple?: boolean;
+  /** 过滤搜索 */
+  filterSearch?: boolean;
   /** 列自定义类名 */
   className?: string;
   /** 列自定义样式 */
@@ -51,6 +64,24 @@ export interface ColumnType<RecordType = any> {
   ellipsis?: boolean;
   /** 子列（分组表头） */
   children?: ColumnType<RecordType>[];
+}
+
+/** 过滤选项 */
+export interface FilterItemType {
+  /** 显示文本 */
+  text: React.ReactNode;
+  /** 过滤值 */
+  value: string | number | boolean;
+}
+
+/** 排序状态项（多列排序） */
+export interface SortState {
+  /** 排序字段 */
+  field: string;
+  /** 排序方向 */
+  order: SortOrder;
+  /** 优先级 */
+  multiple?: number;
 }
 
 /** 分页配置 */
@@ -134,7 +165,7 @@ export interface TableProps<RecordType = any> extends Omit<React.HTMLAttributes<
   /** 行点击事件 */
   onRow?: (record: RecordType, index: number) => React.HTMLAttributes<HTMLTableRowElement>;
   /** 排序变化回调 */
-  onChange?: (pagination: PaginationConfig, sorter: { field: string; order: SortOrder }) => void;
+  onChange?: (pagination: PaginationConfig, sorter: SortState | SortState[]) => void;
   /** 表格 summary */
   summary?: (data: RecordType[]) => React.ReactNode;
 }
@@ -158,6 +189,80 @@ function getCellValue(record: any, dataIndex?: string): any {
   }
   return value;
 }
+
+// ==================== FilterDropdown Sub-Component ====================
+
+interface FilterDropdownProps {
+  filters: FilterItemType[];
+  selectedValues: (string | number | boolean)[];
+  multiple: boolean;
+  search: boolean;
+  onConfirm: (values: (string | number | boolean)[]) => void;
+  onReset: () => void;
+}
+
+const FilterDropdown: React.FC<FilterDropdownProps> = ({
+  filters,
+  selectedValues,
+  multiple,
+  search,
+  onConfirm,
+  onReset,
+}) => {
+  const [localValues, setLocalValues] = useState(selectedValues);
+  const [searchText, setSearchText] = useState('');
+
+  const filteredFilters = search && searchText
+    ? filters.filter(f => String(f.text).toLowerCase().includes(searchText.toLowerCase()))
+    : filters;
+
+  const handleToggle = (value: string | number | boolean) => {
+    if (multiple) {
+      setLocalValues(prev =>
+        prev.includes(value) ? prev.filter(v => v !== value) : [...prev, value]
+      );
+    } else {
+      setLocalValues(prev => prev.includes(value) ? [] : [value]);
+    }
+  };
+
+  return (
+    <div className="soui-table-filter-dropdown-inner">
+      {search && (
+        <div className="soui-table-filter-search">
+          <input
+            type="text"
+            placeholder="搜索"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+        </div>
+      )}
+      <div className="soui-table-filter-list">
+        {filteredFilters.map(filter => (
+          <label key={String(filter.value)} className="soui-table-filter-item">
+            <Checkbox
+              checked={localValues.includes(filter.value)}
+              onChange={() => handleToggle(filter.value)}
+            />
+            <span className="soui-table-filter-item-text">{filter.text}</span>
+          </label>
+        ))}
+      </div>
+      <div className="soui-table-filter-actions">
+        <button className="soui-table-filter-btn soui-table-filter-btn-reset" onClick={onReset}>
+          重置
+        </button>
+        <button
+          className="soui-table-filter-btn soui-table-filter-btn-confirm"
+          onClick={() => onConfirm(localValues)}
+        >
+          确定
+        </button>
+      </div>
+    </div>
+  );
+};
 
 // ==================== Component ====================
 
@@ -188,6 +293,21 @@ const Table = <RecordType extends any = any>({
   const context = useContext(ConfigContext);
   const componentTheme = (context?.components?.Table || {}) as Record<string, any>;
 
+  // Compute flat columns (needed before state init)
+  const flattenColumns = (cols: ColumnType<RecordType>[]): ColumnType<RecordType>[] => {
+    return cols.reduce((acc, col) => {
+      if (col.children?.length) {
+        acc.push(...flattenColumns(col.children));
+      } else {
+        acc.push(col);
+      }
+      return acc;
+    }, [] as ColumnType<RecordType>[]);
+  };
+
+  const flatColumnsRef = React.useRef(flattenColumns(columns));
+  flatColumnsRef.current = flattenColumns(columns);
+
   // CSS Variables for theme
   const cssVars: React.CSSProperties & Record<string, any> = {};
   if (componentTheme.borderRadius !== undefined) {
@@ -211,11 +331,36 @@ const Table = <RecordType extends any = any>({
 
   const componentStyle = { ...cssVars, ...style } as React.CSSProperties;
 
-  // Sort state
-  const [sortState, setSortState] = useState<{ field: string; order: SortOrder }>({
-    field: '',
-    order: null,
+  // Sort state (multi-column)
+  const [sortStates, setSortStates] = useState<SortState[]>(() => {
+    const initial: SortState[] = [];
+    flatColumnsRef.current.forEach(col => {
+      if (col.sortOrder) {
+        initial.push({
+          field: col.dataIndex || col.key || '',
+          order: col.sortOrder,
+          multiple: col.multiple,
+        });
+      }
+    });
+    return initial.sort((a, b) => (b.multiple ?? 0) - (a.multiple ?? 0));
   });
+
+  // Filter state
+  const [filterStates, setFilterStates] = useState<Record<string, (string | number | boolean)[]>>(() => {
+    const initial: Record<string, (string | number | boolean)[]> = {};
+    flatColumnsRef.current.forEach(col => {
+      if (col.filteredValue !== undefined) {
+        const field = col.dataIndex || col.key || '';
+        initial[field] = col.filteredValue;
+      }
+    });
+    return initial;
+  });
+
+  // Active filter dropdown
+  const [activeFilterField, setActiveFilterField] = useState<string | null>(null);
+  const filterRef = React.useRef<HTMLDivElement>(null);
 
   const paginationConfig = pagination === false ? null : pagination;
 
@@ -254,24 +399,46 @@ const Table = <RecordType extends any = any>({
     }
   }, [paginationConfig?.current]);
 
-  // Handle sort
+  // Handle sort (multi-column)
   const handleSort = useCallback((column: ColumnType<RecordType>) => {
     if (!column.sorter) return;
 
     const field = column.dataIndex || column.key || '';
+    const existing = sortStates.find(s => s.field === field);
     let newOrder: SortOrder;
 
-    if (sortState.field === field) {
-      if (sortState.order === 'ascend') newOrder = 'descend';
-      else if (sortState.order === 'descend') newOrder = null;
+    if (existing) {
+      if (existing.order === 'ascend') newOrder = 'descend';
+      else if (existing.order === 'descend') newOrder = null;
       else newOrder = 'ascend';
     } else {
       newOrder = 'ascend';
     }
 
-    setSortState({ field, order: newOrder });
-    onChange?.(paginationState, { field, order: newOrder });
-  }, [sortState, paginationState, onChange]);
+    let newStates: SortState[];
+    if (column.multiple !== undefined) {
+      // Multi-sort mode: maintain all active sorts
+      if (newOrder === null) {
+        newStates = sortStates.filter(s => s.field !== field);
+      } else if (existing) {
+        newStates = sortStates.map(s => s.field === field ? { ...s, order: newOrder } : s);
+      } else {
+        newStates = [...sortStates, { field, order: newOrder, multiple: column.multiple }];
+      }
+      newStates.sort((a, b) => (b.multiple ?? 0) - (a.multiple ?? 0));
+    } else {
+      // Single sort mode: replace all
+      newOrder = newOrder === null ? null : (existing ? newOrder : 'ascend');
+      if (newOrder === null) {
+        newStates = [];
+      } else {
+        newStates = [{ field, order: newOrder, multiple: column.multiple }];
+      }
+    }
+
+    setSortStates(newStates);
+    onChange?.(paginationState, newStates.length === 1 ? newStates[0] : newStates);
+  }, [sortStates, paginationState, onChange]);
 
   // Handle row selection
   const handleSelectRow = useCallback((key: string | number, checked: boolean) => {
@@ -323,24 +490,74 @@ const Table = <RecordType extends any = any>({
     paginationConfig?.onChange?.(page, paginationState.pageSize);
   }, [paginationConfig, paginationState.pageSize]);
 
-  // Process data: sort + paginate
+  // Handle filter change
+  const handleFilterChange = useCallback((field: string, values: (string | number | boolean)[]) => {
+    setFilterStates(prev => {
+      const next = { ...prev };
+      if (values.length === 0) {
+        delete next[field];
+      } else {
+        next[field] = values;
+      }
+      return next;
+    });
+  }, []);
+
+  // Handle filter reset
+  const handleFilterReset = useCallback((field: string) => {
+    setFilterStates(prev => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  }, []);
+
+  // Close filter dropdown on outside click
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setActiveFilterField(null);
+      }
+    };
+    if (activeFilterField) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [activeFilterField]);
+
+  // Process data: filter + sort + paginate
   const processedData = useMemo(() => {
     let data = [...dataSource];
 
-    // Apply sorting
-    if (sortState.order && sortState.field) {
-      const sortColumn = columns.find(col => col.dataIndex === sortState.field || col.key === sortState.field);
-      if (sortColumn && typeof sortColumn.sorter === 'function') {
-        const sorterFn = sortColumn.sorter as (a: RecordType, b: RecordType) => number;
-        data.sort((a, b) => {
-          const result = sorterFn(a, b);
-          return sortState.order === 'descend' ? -result : result;
-        });
+    // Apply filters
+    flatColumnsRef.current.forEach(col => {
+      const field = col.dataIndex || col.key || '';
+      const activeValues = col.filteredValue !== undefined ? col.filteredValue : filterStates[field];
+      if (activeValues && activeValues.length > 0 && col.onFilter) {
+        data = data.filter(record =>
+          activeValues.some(val => col.onFilter!(val, record))
+        );
       }
+    });
+
+    // Apply multi-column sorting
+    if (sortStates.length > 0) {
+      data.sort((a, b) => {
+        for (const state of sortStates) {
+          if (!state.order) continue;
+          const col = flatColumnsRef.current.find(c => (c.dataIndex || c.key || '') === state.field);
+          if (col && typeof col.sorter === 'function') {
+            const result = (col.sorter as (a: RecordType, b: RecordType) => number)(a, b);
+            const finalResult = state.order === 'descend' ? -result : result;
+            if (finalResult !== 0) return finalResult;
+          }
+        }
+        return 0;
+      });
     }
 
     return data;
-  }, [dataSource, sortState, columns]);
+  }, [dataSource, sortStates, filterStates]);
 
   // Paginated data
   const paginatedData = useMemo(() => {
@@ -370,17 +587,7 @@ const Table = <RecordType extends any = any>({
 
   // Flatten columns (handle children for grouped headers)
   const flatColumns = useMemo(() => {
-    const flatten = (cols: ColumnType<RecordType>[]): ColumnType<RecordType>[] => {
-      return cols.reduce((acc, col) => {
-        if (col.children?.length) {
-          acc.push(...flatten(col.children));
-        } else {
-          acc.push(col);
-        }
-        return acc;
-      }, [] as ColumnType<RecordType>[]);
-    };
-    return flatten(columns);
+    return flattenColumns(columns);
   }, [columns]);
 
   // Calculate total columns count (including selection + expand)
@@ -388,27 +595,79 @@ const Table = <RecordType extends any = any>({
     + (rowSelection ? 1 : 0)
     + (expandable ? 1 : 0);
 
-  // Render sort icon
+  // Render sort icon (multi-column aware)
   const renderSortIcon = (column: ColumnType<RecordType>) => {
     if (!column.sorter) return null;
     const field = column.dataIndex || column.key || '';
-    const isActive = sortState.field === field;
+    const sortItem = sortStates.find(s => s.field === field);
+    const isActive = !!sortItem && !!sortItem.order;
+    const isMulti = sortStates.length > 1;
+
     return (
       <span className="soui-table-sorter">
         <span
           className={classNames('soui-table-sorter-icon', 'soui-table-sorter-ascend', {
-            'soui-table-sorter-active': isActive && sortState.order === 'ascend',
+            'soui-table-sorter-active': isActive && sortItem?.order === 'ascend',
           })}
         >
           ▲
         </span>
         <span
           className={classNames('soui-table-sorter-icon', 'soui-table-sorter-descend', {
-            'soui-table-sorter-active': isActive && sortState.order === 'descend',
+            'soui-table-sorter-active': isActive && sortItem?.order === 'descend',
           })}
         >
           ▼
         </span>
+        {isMulti && isActive && column.multiple !== undefined && (
+          <span className="soui-table-sorter-order">{column.multiple}</span>
+        )}
+      </span>
+    );
+  };
+
+  // Render filter dropdown
+  const renderFilterDropdown = (column: ColumnType<RecordType>) => {
+    if (!column.filters?.length) return null;
+    const field = column.dataIndex || column.key || '';
+    const activeValues = column.filteredValue !== undefined ? column.filteredValue : (filterStates[field] || []);
+    const isActive = activeValues.length > 0;
+    const isMulti = column.filterMultiple !== false;
+    const isOpen = activeFilterField === field;
+
+    return (
+      <span className="soui-table-filter" ref={isOpen ? filterRef : undefined}>
+        <span
+          className={classNames('soui-table-filter-icon', {
+            'soui-table-filter-active': isActive,
+          })}
+          onClick={(e) => {
+            e.stopPropagation();
+            setActiveFilterField(isOpen ? null : field);
+          }}
+          role="button"
+          aria-label="过滤"
+        >
+          <Icon name="Filter" size={12} />
+        </span>
+        {isOpen && (
+          <div className="soui-table-filter-dropdown">
+            <FilterDropdown
+              filters={column.filters}
+              selectedValues={activeValues}
+              multiple={isMulti}
+              search={!!column.filterSearch}
+              onConfirm={(values) => {
+                handleFilterChange(field, values);
+                setActiveFilterField(null);
+              }}
+              onReset={() => {
+                handleFilterReset(field);
+                setActiveFilterField(null);
+              }}
+            />
+          </div>
+        )}
       </span>
     );
   };
@@ -422,7 +681,9 @@ const Table = <RecordType extends any = any>({
         const hasChildren = column.children && column.children.length > 0;
         const colSpan = hasChildren ? 1 : 1;
         const headerCellProps = column.onHeaderCell?.(column) || {};
-        const isSorted = sortState.field === (column.dataIndex || String(column.key));
+        const field = column.dataIndex || column.key || '';
+        const isSorted = sortStates.some(s => s.field === field && s.order !== null);
+        const hasFilter = !!column.filters?.length;
 
         return (
           <th
@@ -437,6 +698,8 @@ const Table = <RecordType extends any = any>({
                 'soui-table-th-fixed-left': column.fixed === 'left' || column.fixed === true,
                 'soui-table-th-fixed-right': column.fixed === 'right',
                 'soui-table-th-sorted': isSorted,
+                'soui-table-th-filtered': hasFilter && (filterStates[field]?.length > 0 || (column.filteredValue && column.filteredValue.length > 0)),
+                'soui-table-th-sticky': !!scroll?.y,
               }
             )}
             style={{
@@ -451,6 +714,7 @@ const Table = <RecordType extends any = any>({
             <span className="soui-table-th-content">
               {column.title}
               {renderSortIcon(column)}
+              {renderFilterDropdown(column)}
             </span>
           </th>
         );

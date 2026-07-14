@@ -21,7 +21,7 @@ export default () => (
   <Table
     columns={columns}
     dataSource={dataSource}
-    scroll={{ x: 800 }}
+    scroll={{ x: 800, y: 200 }}
     bordered
   />
 );

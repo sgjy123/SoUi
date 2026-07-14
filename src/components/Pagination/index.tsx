@@ -1,6 +1,7 @@
 import React, { useState, useContext, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import ConfigContext from '../ConfigProvider/context';
+import { addOpacityToColor } from '@/utils';
 import Icon from '../Icon';
 import './style.less';
 
@@ -119,6 +120,7 @@ const Pagination: React.FC<PaginationProps> = ({
   }
   if (componentTheme.colorPrimary !== undefined) {
     cssVars['--soui-pagination-color-primary'] = componentTheme.colorPrimary;
+    cssVars['--soui-pagination-primary-color-20'] = addOpacityToColor(componentTheme.colorPrimary, 0.1);
   }
   if (componentTheme.borderColor !== undefined) {
     cssVars['--soui-pagination-border-color'] = componentTheme.borderColor;

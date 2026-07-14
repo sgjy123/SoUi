@@ -497,6 +497,8 @@ export const docsConfig: MenuGroup[] = [
         items: [
           { key: 'table-basic', label: 'Table 基础用法', componentPath: 'Table', exampleName: 'Basic', description: '最基本的表格用法，展示列和数据。' },
           { key: 'table-sorter', label: 'Table 排序', componentPath: 'Table', exampleName: 'Sorter', description: '支持列排序功能。' },
+          { key: 'table-multi-sorter', label: 'Table 多列排序', componentPath: 'Table', exampleName: 'MultiSorter', description: '支持多列同时排序，按优先级排列。' },
+          { key: 'table-filter', label: 'Table 列过滤', componentPath: 'Table', exampleName: 'Filter', description: '支持列过滤功能，可搜索过滤项。' },
           { key: 'table-selection', label: 'Table 行选择', componentPath: 'Table', exampleName: 'Selection', description: '支持选择行数据。' },
           { key: 'table-bordered', label: 'Table 边框', componentPath: 'Table', exampleName: 'Bordered', description: '带边框的表格。' },
           { key: 'table-size', label: 'Table 尺寸', componentPath: 'Table', exampleName: 'Size', description: '小、中、大三种尺寸。' },
@@ -504,6 +506,14 @@ export const docsConfig: MenuGroup[] = [
           { key: 'table-pagination', label: 'Table 分页', componentPath: 'Table', exampleName: 'Pagination', description: '带分页的表格。' },
           { key: 'table-loading', label: 'Table 加载中', componentPath: 'Table', exampleName: 'Loading', description: '加载状态展示。' },
           { key: 'table-fixed-header', label: 'Table 固定表头', componentPath: 'Table', exampleName: 'FixedHeader', description: '固定表头，支持横向滚动。' },
+          { key: 'table-fixed-column', label: 'Table 固定列', componentPath: 'Table', exampleName: 'FixedColumn', description: '左右固定列，中间内容横向滚动。' },
+          { key: 'table-custom-render', label: 'Table 自定义渲染', componentPath: 'Table', exampleName: 'CustomRender', description: '自定义单元格渲染：头像、标签、进度条、操作按钮。' },
+          { key: 'table-col-span', label: 'Table 合并单元格', componentPath: 'Table', exampleName: 'ColSpan', description: '通过 onCell 实现行合并和列合并。' },
+          { key: 'table-summary', label: 'Table 总结栏', componentPath: 'Table', exampleName: 'Summary', description: '表格底部总结栏，展示合计数据。' },
+          { key: 'table-striped', label: 'Table 斑马纹与空状态', componentPath: 'Table', exampleName: 'Striped', description: '斑马纹表格和自定义空状态展示。' },
+          { key: 'table-selection-action', label: 'Table 批量操作', componentPath: 'Table', exampleName: 'SelectionWithAction', description: '行选择配合批量导出、批量删除等操作。' },
+          { key: 'table-server-data', label: 'Table 服务端数据', componentPath: 'Table', exampleName: 'ServerData', description: '模拟服务端分页、排序、过滤的综合案例。' },
+          { key: 'table-dynamic', label: 'Table 动态列', componentPath: 'Table', exampleName: 'Dynamic', description: '动态控制表格列的显示和隐藏。' },
         ],
       },
       {

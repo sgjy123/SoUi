@@ -113,8 +113,14 @@
 
     &-active {
       border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
-      color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+      background: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+      color: #fff;
       font-weight: 600;
+
+      &:hover {
+        background: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+        opacity: 0.85;
+      }
     }
   }
 
