@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import ConfigContext from '../ConfigProvider/context';
 import { addOpacityToColor } from '@/utils';
 import Icon from '../Icon';
+import Select from '../Select';
+import InputNumber from '../InputNumber';
 import './style.less';
 
 // ==================== Types ====================
@@ -106,6 +108,7 @@ const Pagination: React.FC<PaginationProps> = ({
 }) => {
   const context = useContext(ConfigContext);
   const componentTheme = (context?.components?.Pagination || {}) as Record<string, any>;
+  const globalPrimary = (context?.theme as any)?.primaryColor;
 
   // CSS Variables for theme
   const cssVars: React.CSSProperties & Record<string, any> = {};
@@ -118,9 +121,11 @@ const Pagination: React.FC<PaginationProps> = ({
   if (componentTheme.itemBg !== undefined) {
     cssVars['--soui-pagination-item-bg'] = componentTheme.itemBg;
   }
-  if (componentTheme.colorPrimary !== undefined) {
-    cssVars['--soui-pagination-color-primary'] = componentTheme.colorPrimary;
-    cssVars['--soui-pagination-primary-color-20'] = addOpacityToColor(componentTheme.colorPrimary, 0.1);
+  // 优先用组件级 colorPrimary，否则用全局主题 primaryColor
+  const primaryColor = componentTheme.colorPrimary || globalPrimary;
+  if (primaryColor) {
+    cssVars['--soui-pagination-color-primary'] = primaryColor;
+    cssVars['--soui-pagination-primary-color-20'] = addOpacityToColor(primaryColor, 0.1);
   }
   if (componentTheme.borderColor !== undefined) {
     cssVars['--soui-pagination-border-color'] = componentTheme.borderColor;
@@ -209,21 +214,20 @@ const Pagination: React.FC<PaginationProps> = ({
           <Icon name="Left" size={size === 'small' ? 12 : 14} />
         </li>
         <li className="soui-pagination-simple-pager">
-          <input
-            type="text"
+          <InputNumber
             value={current}
+            min={1}
+            max={totalPages}
+            size={size === 'small' ? 'small' : 'middle'}
             disabled={disabled}
-            onChange={(e) => {
-              const v = parseInt(e.target.value, 10);
+            controls={false}
+            onChange={(v) => { if (v !== null) goTo(v); }}
+            onPressEnter={(e) => {
+              const v = parseInt((e.target as HTMLInputElement).value, 10);
               if (!isNaN(v)) goTo(v);
             }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                const v = parseInt((e.target as HTMLInputElement).value, 10);
-                if (!isNaN(v)) goTo(v);
-              }
-            }}
             aria-label="当前页码"
+            style={{ width: 50 }}
           />
           <span className="soui-pagination-slash">/</span>
           <span>{totalPages}</span>
@@ -252,17 +256,17 @@ const Pagination: React.FC<PaginationProps> = ({
       {/* Page Size Changer */}
       {showSizeChanger && (
         <li className="soui-pagination-options">
-          <select
-            value={pageSize}
+          <Select
+            value={String(pageSize)}
             disabled={disabled}
-            onChange={(e) => handleSizeChange(Number(e.target.value))}
-            className="soui-pagination-size-selector"
-            aria-label="每页条数"
-          >
-            {pageSizeOptions.map((opt) => (
-              <option key={opt} value={opt}>{opt} 条/页</option>
-            ))}
-          </select>
+            size={size === 'small' ? 'small' : 'middle'}
+            onChange={(v) => handleSizeChange(Number(v))}
+            options={pageSizeOptions.map((opt) => ({
+              label: `${opt} 条/页`,
+              value: String(opt),
+            }))}
+            style={{ width: 110 }}
+          />
         </li>
       )}
 
@@ -325,13 +329,22 @@ const Pagination: React.FC<PaginationProps> = ({
       {showQuickJumper && (
         <li className="soui-pagination-jumper">
           <span>跳至</span>
-          <input
-            type="text"
-            value={jumperValue}
+          <InputNumber
+            value={jumperValue === '' ? null : Number(jumperValue)}
+            min={1}
+            max={totalPages}
+            size={size === 'small' ? 'small' : 'middle'}
             disabled={disabled}
-            onChange={(e) => setJumperValue(e.target.value.replace(/[^0-9]/g, ''))}
-            onKeyDown={handleJumperKeyDown}
-            aria-label="快速跳转页码"
+            controls={false}
+            onChange={(v) => setJumperValue(v === null ? '' : String(v))}
+            onPressEnter={() => {
+              const page = parseInt(jumperValue, 10);
+              if (!isNaN(page)) {
+                goTo(page);
+              }
+              setJumperValue('');
+            }}
+            style={{ width: 50 }}
           />
           <span>页</span>
         </li>

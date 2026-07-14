@@ -81,6 +81,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const uploadTheme = mergedTheme.components?.Upload || {};
     // 获取 Form 组件级配置
     const formTheme = mergedTheme.components?.Form || {};
+    // 获取 Pagination 组件级配置
+    const paginationTheme = mergedTheme.components?.Pagination || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -697,6 +699,25 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-form-label-width-component': formTheme.labelWidth ? `${formTheme.labelWidth}px` : undefined,
       '--soui-form-label-color-component': formTheme.labelColor,
       '--soui-form-text-color-secondary-component': formTheme.textSecondary,
+
+      // ==================== Pagination 组件配置 ====================
+      // 第2层: Pagination 配置点 (引用设计令牌)
+      '--soui-pagination-font-size': paginationTheme.fontSize ? `${paginationTheme.fontSize}px` : undefined,
+      '--soui-pagination-border-radius': paginationTheme.borderRadius ? `${paginationTheme.borderRadius}px` : undefined,
+      '--soui-pagination-color-primary': paginationTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-pagination-color-primary-hover': paginationTheme.colorPrimaryHover || mergedTheme.primaryHoverColor,
+      '--soui-pagination-border-color': paginationTheme.borderColor || mergedTheme.borderColorBase,
+      '--soui-pagination-item-bg': paginationTheme.itemBg,
+      '--soui-pagination-primary-color-20': addOpacityToColor(paginationTheme.colorPrimary || mergedTheme.primaryColor || '#1677ff', 0.1),
+
+      // 第3层: Pagination 组件级覆盖 (优先级最高)
+      '--soui-pagination-font-size-component': paginationTheme.fontSize ? `${paginationTheme.fontSize}px` : undefined,
+      '--soui-pagination-border-radius-component': paginationTheme.borderRadius ? `${paginationTheme.borderRadius}px` : undefined,
+      '--soui-pagination-color-primary-component': paginationTheme.colorPrimary,
+      '--soui-pagination-color-primary-hover-component': paginationTheme.colorPrimaryHover,
+      '--soui-pagination-border-color-component': paginationTheme.borderColor,
+      '--soui-pagination-item-bg-component': paginationTheme.itemBg,
+      '--soui-pagination-primary-color-20-component': paginationTheme.colorPrimary ? addOpacityToColor(paginationTheme.colorPrimary, 0.1) : undefined,
     } as any;
   }, [mergedTheme]);
 

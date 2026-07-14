@@ -945,6 +945,8 @@ export interface ComponentThemeConfig {
     itemBg?: string;
     /** 主色 */
     colorPrimary?: string;
+    /** 主色 hover */
+    colorPrimaryHover?: string;
     /** 边框颜色 */
     borderColor?: string;
   };

@@ -610,14 +610,14 @@ const Table = <RecordType extends any = any>({
             'soui-table-sorter-active': isActive && sortItem?.order === 'ascend',
           })}
         >
-          ▲
+          <Icon name="Up" size={14} />
         </span>
         <span
           className={classNames('soui-table-sorter-icon', 'soui-table-sorter-descend', {
             'soui-table-sorter-active': isActive && sortItem?.order === 'descend',
           })}
         >
-          ▼
+          <Icon name="Down" size={14} />
         </span>
         {isMulti && isActive && column.multiple !== undefined && (
           <span className="soui-table-sorter-order">{column.multiple}</span>
@@ -651,7 +651,7 @@ const Table = <RecordType extends any = any>({
           <Icon name="Filter" size={12} />
         </span>
         {isOpen && (
-          <div className="soui-table-filter-dropdown">
+          <div className="soui-table-filter-dropdown" onClick={(e) => e.stopPropagation()}>
             <FilterDropdown
               filters={column.filters}
               selectedValues={activeValues}
@@ -708,7 +708,7 @@ const Table = <RecordType extends any = any>({
             }}
             rowSpan={hasChildren ? 1 : undefined}
             colSpan={colSpan}
-            onClick={() => handleSort(column)}
+            onClick={column.sorter ? () => handleSort(column) : undefined}
             {...headerCellProps}
           >
             <span className="soui-table-th-content">
@@ -793,7 +793,7 @@ const Table = <RecordType extends any = any>({
                         role="button"
                         aria-label={isExpanded ? '收起' : '展开'}
                       >
-                        {isExpanded ? '−' : '+'}
+                        {isExpanded ? <Icon name="Minus" size={12} /> : <Icon name="Plus" size={12} />}
                       </span>
                     )}
                   </td>
