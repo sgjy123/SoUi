@@ -24,6 +24,7 @@ import Drawer from '../../src/components/Drawer';
 import Result from '../../src/components/Result';
 import Watermark from '../../src/components/Watermark';
 import Table from '../../src/components/Table';
+import Pagination from '../../src/components/Pagination';
 import Input from '../../src/components/Input';
 import Select from '../../src/components/Select';
 import Radio from '../../src/components/Radio';
@@ -102,6 +103,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Result,
     Watermark,
     Table,
+    Pagination,
     Input,
     TextArea: Input.TextArea,
     Select,

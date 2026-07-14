@@ -1,0 +1,256 @@
+@import '../../styles/variables.less';
+
+// ==================== Pagination ====================
+
+.soui-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--soui-pagination-font-size, var(--soui-font-size, @font-size-base));
+  line-height: 1.5;
+
+  // ==================== Common Item ====================
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+  }
+
+  // ==================== Total ====================
+
+  .soui-pagination-total {
+    cursor: default;
+    color: var(--soui-text-color, @text-color);
+    font-size: var(--soui-pagination-font-size, var(--soui-font-size, @font-size-base));
+    white-space: nowrap;
+    margin-right: 4px;
+  }
+
+  // ==================== Size Selector ====================
+
+  .soui-pagination-options {
+    cursor: default;
+
+    .soui-pagination-size-selector {
+      height: @control-height-base;
+      padding: 0 @padding-sm;
+      border: 1px solid var(--soui-pagination-border-color, var(--soui-border-color-base, @border-color));
+      border-radius: var(--soui-pagination-border-radius, var(--soui-border-radius, @border-radius-base));
+      background: var(--soui-pagination-item-bg, @bg-color-base);
+      color: var(--soui-text-color, @text-color);
+      font-size: var(--soui-pagination-font-size, var(--soui-font-size, @font-size-base));
+      cursor: pointer;
+      outline: none;
+      transition: border-color var(--soui-transition-duration, @transition-duration);
+
+      &:hover {
+        border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+      }
+
+      &:focus {
+        border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+        box-shadow: 0 0 0 2px var(--soui-pagination-primary-color-20, rgba(22, 119, 255, 0.1));
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  // ==================== Prev / Next / Arrow ====================
+
+  .soui-pagination-prev,
+  .soui-pagination-next {
+    min-width: @control-height-base;
+    height: @control-height-base;
+    border: 1px solid var(--soui-pagination-border-color, var(--soui-border-color-base, @border-color));
+    border-radius: var(--soui-pagination-border-radius, var(--soui-border-radius, @border-radius-base));
+    background: var(--soui-pagination-item-bg, @bg-color-base);
+    color: var(--soui-text-color, @text-color);
+
+    &:hover:not(.soui-pagination-disabled) {
+      border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+      color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+    }
+
+    &.soui-pagination-disabled {
+      cursor: not-allowed;
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+      border-color: var(--soui-pagination-border-color, var(--soui-border-color-base, @border-color));
+    }
+  }
+
+  .soui-pagination-arrow {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  // ==================== Page Items ====================
+
+  .soui-pagination-item {
+    min-width: @control-height-base;
+    height: @control-height-base;
+    padding: 0 @padding-xs;
+    border: 1px solid var(--soui-pagination-border-color, var(--soui-border-color-base, @border-color));
+    border-radius: var(--soui-pagination-border-radius, var(--soui-border-radius, @border-radius-base));
+    background: var(--soui-pagination-item-bg, @bg-color-base);
+    color: var(--soui-text-color, @text-color);
+    font-size: var(--soui-pagination-font-size, var(--soui-font-size, @font-size-base));
+
+    &:hover:not(.soui-pagination-item-active) {
+      border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+      color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+    }
+
+    &-active {
+      border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+      color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+      font-weight: 600;
+    }
+  }
+
+  // ==================== Ellipsis / Jump ====================
+
+  .soui-pagination-jump {
+    min-width: @control-height-base;
+    height: @control-height-base;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    letter-spacing: 2px;
+
+    &:hover {
+      color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+    }
+  }
+
+  .soui-pagination-ellipsis {
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  // ==================== Quick Jumper ====================
+
+  .soui-pagination-jumper {
+    cursor: default;
+    gap: 4px;
+    white-space: nowrap;
+    color: var(--soui-text-color, @text-color);
+
+    input {
+      width: 50px;
+      height: @control-height-base;
+      padding: 0 @padding-xs;
+      border: 1px solid var(--soui-pagination-border-color, var(--soui-border-color-base, @border-color));
+      border-radius: var(--soui-pagination-border-radius, var(--soui-border-radius, @border-radius-base));
+      text-align: center;
+      font-size: var(--soui-pagination-font-size, var(--soui-font-size, @font-size-base));
+      color: var(--soui-text-color, @text-color);
+      outline: none;
+      transition: border-color var(--soui-transition-duration, @transition-duration);
+
+      &:hover {
+        border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+      }
+
+      &:focus {
+        border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+        box-shadow: 0 0 0 2px var(--soui-pagination-primary-color-20, rgba(22, 119, 255, 0.1));
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+  }
+
+  // ==================== Small Size ====================
+
+  &.soui-pagination-small {
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+
+    .soui-pagination-prev,
+    .soui-pagination-next,
+    .soui-pagination-item,
+    .soui-pagination-jump {
+      min-width: @control-height-sm;
+      height: @control-height-sm;
+    }
+
+    .soui-pagination-arrow {
+      font-size: 14px;
+    }
+
+    .soui-pagination-options .soui-pagination-size-selector {
+      height: @control-height-sm;
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+    }
+
+    .soui-pagination-jumper input {
+      width: 40px;
+      height: @control-height-sm;
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+    }
+  }
+
+  // ==================== Simple Mode ====================
+
+  &.soui-pagination-simple {
+    .soui-pagination-simple-pager {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: default;
+      color: var(--soui-text-color, @text-color);
+
+      input {
+        width: 40px;
+        height: @control-height-base;
+        padding: 0 @padding-xs;
+        border: 1px solid var(--soui-pagination-border-color, var(--soui-border-color-base, @border-color));
+        border-radius: var(--soui-pagination-border-radius, var(--soui-border-radius, @border-radius-base));
+        text-align: center;
+        font-size: var(--soui-pagination-font-size, var(--soui-font-size, @font-size-base));
+        color: var(--soui-text-color, @text-color);
+        outline: none;
+        transition: border-color var(--soui-transition-duration, @transition-duration);
+
+        &:focus {
+          border-color: var(--soui-pagination-color-primary, var(--soui-primary-color, @primary-color));
+          box-shadow: 0 0 0 2px var(--soui-pagination-primary-color-20, rgba(22, 119, 255, 0.1));
+        }
+
+        &:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+      }
+
+      .soui-pagination-slash {
+        color: var(--soui-text-color-secondary, @text-color-secondary);
+      }
+    }
+  }
+
+  // ==================== Disabled ====================
+
+  &.soui-pagination-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+
+    .soui-pagination-item,
+    .soui-pagination-prev,
+    .soui-pagination-next,
+    .soui-pagination-jump {
+      cursor: not-allowed;
+    }
+  }
+}

@@ -1,6 +1,11 @@
 import React, { useContext, useMemo, useState, useCallback } from 'react';
 import classNames from 'classnames';
 import ConfigContext from '../ConfigProvider/context';
+import Checkbox from '../Checkbox';
+import Radio from '../Radio';
+import Empty from '../Empty';
+import Loading from '../Loading';
+import Pagination from '../Pagination';
 import './style.less';
 
 // ==================== Types ====================
@@ -462,10 +467,9 @@ const Table = <RecordType extends any = any>({
           {rowSelection && (
             <th className="soui-table-th soui-table-th-selection" style={{ width: rowSelection.columnWidth || 48 }}>
               {rowSelection.type !== 'radio' && (
-                <input
-                  type="checkbox"
-                  className="soui-table-checkbox"
+                <Checkbox
                   checked={allSelected}
+                  indeterminate={!allSelected && selectedKeys.length > 0}
                   onChange={(e) => handleSelectAll(e.target.checked)}
                   aria-label="全选"
                 />
@@ -488,12 +492,9 @@ const Table = <RecordType extends any = any>({
           <tr className="soui-table-tr soui-table-tr-empty">
             <td colSpan={totalColSpan} className="soui-table-td soui-table-td-empty">
               {loading ? (
-                <div className="soui-table-loading">
-                  <div className="soui-table-loading-spinner" />
-                  <span>加载中...</span>
-                </div>
+                <Loading spinning tip="加载中..." />
               ) : (
-                emptyText || <div className="soui-table-empty">暂无数据</div>
+                emptyText || <Empty description="暂无数据" />
               )}
             </td>
           </tr>
@@ -536,14 +537,21 @@ const Table = <RecordType extends any = any>({
                 {/* Selection cell */}
                 {rowSelection && (
                   <td className="soui-table-td soui-table-td-selection">
-                    <input
-                      type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
-                      className={rowSelection.type === 'radio' ? 'soui-table-radio' : 'soui-table-checkbox'}
-                      checked={isSelected}
-                      onChange={(e) => handleSelectRow(recordKey, e.target.checked)}
-                      disabled={rowSelection.getCheckboxProps?.(record)?.disabled}
-                      aria-label={`选择第 ${rowIndex + 1} 行`}
-                    />
+                    {rowSelection.type === 'radio' ? (
+                      <Radio
+                        checked={isSelected}
+                        onChange={(e) => handleSelectRow(recordKey, e.target.checked)}
+                        disabled={rowSelection.getCheckboxProps?.(record)?.disabled}
+                        aria-label={`选择第 ${rowIndex + 1} 行`}
+                      />
+                    ) : (
+                      <Checkbox
+                        checked={isSelected}
+                        onChange={(e) => handleSelectRow(recordKey, e.target.checked)}
+                        disabled={rowSelection.getCheckboxProps?.(record)?.disabled}
+                        aria-label={`选择第 ${rowIndex + 1} 行`}
+                      />
+                    )}
                   </td>
                 )}
                 {/* Data cells */}
@@ -595,48 +603,15 @@ const Table = <RecordType extends any = any>({
     if (!paginationConfig || paginationConfig.show === false) return null;
     if (totalPages <= 1 && totalRecords <= paginationState.pageSize) return null;
 
-    const pages: number[] = [];
-    const maxVisible = 7;
-    let start = Math.max(1, paginationState.current - Math.floor(maxVisible / 2));
-    const end = Math.min(totalPages, start + maxVisible - 1);
-    start = Math.max(1, end - maxVisible + 1);
-
-    for (let i = start; i <= end; i++) {
-      pages.push(i);
-    }
-
     return (
       <div className="soui-table-pagination">
-        <span className="soui-table-pagination-total">共 {totalRecords} 条</span>
-        <div className="soui-table-pagination-pages">
-          <button
-            className="soui-table-pagination-btn"
-            disabled={paginationState.current <= 1}
-            onClick={() => handlePageChange(paginationState.current - 1)}
-            aria-label="上一页"
-          >
-            ‹
-          </button>
-          {pages.map(page => (
-            <button
-              key={page}
-              className={classNames('soui-table-pagination-btn', {
-                'soui-table-pagination-btn-active': page === paginationState.current,
-              })}
-              onClick={() => handlePageChange(page)}
-            >
-              {page}
-            </button>
-          ))}
-          <button
-            className="soui-table-pagination-btn"
-            disabled={paginationState.current >= totalPages}
-            onClick={() => handlePageChange(paginationState.current + 1)}
-            aria-label="下一页"
-          >
-            ›
-          </button>
-        </div>
+        <Pagination
+          current={paginationState.current}
+          pageSize={paginationState.pageSize}
+          total={totalRecords}
+          onChange={handlePageChange}
+          showTotal={(total) => `共 ${total} 条`}
+        />
       </div>
     );
   };
@@ -656,20 +631,14 @@ const Table = <RecordType extends any = any>({
   );
 
   return (
-    <div className={tableClassName} style={componentStyle} {...rest}>
-      {/* Loading overlay */}
-      {loading && (
-        <div className="soui-table-loading-mask">
-          <div className="soui-table-loading-spinner" />
-        </div>
-      )}
-
-      {/* Table title */}
-      {title && (
-        <div className="soui-table-title">
-          {title(processedData)}
-        </div>
-      )}
+    <Loading spinning={loading} tip="加载中...">
+      <div className={tableClassName} style={componentStyle} {...rest}>
+        {/* Table title */}
+        {title && (
+          <div className="soui-table-title">
+            {title(processedData)}
+          </div>
+        )}
 
       {/* Table wrapper for scroll */}
       <div
@@ -707,6 +676,7 @@ const Table = <RecordType extends any = any>({
       {/* Pagination */}
       {renderPagination()}
     </div>
+    </Loading>
   );
 };
 

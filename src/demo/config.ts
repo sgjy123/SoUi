@@ -507,6 +507,16 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
+        key: 'pagination',
+        label: 'Pagination 分页',
+        icon: 'Page',
+        items: [
+          { key: 'pagination-basic', label: 'Pagination 基础用法', componentPath: 'Pagination', exampleName: 'Basic', description: '最基本的分页组件。' },
+          { key: 'pagination-changer', label: 'Pagination 更多功能', componentPath: 'Pagination', exampleName: 'Changer', description: '切换每页条数、快速跳转、显示总数。' },
+          { key: 'pagination-sizes', label: 'Pagination 尺寸与简洁模式', componentPath: 'Pagination', exampleName: 'Sizes', description: '不同尺寸和简洁模式的分页。' },
+        ],
+      },
+      {
         key: 'empty',
         label: 'Empty 空状态',
         icon: 'InternalData',

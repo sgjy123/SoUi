@@ -119,6 +119,10 @@ export type { ResultProps, ResultStatus } from './components/Result';
 export { default as Table } from './components/Table';
 export type { TableProps, ColumnType, TableSize, SortOrder, AlignType, PaginationConfig, RowSelectionConfig, ExpandableConfig } from './components/Table';
 
+// Pagination Component
+export { default as Pagination } from './components/Pagination';
+export type { PaginationProps, PaginationSize } from './components/Pagination';
+
 // Input Component
 export { default as Input } from './components/Input';
 export type { InputProps, InputSize, InputStatus, TextAreaProps, PasswordProps, SearchProps } from './components/Input';

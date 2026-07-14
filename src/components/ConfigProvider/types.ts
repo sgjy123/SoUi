@@ -935,6 +935,19 @@ export interface ComponentThemeConfig {
     /** 表单项底部间距（像素） */
     itemMarginBottom?: number;
   };
+  /** Pagination 分页器主题配置 */
+  Pagination?: {
+    /** 圆角大小 */
+    borderRadius?: number;
+    /** 字体大小 */
+    fontSize?: number;
+    /** 页码项背景色 */
+    itemBg?: string;
+    /** 主色 */
+    colorPrimary?: string;
+    /** 边框颜色 */
+    borderColor?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 
