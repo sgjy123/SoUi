@@ -387,8 +387,9 @@ const Tree: React.FC<TreeProps> = ({
 
   // ==================== 勾选状态 ====================
   const [initCheckedState] = useState(() => {
-    if (checkStrictly) return { checkedKeys: defaultCheckedKeys || [], halfCheckedKeys: [] as React.Key[] };
-    return computeInitialChecked(defaultCheckedKeys || [], nodeMap, childrenKey);
+    const initialKeys = controlledCheckedKeys !== undefined ? controlledCheckedKeys : (defaultCheckedKeys || []);
+    if (checkStrictly) return { checkedKeys: initialKeys, halfCheckedKeys: [] as React.Key[] };
+    return computeInitialChecked(initialKeys, nodeMap, childrenKey);
   });
   const [innerCheckedKeys, setInnerCheckedKeys] = useState<React.Key[]>(initCheckedState.checkedKeys);
   const [halfCheckedKeysState, setHalfCheckedKeysState] = useState<React.Key[]>(initCheckedState.halfCheckedKeys);
@@ -513,8 +514,8 @@ const Tree: React.FC<TreeProps> = ({
 
       if (controlledCheckedKeys === undefined) {
         setInnerCheckedKeys(result.checkedKeys);
-        setHalfCheckedKeysState(result.halfCheckedKeys);
       }
+      setHalfCheckedKeysState(result.halfCheckedKeys);
       onCheck?.(result.checkedKeys, { checked: newChecked, node, halfCheckedKeys: result.halfCheckedKeys });
     }
   }, [disabled, checkedKeys, checkedSet, halfCheckedKeysState, checkStrictly, controlledCheckedKeys, nodeMap, childrenKey, onCheck]);
