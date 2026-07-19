@@ -274,7 +274,9 @@ export default () => {
 
 ### 文本提示
 
-通过 `tooltip` 属性开启 Tooltip 提示，鼠标悬停在截断的节点标题上时显示完整内容。默认关闭，开启后仅对字符串类型的 title 生效。即使关闭 Tooltip，节点也会通过原生 `title` 属性提供浏览器原生提示。
+通过 `tooltip` 属性开启文本截断与 Tooltip 提示。开启后，所有字符串类型的节点标题将始终以单行显示并以省略号（...）截断溢出部分，鼠标悬停时通过 Tooltip 组件显示完整内容。开启 Tooltip 后原生 `title` 属性会被移除，避免与组件 Tooltip 重复提示。关闭 Tooltip 时，节点仍通过原生 `title` 属性提供浏览器默认提示。
+
+> **性能提示：** 开启 `tooltip` 后，每个字符串节点都会额外渲染一个 Tooltip 组件实例，在节点数量较多（如数百个以上）时会产生一定的性能开销。建议仅在确实需要截断提示的场景下开启，或配合异步加载 / 虚拟滚动控制同时渲染的节点数量。
 
 ```tsx
 import { Tree, Space, Switch } from '@soui/ui';
@@ -585,7 +587,7 @@ export default () => (
 | titleRender | 自定义节点渲染 | `(node: TreeNodeData) => ReactNode` | `-` | - |
 | emptyText | 空状态显示 | `ReactNode` | `'暂无数据'` | - |
 | nodeIndent | 缩进宽度（像素） | `number` | `24` | - |
-| tooltip | 悬停节点时显示 Tooltip 完整标题 | `boolean` | `false` | - |
+| tooltip | 开启后节点标题始终单行截断（省略号），悬停显示 Tooltip 完整内容。会移除原生 title 属性。注意：每个节点额外渲染 Tooltip 实例，大量节点时有性能开销 | `boolean` | `false` | - |
 
 ### TreeNodeData
 
