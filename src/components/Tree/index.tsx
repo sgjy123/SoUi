@@ -660,6 +660,7 @@ const Tree: React.FC<TreeProps> = ({
             {/* 标题 */}
             {(() => {
               const titleStr = typeof node.title === 'string' ? node.title : undefined;
+              const useTooltip = tooltip && titleStr;
               const titleEl = (
                 <span
                   className={classNames('soui-tree-title', {
@@ -667,7 +668,7 @@ const Tree: React.FC<TreeProps> = ({
                     'soui-tree-title-selected': isSelected,
                     'soui-tree-title-disabled': nodeDisabled,
                   })}
-                  title={titleStr}
+                  title={useTooltip ? undefined : titleStr}
                   onClick={(e) => {
                     if (selectable && node.selectable !== false && !nodeDisabled) {
                       handleSelect(node, e);
@@ -677,7 +678,7 @@ const Tree: React.FC<TreeProps> = ({
                   {renderTitle(node)}
                 </span>
               );
-              return tooltip && titleStr ? (
+              return useTooltip ? (
                 <Tooltip title={titleStr} placement="top">
                   {titleEl}
                 </Tooltip>

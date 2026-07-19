@@ -105,6 +105,15 @@
     &:hover {
       background-color: var(--soui-tree-node-hover-bg, rgba(0, 0, 0, 0.04));
     }
+
+    // Tooltip 包裹层：需要参与 flex 收缩，否则 title 截断失效
+    .soui-tooltip-trigger {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+    }
   }
 
   // ==================== Switcher ====================
@@ -173,6 +182,7 @@
                 color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
     &-truncate {
+      display: block;
       flex: 1;
       min-width: 0;
       overflow: hidden;
