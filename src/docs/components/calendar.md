@@ -103,6 +103,46 @@ export default () => (
 );
 ```
 
+### 农历显示
+
+通过 `showLunar` 属性在每个日期下方显示对应的农历信息，包含节气提示。适用于需要展示传统农历的场景。
+
+```tsx
+import { Calendar } from '@soui/ui';
+
+export default () => <Calendar showLunar />;
+```
+
+### 自定义头部
+
+通过 `headerRender` 完全自定义日历头部区域，可以实现前后翻页、快捷跳转等交互。
+
+```tsx
+import { Calendar } from '@soui/ui';
+import type { HeaderRenderConfig } from '@soui/ui';
+import { Button, Space } from '@soui/ui';
+
+export default () => (
+  <Calendar
+    headerRender={({ value, mode, onChange, onModeChange }: HeaderRenderConfig) => (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px' }}>
+        <Space>
+          <Button size="small" onClick={() => onChange(value.subtract(1, 'month'))}>上月</Button>
+          <Button size="small" onClick={() => onChange(value.add(1, 'month'))}>下月</Button>
+          <Button size="small" onClick={() => onChange(value.subtract(1, 'year'))}>去年</Button>
+          <Button size="small" onClick={() => onChange(value.add(1, 'year'))}>明年</Button>
+        </Space>
+        <span style={{ fontWeight: 600 }}>{value.format('YYYY年M月')}</span>
+        <Space>
+          <Button size="small" type={mode === 'month' ? 'primary' : 'default'} onClick={() => onModeChange('month')}>月</Button>
+          <Button size="small" type={mode === 'year' ? 'primary' : 'default'} onClick={() => onModeChange('year')}>年</Button>
+        </Space>
+      </div>
+    )}
+  />
+);
+```
+
 ## API
 
 ### Calendar
@@ -120,7 +160,7 @@ export default () => (
 | cellRender | 自定义单元格内容（追加在日期数字下方） | `(current: Dayjs, info: CellRenderInfo) => ReactNode` | `-` | - |
 | fullCellRender | 自定义完整单元格（替换整个单元格） | `(current: Dayjs, info: CellRenderInfo) => ReactNode` | `-` | - |
 | disabledDate | 禁用日期，返回 true 则不可选 | `(current: Dayjs) => boolean` | `-` | - |
-| locale | 国际化配置 | `CalendarLocale` | 中文 | - |
+| showLunar | 是否显示农历信息 | `boolean` | `false` | - |
 
 ### HeaderRenderConfig
 
@@ -137,16 +177,6 @@ export default () => (
 |------|------|------|
 | type | 单元格类型（日期或月份） | `'date' \| 'month'` |
 | today | 今天的日期 | `Dayjs` |
-
-### CalendarLocale
-
-| 参数 | 说明 | 类型 | 默认值 |
-|------|------|------|--------|
-| yearSuffix | 年份后缀 | `string` | `'年'` |
-| months | 月份名称数组 | `string[]` | `['1月', ..., '12月']` |
-| weekdays | 星期名称（从周一开始） | `string[]` | `['一', ..., '日']` |
-| monthLabel | 月视图按钮文字 | `string` | `'月'` |
-| yearLabel | 年视图按钮文字 | `string` | `'年'` |
 
 ## 主题定制
 

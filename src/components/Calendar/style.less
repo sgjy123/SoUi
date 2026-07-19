@@ -22,28 +22,9 @@
     display: flex;
     align-items: center;
     gap: @margin-sm;
-  }
 
-  &-year-select,
-  &-month-select {
-    height: @control-height-base;
-    padding: 0 @padding-sm;
-    border: 1px solid var(--soui-border-color, @border-color);
-    border-radius: var(--soui-calendar-border-radius, var(--soui-border-radius, @border-radius-base));
-    font-size: var(--soui-font-size, @font-size-base);
-    color: var(--soui-text-color, @text-color);
-    background: #fff;
-    cursor: pointer;
-    outline: none;
-    transition: border-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
-
-    &:hover {
-      border-color: var(--soui-calendar-color-primary, var(--soui-primary-color, @primary-color));
-    }
-
-    &:focus {
-      border-color: var(--soui-calendar-color-primary, var(--soui-primary-color, @primary-color));
-      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+    .soui-select {
+      min-width: 90px;
     }
   }
 
@@ -116,7 +97,8 @@
 
     // Not in current month
     &:not(&-current) {
-      .soui-calendar-date-value {
+      .soui-calendar-date-value,
+      .soui-calendar-lunar {
         color: var(--soui-text-color-disabled, @text-color-disabled);
       }
     }
@@ -147,6 +129,7 @@
 
       .soui-calendar-date-value,
       .soui-calendar-month-value,
+      .soui-calendar-lunar,
       .soui-calendar-cell-inner {
         color: var(--soui-text-color-disabled, @text-color-disabled);
       }
@@ -164,6 +147,14 @@
     padding: @padding-xs;
   }
 
+  // 日期行：阳历数字 + 农历文字
+  &-date-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+
   &-date-value {
     display: inline-flex;
     align-items: center;
@@ -172,6 +163,16 @@
     height: 24px;
     border-radius: var(--soui-calendar-border-radius, var(--soui-border-radius, @border-radius-base));
     transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+  }
+
+  // 农历文字
+  &-lunar {
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    line-height: 1.3;
+    white-space: nowrap;
+    transform: scale(0.9);
+    transform-origin: center;
   }
 
   &-month-value {
@@ -205,8 +206,8 @@
       padding: @padding-xs @padding-sm;
     }
 
-    .soui-calendar-date-value {
-      align-self: flex-end;
+    .soui-calendar-date-row {
+      align-items: flex-end;
     }
 
     .soui-calendar-cell-month {
@@ -236,15 +237,13 @@
       padding: @padding-xs @padding-sm;
     }
 
-    .soui-calendar-year-select,
-    .soui-calendar-month-select {
-      height: @control-height-sm;
-      font-size: var(--soui-font-size-sm, @font-size-sm);
-    }
-
     .soui-calendar-mode-btn {
       padding: 2px @padding-sm;
       font-size: var(--soui-font-size-sm, @font-size-sm);
+    }
+
+    .soui-calendar-lunar {
+      display: none;
     }
   }
 }

@@ -3,28 +3,13 @@ import classNames from 'classnames';
 import dayjs, { type Dayjs } from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import ConfigContext from '../ConfigProvider/context';
+import Select from '../Select';
+import { solarToLunar } from './lunar';
 import './style.less';
 
 // ==================== Types ====================
 
 export type CalendarMode = 'month' | 'year';
-
-export interface CalendarLocale {
-  /** 年份后缀 */
-  yearSuffix?: string;
-  /** 月份名称 */
-  months?: string[];
-  /** 月份短名称 */
-  monthsShort?: string[];
-  /** 星期名称（从周一开始） */
-  weekdays?: string[];
-  /** 星期短名称 */
-  weekdaysShort?: string[];
-  /** 月视图标签 */
-  monthLabel?: string;
-  /** 年视图标签 */
-  yearLabel?: string;
-}
 
 export interface HeaderRenderConfig {
   /** 当前显示日期 */
@@ -59,6 +44,8 @@ export interface CalendarProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   defaultMode?: CalendarMode;
   /** 是否全屏展示（false 为卡片模式） */
   fullscreen?: boolean;
+  /** 是否显示农历 */
+  showLunar?: boolean;
   /** 自定义头部渲染 */
   headerRender?: (config: HeaderRenderConfig) => React.ReactNode;
   /** 自定义单元格内容（追加在日期数字下方） */
@@ -67,28 +54,18 @@ export interface CalendarProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   fullCellRender?: (current: Dayjs, info: CellRenderInfo) => React.ReactNode;
   /** 禁用日期 */
   disabledDate?: (current: Dayjs) => boolean;
-  /** 国际化配置 */
-  locale?: CalendarLocale;
 }
 
 // ==================== Constants ====================
 
-const DEFAULT_LOCALE: Required<CalendarLocale> = {
-  yearSuffix: '年',
-  months: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-  monthsShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-  weekdays: ['一', '二', '三', '四', '五', '六', '日'],
-  weekdaysShort: ['一', '二', '三', '四', '五', '六', '日'],
-  monthLabel: '月',
-  yearLabel: '年',
-};
+const WEEKDAYS = ['一', '二', '三', '四', '五', '六', '日'];
+const MONTHS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
 
 // ==================== Helpers ====================
 
 /** 获取月视图的 42 个日期格子（6行×7列） */
 function getMonthCells(current: Dayjs): Dayjs[] {
   const start = current.startOf('month');
-  // 周一为一周起始
   const dayOfWeek = start.day() === 0 ? 6 : start.day() - 1;
   const firstCell = start.subtract(dayOfWeek, 'day');
   return Array.from({ length: 42 }, (_, i) => firstCell.add(i, 'day'));
@@ -101,13 +78,17 @@ function getYearMonths(current: Dayjs): Dayjs[] {
 }
 
 /** 生成年份选项（前后各 10 年） */
-function getYearOptions(current: Dayjs): number[] {
+function getYearOptions(current: Dayjs) {
   const year = current.year();
-  const years: number[] = [];
-  for (let y = year - 10; y <= year + 10; y++) {
-    years.push(y);
-  }
-  return years;
+  return Array.from({ length: 21 }, (_, i) => {
+    const y = year - 10 + i;
+    return { value: String(y), label: `${y}年` };
+  });
+}
+
+/** 生成月份选项 */
+function getMonthOptions() {
+  return MONTHS.map((m, i) => ({ value: String(i), label: m }));
 }
 
 // ==================== Component ====================
@@ -120,11 +101,11 @@ const Calendar: React.FC<CalendarProps> = ({
   mode: controlledMode,
   defaultMode = 'month',
   fullscreen = true,
+  showLunar = false,
   headerRender,
   cellRender,
   fullCellRender,
   disabledDate,
-  locale: localeProp,
   className,
   style,
   ...rest
@@ -152,7 +133,6 @@ const Calendar: React.FC<CalendarProps> = ({
 
   const componentStyle = { ...cssVars, ...style } as React.CSSProperties;
 
-  const locale = { ...DEFAULT_LOCALE, ...localeProp };
   const today = useMemo(() => dayjs(), []);
 
   // ==================== State ====================
@@ -162,14 +142,12 @@ const Calendar: React.FC<CalendarProps> = ({
   const [innerMode, setInnerMode] = useState<CalendarMode>(defaultMode);
   const mode = controlledMode !== undefined ? controlledMode : innerMode;
 
-  // 面板显示日期（用于导航）
   const [panelDate, setPanelDate] = useState<Dayjs>(selectedDate);
 
   // ==================== Handlers ====================
 
   const handleSelect = useCallback((date: Dayjs) => {
     if (disabledDate?.(date)) return;
-
     if (controlledValue === undefined) {
       setInnerValue(date);
     }
@@ -189,15 +167,27 @@ const Calendar: React.FC<CalendarProps> = ({
     onPanelChange?.(date, mode);
   }, [mode, onPanelChange]);
 
-  const handleYearChange = useCallback((year: number) => {
-    const newDate = panelDate.year(year);
-    handlePanelDateChange(newDate);
+  const handleYearChange = useCallback((val: string | string[]) => {
+    const year = Number(val);
+    if (!isNaN(year)) {
+      handlePanelDateChange(panelDate.year(year));
+    }
   }, [panelDate, handlePanelDateChange]);
 
-  const handleMonthChange = useCallback((month: number) => {
-    const newDate = panelDate.month(month);
-    handlePanelDateChange(newDate);
+  const handleMonthChange = useCallback((val: string | string[]) => {
+    const month = Number(val);
+    if (!isNaN(month)) {
+      handlePanelDateChange(panelDate.month(month));
+    }
   }, [panelDate, handlePanelDateChange]);
+
+  // ==================== Render: Lunar text ====================
+
+  const renderLunarText = (date: Dayjs) => {
+    const lunar = solarToLunar(date.year(), date.month() + 1, date.date());
+    const text = lunar.solarTerm || lunar.text;
+    return <span className="soui-calendar-lunar">{text}</span>;
+  };
 
   // ==================== Render: Header ====================
 
@@ -212,32 +202,29 @@ const Calendar: React.FC<CalendarProps> = ({
     }
 
     const yearOptions = getYearOptions(panelDate);
+    const monthOptions = getMonthOptions();
 
     return (
       <div className="soui-calendar-header">
         <div className="soui-calendar-header-selects">
-          <select
+          <Select
             className="soui-calendar-year-select"
-            value={panelDate.year()}
-            onChange={(e) => handleYearChange(Number(e.target.value))}
+            value={String(panelDate.year())}
+            options={yearOptions}
+            onChange={handleYearChange}
+            size={fullscreen ? 'middle' : 'small'}
             aria-label="选择年份"
-          >
-            {yearOptions.map((y) => (
-              <option key={y} value={y}>{y}{locale.yearSuffix}</option>
-            ))}
-          </select>
+          />
 
           {mode === 'month' && (
-            <select
+            <Select
               className="soui-calendar-month-select"
-              value={panelDate.month()}
-              onChange={(e) => handleMonthChange(Number(e.target.value))}
+              value={String(panelDate.month())}
+              options={monthOptions}
+              onChange={handleMonthChange}
+              size={fullscreen ? 'middle' : 'small'}
               aria-label="选择月份"
-            >
-              {locale.months.map((m, i) => (
-                <option key={i} value={i}>{m}</option>
-              ))}
-            </select>
+            />
           )}
         </div>
 
@@ -249,7 +236,7 @@ const Calendar: React.FC<CalendarProps> = ({
             role="radio"
             aria-checked={mode === 'month'}
           >
-            {locale.monthLabel}
+            月
           </button>
           <button
             type="button"
@@ -258,7 +245,7 @@ const Calendar: React.FC<CalendarProps> = ({
             role="radio"
             aria-checked={mode === 'year'}
           >
-            {locale.yearLabel}
+            年
           </button>
         </div>
       </div>
@@ -276,7 +263,7 @@ const Calendar: React.FC<CalendarProps> = ({
         <table className="soui-calendar-table" role="grid" aria-label="月视图">
           <thead>
             <tr>
-              {locale.weekdays.map((day, i) => (
+              {WEEKDAYS.map((day, i) => (
                 <th key={i} className="soui-calendar-th" scope="col">{day}</th>
               ))}
             </tr>
@@ -302,7 +289,10 @@ const Calendar: React.FC<CalendarProps> = ({
                     fullCellRender(date, { type: 'date', today })
                   ) : (
                     <div className="soui-calendar-cell-inner">
-                      <span className="soui-calendar-date-value">{date.date()}</span>
+                      <div className="soui-calendar-date-row">
+                        <span className="soui-calendar-date-value">{date.date()}</span>
+                        {showLunar && renderLunarText(date)}
+                      </div>
                       {cellRender && (
                         <div className="soui-calendar-cell-extra">
                           {cellRender(date, { type: 'date', today })}
@@ -362,7 +352,7 @@ const Calendar: React.FC<CalendarProps> = ({
                   ) : (
                     <div className="soui-calendar-cell-inner">
                       <span className="soui-calendar-month-value">
-                        {locale.months[monthDate.month()]}
+                        {MONTHS[monthDate.month()]}
                       </span>
                       {cellRender && (
                         <div className="soui-calendar-cell-extra">
@@ -404,6 +394,7 @@ const Calendar: React.FC<CalendarProps> = ({
     {
       'soui-calendar-fullscreen': fullscreen,
       'soui-calendar-card': !fullscreen,
+      'soui-calendar-show-lunar': showLunar,
     },
     className,
   );

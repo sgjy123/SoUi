@@ -53,3 +53,42 @@ export const disabledCode = `<Calendar
     return isBefore || isWeekend;
   }}
 />`;
+
+export const lunarCode = `const [value, setValue] = useState(dayjs());
+const [mode, setMode] = useState('month');
+
+<Calendar
+  showLunar
+  value={value}
+  mode={mode}
+  onChange={setValue}
+  onPanelChange={(date, newMode) => setMode(newMode)}
+/>`;
+
+export const customHeaderCode = `const [value, setValue] = useState(dayjs());
+const [mode, setMode] = useState('month');
+
+<Calendar
+  value={value}
+  mode={mode}
+  onChange={setValue}
+  onPanelChange={(date, newMode) => setMode(newMode)}
+  headerRender={({ value: panelDate, mode: currentMode, onChange, onModeChange }) => (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px', borderBottom: '1px solid #f0f0f0' }}>
+      <Space>
+        <Button size="small" onClick={() => onChange(panelDate.subtract(1, currentMode === 'month' ? 'month' : 'year'))}>
+          上一{currentMode === 'month' ? '月' : '年'}
+        </Button>
+        <span style={{ fontWeight: 600 }}>{panelDate.format('YYYY年M月')}</span>
+        <Button size="small" onClick={() => onChange(panelDate.add(1, currentMode === 'month' ? 'month' : 'year'))}>
+          下一{currentMode === 'month' ? '月' : '年'}
+        </Button>
+      </Space>
+      <Space>
+        <Button size="small" onClick={() => onChange(dayjs())}>今天</Button>
+        <Button size="small" type={currentMode === 'month' ? 'primary' : 'default'} onClick={() => onModeChange('month')}>月</Button>
+        <Button size="small" type={currentMode === 'year' ? 'primary' : 'default'} onClick={() => onModeChange('year')}>年</Button>
+      </Space>
+    </div>
+  )}
+/>`;

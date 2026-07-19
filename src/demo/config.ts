@@ -196,6 +196,8 @@ export const docsConfig: MenuGroup[] = [
           { key: 'calendar-card', label: 'Calendar 卡片模式', componentPath: 'Calendar', exampleName: 'Card', description: '紧凑的卡片式日历，适用于侧边栏或弹出层。' },
           { key: 'calendar-cell-render', label: 'Calendar 自定义渲染', componentPath: 'Calendar', exampleName: 'CellRender', description: '通过 cellRender 在日期单元格中渲染事件或自定义内容。' },
           { key: 'calendar-disabled', label: 'Calendar 禁用日期', componentPath: 'Calendar', exampleName: 'Disabled', description: '通过 disabledDate 禁用特定日期，如过去的日期或周末。' },
+          { key: 'calendar-lunar', label: 'Calendar 农历显示', componentPath: 'Calendar', exampleName: 'Lunar', description: '通过 showLunar 在日期下方显示农历信息，包含节气提示。' },
+          { key: 'calendar-custom-header', label: 'Calendar 自定义头部', componentPath: 'Calendar', exampleName: 'CustomHeader', description: '通过 headerRender 自定义日历头部，实现前后翻页导航。' },
         ],
       },
     ],
