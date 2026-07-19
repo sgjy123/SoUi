@@ -217,6 +217,10 @@ export type {
   Rule,
 } from './components/Form';
 
+// Calendar Component
+export { default as Calendar } from './components/Calendar';
+export type { CalendarProps, CalendarMode, CalendarLocale, HeaderRenderConfig, CellRenderInfo } from './components/Calendar';
+
 // Utils
 export * from './utils';
 

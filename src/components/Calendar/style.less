@@ -1,0 +1,250 @@
+@import '../../styles/variables.less';
+
+// ==================== Calendar Component ====================
+
+.soui-calendar {
+  font-size: var(--soui-calendar-font-size, var(--soui-font-size, @font-size-base));
+  color: var(--soui-calendar-color-text, var(--soui-text-color, @text-color));
+  background: var(--soui-calendar-bg, #fff);
+  border-radius: var(--soui-calendar-border-radius, var(--soui-border-radius, @border-radius-base));
+  line-height: 1.5;
+
+  // ==================== Header ====================
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: @padding-sm @padding-md;
+    border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
+  }
+
+  &-header-selects {
+    display: flex;
+    align-items: center;
+    gap: @margin-sm;
+  }
+
+  &-year-select,
+  &-month-select {
+    height: @control-height-base;
+    padding: 0 @padding-sm;
+    border: 1px solid var(--soui-border-color, @border-color);
+    border-radius: var(--soui-calendar-border-radius, var(--soui-border-radius, @border-radius-base));
+    font-size: var(--soui-font-size, @font-size-base);
+    color: var(--soui-text-color, @text-color);
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+    transition: border-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover {
+      border-color: var(--soui-calendar-color-primary, var(--soui-primary-color, @primary-color));
+    }
+
+    &:focus {
+      border-color: var(--soui-calendar-color-primary, var(--soui-primary-color, @primary-color));
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+    }
+  }
+
+  // Mode switch buttons
+  &-header-mode {
+    display: inline-flex;
+    border: 1px solid var(--soui-border-color, @border-color);
+    border-radius: var(--soui-calendar-border-radius, var(--soui-border-radius, @border-radius-base));
+    overflow: hidden;
+  }
+
+  &-mode-btn {
+    padding: @padding-xs @padding-md;
+    border: none;
+    background: #fff;
+    font-size: var(--soui-font-size, @font-size-base);
+    color: var(--soui-text-color, @text-color);
+    cursor: pointer;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--soui-border-color, @border-color);
+    }
+
+    &:hover {
+      color: var(--soui-calendar-color-primary, var(--soui-primary-color, @primary-color));
+    }
+
+    &-active {
+      background: var(--soui-calendar-color-primary, var(--soui-primary-color, @primary-color));
+      color: var(--soui-color-text-inverse, #fff);
+
+      &:hover {
+        color: var(--soui-color-text-inverse, #fff);
+      }
+    }
+  }
+
+  // ==================== Body ====================
+  &-body {
+    padding: @padding-sm;
+  }
+
+  &-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  // Weekday header
+  &-th {
+    padding: @padding-sm 0;
+    text-align: center;
+    font-weight: 500;
+    font-size: var(--soui-font-size, @font-size-base);
+    color: var(--soui-text-color, @text-color);
+  }
+
+  // ==================== Cell ====================
+  &-cell {
+    text-align: center;
+    vertical-align: top;
+    cursor: pointer;
+    transition: background-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    border-radius: var(--soui-calendar-border-radius, var(--soui-border-radius, @border-radius-base));
+
+    &:hover:not(&-disabled):not(&-selected) {
+      background: var(--soui-calendar-cell-hover-bg, rgba(0, 0, 0, 0.04));
+    }
+
+    // Not in current month
+    &:not(&-current) {
+      .soui-calendar-date-value {
+        color: var(--soui-text-color-disabled, @text-color-disabled);
+      }
+    }
+
+    // Today
+    &-today {
+      .soui-calendar-date-value,
+      .soui-calendar-month-value {
+        color: var(--soui-calendar-color-primary, var(--soui-primary-color, @primary-color));
+        font-weight: 600;
+      }
+    }
+
+    // Selected
+    &-selected {
+      background: var(--soui-calendar-cell-selected-bg, rgba(22, 119, 255, 0.1));
+
+      .soui-calendar-date-value,
+      .soui-calendar-month-value {
+        color: var(--soui-calendar-color-primary, var(--soui-primary-color, @primary-color));
+        font-weight: 600;
+      }
+    }
+
+    // Disabled
+    &-disabled {
+      cursor: not-allowed;
+
+      .soui-calendar-date-value,
+      .soui-calendar-month-value,
+      .soui-calendar-cell-inner {
+        color: var(--soui-text-color-disabled, @text-color-disabled);
+      }
+
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+
+  &-cell-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: @padding-xs;
+  }
+
+  &-date-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    border-radius: var(--soui-calendar-border-radius, var(--soui-border-radius, @border-radius-base));
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+  }
+
+  &-month-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: @padding-xs @padding-sm;
+    border-radius: var(--soui-calendar-border-radius, var(--soui-border-radius, @border-radius-base));
+  }
+
+  &-cell-extra {
+    width: 100%;
+    margin-top: @margin-xs;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    text-align: left;
+  }
+
+  // ==================== Fullscreen Mode ====================
+  &-fullscreen {
+    border: 1px solid var(--soui-border-color-split, @border-color-split);
+
+    .soui-calendar-cell {
+      height: var(--soui-calendar-cell-height, 80px);
+      border-top: 2px solid var(--soui-border-color-split, @border-color-split);
+      border-radius: 0;
+    }
+
+    .soui-calendar-cell-inner {
+      align-items: flex-start;
+      height: 100%;
+      padding: @padding-xs @padding-sm;
+    }
+
+    .soui-calendar-date-value {
+      align-self: flex-end;
+    }
+
+    .soui-calendar-cell-month {
+      height: var(--soui-calendar-cell-height, 80px);
+    }
+
+    .soui-calendar-th {
+      padding: @padding-sm @padding-sm;
+    }
+  }
+
+  // ==================== Card Mode ====================
+  &-card {
+    box-shadow: var(--soui-box-shadow-secondary, @box-shadow-secondary);
+
+    .soui-calendar-cell-inner {
+      padding: 2px;
+    }
+
+    .soui-calendar-cell-month {
+      .soui-calendar-cell-inner {
+        padding: @padding-sm @padding-xs;
+      }
+    }
+
+    .soui-calendar-header {
+      padding: @padding-xs @padding-sm;
+    }
+
+    .soui-calendar-year-select,
+    .soui-calendar-month-select {
+      height: @control-height-sm;
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+    }
+
+    .soui-calendar-mode-btn {
+      padding: 2px @padding-sm;
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+    }
+  }
+}

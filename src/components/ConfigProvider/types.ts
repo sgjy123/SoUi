@@ -764,6 +764,19 @@ export interface ComponentThemeConfig {
     /** 边框圆角（像素） */
     borderRadius?: number;
   };
+  /** 日历组件配置 */
+  Calendar?: {
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 主色 */
+    colorPrimary?: string;
+    /** 边框圆角（像素） */
+    borderRadius?: number;
+    /** 单元格高度（像素，全屏模式） */
+    cellHeight?: number;
+    /** 头部背景色 */
+    headerBg?: string;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

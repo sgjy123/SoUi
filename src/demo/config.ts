@@ -187,6 +187,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tree-field-names', label: 'Tree 自定义字段', componentPath: 'Tree', exampleName: 'FieldNames', description: '通过 fieldNames 适配不同的数据结构。' },
         ],
       },
+      {
+        key: 'calendar',
+        label: 'Calendar 日历',
+        icon: 'Calendar',
+        items: [
+          { key: 'calendar-basic', label: 'Calendar 基础用法', componentPath: 'Calendar', exampleName: 'Basic', description: '基本的日历组件，支持月/年视图切换和日期选择。' },
+          { key: 'calendar-card', label: 'Calendar 卡片模式', componentPath: 'Calendar', exampleName: 'Card', description: '紧凑的卡片式日历，适用于侧边栏或弹出层。' },
+          { key: 'calendar-cell-render', label: 'Calendar 自定义渲染', componentPath: 'Calendar', exampleName: 'CellRender', description: '通过 cellRender 在日期单元格中渲染事件或自定义内容。' },
+          { key: 'calendar-disabled', label: 'Calendar 禁用日期', componentPath: 'Calendar', exampleName: 'Disabled', description: '通过 disabledDate 禁用特定日期，如过去的日期或周末。' },
+        ],
+      },
     ],
   },
   {
