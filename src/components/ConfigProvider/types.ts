@@ -745,6 +745,25 @@ export interface ComponentThemeConfig {
     /** 多选标签背景色 */
     tagBg?: string;
   };
+  /** 树形控件配置 */
+  Tree?: {
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 主色 */
+    colorPrimary?: string;
+    /** 节点高度（像素） */
+    nodeHeight?: number;
+    /** 节点悬停背景色 */
+    nodeHoverBg?: string;
+    /** 节点选中背景色 */
+    nodeSelectedBg?: string;
+    /** 展开图标颜色 */
+    switcherColor?: string;
+    /** 节点图标颜色 */
+    iconColor?: string;
+    /** 边框圆角（像素） */
+    borderRadius?: number;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

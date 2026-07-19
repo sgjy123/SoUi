@@ -34,6 +34,7 @@ import InputNumber from '../../src/components/InputNumber';
 import Switch from '../../src/components/Switch';
 import Cascader from '../../src/components/Cascader';
 import TreeSelect from '../../src/components/TreeSelect';
+import Tree from '../../src/components/Tree';
 import Rate from '../../src/components/Rate';
 import ColorPicker from '../../src/components/ColorPicker';
 import DatePicker from '../../src/components/DatePicker';
@@ -69,6 +70,8 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     React,
     useState: React.useState,
     useEffect: React.useEffect,
+    useMemo: React.useMemo,
+    useCallback: React.useCallback,
     Button,
     Space,
     Icon,
@@ -118,6 +121,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Switch,
     Cascader,
     TreeSelect,
+    Tree,
     Rate,
     ColorPicker,
     DatePicker,

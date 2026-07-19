@@ -1,0 +1,228 @@
+@import '../../styles/variables.less';
+
+// ==================== Spin Animation ====================
+@keyframes soui-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+// ==================== Tree Component ====================
+
+.soui-tree {
+  font-size: var(--soui-tree-font-size, var(--soui-font-size, @font-size-base));
+  color: var(--soui-tree-color-text, var(--soui-text-color, @text-color));
+  line-height: 1.5;
+
+  // Empty state
+  &-empty {
+    padding: @padding-lg;
+    text-align: center;
+    color: var(--soui-text-color-disabled, @text-color-disabled);
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+  }
+
+  // Tree list (root ul) — default block layout, li 自然纵向堆叠
+  &-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  // Tree node (li) — block 布局，内部用 inline-block 元素同行，子树 ul 自然换行到下方
+  &-treenode {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    outline: none;
+
+    // 连接线模式：每个节点画水平连接线，从缩进竖线连到 switcher
+    .soui-tree-show-line & {
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        width: 12px;
+        border-top: 1px solid var(--soui-border-color-split, @border-color-split);
+        z-index: 1;
+      }
+    }
+
+    &-disabled {
+      .soui-tree-title {
+        cursor: not-allowed;
+        color: var(--soui-text-color-disabled, @text-color-disabled);
+      }
+      .soui-tree-switcher {
+        cursor: not-allowed;
+      }
+      .soui-tree-checkbox {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+
+    &-selected {
+      > .soui-tree-node-content-wrapper {
+        background-color: var(--soui-tree-node-selected-bg, rgba(22, 119, 255, 0.1));
+      }
+    }
+  }
+
+  // Indent (spacing for nesting level)
+  &-indent {
+    display: inline-block;
+    height: var(--soui-tree-node-height, 26px);
+    vertical-align: middle;
+  }
+
+  // Node content wrapper — inline-flex 与 indent/switcher 同行
+  &-node-content-wrapper {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    max-width: calc(100% - 24px); // reserve space for switcher
+    padding: 2px 0;
+    border-radius: var(--soui-tree-border-radius, var(--soui-border-radius, @border-radius-base));
+    transition: background-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover {
+      background-color: var(--soui-tree-node-hover-bg, rgba(0, 0, 0, 0.04));
+    }
+  }
+
+  // Switcher (expand/collapse icon)
+  &-switcher {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: var(--soui-tree-node-height, 26px);
+    cursor: pointer;
+    color: var(--soui-tree-switcher-color, var(--soui-text-color-secondary, @text-color-secondary));
+    transition: color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover {
+      color: var(--soui-tree-color-primary, @primary-color);
+    }
+
+    &-noop {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    &-leaf-line {
+      cursor: default;
+      pointer-events: none;
+    }
+
+    &-loading {
+      color: var(--soui-tree-color-primary, @primary-color);
+      cursor: default;
+    }
+  }
+
+  // Checkbox
+  &-checkbox {
+    display: inline-flex;
+    align-items: center;
+    margin-right: @margin-xs;
+    height: var(--soui-tree-node-height, 26px);
+  }
+
+  // Icon
+  &-icon {
+    display: inline-flex;
+    align-items: center;
+    margin-right: @margin-xs;
+    color: var(--soui-tree-icon-color, var(--soui-text-color-secondary, @text-color-secondary));
+  }
+
+  // Title — 默认不截断，完整显示标题；tooltip 模式下截断省略
+  &-title {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 @padding-xs;
+    border-radius: var(--soui-tree-border-radius, var(--soui-border-radius, @border-radius-base));
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    transition: background-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function),
+                color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    // 仅在 tooltip 模式下截断显示省略号
+    &-truncate {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &-selected {
+      background-color: var(--soui-tree-node-selected-bg, rgba(22, 119, 255, 0.1));
+      color: var(--soui-tree-color-primary, @primary-color);
+    }
+
+    &-disabled {
+      cursor: not-allowed;
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+    }
+
+    // Search highlight
+    &-match {
+      color: var(--soui-tree-color-primary, @primary-color);
+      font-weight: 600;
+      background-color: rgba(22, 119, 255, 0.08);
+      border-radius: 2px;
+      padding: 0 2px;
+    }
+  }
+
+  // Child tree (nested ul) — block 元素，自然在 content-wrapper 下方
+  &-child-tree {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    // 展开动画
+    animation: soui-tree-expand 0.2s ease-out;
+  }
+
+  // Show line mode
+  &-show-line {
+    .soui-tree-child-tree {
+      margin: 0;
+      margin-left: 12px;
+      padding: 0;
+      border-left: 1px solid var(--soui-border-color-split, @border-color-split);
+    }
+  }
+
+  // Block node mode — 整行可点击，content-wrapper 用 flex+100% 撑满行宽，paddingLeft 实现缩进
+  &-block-node {
+    .soui-tree-node-content-wrapper {
+      display: flex;
+      width: 100%;
+    }
+
+    .soui-tree-title {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+// Expand animation
+@keyframes soui-tree-expand {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

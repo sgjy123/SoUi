@@ -160,6 +160,10 @@ export type { CascaderProps, CascaderSize, CascaderStatus, CascaderExpandTrigger
 export { default as TreeSelect } from './components/TreeSelect';
 export type { TreeSelectProps, TreeSelectSize, TreeSelectStatus, TreeSelectOption, TreeSelectFieldNames, TreeSelectRef, TreeSelectShowCheckedStrategy } from './components/TreeSelect';
 
+// Tree Component
+export { default as Tree } from './components/Tree';
+export type { TreeProps, TreeNodeData, TreeFieldNames } from './components/Tree';
+
 // Rate Component
 export { default as Rate } from './components/Rate';
 export type { RateProps, RateSize } from './components/Rate';

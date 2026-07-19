@@ -145,22 +145,6 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
-        key: 'steps',
-        label: 'Steps 步骤条',
-        icon: 'BabyFeet',
-        items: [
-          { key: 'steps-basic', label: 'Steps 基础用法', componentPath: 'Steps', exampleName: 'Basic', description: '最简单的步骤条用法。' },
-          { key: 'steps-vertical', label: 'Steps 垂直方向', componentPath: 'Steps', exampleName: 'Vertical', description: '垂直方向的步骤条。' },
-          { key: 'steps-icon', label: 'Steps 带图标', componentPath: 'Steps', exampleName: 'WithIcon', description: '为步骤添加自定义图标。' },
-          { key: 'steps-small', label: 'Steps 小尺寸', componentPath: 'Steps', exampleName: 'SmallSize', description: '小尺寸的步骤条。' },
-          { key: 'steps-controlled', label: 'Steps 受控模式', componentPath: 'Steps', exampleName: 'Controlled', description: '通过按钮控制步骤切换。' },
-          { key: 'steps-progress-dot', label: 'Steps 进度点模式', componentPath: 'Steps', exampleName: 'ProgressDot', description: '使用小圆点代替数字图标，支持自定义渲染。' },
-          { key: 'steps-subtitle', label: 'Steps 子标题与禁用', componentPath: 'Steps', exampleName: 'WithSubtitle', description: '添加子标题和禁用特定步骤。' },
-          { key: 'steps-label-placement', label: 'Steps 标签位置', componentPath: 'Steps', exampleName: 'LabelPlacement', description: '控制标签水平或垂直放置。' },
-          { key: 'steps-advanced', label: 'Steps 综合示例', componentPath: 'Steps', exampleName: 'Advanced', description: '展示所有功能的完整示例。' },
-        ],
-      },
-      {
         key: 'anchor',
         label: 'Anchor 锚点',
         icon: 'AnchorOne',
@@ -186,6 +170,21 @@ export const docsConfig: MenuGroup[] = [
           { key: 'affix-basic', label: 'Affix 基础用法', componentPath: 'Affix', exampleName: 'Basic', description: '最简单的用法，固定在顶部和底部。' },
           { key: 'affix-target', label: 'Affix 指定容器', componentPath: 'Affix', exampleName: 'Target', description: '用 target 指定 Affix 需要监听滚动事件的元素。' },
           { key: 'affix-callback', label: 'Affix 回调', componentPath: 'Affix', exampleName: 'Callback', description: '可以通过 onChange 获取到状态改变的情况。' },
+        ],
+      },
+      {
+        key: 'tree',
+        label: 'Tree 树形控件',
+        icon: 'TreeDiagram',
+        items: [
+          { key: 'tree-basic', label: 'Tree 基础用法', componentPath: 'Tree', exampleName: 'Basic', description: '基本的树形控件，支持展开/收起、选中、连接线、图标等。' },
+          { key: 'tree-checkable', label: 'Tree 可勾选', componentPath: 'Tree', exampleName: 'Checkable', description: '支持勾选节点，父子节点联动，支持严格模式和禁用勾选。' },
+          { key: 'tree-searchable', label: 'Tree 搜索', componentPath: 'Tree', exampleName: 'Searchable', description: '配合搜索框过滤节点，高亮匹配文字，支持自动展开父节点。' },
+          { key: 'tree-async', label: 'Tree 异步加载', componentPath: 'Tree', exampleName: 'AsyncLoad', description: '点击展开时异步加载子节点数据。' },
+          { key: 'tree-tooltip', label: 'Tree 文本提示', componentPath: 'Tree', exampleName: 'Tooltip', description: '长文本截断时通过 Tooltip 展示完整标题。' },
+          { key: 'tree-custom-render', label: 'Tree 自定义渲染', componentPath: 'Tree', exampleName: 'CustomRender', description: '通过 titleRender 自定义节点内容，支持图标、标签等。' },
+          { key: 'tree-disabled', label: 'Tree 禁用', componentPath: 'Tree', exampleName: 'Disabled', description: '节点级和树级禁用，以及 disableCheckbox 的区别。' },
+          { key: 'tree-field-names', label: 'Tree 自定义字段', componentPath: 'Tree', exampleName: 'FieldNames', description: '通过 fieldNames 适配不同的数据结构。' },
         ],
       },
     ],
@@ -451,7 +450,7 @@ export const docsConfig: MenuGroup[] = [
     ],
   },
   {
-    title: '排版与提示',
+    title: '排版',
     icon: 'Text',
     components: [
       {
@@ -484,17 +483,7 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tooltip-disabled', label: 'Tooltip 禁用', componentPath: 'Tooltip', exampleName: 'Disabled', description: '禁用状态处理。' },
         ],
       },
-      {
-        key: 'popconfirm',
-        label: 'Popconfirm 气泡确认框',
-        icon: 'Caution',
-        items: [
-          { key: 'popconfirm-basic', label: 'Popconfirm 基础用法', componentPath: 'Popconfirm', exampleName: 'Basic', description: '基本的气泡确认框用法。' },
-          { key: 'popconfirm-placement', label: 'Popconfirm 弹出方向', componentPath: 'Popconfirm', exampleName: 'Placement', description: '12 个不同的弹出位置。' },
-          { key: 'popconfirm-custom', label: 'Popconfirm 自定义内容', componentPath: 'Popconfirm', exampleName: 'CustomContent', description: '自定义图标、描述、按钮等。' },
-          { key: 'popconfirm-async', label: 'Popconfirm 异步关闭', componentPath: 'Popconfirm', exampleName: 'AsyncClose', description: 'Promise 异步关闭确认框。' },
-        ],
-      },
+
     ],
   },
   {
@@ -657,15 +646,30 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
-        key: 'watermark',
-        label: 'Watermark 水印',
-        icon: 'Shield',
+        key: 'popconfirm',
+        label: 'Popconfirm 气泡确认框',
+        icon: 'Caution',
         items: [
-          { key: 'watermark-basic', label: 'Watermark 基础用法', componentPath: 'Watermark', exampleName: 'Basic', description: '基础的文字水印。' },
-          { key: 'watermark-multiline', label: 'Watermark 多行文本', componentPath: 'Watermark', exampleName: 'MultiLine', description: '支持多行文字水印。' },
-          { key: 'watermark-image', label: 'Watermark 图片水印', componentPath: 'Watermark', exampleName: 'Image', description: '使用图片作为水印内容。' },
-          { key: 'watermark-content', label: 'Watermark 覆盖内容', componentPath: 'Watermark', exampleName: 'Content', description: '水印覆盖在子元素上方。' },
-          { key: 'watermark-custom', label: 'Watermark 自定义样式', componentPath: 'Watermark', exampleName: 'CustomStyle', description: '自定义水印的颜色、大小、旋转角度等。' },
+          { key: 'popconfirm-basic', label: 'Popconfirm 基础用法', componentPath: 'Popconfirm', exampleName: 'Basic', description: '基本的气泡确认框用法。' },
+          { key: 'popconfirm-placement', label: 'Popconfirm 弹出方向', componentPath: 'Popconfirm', exampleName: 'Placement', description: '12 个不同的弹出位置。' },
+          { key: 'popconfirm-custom', label: 'Popconfirm 自定义内容', componentPath: 'Popconfirm', exampleName: 'CustomContent', description: '自定义图标、描述、按钮等。' },
+          { key: 'popconfirm-async', label: 'Popconfirm 异步关闭', componentPath: 'Popconfirm', exampleName: 'AsyncClose', description: 'Promise 异步关闭确认框。' },
+        ],
+      },
+      {
+        key: 'steps',
+        label: 'Steps 步骤条',
+        icon: 'BabyFeet',
+        items: [
+          { key: 'steps-basic', label: 'Steps 基础用法', componentPath: 'Steps', exampleName: 'Basic', description: '最简单的步骤条用法。' },
+          { key: 'steps-vertical', label: 'Steps 垂直方向', componentPath: 'Steps', exampleName: 'Vertical', description: '垂直方向的步骤条。' },
+          { key: 'steps-icon', label: 'Steps 带图标', componentPath: 'Steps', exampleName: 'WithIcon', description: '为步骤添加自定义图标。' },
+          { key: 'steps-small', label: 'Steps 小尺寸', componentPath: 'Steps', exampleName: 'SmallSize', description: '小尺寸的步骤条。' },
+          { key: 'steps-controlled', label: 'Steps 受控模式', componentPath: 'Steps', exampleName: 'Controlled', description: '通过按钮控制步骤切换。' },
+          { key: 'steps-progress-dot', label: 'Steps 进度点模式', componentPath: 'Steps', exampleName: 'ProgressDot', description: '使用小圆点代替数字图标，支持自定义渲染。' },
+          { key: 'steps-subtitle', label: 'Steps 子标题与禁用', componentPath: 'Steps', exampleName: 'WithSubtitle', description: '添加子标题和禁用特定步骤。' },
+          { key: 'steps-label-placement', label: 'Steps 标签位置', componentPath: 'Steps', exampleName: 'LabelPlacement', description: '控制标签水平或垂直放置。' },
+          { key: 'steps-advanced', label: 'Steps 综合示例', componentPath: 'Steps', exampleName: 'Advanced', description: '展示所有功能的完整示例。' },
         ],
       },
     ],
@@ -685,7 +689,18 @@ export const docsConfig: MenuGroup[] = [
           { key: 'divider-color', label: 'Divider 颜色', componentPath: 'Divider', exampleName: 'CustomColor', description: '自定义分割线颜色。' },
         ],
       },
-
+      {
+        key: 'watermark',
+        label: 'Watermark 水印',
+        icon: 'Shield',
+        items: [
+          { key: 'watermark-basic', label: 'Watermark 基础用法', componentPath: 'Watermark', exampleName: 'Basic', description: '基础的文字水印。' },
+          { key: 'watermark-multiline', label: 'Watermark 多行文本', componentPath: 'Watermark', exampleName: 'MultiLine', description: '支持多行文字水印。' },
+          { key: 'watermark-image', label: 'Watermark 图片水印', componentPath: 'Watermark', exampleName: 'Image', description: '使用图片作为水印内容。' },
+          { key: 'watermark-content', label: 'Watermark 覆盖内容', componentPath: 'Watermark', exampleName: 'Content', description: '水印覆盖在子元素上方。' },
+          { key: 'watermark-custom', label: 'Watermark 自定义样式', componentPath: 'Watermark', exampleName: 'CustomStyle', description: '自定义水印的颜色、大小、旋转角度等。' },
+        ],
+      },
     ],
   },
 ];
