@@ -54,6 +54,8 @@ export interface CalendarProps extends Omit<React.HTMLAttributes<HTMLDivElement>
   fullCellRender?: (current: Dayjs, info: CellRenderInfo) => React.ReactNode;
   /** 禁用日期 */
   disabledDate?: (current: Dayjs) => boolean;
+  /** 年份选择器显示当前年份前后各多少年，默认 10，有效范围 1~50 */
+  yearRange?: number;
 }
 
 // ==================== Constants ====================
@@ -77,13 +79,41 @@ function getYearMonths(current: Dayjs): Dayjs[] {
   return Array.from({ length: 12 }, (_, i) => start.add(i, 'month'));
 }
 
-/** 生成年份选项（前后各 10 年） */
-function getYearOptions(current: Dayjs) {
+/** 生成年份选项（前后各 range 年） */
+function getYearOptions(current: Dayjs, range: number) {
   const year = current.year();
-  return Array.from({ length: 21 }, (_, i) => {
-    const y = year - 10 + i;
+  const count = range * 2 + 1;
+  return Array.from({ length: count }, (_, i) => {
+    const y = year - range + i;
     return { value: String(y), label: `${y}年` };
   });
+}
+
+/** 校验 yearRange 有效值：必须为 1~50 的正整数，否则回退默认值 */
+function validateYearRange(value: number | undefined): number {
+  const DEFAULT = 10;
+  const MIN = 1;
+  const MAX = 50;
+  if (value === undefined || value === null) return DEFAULT;
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`[SoUi Calendar] yearRange 必须为有效数字，收到: ${value}，已回退为默认值 ${DEFAULT}`);
+    }
+    return DEFAULT;
+  }
+  const rounded = Math.round(value);
+  if (rounded !== value) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`[SoUi Calendar] yearRange 必须为整数，收到: ${value}，已取整为 ${rounded}`);
+    }
+  }
+  if (rounded < MIN || rounded > MAX) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(`[SoUi Calendar] yearRange 有效范围为 ${MIN}~${MAX}，收到: ${rounded}，已修正为 ${Math.min(Math.max(rounded, MIN), MAX)}`);
+    }
+    return Math.min(Math.max(rounded, MIN), MAX);
+  }
+  return rounded;
 }
 
 /** 生成月份选项 */
@@ -106,6 +136,7 @@ const Calendar: React.FC<CalendarProps> = ({
   cellRender,
   fullCellRender,
   disabledDate,
+  yearRange,
   className,
   style,
   ...rest
@@ -143,6 +174,9 @@ const Calendar: React.FC<CalendarProps> = ({
   const mode = controlledMode !== undefined ? controlledMode : innerMode;
 
   const [panelDate, setPanelDate] = useState<Dayjs>(selectedDate);
+
+  // 校验 yearRange
+  const validYearRange = useMemo(() => validateYearRange(yearRange), [yearRange]);
 
   // ==================== Handlers ====================
 
@@ -201,7 +235,7 @@ const Calendar: React.FC<CalendarProps> = ({
       });
     }
 
-    const yearOptions = getYearOptions(panelDate);
+    const yearOptions = getYearOptions(panelDate, validYearRange);
     const monthOptions = getMonthOptions();
 
     return (

@@ -161,6 +161,7 @@ export default () => (
 | fullCellRender | 自定义完整单元格（替换整个单元格） | `(current: Dayjs, info: CellRenderInfo) => ReactNode` | `-` | - |
 | disabledDate | 禁用日期，返回 true 则不可选 | `(current: Dayjs) => boolean` | `-` | - |
 | showLunar | 是否显示农历信息 | `boolean` | `false` | - |
+| yearRange | 年份选择器显示当前年份前后各多少年，有效范围 1~50，非整数自动取整，越界自动修正 | `number` | `10` | - |
 
 ### HeaderRenderConfig
 

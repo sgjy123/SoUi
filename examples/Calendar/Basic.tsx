@@ -17,6 +17,7 @@ export default () => {
       mode={mode}
       onChange={setValue}
       onPanelChange={handlePanelChange}
+      yearRange={20}
     />
   );
 };
