@@ -603,6 +603,7 @@ const Tree: React.FC<TreeProps> = ({
             className={classNames('soui-tree-node-content-wrapper', {
               'soui-tree-node-content-wrapper-block': blockNode,
             })}
+            style={blockNode && level > 0 ? { marginLeft: -(level * nodeIndent), paddingLeft: level * nodeIndent } : undefined}
           >
             {/* 展开/收起图标 */}
             {!leaf || isLoading ? (

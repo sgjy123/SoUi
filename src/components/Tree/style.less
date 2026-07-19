@@ -180,7 +180,6 @@
     }
 
     &-selected {
-      background-color: var(--soui-tree-node-selected-bg, rgba(22, 119, 255, 0.1));
       color: var(--soui-tree-color-primary, @primary-color);
     }
 
@@ -228,17 +227,6 @@
       display: flex;
       flex-wrap: wrap;
       align-items: flex-start;
-      border-radius: var(--soui-tree-border-radius, var(--soui-border-radius, @border-radius-base));
-      transition: background-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
-
-      &:hover {
-        background-color: var(--soui-tree-node-hover-bg, rgba(0, 0, 0, 0.04));
-      }
-    }
-
-    // 选中背景提升到 treenode 级别
-    .soui-tree-treenode-selected {
-      background-color: var(--soui-tree-node-selected-bg, rgba(22, 119, 255, 0.1));
     }
 
     .soui-tree-indent {
@@ -254,15 +242,6 @@
       flex: 1 1 auto;
       min-width: 0;
       max-width: none;
-
-      // blockNode 下 hover/selected 背景由 treenode 承担
-      &:hover {
-        background-color: transparent;
-      }
-    }
-
-    .soui-tree-treenode-selected > .soui-tree-node-content-wrapper {
-      background-color: transparent;
     }
 
     .soui-tree-child-tree {
