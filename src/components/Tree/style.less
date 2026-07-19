@@ -6,6 +6,9 @@
   to { transform: rotate(360deg); }
 }
 
+// 连接线颜色（比 border-color-split 深，更清晰）
+@tree-line-color: var(--soui-tree-line-color, var(--soui-border-color, @border-color));
+
 // ==================== Tree Component ====================
 
 .soui-tree {
@@ -21,34 +24,19 @@
     font-size: var(--soui-font-size-sm, @font-size-sm);
   }
 
-  // Tree list (root ul) — default block layout, li 自然纵向堆叠
+  // Tree list (root ul)
   &-list {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  // Tree node (li) — block 布局，内部用 inline-block 元素同行，子树 ul 自然换行到下方
+  // Tree node (li) — 默认 block 布局
   &-treenode {
     list-style: none;
     margin: 0;
     padding: 0;
     outline: none;
-
-    // 连接线模式：每个节点画水平连接线，从缩进竖线连到 switcher
-    .soui-tree-show-line & {
-      position: relative;
-
-      &::before {
-        content: '';
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        width: 12px;
-        border-top: 1px solid var(--soui-border-color-split, @border-color-split);
-        z-index: 1;
-      }
-    }
 
     &-disabled {
       .soui-tree-title {
@@ -71,19 +59,45 @@
     }
   }
 
-  // Indent (spacing for nesting level)
+  // ==================== Indent ====================
   &-indent {
     display: inline-block;
     height: var(--soui-tree-node-height, 26px);
     vertical-align: middle;
+    pointer-events: none;
+    white-space: nowrap;
   }
 
-  // Node content wrapper — inline-flex 与 indent/switcher 同行
+  &-indent-unit {
+    display: inline-block;
+    height: 100%;
+
+    .soui-tree-show-line & {
+      position: relative;
+
+      // 竖线：在单元中心，从顶部延伸到底部 + 间隙（连接下一行）
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: -@padding-xs;
+        border-left: 1px solid @tree-line-color;
+      }
+
+      // 最后一个兄弟的缩进单元：不画竖线
+      &-end::before {
+        display: none;
+      }
+    }
+  }
+
+  // Node content wrapper
   &-node-content-wrapper {
     display: inline-flex;
     align-items: center;
     vertical-align: middle;
-    max-width: calc(100% - 24px); // reserve space for switcher
+    max-width: calc(100% - 24px);
     padding: 2px 0;
     border-radius: var(--soui-tree-border-radius, var(--soui-border-radius, @border-radius-base));
     transition: background-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
@@ -93,7 +107,7 @@
     }
   }
 
-  // Switcher (expand/collapse icon)
+  // ==================== Switcher ====================
   &-switcher {
     display: inline-flex;
     align-items: center;
@@ -113,9 +127,15 @@
       pointer-events: none;
     }
 
+    // 叶子节点占位（showLine 模式），不画线条
     &-leaf-line {
       cursor: default;
       pointer-events: none;
+    }
+
+    // showLine 模式的 □-/□+ 图标
+    &-line-icon {
+      vertical-align: -0.15em;
     }
 
     &-loading {
@@ -140,7 +160,7 @@
     color: var(--soui-tree-icon-color, var(--soui-text-color-secondary, @text-color-secondary));
   }
 
-  // Title — 默认不截断，完整显示标题；tooltip 模式下截断省略
+  // Title
   &-title {
     display: inline-flex;
     align-items: center;
@@ -152,7 +172,6 @@
     transition: background-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function),
                 color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
 
-    // 仅在 tooltip 模式下截断显示省略号
     &-truncate {
       flex: 1;
       min-width: 0;
@@ -170,7 +189,6 @@
       color: var(--soui-text-color-disabled, @text-color-disabled);
     }
 
-    // Search highlight
     &-match {
       color: var(--soui-tree-color-primary, @primary-color);
       font-weight: 600;
@@ -180,30 +198,55 @@
     }
   }
 
-  // Child tree (nested ul) — block 元素，自然在 content-wrapper 下方
+  // Child tree (nested ul)
   &-child-tree {
     list-style: none;
     margin: 0;
     padding: 0;
-    // 展开动画
     animation: soui-tree-expand 0.2s ease-out;
   }
 
-  // Show line mode
+  // ==================== Show Line 模式 ====================
   &-show-line {
-    .soui-tree-child-tree {
-      margin: 0;
-      margin-left: 12px;
-      padding: 0;
-      border-left: 1px solid var(--soui-border-color-split, @border-color-split);
+    // switcher 宽度与 indent-unit 一致，确保竖线对齐
+    .soui-tree-switcher {
+      width: var(--soui-tree-indent-size, 24px);
+      background: transparent;
+    }
+
+    // content-wrapper 提升到连接线之上，确保图标不被遮挡
+    .soui-tree-node-content-wrapper {
+      position: relative;
+      z-index: 1;
     }
   }
 
-  // Block node mode — 整行可点击，content-wrapper 用 flex+100% 撑满行宽，paddingLeft 实现缩进
+  // ==================== Block Node 模式 ====================
+  // treenode 用 flex：indent + content-wrapper 同行，child-tree 换行到下方
   &-block-node {
-    .soui-tree-node-content-wrapper {
+    .soui-tree-treenode {
       display: flex;
-      width: 100%;
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .soui-tree-indent {
+      align-self: stretch;
+      height: auto;
+    }
+
+    .soui-tree-indent-unit {
+      height: 100%;
+    }
+
+    .soui-tree-node-content-wrapper {
+      flex: 1;
+      min-width: 0;
+      max-width: none;
+    }
+
+    .soui-tree-child-tree {
+      flex-basis: 100%;
     }
 
     .soui-tree-title {

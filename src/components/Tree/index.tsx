@@ -426,6 +426,8 @@ const Tree: React.FC<TreeProps> = ({
   if (treeTheme.borderRadius !== undefined) {
     cssVars['--soui-tree-border-radius'] = `${treeTheme.borderRadius}px`;
   }
+  // showLine 模式下 switcher 宽度需与 indent-unit 宽度一致，确保竖线对齐
+  cssVars['--soui-tree-indent-size'] = `${nodeIndent}px`;
 
   const treeStyle = { ...cssVars, ...style } as React.CSSProperties;
 
@@ -540,12 +542,26 @@ const Tree: React.FC<TreeProps> = ({
   const renderSwitcherIcon = (isExpanded: boolean) => {
     if (typeof switcherIcon === 'function') return switcherIcon({ expanded: isExpanded });
     if (switcherIcon) return switcherIcon;
-    return <Icon name={isExpanded ? 'Down' : 'Right'} size={showLine ? 12 : 10} />;
+    // showLine 模式：□-/□+ 图标（同 antd）
+    if (showLine) {
+      return isExpanded ? (
+        <svg className="soui-tree-switcher-line-icon" viewBox="0 0 1024 1024" width="1em" height="1em" fill="currentColor">
+          <path d="M328 472h368v80H328v-80z" />
+          <path d="M872 152H152v720h720V152zm-80 640H232V232h560v560z" />
+        </svg>
+      ) : (
+        <svg className="soui-tree-switcher-line-icon" viewBox="0 0 1024 1024" width="1em" height="1em" fill="currentColor">
+          <path d="M472 328h80v144h144v80H552v144h-80V552H328v-80h144V328z" />
+          <path d="M872 152H152v720h720V152zm-80 640H232V232h560v560z" />
+        </svg>
+      );
+    }
+    return <Icon name={isExpanded ? 'Down' : 'Right'} size={10} />;
   };
 
   // ==================== 递归渲染 ====================
-  const renderNodes = (nodes: TreeNodeData[], level: number): React.ReactNode => {
-    return nodes.map((node) => {
+  const renderNodes = (nodes: TreeNodeData[], level: number, isEnd: boolean[] = []): React.ReactNode => {
+    return nodes.map((node, index) => {
       const children = node[childrenKey] as TreeNodeData[] | undefined;
       const hasKids = !!children && children.length > 0;
       const leaf = isLeafNode(node, childrenKey);
@@ -555,18 +571,31 @@ const Tree: React.FC<TreeProps> = ({
       const isHalfChecked = halfCheckedSet.has(node.key);
       const isLoading = loadingKeys.has(node.key);
       const nodeDisabled = disabled || node.disabled || false;
+      const isLast = index === nodes.length - 1;
+      const nodeIsEnd = [...isEnd, isLast];
 
       const nodeCls = classNames('soui-tree-treenode', {
         'soui-tree-treenode-disabled': nodeDisabled,
         'soui-tree-treenode-selected': isSelected,
         'soui-tree-treenode-checked': isChecked,
+        'soui-tree-treenode-leaf-last': isLast,
       });
 
       return (
         <li key={node.key} className={nodeCls}>
-          {/* 缩进：block 模式下通过 content-wrapper 的 paddingLeft 实现，非 block 模式用 indent span */}
-          {level > 0 && !blockNode && (
-            <span className="soui-tree-indent" style={{ width: level * nodeIndent }} />
+          {/* 缩进：Ant Design 方式，每层一个 indent-unit，showLine 模式下画竖线 */}
+          {level > 0 && (
+            <span className="soui-tree-indent" aria-hidden="true">
+              {Array.from({ length: level }, (_, i) => (
+                <span
+                  key={i}
+                  className={classNames('soui-tree-indent-unit', {
+                    'soui-tree-indent-unit-end': isEnd[i],
+                  })}
+                  style={{ width: nodeIndent }}
+                />
+              ))}
+            </span>
           )}
 
           {/* 节点内容行 */}
@@ -574,7 +603,6 @@ const Tree: React.FC<TreeProps> = ({
             className={classNames('soui-tree-node-content-wrapper', {
               'soui-tree-node-content-wrapper-block': blockNode,
             })}
-            style={blockNode && level > 0 ? { paddingLeft: level * nodeIndent } : undefined}
           >
             {/* 展开/收起图标 */}
             {!leaf || isLoading ? (
@@ -658,7 +686,7 @@ const Tree: React.FC<TreeProps> = ({
           {/* 子节点 */}
           {hasKids && isExpanded && (
             <ul className="soui-tree-child-tree">
-              {renderNodes(children!, level + 1)}
+              {renderNodes(children!, level + 1, nodeIsEnd)}
             </ul>
           )}
         </li>
