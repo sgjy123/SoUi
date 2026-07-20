@@ -1,0 +1,18 @@
+@import '../../styles/variables.less';
+
+.soui-waterfall {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  transition: height var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+  &-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function),
+                opacity var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    border-radius: var(--soui-waterfall-border-radius, var(--soui-border-radius, @border-radius-base));
+    will-change: transform;
+  }
+}

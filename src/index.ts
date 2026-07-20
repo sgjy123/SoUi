@@ -221,6 +221,10 @@ export type {
 export { default as Calendar } from './components/Calendar';
 export type { CalendarProps, CalendarMode, HeaderRenderConfig, CellRenderInfo } from './components/Calendar';
 
+// Waterfall Component
+export { default as Waterfall } from './components/Waterfall';
+export type { WaterfallProps, WaterfallItem, WaterfallBreakpoints, WaterfallLayoutInfo } from './components/Waterfall';
+
 // Utils
 export * from './utils';
 

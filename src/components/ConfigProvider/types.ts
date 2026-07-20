@@ -777,6 +777,13 @@ export interface ComponentThemeConfig {
     /** 头部背景色 */
     headerBg?: string;
   };
+  /** 瀑布流组件配置 */
+  Waterfall?: {
+    /** 边框圆角（像素） */
+    borderRadius?: number;
+    /** 默认间距（像素） */
+    gutter?: number;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

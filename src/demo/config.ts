@@ -187,19 +187,7 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tree-field-names', label: 'Tree 自定义字段', componentPath: 'Tree', exampleName: 'FieldNames', description: '通过 fieldNames 适配不同的数据结构。' },
         ],
       },
-      {
-        key: 'calendar',
-        label: 'Calendar 日历',
-        icon: 'Calendar',
-        items: [
-          { key: 'calendar-basic', label: 'Calendar 基础用法', componentPath: 'Calendar', exampleName: 'Basic', description: '基本的日历组件，支持月/年视图切换和日期选择。' },
-          { key: 'calendar-card', label: 'Calendar 卡片模式', componentPath: 'Calendar', exampleName: 'Card', description: '紧凑的卡片式日历，适用于侧边栏或弹出层。' },
-          { key: 'calendar-cell-render', label: 'Calendar 自定义渲染', componentPath: 'Calendar', exampleName: 'CellRender', description: '通过 cellRender 在日期单元格中渲染事件或自定义内容。' },
-          { key: 'calendar-disabled', label: 'Calendar 禁用日期', componentPath: 'Calendar', exampleName: 'Disabled', description: '通过 disabledDate 禁用特定日期，如过去的日期或周末。' },
-          { key: 'calendar-lunar', label: 'Calendar 农历显示', componentPath: 'Calendar', exampleName: 'Lunar', description: '通过 showLunar 在日期下方显示农历信息，包含节气提示。' },
-          { key: 'calendar-custom-header', label: 'Calendar 自定义头部', componentPath: 'Calendar', exampleName: 'CustomHeader', description: '通过 headerRender 自定义日历头部，实现前后翻页导航。' },
-        ],
-      },
+
     ],
   },
   {
@@ -549,6 +537,31 @@ export const docsConfig: MenuGroup[] = [
           { key: 'empty-with-action', label: 'Empty 带操作', componentPath: 'Empty', exampleName: 'WithAction', description: '底部添加操作按钮引导用户。' },
           { key: 'empty-custom-image', label: 'Empty 自定义图片', componentPath: 'Empty', exampleName: 'CustomImage', description: '支持 URL 或 React 节点自定义图片。' },
           { key: 'empty-theme', label: 'Empty 主题定制', componentPath: 'Empty', exampleName: 'ThemeConfig', description: '通过 ConfigProvider 自定义主题样式。' },
+        ],
+      },
+      {
+        key: 'calendar',
+        label: 'Calendar 日历',
+        icon: 'Calendar',
+        items: [
+          { key: 'calendar-basic', label: 'Calendar 基础用法', componentPath: 'Calendar', exampleName: 'Basic', description: '基本的日历组件，支持月/年视图切换和日期选择。' },
+          { key: 'calendar-card', label: 'Calendar 卡片模式', componentPath: 'Calendar', exampleName: 'Card', description: '紧凑的卡片式日历，适用于侧边栏或弹出层。' },
+          { key: 'calendar-cell-render', label: 'Calendar 自定义渲染', componentPath: 'Calendar', exampleName: 'CellRender', description: '通过 cellRender 在日期单元格中渲染事件或自定义内容。' },
+          { key: 'calendar-disabled', label: 'Calendar 禁用日期', componentPath: 'Calendar', exampleName: 'Disabled', description: '通过 disabledDate 禁用特定日期，如过去的日期或周末。' },
+          { key: 'calendar-lunar', label: 'Calendar 农历显示', componentPath: 'Calendar', exampleName: 'Lunar', description: '通过 showLunar 在日期下方显示农历信息，包含节气提示。' },
+          { key: 'calendar-custom-header', label: 'Calendar 自定义头部', componentPath: 'Calendar', exampleName: 'CustomHeader', description: '通过 headerRender 自定义日历头部，实现前后翻页导航。' },
+        ],
+      },
+      {
+        key: 'waterfall',
+        label: 'Waterfall 瀑布流',
+        icon: 'WaterfallsH',
+        items: [
+          { key: 'waterfall-basic', label: 'Waterfall 基础用法', componentPath: 'Waterfall', exampleName: 'Basic', description: '基本的瀑布流布局，通过 items 和 renderItem 渲染不等高卡片。' },
+          { key: 'waterfall-responsive', label: 'Waterfall 响应式列数', componentPath: 'Waterfall', exampleName: 'Responsive', description: '通过断点对象配置不同屏幕宽度下的列数。' },
+          { key: 'waterfall-gutter', label: 'Waterfall 自定义间距', componentPath: 'Waterfall', exampleName: 'Gutter', description: '通过 gutter 数组分别设置水平和垂直间距。' },
+          { key: 'waterfall-image-gallery', label: 'Waterfall 图片画廊', componentPath: 'Waterfall', exampleName: 'ImageGallery', description: '模拟图片画廊场景，展示不等高内容的瀑布流排列。' },
+          { key: 'waterfall-infinite-load', label: 'Waterfall 无限加载', componentPath: 'Waterfall', exampleName: 'InfiniteLoad', description: '结合 IntersectionObserver 实现滚动到底部自动加载更多数据。' },
         ],
       },
     ],

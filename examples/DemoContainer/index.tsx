@@ -36,6 +36,7 @@ import Cascader from '../../src/components/Cascader';
 import TreeSelect from '../../src/components/TreeSelect';
 import Tree from '../../src/components/Tree';
 import Calendar from '../../src/components/Calendar';
+import Waterfall from '../../src/components/Waterfall';
 import Rate from '../../src/components/Rate';
 import ColorPicker from '../../src/components/ColorPicker';
 import DatePicker from '../../src/components/DatePicker';
@@ -124,6 +125,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     TreeSelect,
     Tree,
     Calendar,
+    Waterfall,
     Rate,
     ColorPicker,
     DatePicker,
