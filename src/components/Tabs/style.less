@@ -1,0 +1,396 @@
+@import '../../styles/variables.less';
+
+.soui-tabs {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--soui-tabs-font-size, var(--soui-font-size, @font-size-base));
+  color: var(--soui-text-color, @text-color);
+
+  // ==================== Nav ====================
+  &-nav {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-bottom: @padding-md;
+  }
+
+  &-nav-centered {
+    .soui-tabs-nav-list {
+      justify-content: center;
+    }
+  }
+
+  &-nav-list {
+    display: flex;
+    position: relative;
+    outline: none;
+  }
+
+  // ==================== Scroll ====================
+  &-nav-scroll {
+    flex: 1;
+    overflow: hidden;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  &-scroll-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 100%;
+    min-height: 28px;
+    border: none;
+    background: var(--soui-bg-color-base, @bg-color-base);
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+    z-index: 1;
+    transition: color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover {
+      color: var(--soui-tabs-color-primary-component, var(--soui-tabs-color-primary, var(--soui-primary-color, @primary-color)));
+    }
+
+    &-prev {
+      margin-right: 2px;
+    }
+
+    &-next {
+      margin-left: 2px;
+    }
+  }
+
+  &-extra {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    &-left {
+      margin-right: @padding-md;
+    }
+
+    &-right {
+      margin-left: auto;
+      padding-left: @padding-md;
+    }
+  }
+
+  // ==================== Tab Item ====================
+  &-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: @padding-xs;
+    padding: @padding-sm @padding-md;
+    cursor: pointer;
+    white-space: nowrap;
+    color: var(--soui-text-color, @text-color);
+    transition: color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    user-select: none;
+
+    &:hover {
+      color: var(--soui-tabs-color-primary-component, var(--soui-tabs-color-primary, var(--soui-primary-color, @primary-color)));
+    }
+
+    &-active {
+      color: var(--soui-tabs-item-active-color-component, var(--soui-tabs-item-active-color, var(--soui-tabs-color-primary-component, var(--soui-tabs-color-primary, var(--soui-primary-color, @primary-color)))));
+      font-weight: 500;
+    }
+
+    &-disabled {
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+      cursor: not-allowed;
+
+      &:hover {
+        color: var(--soui-text-color-disabled, @text-color-disabled);
+      }
+    }
+
+    &-icon {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    &-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      margin-left: 4px;
+      font-size: 12px;
+      line-height: 1;
+      border-radius: 2px;
+      color: var(--soui-text-color-secondary, @text-color-secondary);
+      transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+      &:hover {
+        color: var(--soui-text-color, @text-color);
+        background: rgba(0, 0, 0, 0.06);
+      }
+    }
+  }
+
+  // ==================== Add Button ====================
+  &-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    margin-left: @padding-xs;
+    border: 1px solid var(--soui-border-color-split, @border-color-split);
+    border-radius: var(--soui-tabs-border-radius, var(--soui-border-radius, @border-radius-base));
+    background: var(--soui-bg-color-base, @bg-color-base);
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    cursor: pointer;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    flex-shrink: 0;
+
+    &:hover {
+      color: var(--soui-tabs-color-primary-component, var(--soui-tabs-color-primary, var(--soui-primary-color, @primary-color)));
+      border-color: var(--soui-tabs-color-primary-component, var(--soui-tabs-color-primary, var(--soui-primary-color, @primary-color)));
+    }
+  }
+
+  // ==================== Ink Bar ====================
+  &-ink-bar {
+    position: absolute;
+    left: 0;
+    background: var(--soui-tabs-color-primary-component, var(--soui-tabs-color-primary, var(--soui-primary-color, @primary-color)));
+    pointer-events: none;
+
+    &-animated {
+      transition: transform var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function),
+                  width var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function),
+                  height var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    }
+  }
+
+  // ==================== Content ====================
+  &-content {
+    flex: 1;
+    min-height: 0;
+  }
+
+  &-tabpane {
+    outline: none;
+  }
+
+  // ==================== Type: Line ====================
+  &-line {
+    .soui-tabs-nav-list {
+      border-bottom: 1px solid var(--soui-border-color-split, @border-color-split);
+    }
+
+    .soui-tabs-ink-bar {
+      bottom: 0;
+      height: 2px;
+    }
+  }
+
+  // ==================== Type: Card ====================
+  &-card,
+  &-editable-card {
+    .soui-tabs-nav-list {
+      gap: @padding-xs;
+    }
+
+    .soui-tabs-tab {
+      padding: @padding-xs @padding-md;
+      border: 1px solid var(--soui-border-color-split, @border-color-split);
+      border-radius: var(--soui-tabs-border-radius, var(--soui-border-radius, @border-radius-base)) var(--soui-tabs-border-radius, var(--soui-border-radius, @border-radius-base)) 0 0;
+      background: var(--soui-tabs-card-bg-component, var(--soui-tabs-card-bg, @bg-color-layout));
+      transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+      &-active {
+        background: var(--soui-bg-color-base, @bg-color-base);
+        border-bottom-color: transparent;
+      }
+
+      &-disabled {
+        background: @bg-color-disable;
+      }
+    }
+  }
+
+  // ==================== Size ====================
+  &-large {
+    .soui-tabs-tab {
+      padding: @padding-sm + 4px @padding-md + 4px;
+      font-size: var(--soui-font-size-lg, @font-size-lg);
+    }
+  }
+
+  &-small {
+    .soui-tabs-tab {
+      padding: @padding-xs @padding-sm;
+      font-size: var(--soui-font-size-sm, @font-size-sm);
+    }
+  }
+
+  // ==================== Position: Bottom ====================
+  &-bottom {
+    // DOM 顺序: [content, nav]，默认 column 方向即 content 在上、nav 在下
+
+    .soui-tabs-nav {
+      margin-bottom: 0;
+      margin-top: @padding-md;
+    }
+
+    &.soui-tabs-line {
+      .soui-tabs-nav-list {
+        border-bottom: none;
+        border-top: 1px solid var(--soui-border-color-split, @border-color-split);
+      }
+
+      .soui-tabs-ink-bar {
+        bottom: auto;
+        top: 0;
+      }
+    }
+
+    &.soui-tabs-card,
+    &.soui-tabs-editable-card {
+      .soui-tabs-tab {
+        border-radius: 0 0 var(--soui-tabs-border-radius, var(--soui-border-radius, @border-radius-base)) var(--soui-tabs-border-radius, var(--soui-border-radius, @border-radius-base));
+
+        &-active {
+          border-bottom-color: var(--soui-border-color-split, @border-color-split);
+          border-top-color: transparent;
+        }
+      }
+    }
+  }
+
+  // ==================== Position: Left / Right (shared) ====================
+  &-left,
+  &-right {
+    flex-direction: row;
+
+    .soui-tabs-nav {
+      flex-direction: column;
+      align-items: stretch;
+      margin-bottom: 0;
+    }
+
+    .soui-tabs-nav-list {
+      flex-direction: column;
+      border-bottom: none;
+    }
+
+    .soui-tabs-tab {
+      padding: @padding-sm @padding-md;
+      justify-content: flex-start;
+    }
+
+    .soui-tabs-content {
+      flex: 1;
+    }
+
+    .soui-tabs-extra {
+      &-left {
+        margin-right: 0;
+        margin-bottom: @padding-sm;
+      }
+
+      &-right {
+        margin-left: 0;
+        padding-left: 0;
+        margin-top: @padding-sm;
+      }
+    }
+
+    .soui-tabs-add-btn {
+      margin-left: 0;
+      margin-top: @padding-xs;
+      align-self: flex-start;
+    }
+
+    .soui-tabs-scroll-btn {
+      width: 100%;
+      height: 24px;
+      min-height: 24px;
+
+      &-prev {
+        margin-right: 0;
+        margin-bottom: 2px;
+      }
+
+      &-next {
+        margin-left: 0;
+        margin-top: 2px;
+      }
+    }
+
+    // 垂直方向墨条基础
+    &.soui-tabs-line .soui-tabs-ink-bar {
+      bottom: auto;
+      width: 2px;
+      height: auto;
+    }
+  }
+
+  // ==================== Position: Left ====================
+  &-left {
+    .soui-tabs-nav {
+      margin-right: @padding-md;
+    }
+
+    &.soui-tabs-line {
+      .soui-tabs-nav-list {
+        border-right: 1px solid var(--soui-border-color-split, @border-color-split);
+      }
+
+      .soui-tabs-ink-bar {
+        right: 0;
+        left: auto;
+      }
+    }
+
+    &.soui-tabs-card,
+    &.soui-tabs-editable-card {
+      .soui-tabs-tab {
+        border-radius: var(--soui-tabs-border-radius, var(--soui-border-radius, @border-radius-base)) 0 0 var(--soui-tabs-border-radius, var(--soui-border-radius, @border-radius-base));
+
+        &-active {
+          border-right-color: transparent;
+          border-bottom-color: var(--soui-border-color-split, @border-color-split);
+        }
+      }
+    }
+  }
+
+  // ==================== Position: Right ====================
+  &-right {
+    // DOM 顺序: [content, nav]，继承 row 方向即 content 在左、nav 在右
+
+    .soui-tabs-nav {
+      margin-left: @padding-md;
+    }
+
+    &.soui-tabs-line {
+      .soui-tabs-nav-list {
+        border-left: 1px solid var(--soui-border-color-split, @border-color-split);
+      }
+
+      .soui-tabs-ink-bar {
+        left: 0;
+        right: auto;
+      }
+    }
+
+    &.soui-tabs-card,
+    &.soui-tabs-editable-card {
+      .soui-tabs-tab {
+        border-radius: 0 var(--soui-tabs-border-radius, var(--soui-border-radius, @border-radius-base)) var(--soui-border-radius, var(--soui-border-radius, @border-radius-base)) 0;
+
+        &-active {
+          border-left-color: transparent;
+          border-bottom-color: var(--soui-border-color-split, @border-color-split);
+        }
+      }
+    }
+  }
+}

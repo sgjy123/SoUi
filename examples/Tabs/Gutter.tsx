@@ -1,0 +1,17 @@
+import React from 'react';
+import { Tabs, Space } from '../../src';
+
+const items = [
+  { key: '1', label: '标签一', children: <div style={{ padding: 16 }}>内容一</div> },
+  { key: '2', label: '标签二', children: <div style={{ padding: 16 }}>内容二</div> },
+  { key: '3', label: '标签三', children: <div style={{ padding: 16 }}>内容三</div> },
+  { key: '4', label: '标签四', children: <div style={{ padding: 16 }}>内容四</div> },
+];
+
+export default () => (
+  <Space direction="vertical" size="large" style={{ width: '100%' }}>
+    <Tabs items={items} tabBarGutter={0} />
+    <Tabs items={items} tabBarGutter={24} />
+    <Tabs items={items} tabBarGutter={48} type="card" />
+  </Space>
+);

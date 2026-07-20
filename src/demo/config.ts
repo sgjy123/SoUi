@@ -111,6 +111,25 @@ export const docsConfig: MenuGroup[] = [
           { key: 'space-align', label: 'Space 对齐方式', componentPath: 'Space', exampleName: 'Align', description: '多种对齐方式。' },
         ],
       },
+      {
+        key: 'tabs',
+        label: 'Tabs 标签页',
+        icon: 'BookmarkOne',
+        items: [
+          { key: 'tabs-basic', label: 'Tabs 基础用法', componentPath: 'Tabs', exampleName: 'Basic', description: '最基本的标签页用法，线条式切换。' },
+          { key: 'tabs-card', label: 'Tabs 卡片式', componentPath: 'Tabs', exampleName: 'Card', description: '卡片式标签页，适合需要明确区域划分的场景。' },
+          { key: 'tabs-position', label: 'Tabs 位置', componentPath: 'Tabs', exampleName: 'Position', description: '支持上、下、左、右四个方向的标签位置。' },
+          { key: 'tabs-size', label: 'Tabs 尺寸', componentPath: 'Tabs', exampleName: 'Size', description: '大、中、小三种尺寸。' },
+          { key: 'tabs-extra', label: 'Tabs 附加内容', componentPath: 'Tabs', exampleName: 'Extra', description: '在标签栏右侧或两侧添加额外操作内容。' },
+          { key: 'tabs-controlled', label: 'Tabs 受控模式', componentPath: 'Tabs', exampleName: 'Controlled', description: '通过 activeKey 和 onChange 受控使用，支持禁用标签。' },
+          { key: 'tabs-icon', label: 'Tabs 图标与居中', componentPath: 'Tabs', exampleName: 'Icon', description: '为标签添加图标，使用 centered 居中显示。' },
+          { key: 'tabs-editable', label: 'Tabs 可编辑标签', componentPath: 'Tabs', exampleName: 'Editable', description: '可新增和关闭标签页，适用于动态标签管理场景。' },
+          { key: 'tabs-gutter', label: 'Tabs 标签间距', componentPath: 'Tabs', exampleName: 'Gutter', description: '通过 tabBarGutter 自定义标签之间的间距。' },
+          { key: 'tabs-destroy', label: 'Tabs 销毁与样式', componentPath: 'Tabs', exampleName: 'DestroyAndStyle', description: 'destroyInactiveTabPane 销毁非激活面板，tabBarStyle 自定义标签栏样式。' },
+          { key: 'tabs-scroll', label: 'Tabs 滚动溢出', componentPath: 'Tabs', exampleName: 'Scroll', description: '标签过多时自动出现滚动按钮，支持滑动切换。' },
+          { key: 'tabs-theme', label: 'Tabs 主题定制', componentPath: 'Tabs', exampleName: 'Theme', description: '通过 ConfigProvider 自定义标签页主题。' },
+        ],
+      },
     ],
   },
   {
@@ -187,7 +206,6 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tree-field-names', label: 'Tree 自定义字段', componentPath: 'Tree', exampleName: 'FieldNames', description: '通过 fieldNames 适配不同的数据结构。' },
         ],
       },
-
     ],
   },
   {

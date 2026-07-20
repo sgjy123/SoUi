@@ -225,6 +225,10 @@ export type { CalendarProps, CalendarMode, HeaderRenderConfig, CellRenderInfo } 
 export { default as Waterfall } from './components/Waterfall';
 export type { WaterfallProps, WaterfallItem, WaterfallBreakpoints, WaterfallLayoutInfo } from './components/Waterfall';
 
+// Tabs Component
+export { default as Tabs } from './components/Tabs';
+export type { TabsProps, TabItem, TabsType, TabsSize, TabPosition, EditAction } from './components/Tabs';
+
 // Utils
 export * from './utils';
 

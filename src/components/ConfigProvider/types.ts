@@ -784,6 +784,19 @@ export interface ComponentThemeConfig {
     /** 默认间距（像素） */
     gutter?: number;
   };
+  /** 标签页组件配置 */
+  Tabs?: {
+    /** 主色（墨条、激活态） */
+    colorPrimary?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 边框圆角（像素，card 模式） */
+    borderRadius?: number;
+    /** 激活标签文本色 */
+    itemActiveColor?: string;
+    /** 卡片模式背景色 */
+    cardBg?: string;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */
