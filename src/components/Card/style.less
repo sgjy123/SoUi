@@ -1,0 +1,203 @@
+@import '../../styles/variables.less';
+
+.soui-card {
+  position: relative;
+  background: var(--soui-card-color-bg-component, var(--soui-card-color-bg, var(--soui-bg-color-base, @bg-color-base)));
+  border-radius: var(--soui-card-border-radius-component, var(--soui-card-border-radius, var(--soui-border-radius, @border-radius-base)));
+  color: var(--soui-text-color, @text-color);
+  font-size: var(--soui-font-size, @font-size-base);
+  transition: box-shadow var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+  // ==================== 边框 ====================
+  &-bordered {
+    border: 1px solid var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split)));
+  }
+
+  // ==================== 悬停浮起 ====================
+  &-hoverable {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: var(--soui-card-hover-shadow-component, var(--soui-card-hover-shadow, var(--soui-box-shadow-secondary, @box-shadow-secondary)));
+    }
+  }
+
+  // ==================== 头部 ====================
+  &-head {
+    min-height: 56px;
+    padding: 0 @padding-lg;
+    border-bottom: 1px solid var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split)));
+    border-radius: var(--soui-card-border-radius-component, var(--soui-card-border-radius, var(--soui-border-radius, @border-radius-base))) var(--soui-card-border-radius-component, var(--soui-card-border-radius, var(--soui-border-radius, @border-radius-base))) 0 0;
+
+    &-wrapper {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: 56px;
+    }
+
+    &-title {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: var(--soui-card-header-font-size-component, var(--soui-card-header-font-size, var(--soui-font-size-lg, @font-size-lg)));
+      font-weight: 600;
+      color: var(--soui-text-color, @text-color);
+    }
+  }
+
+  &-extra {
+    margin-left: auto;
+    color: var(--soui-text-color, @text-color);
+    font-size: var(--soui-font-size, @font-size-base);
+    font-weight: normal;
+  }
+
+  // ==================== 封面 ====================
+  &-cover {
+    overflow: hidden;
+    border-radius: var(--soui-card-border-radius-component, var(--soui-card-border-radius, var(--soui-border-radius, @border-radius-base))) var(--soui-card-border-radius-component, var(--soui-card-border-radius, var(--soui-border-radius, @border-radius-base))) 0 0;
+
+    > * {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  // ==================== 内容区 ====================
+  &-body {
+    padding: @padding-lg;
+  }
+
+  // ==================== 小尺寸 ====================
+  &-small {
+    > .soui-card-head {
+      min-height: 38px;
+      padding: 0 @padding-sm + 4px;
+
+      .soui-card-head-wrapper {
+        min-height: 38px;
+      }
+
+      .soui-card-head-title {
+        font-size: var(--soui-font-size, @font-size-base);
+      }
+    }
+
+    > .soui-card-body {
+      padding: @padding-sm + 4px;
+    }
+  }
+
+  // ==================== 内嵌卡片 ====================
+  &-inner {
+    background: var(--soui-bg-color-layout, @bg-color-layout);
+
+    > .soui-card-head {
+      background: var(--soui-card-header-bg-component, var(--soui-card-header-bg, var(--soui-bg-color-layout, @bg-color-layout)));
+      border-bottom: 1px solid var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split)));
+
+      .soui-card-head-title {
+        font-size: var(--soui-font-size, @font-size-base);
+      }
+    }
+  }
+
+  // ==================== 栅格 ====================
+  &-grid {
+    width: 33.33%;
+    padding: @padding-lg;
+    border: 0;
+    border-radius: 0;
+    box-shadow: 1px 0 0 0 var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split))),
+      0 1px 0 0 var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split))),
+      1px 1px 0 0 var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split))),
+      inset 1px 0 0 0 var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split))),
+      inset 0 1px 0 0 var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split)));
+    transition: box-shadow var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &-hoverable:hover {
+      position: relative;
+      z-index: 1;
+      box-shadow: var(--soui-card-hover-shadow-component, var(--soui-card-hover-shadow, var(--soui-box-shadow-secondary, @box-shadow-secondary)));
+    }
+  }
+
+  // ==================== Meta ====================
+  &-meta {
+    display: flex;
+    margin: -@padding-xs 0;
+
+    &-avatar {
+      padding-right: @padding-md;
+    }
+
+    &-detail {
+      flex: 1;
+      overflow: hidden;
+
+      > div:not(:last-child) {
+        margin-bottom: @padding-xs;
+      }
+    }
+
+    &-title {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: var(--soui-font-size-lg, @font-size-lg);
+      font-weight: 600;
+      color: var(--soui-text-color, @text-color);
+    }
+
+    &-description {
+      color: var(--soui-text-color-secondary, @text-color-secondary);
+    }
+  }
+
+  // ==================== 操作栏 ====================
+  &-actions {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split)));
+    background: var(--soui-card-color-bg-component, var(--soui-card-color-bg, var(--soui-bg-color-base, @bg-color-base)));
+    border-radius: 0 0 var(--soui-card-border-radius-component, var(--soui-card-border-radius, var(--soui-border-radius, @border-radius-base))) var(--soui-card-border-radius-component, var(--soui-card-border-radius, var(--soui-border-radius, @border-radius-base)));
+
+    &-item {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      color: var(--soui-text-color-secondary, @text-color-secondary);
+      text-align: center;
+      cursor: pointer;
+      transition: color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+      &:not(:last-child) {
+        border-right: 1px solid var(--soui-card-border-color-component, var(--soui-card-border-color, var(--soui-border-color-split, @border-color-split)));
+      }
+
+      &:hover {
+        color: var(--soui-card-color-primary-component, var(--soui-card-color-primary, var(--soui-primary-color, @primary-color)));
+      }
+
+      &-inner {
+        display: inline-flex;
+        align-items: center;
+        gap: @padding-xs;
+        padding: @padding-sm 0;
+        font-size: var(--soui-font-size, @font-size-base);
+        line-height: 1.5;
+      }
+    }
+  }
+
+  // ==================== 加载中 ====================
+  &-loading {
+    overflow: hidden;
+    user-select: none;
+  }
+}

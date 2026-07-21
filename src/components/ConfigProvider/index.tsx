@@ -87,6 +87,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const paginationTheme = mergedTheme.components?.Pagination || {};
     // 获取 Tag 组件级配置
     const tagTheme = mergedTheme.components?.Tag || {};
+    // 获取 Card 组件级配置
+    const cardTheme = mergedTheme.components?.Card || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -761,6 +763,25 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-tag-default-bg-component': tagTheme.defaultBg,
       '--soui-tag-default-color-component': tagTheme.defaultColor,
       '--soui-tag-default-border-color-component': tagTheme.defaultBorderColor,
+
+      // ==================== Card 组件配置 ====================
+      // 第2层: Card 配置点 (引用设计令牌)
+      '--soui-card-color-primary': cardTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-card-color-bg': cardTheme.colorBg,
+      '--soui-card-header-bg': cardTheme.headerBg,
+      '--soui-card-border-color': cardTheme.borderColor,
+      '--soui-card-border-radius': cardTheme.borderRadius ? `${cardTheme.borderRadius}px` : undefined,
+      '--soui-card-header-font-size': cardTheme.headerFontSize ? `${cardTheme.headerFontSize}px` : undefined,
+      '--soui-card-hover-shadow': cardTheme.hoverShadow,
+
+      // 第3层: Card 组件级覆盖 (优先级最高)
+      '--soui-card-color-primary-component': cardTheme.colorPrimary,
+      '--soui-card-color-bg-component': cardTheme.colorBg,
+      '--soui-card-header-bg-component': cardTheme.headerBg,
+      '--soui-card-border-color-component': cardTheme.borderColor,
+      '--soui-card-border-radius-component': cardTheme.borderRadius ? `${cardTheme.borderRadius}px` : undefined,
+      '--soui-card-header-font-size-component': cardTheme.headerFontSize ? `${cardTheme.headerFontSize}px` : undefined,
+      '--soui-card-hover-shadow-component': cardTheme.hoverShadow,
     } as any;
   }, [mergedTheme]);
 

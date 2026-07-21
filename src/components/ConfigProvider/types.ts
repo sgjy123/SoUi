@@ -827,6 +827,23 @@ export interface ComponentThemeConfig {
     /** 默认标签边框色 */
     defaultBorderColor?: string;
   };
+  /** 卡片组件配置 */
+  Card?: {
+    /** 主色（操作栏悬停色） */
+    colorPrimary?: string;
+    /** 卡片背景色 */
+    colorBg?: string;
+    /** 头部背景色（内嵌卡片） */
+    headerBg?: string;
+    /** 边框颜色 */
+    borderColor?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 头部标题字号（像素） */
+    headerFontSize?: number;
+    /** 悬停阴影 */
+    hoverShadow?: string;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

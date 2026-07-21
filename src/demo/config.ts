@@ -610,6 +610,21 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tag-theme', label: 'Tag 主题定制', componentPath: 'Tag', exampleName: 'Theme', description: '通过 ConfigProvider 自定义标签主题。' },
         ],
       },
+      {
+        key: 'card',
+        label: 'Card 卡片',
+        icon: 'CardTwo',
+        items: [
+          { key: 'card-basic', label: 'Card 基础用法', componentPath: 'Card', exampleName: 'Basic', description: '带标题和右侧操作区的基础卡片。' },
+          { key: 'card-border-hover', label: 'Card 边框与悬停', componentPath: 'Card', exampleName: 'BorderAndHover', description: '无边框卡片和悬停浮起效果。' },
+          { key: 'card-size', label: 'Card 尺寸', componentPath: 'Card', exampleName: 'Size', description: '默认和小尺寸两种卡片。' },
+          { key: 'card-cover-actions', label: 'Card 封面与操作', componentPath: 'Card', exampleName: 'CoverAndActions', description: '封面、Meta 信息和底部操作栏。' },
+          { key: 'card-grid', label: 'Card 栅格', componentPath: 'Card', exampleName: 'Grid', description: 'Card.Grid 栅格化展示内容。' },
+          { key: 'card-inner', label: 'Card 内嵌卡片', componentPath: 'Card', exampleName: 'Inner', description: 'type="inner" 内嵌卡片，适用于嵌套场景。' },
+          { key: 'card-loading', label: 'Card 加载中', componentPath: 'Card', exampleName: 'Loading', description: 'loading 状态显示骨架屏占位。' },
+          { key: 'card-theme', label: 'Card 主题定制', componentPath: 'Card', exampleName: 'Theme', description: '通过 ConfigProvider 自定义卡片主题。' },
+        ],
+      },
     ],
   },
   {

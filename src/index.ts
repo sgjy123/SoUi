@@ -237,6 +237,10 @@ export type { DropdownProps, DropdownMenuItem, DropdownMenuProps, DropdownTrigge
 export { default as Tag } from './components/Tag';
 export type { TagProps, CheckableTagProps, TagPresetColor, TagPresetStatus } from './components/Tag';
 
+// Card Component
+export { default as Card } from './components/Card';
+export type { CardProps, CardGridProps, CardMetaProps, CardSize, CardType } from './components/Card';
+
 // Utils
 export * from './utils';
 

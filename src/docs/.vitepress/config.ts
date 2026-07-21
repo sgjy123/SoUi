@@ -244,6 +244,7 @@ function sidebarComponents() {
         { text: 'Calendar 日历', link: 'calendar' },
         { text: 'Waterfall 瀑布流', link: 'waterfall' },
         { text: 'Tag 标签', link: 'tag' },
+        { text: 'Card 卡片', link: 'card' },
       ],
     },
     {
