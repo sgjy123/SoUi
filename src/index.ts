@@ -229,6 +229,10 @@ export type { WaterfallProps, WaterfallItem, WaterfallBreakpoints, WaterfallLayo
 export { default as Tabs } from './components/Tabs';
 export type { TabsProps, TabItem, TabsType, TabsSize, TabPosition, EditAction } from './components/Tabs';
 
+// Dropdown Component
+export { default as Dropdown } from './components/Dropdown';
+export type { DropdownProps, DropdownMenuItem, DropdownMenuProps, DropdownTrigger, DropdownPlacement } from './components/Dropdown';
+
 // Utils
 export * from './utils';
 

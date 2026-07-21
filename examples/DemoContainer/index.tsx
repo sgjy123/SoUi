@@ -38,6 +38,7 @@ import Tree from '../../src/components/Tree';
 import Calendar from '../../src/components/Calendar';
 import Waterfall from '../../src/components/Waterfall';
 import Tabs from '../../src/components/Tabs';
+import Dropdown from '../../src/components/Dropdown';
 import Rate from '../../src/components/Rate';
 import ColorPicker from '../../src/components/ColorPicker';
 import DatePicker from '../../src/components/DatePicker';
@@ -128,6 +129,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Calendar,
     Waterfall,
     Tabs,
+    Dropdown,
     Rate,
     ColorPicker,
     DatePicker,

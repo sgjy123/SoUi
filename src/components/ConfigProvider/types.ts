@@ -797,6 +797,21 @@ export interface ComponentThemeConfig {
     /** 卡片模式背景色 */
     cardBg?: string;
   };
+  /** 下拉菜单组件配置 */
+  Dropdown?: {
+    /** 主色（选中项） */
+    colorPrimary?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 边框圆角（像素） */
+    borderRadius?: number;
+    /** 面板背景色 */
+    colorBg?: string;
+    /** 菜单项悬停背景色 */
+    itemHoverBg?: string;
+    /** 危险项颜色 */
+    colorError?: string;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

@@ -130,6 +130,21 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tabs-theme', label: 'Tabs 主题定制', componentPath: 'Tabs', exampleName: 'Theme', description: '通过 ConfigProvider 自定义标签页主题。' },
         ],
       },
+      {
+        key: 'dropdown',
+        label: 'Dropdown 下拉菜单',
+        icon: 'DownOne',
+        items: [
+          { key: 'dropdown-basic', label: 'Dropdown 基础用法', componentPath: 'Dropdown', exampleName: 'Basic', description: '最基本的下拉菜单，悬停触发展开。' },
+          { key: 'dropdown-trigger', label: 'Dropdown 触发方式', componentPath: 'Dropdown', exampleName: 'Trigger', description: '支持悬停、点击、右键等多种触发方式。' },
+          { key: 'dropdown-placement', label: 'Dropdown 弹出位置', componentPath: 'Dropdown', exampleName: 'Placement', description: '支持 6 个方向的弹出位置。' },
+          { key: 'dropdown-submenu', label: 'Dropdown 多级菜单', componentPath: 'Dropdown', exampleName: 'SubMenu', description: '支持嵌套子菜单，悬停展开下一级。' },
+          { key: 'dropdown-states', label: 'Dropdown 图标与状态', componentPath: 'Dropdown', exampleName: 'States', description: '带图标、分组、分割线、禁用和危险项的菜单。' },
+          { key: 'dropdown-selectable', label: 'Dropdown 可选中菜单', componentPath: 'Dropdown', exampleName: 'Selectable', description: '菜单项支持选中状态，带勾选图标。' },
+          { key: 'dropdown-render', label: 'Dropdown 自定义渲染', componentPath: 'Dropdown', exampleName: 'DropdownRender', description: '通过 dropdownRender 自定义浮层内容。' },
+          { key: 'dropdown-theme', label: 'Dropdown 主题定制', componentPath: 'Dropdown', exampleName: 'Theme', description: '通过 ConfigProvider 自定义下拉菜单主题。' },
+        ],
+      },
     ],
   },
   {

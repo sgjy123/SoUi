@@ -189,6 +189,7 @@ function sidebarComponents() {
         { text: 'Layout 布局', link: 'layout' },
         { text: 'Space 间距', link: 'space' },
         { text: 'Tabs 标签页', link: 'tabs' },
+        { text: 'Dropdown 下拉菜单', link: 'dropdown' },
       ],
     },
     {
