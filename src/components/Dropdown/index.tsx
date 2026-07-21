@@ -339,9 +339,18 @@ const Dropdown: React.FC<DropdownProps> = ({
 }) => {
   const context = useContext(ConfigContext);
   const componentTheme = (context?.components?.Dropdown || {}) as Record<string, any>;
+  const globalTheme = context?.theme;
 
   // 主题 CSS 变量
   const cssVars: React.CSSProperties & Record<string, any> = {};
+  // 浮层通过 createPortal 渲染到 body，无法继承 ConfigProvider 包裹 div 上的 CSS 变量，
+  // 因此需要将全局主题色显式注入到浮层元素上
+  if (globalTheme?.primaryColor) {
+    cssVars['--soui-primary-color'] = globalTheme.primaryColor;
+  }
+  if (globalTheme?.errorColor) {
+    cssVars['--soui-error-color'] = globalTheme.errorColor;
+  }
   if (componentTheme.colorPrimary !== undefined) {
     cssVars['--soui-dropdown-color-primary'] = componentTheme.colorPrimary;
   }

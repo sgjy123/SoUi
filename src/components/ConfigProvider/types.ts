@@ -812,6 +812,21 @@ export interface ComponentThemeConfig {
     /** 危险项颜色 */
     colorError?: string;
   };
+  /** 标签组件配置 */
+  Tag?: {
+    /** 主色（选中标签背景色） */
+    colorPrimary?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+    /** 边框圆角（像素） */
+    borderRadius?: number;
+    /** 默认标签背景色 */
+    defaultBg?: string;
+    /** 默认标签文字色 */
+    defaultColor?: string;
+    /** 默认标签边框色 */
+    defaultBorderColor?: string;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

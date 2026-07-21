@@ -233,6 +233,10 @@ export type { TabsProps, TabItem, TabsType, TabsSize, TabPosition, EditAction } 
 export { default as Dropdown } from './components/Dropdown';
 export type { DropdownProps, DropdownMenuItem, DropdownMenuProps, DropdownTrigger, DropdownPlacement } from './components/Dropdown';
 
+// Tag Component
+export { default as Tag } from './components/Tag';
+export type { TagProps, CheckableTagProps, TagPresetColor, TagPresetStatus } from './components/Tag';
+
 // Utils
 export * from './utils';
 

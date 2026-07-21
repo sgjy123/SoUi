@@ -1,0 +1,198 @@
+@import '../../styles/variables.less';
+
+// 预设颜色 mixin
+.tag-preset(@bg, @border, @text) {
+  background: @bg;
+  color: @text;
+
+  &.soui-tag-bordered {
+    border-color: @border;
+  }
+}
+
+// processing 状态圆点动画
+@keyframes soui-tag-processing-pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.soui-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: @padding-xs;
+  height: 22px;
+  padding: 0 7px;
+  font-size: var(--soui-tag-font-size, var(--soui-font-size-sm, @font-size-sm));
+  line-height: 20px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+  border-radius: var(--soui-tag-border-radius, var(--soui-border-radius-sm, @border-radius-sm));
+  background: var(--soui-tag-default-bg-component, var(--soui-tag-default-bg, #fafafa));
+  color: var(--soui-tag-default-color-component, var(--soui-tag-default-color, var(--soui-text-color, @text-color)));
+  transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+  // ==================== 边框 ====================
+  &-bordered {
+    border-color: var(--soui-tag-default-border-color-component, var(--soui-tag-default-border-color, #d9d9d9));
+  }
+
+  // ==================== 子元素 ====================
+  &-icon {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &-content {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &-close-icon {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // ==================== 关闭动画 ====================
+  &-closing {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+  }
+
+  // ==================== 预设状态色 ====================
+  &-default {
+    .tag-preset(#fafafa, #d9d9d9, rgba(0, 0, 0, 0.88));
+    color: var(--soui-tag-default-color-component, var(--soui-tag-default-color, var(--soui-text-color, @text-color)));
+  }
+
+  &-success {
+    .tag-preset(#f6ffed, #b7eb8f, #389e0d);
+  }
+
+  &-processing {
+    .tag-preset(#e6f4ff, #91caff, #1677ff);
+
+    .soui-tag-content {
+      position: relative;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-right: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 6px;
+        height: 6px;
+        margin-top: -3px;
+        border-radius: 50%;
+        background: currentColor;
+        animation: soui-tag-processing-pulse 1.2s ease-in-out infinite;
+      }
+    }
+  }
+
+  &-error {
+    .tag-preset(#fff1f0, #ffa39e, #cf1322);
+  }
+
+  &-warning {
+    .tag-preset(#fffbe6, #ffe58f, #d4b106);
+  }
+
+  // ==================== 预设颜色 ====================
+  &-magenta {
+    .tag-preset(#fff0f6, #ffadd2, #c41d7f);
+  }
+
+  &-red {
+    .tag-preset(#fff1f0, #ffa39e, #cf1322);
+  }
+
+  &-volcano {
+    .tag-preset(#fff2e8, #ffbb96, #d4380d);
+  }
+
+  &-orange {
+    .tag-preset(#fff7e6, #ffd591, #d46b08);
+  }
+
+  &-gold {
+    .tag-preset(#fffbe6, #ffe58f, #d4b106);
+  }
+
+  &-lime {
+    .tag-preset(#fcffe6, #eaff8f, #7cb305);
+  }
+
+  &-green {
+    .tag-preset(#f6ffed, #b7eb8f, #389e0d);
+  }
+
+  &-cyan {
+    .tag-preset(#e6fffb, #87e8de, #08979c);
+  }
+
+  &-blue {
+    .tag-preset(#e6f4ff, #91caff, #1677ff);
+  }
+
+  &-geekblue {
+    .tag-preset(#f0f5ff, #adc6ff, #2f54eb);
+  }
+
+  &-purple {
+    .tag-preset(#f9f0ff, #d3adf7, #722ed1);
+  }
+
+  // ==================== 可选中标签 ====================
+  &-checkable {
+    background: transparent;
+    border-color: transparent;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.06);
+    }
+
+    &:active {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  &-checked {
+    background: var(--soui-tag-color-primary-component, var(--soui-tag-color-primary, var(--soui-primary-color, @primary-color)));
+    color: var(--soui-color-text-inverse, #fff);
+
+    &:hover {
+      background: var(--soui-tag-color-primary-component, var(--soui-tag-color-primary, var(--soui-primary-color, @primary-color)));
+      opacity: 0.85;
+    }
+
+    &:active {
+      opacity: 1;
+    }
+  }
+}

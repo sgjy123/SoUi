@@ -85,6 +85,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const formTheme = mergedTheme.components?.Form || {};
     // 获取 Pagination 组件级配置
     const paginationTheme = mergedTheme.components?.Pagination || {};
+    // 获取 Tag 组件级配置
+    const tagTheme = mergedTheme.components?.Tag || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -742,6 +744,23 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-pagination-border-color-component': paginationTheme.borderColor,
       '--soui-pagination-item-bg-component': paginationTheme.itemBg,
       '--soui-pagination-primary-color-20-component': paginationTheme.colorPrimary ? addOpacityToColor(paginationTheme.colorPrimary, 0.1) : undefined,
+
+      // ==================== Tag 组件配置 ====================
+      // 第2层: Tag 配置点 (引用设计令牌)
+      '--soui-tag-color-primary': tagTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-tag-font-size': tagTheme.fontSize ? `${tagTheme.fontSize}px` : undefined,
+      '--soui-tag-border-radius': tagTheme.borderRadius ? `${tagTheme.borderRadius}px` : undefined,
+      '--soui-tag-default-bg': tagTheme.defaultBg,
+      '--soui-tag-default-color': tagTheme.defaultColor,
+      '--soui-tag-default-border-color': tagTheme.defaultBorderColor,
+
+      // 第3层: Tag 组件级覆盖 (优先级最高)
+      '--soui-tag-color-primary-component': tagTheme.colorPrimary,
+      '--soui-tag-font-size-component': tagTheme.fontSize ? `${tagTheme.fontSize}px` : undefined,
+      '--soui-tag-border-radius-component': tagTheme.borderRadius ? `${tagTheme.borderRadius}px` : undefined,
+      '--soui-tag-default-bg-component': tagTheme.defaultBg,
+      '--soui-tag-default-color-component': tagTheme.defaultColor,
+      '--soui-tag-default-border-color-component': tagTheme.defaultBorderColor,
     } as any;
   }, [mergedTheme]);
 

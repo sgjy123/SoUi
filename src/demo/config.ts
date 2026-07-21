@@ -597,6 +597,19 @@ export const docsConfig: MenuGroup[] = [
           { key: 'waterfall-infinite-load', label: 'Waterfall 无限加载', componentPath: 'Waterfall', exampleName: 'InfiniteLoad', description: '结合 IntersectionObserver 实现滚动到底部自动加载更多数据。' },
         ],
       },
+      {
+        key: 'tag',
+        label: 'Tag 标签',
+        icon: 'TagOne',
+        items: [
+          { key: 'tag-basic', label: 'Tag 基础用法', componentPath: 'Tag', exampleName: 'Basic', description: '基本标签，支持无边框样式。' },
+          { key: 'tag-colorful', label: 'Tag 多彩标签', componentPath: 'Tag', exampleName: 'Colorful', description: '预设状态色、预设颜色和自定义颜色。' },
+          { key: 'tag-closable', label: 'Tag 可关闭标签', componentPath: 'Tag', exampleName: 'Closable', description: '可关闭标签，支持动态新增和删除。' },
+          { key: 'tag-checkable', label: 'Tag 可选中标签', componentPath: 'Tag', exampleName: 'Checkable', description: 'CheckableTag 用于多选场景。' },
+          { key: 'tag-icon', label: 'Tag 图标标签', componentPath: 'Tag', exampleName: 'IconTag', description: '带图标的标签。' },
+          { key: 'tag-theme', label: 'Tag 主题定制', componentPath: 'Tag', exampleName: 'Theme', description: '通过 ConfigProvider 自定义标签主题。' },
+        ],
+      },
     ],
   },
   {
