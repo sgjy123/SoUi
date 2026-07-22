@@ -665,6 +665,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'descriptions-theme', label: 'Descriptions 主题定制', componentPath: 'Descriptions', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'image',
+        label: 'Image 图片',
+        icon: 'Picture',
+        items: [
+          { key: 'image-basic', label: 'Image 基础用法', componentPath: 'Image', exampleName: 'Basic', description: '基础图片展示，点击预览大图。' },
+          { key: 'image-fallback', label: 'Image 加载失败', componentPath: 'Image', exampleName: 'Fallback', description: 'fallback 配置加载失败时的占位图。' },
+          { key: 'image-preview-group', label: 'Image 多张图片预览', componentPath: 'Image', exampleName: 'PreviewGroup', description: 'Image.PreviewGroup 多张图片联动预览。' },
+          { key: 'image-theme', label: 'Image 主题定制', componentPath: 'Image', exampleName: 'Theme', description: '通过 ConfigProvider 自定义图片主题。' },
+        ],
+      },
     ],
   },
   {

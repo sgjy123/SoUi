@@ -95,6 +95,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const carouselTheme = mergedTheme.components?.Carousel || {};
     // 获取 Descriptions 组件级配置
     const descriptionsTheme = mergedTheme.components?.Descriptions || {};
+    // 获取 Image 组件级配置
+    const imageTheme = mergedTheme.components?.Image || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -821,6 +823,15 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-descriptions-label-bg-component': descriptionsTheme.colorLabelBg,
       '--soui-descriptions-border-color-component': descriptionsTheme.borderColor,
       '--soui-descriptions-font-size-component': descriptionsTheme.fontSize ? `${descriptionsTheme.fontSize}px` : undefined,
+
+      // ==================== Image 组件配置 ====================
+      // 第2层: Image 配置点 (引用设计令牌)
+      '--soui-image-placeholder-bg': imageTheme.placeholderBg,
+      '--soui-image-border-radius': imageTheme.borderRadius ? `${imageTheme.borderRadius}px` : undefined,
+
+      // 第3层: Image 组件级覆盖 (优先级最高)
+      '--soui-image-placeholder-bg-component': imageTheme.placeholderBg,
+      '--soui-image-border-radius-component': imageTheme.borderRadius ? `${imageTheme.borderRadius}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

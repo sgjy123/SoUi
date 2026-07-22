@@ -253,6 +253,10 @@ export type { CarouselProps, CarouselRef, CarouselEffect, CarouselDotPosition } 
 export { default as Descriptions } from './components/Descriptions';
 export type { DescriptionsProps, DescriptionsItemProps, DescriptionsSize, DescriptionsLayout, DescriptionsColumn } from './components/Descriptions';
 
+// Image Component
+export { default as Image } from './components/Image';
+export type { ImageProps, ImagePreviewProps, PreviewGroupProps } from './components/Image';
+
 // Utils
 export * from './utils';
 

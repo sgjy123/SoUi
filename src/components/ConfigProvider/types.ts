@@ -871,6 +871,13 @@ export interface ComponentThemeConfig {
     /** 字体大小（像素） */
     fontSize?: number;
   };
+  /** 图片组件配置 */
+  Image?: {
+    /** 占位背景色 */
+    placeholderBg?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */
