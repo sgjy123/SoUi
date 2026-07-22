@@ -46,7 +46,7 @@ export interface CardGridProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode;
 }
 
-export interface CardMetaProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface CardMetaProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** 头像 */
   avatar?: React.ReactNode;
   /** 标题 */
