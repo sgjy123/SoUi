@@ -640,6 +640,19 @@ export const docsConfig: MenuGroup[] = [
           { key: 'badge-theme', label: 'Badge 主题定制', componentPath: 'Badge', exampleName: 'Theme', description: '通过 ConfigProvider 自定义徽章主题。' },
         ],
       },
+      {
+        key: 'carousel',
+        label: 'Carousel 轮播',
+        icon: 'Carousel',
+        items: [
+          { key: 'carousel-basic', label: 'Carousel 基础用法', componentPath: 'Carousel', exampleName: 'Basic', description: '自动播放的基础轮播。' },
+          { key: 'carousel-dot-position', label: 'Carousel 指示点位置', componentPath: 'Carousel', exampleName: 'DotPosition', description: '上下左右四个方向的指示点。' },
+          { key: 'carousel-fade', label: 'Carousel 渐显', componentPath: 'Carousel', exampleName: 'Fade', description: 'effect="fade" 渐显切换效果。' },
+          { key: 'carousel-vertical', label: 'Carousel 垂直方向', componentPath: 'Carousel', exampleName: 'Vertical', description: 'vertical 垂直方向轮播。' },
+          { key: 'carousel-arrows', label: 'Carousel 切换箭头', componentPath: 'Carousel', exampleName: 'Arrows', description: 'arrows 显示上一张/下一张箭头。' },
+          { key: 'carousel-theme', label: 'Carousel 主题定制', componentPath: 'Carousel', exampleName: 'Theme', description: '通过 ConfigProvider 自定义轮播主题。' },
+        ],
+      },
     ],
   },
   {

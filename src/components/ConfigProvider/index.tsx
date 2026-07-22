@@ -91,6 +91,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const cardTheme = mergedTheme.components?.Card || {};
     // 获取 Badge 组件级配置
     const badgeTheme = mergedTheme.components?.Badge || {};
+    // 获取 Carousel 组件级配置
+    const carouselTheme = mergedTheme.components?.Carousel || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -795,6 +797,17 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-badge-color-error-component': badgeTheme.colorError,
       '--soui-badge-color-primary-component': badgeTheme.colorPrimary,
       '--soui-badge-font-size-component': badgeTheme.fontSize ? `${badgeTheme.fontSize}px` : undefined,
+
+      // ==================== Carousel 组件配置 ====================
+      // 第2层: Carousel 配置点 (引用设计令牌)
+      '--soui-carousel-color-primary': carouselTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-carousel-dot-size': carouselTheme.dotSize ? `${carouselTheme.dotSize}px` : undefined,
+      '--soui-carousel-arrow-size': carouselTheme.arrowSize ? `${carouselTheme.arrowSize}px` : undefined,
+
+      // 第3层: Carousel 组件级覆盖 (优先级最高)
+      '--soui-carousel-color-primary-component': carouselTheme.colorPrimary,
+      '--soui-carousel-dot-size-component': carouselTheme.dotSize ? `${carouselTheme.dotSize}px` : undefined,
+      '--soui-carousel-arrow-size-component': carouselTheme.arrowSize ? `${carouselTheme.arrowSize}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

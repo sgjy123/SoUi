@@ -246,6 +246,7 @@ function sidebarComponents() {
         { text: 'Tag 标签', link: 'tag' },
         { text: 'Card 卡片', link: 'card' },
         { text: 'Badge 徽章数', link: 'badge' },
+        { text: 'Carousel 轮播', link: 'carousel' },
       ],
     },
     {

@@ -853,6 +853,15 @@ export interface ComponentThemeConfig {
     /** 数字字体大小（像素） */
     fontSize?: number;
   };
+  /** 轮播组件配置 */
+  Carousel?: {
+    /** 主色（激活指示点颜色） */
+    colorPrimary?: string;
+    /** 指示点尺寸（像素） */
+    dotSize?: number;
+    /** 箭头按钮尺寸（像素） */
+    arrowSize?: number;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

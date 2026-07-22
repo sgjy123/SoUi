@@ -245,6 +245,10 @@ export type { CardProps, CardGridProps, CardMetaProps, CardSize, CardType } from
 export { default as Badge } from './components/Badge';
 export type { BadgeProps, RibbonProps, BadgeStatus, BadgeSize, RibbonPlacement } from './components/Badge';
 
+// Carousel Component
+export { default as Carousel } from './components/Carousel';
+export type { CarouselProps, CarouselRef, CarouselEffect, CarouselDotPosition } from './components/Carousel';
+
 // Utils
 export * from './utils';
 

@@ -1,0 +1,173 @@
+@import '../../styles/variables.less';
+
+.soui-carousel {
+  position: relative;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+
+  // ==================== 视口与轨道 ====================
+  &-viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  &-track {
+    box-sizing: border-box;
+    will-change: transform;
+  }
+
+  &-slide {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    &-fade {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+  }
+
+  // ==================== 指示点 ====================
+  &-dots {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    gap: @padding-xs + 2px;
+
+    &-bottom {
+      bottom: @padding-sm + 4px;
+      left: 50%;
+      flex-direction: row;
+      transform: translateX(-50%);
+    }
+
+    &-top {
+      top: @padding-sm + 4px;
+      left: 50%;
+      flex-direction: row;
+      transform: translateX(-50%);
+    }
+
+    &-left {
+      left: @padding-sm + 4px;
+      top: 50%;
+      flex-direction: column;
+      transform: translateY(-50%);
+    }
+
+    &-right {
+      right: @padding-sm + 4px;
+      top: 50%;
+      flex-direction: column;
+      transform: translateY(-50%);
+    }
+  }
+
+  &-dot-item {
+    display: flex;
+    line-height: 0;
+  }
+
+  &-dot {
+    display: block;
+    width: 16px;
+    height: var(--soui-carousel-dot-size-component, var(--soui-carousel-dot-size, 3px));
+    padding: 0;
+    border: none;
+    border-radius: 100px;
+    background: var(--soui-carousel-dot-color-component, var(--soui-carousel-dot-color, rgba(0, 0, 0, 0.2)));
+    cursor: pointer;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  // 垂直方向指示点：竖向排列
+  &-dots-left &-dot,
+  &-dots-right &-dot {
+    width: var(--soui-carousel-dot-size-component, var(--soui-carousel-dot-size, 3px));
+    height: 16px;
+  }
+
+  &-dot-active &-dot {
+    width: 24px;
+    background: var(--soui-carousel-color-primary-component, var(--soui-carousel-color-primary, var(--soui-primary-color, @primary-color)));
+  }
+
+  &-dots-left &-dot-active &-dot,
+  &-dots-right &-dot-active &-dot {
+    width: var(--soui-carousel-dot-size-component, var(--soui-carousel-dot-size, 3px));
+    height: 24px;
+  }
+
+  // ==================== 切换箭头 ====================
+  &-arrow {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--soui-carousel-arrow-size-component, var(--soui-carousel-arrow-size, 32px));
+    height: var(--soui-carousel-arrow-size-component, var(--soui-carousel-arrow-size, 32px));
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--soui-carousel-arrow-bg-component, var(--soui-carousel-arrow-bg, rgba(0, 0, 0, 0.2)));
+    color: var(--soui-color-text-inverse, #fff);
+    cursor: pointer;
+    transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover {
+      background: var(--soui-carousel-arrow-bg-hover-component, var(--soui-carousel-arrow-bg-hover, rgba(0, 0, 0, 0.4)));
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &-disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+
+      &:hover {
+        background: var(--soui-carousel-arrow-bg-component, var(--soui-carousel-arrow-bg, rgba(0, 0, 0, 0.2)));
+      }
+    }
+
+    &-prev {
+      left: @padding-sm + 4px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &-next {
+      right: @padding-sm + 4px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  // 垂直方向箭头位置
+  &-vertical &-arrow-prev {
+    left: 50%;
+    top: @padding-sm + 4px;
+    transform: translateX(-50%);
+  }
+
+  &-vertical &-arrow-next {
+    left: 50%;
+    top: auto;
+    bottom: @padding-sm + 4px;
+    transform: translateX(-50%);
+  }
+}
