@@ -249,6 +249,10 @@ export type { BadgeProps, RibbonProps, BadgeStatus, BadgeSize, RibbonPlacement }
 export { default as Carousel } from './components/Carousel';
 export type { CarouselProps, CarouselRef, CarouselEffect, CarouselDotPosition } from './components/Carousel';
 
+// Descriptions Component
+export { default as Descriptions } from './components/Descriptions';
+export type { DescriptionsProps, DescriptionsItemProps, DescriptionsSize, DescriptionsLayout, DescriptionsColumn } from './components/Descriptions';
+
 // Utils
 export * from './utils';
 

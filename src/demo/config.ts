@@ -653,6 +653,18 @@ export const docsConfig: MenuGroup[] = [
           { key: 'carousel-theme', label: 'Carousel 主题定制', componentPath: 'Carousel', exampleName: 'Theme', description: '通过 ConfigProvider 自定义轮播主题。' },
         ],
       },
+      {
+        key: 'descriptions',
+        label: 'Descriptions 描述列表',
+        icon: 'DocDetail',
+        items: [
+          { key: 'descriptions-basic', label: 'Descriptions 基础用法', componentPath: 'Descriptions', exampleName: 'Basic', description: '基础描述列表，默认三列布局。' },
+          { key: 'descriptions-bordered', label: 'Descriptions 带边框', componentPath: 'Descriptions', exampleName: 'Bordered', description: 'bordered 带边框样式。' },
+          { key: 'descriptions-vertical', label: 'Descriptions 垂直布局', componentPath: 'Descriptions', exampleName: 'Vertical', description: 'layout="vertical" 垂直布局。' },
+          { key: 'descriptions-size', label: 'Descriptions 尺寸', componentPath: 'Descriptions', exampleName: 'Size', description: '三种尺寸：default / middle / small。' },
+          { key: 'descriptions-theme', label: 'Descriptions 主题定制', componentPath: 'Descriptions', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
   {

@@ -93,6 +93,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const badgeTheme = mergedTheme.components?.Badge || {};
     // 获取 Carousel 组件级配置
     const carouselTheme = mergedTheme.components?.Carousel || {};
+    // 获取 Descriptions 组件级配置
+    const descriptionsTheme = mergedTheme.components?.Descriptions || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -808,6 +810,17 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-carousel-color-primary-component': carouselTheme.colorPrimary,
       '--soui-carousel-dot-size-component': carouselTheme.dotSize ? `${carouselTheme.dotSize}px` : undefined,
       '--soui-carousel-arrow-size-component': carouselTheme.arrowSize ? `${carouselTheme.arrowSize}px` : undefined,
+
+      // ==================== Descriptions 组件配置 ====================
+      // 第2层: Descriptions 配置点 (引用设计令牌)
+      '--soui-descriptions-label-bg': descriptionsTheme.colorLabelBg,
+      '--soui-descriptions-border-color': descriptionsTheme.borderColor,
+      '--soui-descriptions-font-size': descriptionsTheme.fontSize ? `${descriptionsTheme.fontSize}px` : undefined,
+
+      // 第3层: Descriptions 组件级覆盖 (优先级最高)
+      '--soui-descriptions-label-bg-component': descriptionsTheme.colorLabelBg,
+      '--soui-descriptions-border-color-component': descriptionsTheme.borderColor,
+      '--soui-descriptions-font-size-component': descriptionsTheme.fontSize ? `${descriptionsTheme.fontSize}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

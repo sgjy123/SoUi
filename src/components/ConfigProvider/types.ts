@@ -862,6 +862,15 @@ export interface ComponentThemeConfig {
     /** 箭头按钮尺寸（像素） */
     arrowSize?: number;
   };
+  /** 描述列表组件配置 */
+  Descriptions?: {
+    /** 标签背景色（有边框时） */
+    colorLabelBg?: string;
+    /** 边框颜色 */
+    borderColor?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

@@ -1,0 +1,122 @@
+@import '../../styles/variables.less';
+
+.soui-descriptions {
+  font-size: var(--soui-descriptions-font-size, var(--soui-font-size, @font-size-base));
+  color: var(--soui-text-color, @text-color);
+
+  // ==================== 头部 ====================
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: @margin-md;
+    gap: @padding-md;
+  }
+
+  &-title {
+    flex: 1;
+    color: var(--soui-text-color, @text-color);
+    font-weight: 600;
+    font-size: var(--soui-font-size-lg, @font-size-lg);
+    line-height: @line-height-base;
+  }
+
+  &-extra {
+    color: var(--soui-text-color, @text-color);
+  }
+
+  // ==================== 表格 ====================
+  &-body {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  &-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+
+  &-item-label,
+  &-item-content {
+    text-align: start;
+    vertical-align: top;
+    word-break: break-word;
+  }
+
+  &-item-label {
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    white-space: nowrap;
+  }
+
+  &-item-content {
+    color: var(--soui-text-color, @text-color);
+  }
+
+  &-colon {
+    margin: 0 6px 0 2px;
+  }
+
+  // ==================== 水平布局（无边框） ====================
+  &-layout-horizontal:not(&-bordered) {
+    .soui-descriptions-item-label,
+    .soui-descriptions-item-content {
+      padding: 0 @padding-md @padding-md 0;
+    }
+  }
+
+  // ==================== 垂直布局（无边框） ====================
+  &-layout-vertical:not(&-bordered) {
+    .soui-descriptions-item-label {
+      padding: 0 0 @padding-xs 0;
+    }
+
+    .soui-descriptions-item-content {
+      padding: 0 @padding-md @padding-md 0;
+    }
+  }
+
+  // ==================== 有边框 ====================
+  &-bordered {
+    .soui-descriptions-table {
+      border: 1px solid var(--soui-descriptions-border-color, var(--soui-border-color-split, @border-color-split));
+      border-radius: var(--soui-border-radius, @border-radius-base);
+    }
+
+    .soui-descriptions-item-label,
+    .soui-descriptions-item-content {
+      border: 1px solid var(--soui-descriptions-border-color, var(--soui-border-color-split, @border-color-split));
+      padding: @padding-md @padding-lg;
+    }
+
+    .soui-descriptions-item-label {
+      background: var(--soui-descriptions-label-bg-component, var(--soui-descriptions-label-bg, var(--soui-bg-color-layout, @bg-color-layout)));
+      white-space: nowrap;
+    }
+  }
+
+  // ==================== 尺寸 ====================
+  &-size-middle {
+    &.soui-descriptions-bordered .soui-descriptions-item-label,
+    &.soui-descriptions-bordered .soui-descriptions-item-content {
+      padding: @padding-sm + 4px @padding-lg;
+    }
+
+    &.soui-descriptions-layout-horizontal:not(.soui-descriptions-bordered) .soui-descriptions-item-label,
+    &.soui-descriptions-layout-horizontal:not(.soui-descriptions-bordered) .soui-descriptions-item-content {
+      padding-bottom: @padding-sm + 4px;
+    }
+  }
+
+  &-size-small {
+    &.soui-descriptions-bordered .soui-descriptions-item-label,
+    &.soui-descriptions-bordered .soui-descriptions-item-content {
+      padding: @padding-sm @padding-md;
+    }
+
+    &.soui-descriptions-layout-horizontal:not(.soui-descriptions-bordered) .soui-descriptions-item-label,
+    &.soui-descriptions-layout-horizontal:not(.soui-descriptions-bordered) .soui-descriptions-item-content {
+      padding-bottom: @padding-sm;
+    }
+  }
+}

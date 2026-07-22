@@ -43,6 +43,7 @@ import Tag from '../../src/components/Tag';
 import Card from '../../src/components/Card';
 import Badge from '../../src/components/Badge';
 import Carousel from '../../src/components/Carousel';
+import Descriptions from '../../src/components/Descriptions';
 import Rate from '../../src/components/Rate';
 import ColorPicker from '../../src/components/ColorPicker';
 import DatePicker from '../../src/components/DatePicker';
@@ -142,6 +143,8 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Badge,
     Ribbon: Badge.Ribbon,
     Carousel,
+    Descriptions,
+    DescriptionsItem: Descriptions.Item,
     Rate,
     ColorPicker,
     DatePicker,
