@@ -241,6 +241,10 @@ export type { TagProps, CheckableTagProps, TagPresetColor, TagPresetStatus } fro
 export { default as Card } from './components/Card';
 export type { CardProps, CardGridProps, CardMetaProps, CardSize, CardType } from './components/Card';
 
+// Badge Component
+export { default as Badge } from './components/Badge';
+export type { BadgeProps, RibbonProps, BadgeStatus, BadgeSize, RibbonPlacement } from './components/Badge';
+
 // Utils
 export * from './utils';
 

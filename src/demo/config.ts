@@ -625,6 +625,21 @@ export const docsConfig: MenuGroup[] = [
           { key: 'card-theme', label: 'Card 主题定制', componentPath: 'Card', exampleName: 'Theme', description: '通过 ConfigProvider 自定义卡片主题。' },
         ],
       },
+      {
+        key: 'badge',
+        label: 'Badge 徽章数',
+        icon: 'Badge',
+        items: [
+          { key: 'badge-basic', label: 'Badge 基础用法', componentPath: 'Badge', exampleName: 'Basic', description: '展示数字、0 值和自定义内容徽章。' },
+          { key: 'badge-overflow', label: 'Badge 封顶数字', componentPath: 'Badge', exampleName: 'Overflow', description: '超过 overflowCount 显示为 N+。' },
+          { key: 'badge-dot', label: 'Badge 小红点', componentPath: 'Badge', exampleName: 'Dot', description: '不展示数字，只显示小红点。' },
+          { key: 'badge-status', label: 'Badge 状态点', componentPath: 'Badge', exampleName: 'Status', description: '五种状态点及带文字的状态。' },
+          { key: 'badge-colorful', label: 'Badge 多彩颜色', componentPath: 'Badge', exampleName: 'Colorful', description: '预设颜色和自定义色值。' },
+          { key: 'badge-size', label: 'Badge 尺寸与描边', componentPath: 'Badge', exampleName: 'Size', description: '小尺寸徽章和白色描边。' },
+          { key: 'badge-ribbon', label: 'Badge 缎带', componentPath: 'Badge', exampleName: 'Ribbon', description: 'Badge.Ribbon 缎带展示。' },
+          { key: 'badge-theme', label: 'Badge 主题定制', componentPath: 'Badge', exampleName: 'Theme', description: '通过 ConfigProvider 自定义徽章主题。' },
+        ],
+      },
     ],
   },
   {

@@ -844,6 +844,15 @@ export interface ComponentThemeConfig {
     /** 悬停阴影 */
     hoverShadow?: string;
   };
+  /** 徽章数组件配置 */
+  Badge?: {
+    /** 错误色（数字背景色） */
+    colorError?: string;
+    /** 主色（processing 状态色） */
+    colorPrimary?: string;
+    /** 数字字体大小（像素） */
+    fontSize?: number;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

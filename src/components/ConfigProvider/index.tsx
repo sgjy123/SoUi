@@ -89,6 +89,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const tagTheme = mergedTheme.components?.Tag || {};
     // 获取 Card 组件级配置
     const cardTheme = mergedTheme.components?.Card || {};
+    // 获取 Badge 组件级配置
+    const badgeTheme = mergedTheme.components?.Badge || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -782,6 +784,17 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-card-border-radius-component': cardTheme.borderRadius ? `${cardTheme.borderRadius}px` : undefined,
       '--soui-card-header-font-size-component': cardTheme.headerFontSize ? `${cardTheme.headerFontSize}px` : undefined,
       '--soui-card-hover-shadow-component': cardTheme.hoverShadow,
+
+      // ==================== Badge 组件配置 ====================
+      // 第2层: Badge 配置点 (引用设计令牌)
+      '--soui-badge-color-error': badgeTheme.colorError || mergedTheme.errorColor,
+      '--soui-badge-color-primary': badgeTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-badge-font-size': badgeTheme.fontSize ? `${badgeTheme.fontSize}px` : undefined,
+
+      // 第3层: Badge 组件级覆盖 (优先级最高)
+      '--soui-badge-color-error-component': badgeTheme.colorError,
+      '--soui-badge-color-primary-component': badgeTheme.colorPrimary,
+      '--soui-badge-font-size-component': badgeTheme.fontSize ? `${badgeTheme.fontSize}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

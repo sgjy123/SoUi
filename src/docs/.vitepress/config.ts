@@ -245,6 +245,7 @@ function sidebarComponents() {
         { text: 'Waterfall 瀑布流', link: 'waterfall' },
         { text: 'Tag 标签', link: 'tag' },
         { text: 'Card 卡片', link: 'card' },
+        { text: 'Badge 徽章数', link: 'badge' },
       ],
     },
     {
