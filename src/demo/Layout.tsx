@@ -64,7 +64,7 @@ const DocsLayout: React.FC = () => {
       <Layout hasSider style={{ minHeight: '100vh', borderRadius: '8px', overflow: 'hidden' }}>
         {/* 左侧菜单 */}
         <Layout.Sider width={256}
-          style={{ 
+          style={{
             background: '#fff',
             color: '#fff',
           }}>
@@ -73,7 +73,7 @@ const DocsLayout: React.FC = () => {
             mode="inline"
             selectedKeys={[activeComponentKey]}
             openKeys={openKeys}
-            accordion={false}
+            accordion
             onOpenChange={(keys) => setOpenKeys(keys)}
             onClick={({ key }) => {
               // key 是组件的 key
