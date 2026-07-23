@@ -129,6 +129,41 @@ export default () => {
 };
 ```
 
+### 配合 Form 使用
+
+Segmented 可直接作为 `Form.Item` 的表单控件：`value` / `onChange` 由表单接管，`onBlur` 用于触发失焦校验，并自动跟随 Form 的 `size` 与 `disabled`。
+
+```tsx
+import { Form, Segmented, Button, Message } from '@soui/ui';
+
+export default () => {
+  const [form] = Form.useForm();
+
+  return (
+    <Form
+      form={form}
+      layout="vertical"
+      initialValues={{ view: 'list' }}
+      onFinish={(values) => {
+        Message.success('提交成功！');
+        console.log(values);
+      }}
+    >
+      <Form.Item name="view" label="视图模式">
+        <Segmented
+          options={[
+            { label: '列表', value: 'list' },
+            { label: '网格', value: 'grid' },
+            { label: '画廊', value: 'gallery' },
+          ]}
+        />
+      </Form.Item>
+      <Button type="primary" htmlType="submit">提交</Button>
+    </Form>
+  );
+};
+```
+
 ## API
 
 ### 属性

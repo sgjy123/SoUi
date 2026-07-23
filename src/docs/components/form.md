@@ -16,7 +16,7 @@
 水平布局的表单，标签在控件左侧。
 
 ```tsx
-import { Form, Input, Radio, Select, Button, Space, Message } from '@soui/ui';
+import { Form, Input, Radio, Select, Segmented, Button, Space, Message } from '@soui/ui';
 
 export default () => {
   const [form] = Form.useForm();
@@ -27,7 +27,7 @@ export default () => {
       layout="horizontal"
       labelCol={{ span: 6 }}
       wrapperCol={{ span: 18 }}
-      initialValues={{ gender: 'male' }}
+      initialValues={{ gender: 'male', view: 'list' }}
       onFinish={(values) => {
         Message.success('提交成功！');
         console.log(values);
@@ -44,6 +44,9 @@ export default () => {
       </Form.Item>
       <Form.Item name="role" label="角色">
         <Select placeholder="请选择角色" options={[{ label: '管理员', value: 'admin' }, { label: '编辑者', value: 'editor' }]} />
+      </Form.Item>
+      <Form.Item name="view" label="视图模式">
+        <Segmented options={[{ label: '列表', value: 'list' }, { label: '网格', value: 'grid' }, { label: '画廊', value: 'gallery' }]} />
       </Form.Item>
       <Form.Item wrapperCol={{ offset: 6, span: 18 }}>
         <Space>

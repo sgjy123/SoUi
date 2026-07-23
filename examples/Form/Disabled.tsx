@@ -4,6 +4,7 @@ import Input from '../../src/components/Input';
 import Select from '../../src/components/Select';
 import InputNumber from '../../src/components/InputNumber';
 import Switch from '../../src/components/Switch';
+import Segmented from '../../src/components/Segmented';
 import Button from '../../src/components/Button';
 import Message from '../../src/components/Message';
 
@@ -31,6 +32,7 @@ const Disabled: React.FC = () => {
             email: 'user@example.com',
             role: 'admin',
             age: 25,
+            view: 'list',
           }}
           onFinish={(v) => Message.success('提交成功')}
         >
@@ -54,6 +56,16 @@ const Disabled: React.FC = () => {
 
           <Form.Item name="age" label="年龄">
             <InputNumber placeholder="年龄" style={{ width: '100%' }} />
+          </Form.Item>
+
+          <Form.Item name="view" label="视图模式">
+            <Segmented
+              options={[
+                { label: '列表', value: 'list' },
+                { label: '网格', value: 'grid' },
+                { label: '画廊', value: 'gallery' },
+              ]}
+            />
           </Form.Item>
 
           <Form.Item

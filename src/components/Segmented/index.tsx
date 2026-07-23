@@ -71,6 +71,7 @@ const Segmented: React.FC<SegmentedProps> = ({
   value: valueProp,
   defaultValue,
   onChange,
+  onBlur,
   size = 'middle',
   disabled = false,
   block = false,
@@ -105,11 +106,15 @@ const Segmented: React.FC<SegmentedProps> = ({
     []
   );
 
-  // 测量选中项位置，驱动滑块
+  // 测量选中项位置，驱动滑块（值未变时返回旧引用，避免内联 options 引发的重渲染循环）
   const measure = useCallback(() => {
     const el = currentValue !== undefined ? itemRefs.current.get(currentValue) : undefined;
     if (!el) return;
-    setThumb({ width: el.offsetWidth, left: el.offsetLeft });
+    const width = el.offsetWidth;
+    const left = el.offsetLeft;
+    setThumb((prev) =>
+      prev.width === width && prev.left === left ? prev : { width, left }
+    );
   }, [currentValue]);
 
   useLayoutEffect(() => {
@@ -203,6 +208,7 @@ const Segmented: React.FC<SegmentedProps> = ({
               aria-disabled={itemDisabled}
               tabIndex={itemDisabled ? -1 : 0}
               onClick={() => select(opt.value)}
+              onBlur={(e) => onBlur?.(e as unknown as React.FocusEvent<HTMLDivElement>)}
             >
               <span className="soui-segmented-item-label">
                 {opt.icon && <span className="soui-segmented-item-icon">{opt.icon}</span>}

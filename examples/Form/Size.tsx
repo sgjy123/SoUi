@@ -2,6 +2,7 @@ import React from 'react';
 import Form from '../../src/components/Form';
 import Input from '../../src/components/Input';
 import Select from '../../src/components/Select';
+import Segmented from '../../src/components/Segmented';
 import Button from '../../src/components/Button';
 import Message from '../../src/components/Message';
 
@@ -47,6 +48,16 @@ const Size: React.FC = () => {
               options={[
                 { label: '管理员', value: 'admin' },
                 { label: '编辑者', value: 'editor' },
+              ]}
+            />
+          </Form.Item>
+
+          <Form.Item name="view" label="视图模式" initialValue="list">
+            <Segmented
+              options={[
+                { label: '列表', value: 'list' },
+                { label: '网格', value: 'grid' },
+                { label: '画廊', value: 'gallery' },
               ]}
             />
           </Form.Item>

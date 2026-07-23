@@ -3,6 +3,7 @@ import Form from '../../src/components/Form';
 import Input from '../../src/components/Input';
 import Radio from '../../src/components/Radio';
 import Select from '../../src/components/Select';
+import Segmented from '../../src/components/Segmented';
 import Button from '../../src/components/Button';
 import Space from '../../src/components/Space';
 import Message from '../../src/components/Message';
@@ -22,7 +23,7 @@ const Basic: React.FC = () => {
         layout="horizontal"
         labelCol={{ span: 6 }}
         wrapperCol={{ span: 18 }}
-        initialValues={{ gender: 'male' }}
+        initialValues={{ gender: 'male', view: 'list' }}
         onFinish={onFinish}
       >
         <Form.Item
@@ -60,6 +61,16 @@ const Basic: React.FC = () => {
               { label: '管理员', value: 'admin' },
               { label: '编辑者', value: 'editor' },
               { label: '普通用户', value: 'user' },
+            ]}
+          />
+        </Form.Item>
+
+        <Form.Item name="view" label="视图模式">
+          <Segmented
+            options={[
+              { label: '列表', value: 'list' },
+              { label: '网格', value: 'grid' },
+              { label: '画廊', value: 'gallery' },
             ]}
           />
         </Form.Item>

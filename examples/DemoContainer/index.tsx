@@ -29,6 +29,7 @@ import Pagination from '../../src/components/Pagination';
 import Input from '../../src/components/Input';
 import Select from '../../src/components/Select';
 import Radio from '../../src/components/Radio';
+import Segmented from '../../src/components/Segmented';
 import Checkbox from '../../src/components/Checkbox';
 import InputNumber from '../../src/components/InputNumber';
 import Switch from '../../src/components/Switch';
@@ -127,6 +128,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Radio,
     RadioGroup: Radio.Group,
     RadioButton: Radio.Button,
+    Segmented,
     Checkbox,
     CheckboxGroup: Checkbox.Group,
     InputNumber,
