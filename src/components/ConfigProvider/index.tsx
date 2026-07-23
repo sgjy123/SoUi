@@ -57,6 +57,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const selectTheme = mergedTheme.components?.Select || {};
     // 获取 Radio 组件级配置
     const radioTheme = mergedTheme.components?.Radio || {};
+    // 获取 Segmented 组件级配置
+    const segmentedTheme = mergedTheme.components?.Segmented || {};
     // 获取 Checkbox 组件级配置
     const checkboxTheme = mergedTheme.components?.Checkbox || {};
     // 获取 InputNumber 组件级配置
@@ -448,6 +450,16 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-radio-color-bg': radioTheme.colorBg || '#fff',
       '--soui-radio-color-text': radioTheme.colorText || 'rgba(0, 0, 0, 0.88)',
       '--soui-radio-color-bg-disabled': radioTheme.colorBgDisabled || '#f5f5f5',
+
+      // ==================== Segmented 组件配置 ====================
+      '--soui-segmented-color-primary': segmentedTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-segmented-track-bg': segmentedTheme.trackBg || '#f5f5f5',
+      '--soui-segmented-item-selected-bg': segmentedTheme.itemSelectedBg || '#fff',
+      '--soui-segmented-color-text': segmentedTheme.colorText || 'rgba(0, 0, 0, 0.65)',
+      '--soui-segmented-color-text-selected': segmentedTheme.colorTextSelected || 'rgba(0, 0, 0, 0.88)',
+      '--soui-segmented-color-text-disabled': segmentedTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
+      '--soui-segmented-border-radius': segmentedTheme.borderRadius ? `${segmentedTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
+      '--soui-segmented-font-size': segmentedTheme.fontSize ? `${segmentedTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
 
       // ==================== Checkbox 组件配置 ====================
       '--soui-checkbox-color-primary': checkboxTheme.colorPrimary || mergedTheme.primaryColor,

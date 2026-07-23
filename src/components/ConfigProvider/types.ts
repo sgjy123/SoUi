@@ -616,6 +616,25 @@ export interface ComponentThemeConfig {
     /** 禁用背景色 */
     colorBgDisabled?: string;
   };
+  /** 分段控制器组件配置 */
+  Segmented?: {
+    /** 主色（焦点环） */
+    colorPrimary?: string;
+    /** 轨道背景色 */
+    trackBg?: string;
+    /** 选中项（滑块）背景色 */
+    itemSelectedBg?: string;
+    /** 默认文本颜色 */
+    colorText?: string;
+    /** 选中文本颜色 */
+    colorTextSelected?: string;
+    /** 禁用文本颜色 */
+    colorTextDisabled?: string;
+    /** 圆角 */
+    borderRadius?: number;
+    /** 字体大小 */
+    fontSize?: number;
+  };
   /** 多选框组件配置 */
   Checkbox?: {
     /** 主色 */

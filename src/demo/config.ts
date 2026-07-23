@@ -278,6 +278,20 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
+        key: 'segmented',
+        label: 'Segmented 分段控制器',
+        icon: 'SwitchContrast',
+        items: [
+          { key: 'segmented-basic', label: 'Segmented 基础用法', componentPath: 'Segmented', exampleName: 'Basic', description: '基本分段切换，默认选中第一项，支持对象配置。' },
+          { key: 'segmented-size', label: 'Segmented 尺寸', componentPath: 'Segmented', exampleName: 'Size', description: '大、中、小三种尺寸。' },
+          { key: 'segmented-block', label: 'Segmented 撑满宽度', componentPath: 'Segmented', exampleName: 'Block', description: 'block 撑满父容器，选项等分。' },
+          { key: 'segmented-disabled', label: 'Segmented 禁用', componentPath: 'Segmented', exampleName: 'Disabled', description: '禁用单个选项或整体禁用。' },
+          { key: 'segmented-icon', label: 'Segmented 图标', componentPath: 'Segmented', exampleName: 'Icon', description: '图标加文字或纯图标选项。' },
+          { key: 'segmented-controlled', label: 'Segmented 受控模式', componentPath: 'Segmented', exampleName: 'Controlled', description: '通过 value 和 onChange 受控使用。' },
+          { key: 'segmented-theme', label: 'Segmented 主题定制', componentPath: 'Segmented', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
+      {
         key: 'checkbox',
         label: 'Checkbox 多选框',
         icon: 'CheckCorrect',

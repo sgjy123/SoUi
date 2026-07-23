@@ -210,6 +210,7 @@ function sidebarComponents() {
         { text: 'Input 输入框', link: 'input' },
         { text: 'Select 选择器', link: 'select' },
         { text: 'Radio 单选框', link: 'radio' },
+        { text: 'Segmented 分段控制器', link: 'segmented' },
         { text: 'Checkbox 多选框', link: 'checkbox' },
         { text: 'InputNumber 数字输入', link: 'input-number' },
         { text: 'Switch 开关', link: 'switch' },

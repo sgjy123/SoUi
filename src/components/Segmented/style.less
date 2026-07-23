@@ -1,0 +1,138 @@
+@import '../../styles/variables.less';
+
+@soui-segmented-track-padding: 2px;
+
+.soui-segmented {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  padding: @soui-segmented-track-padding;
+  background: var(--soui-segmented-track-bg, @bg-color-layout);
+  border-radius: var(--soui-segmented-border-radius, var(--soui-border-radius, @border-radius-base));
+  font-size: var(--soui-segmented-font-size, var(--soui-font-size, @font-size-base));
+  color: var(--soui-segmented-color-text, var(--soui-text-color, @text-color));
+  transition: background-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  // ==================== 分组容器 ====================
+  &-group {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  // ==================== 滑块 ====================
+  &-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+    height: 100%;
+    background: var(--soui-segmented-item-selected-bg, var(--soui-color-bg-container, @bg-color-container));
+    border-radius: calc(var(--soui-segmented-border-radius, var(--soui-border-radius, @border-radius-base)) - @soui-segmented-track-padding);
+    box-shadow: var(--soui-segmented-thumb-shadow, var(--soui-box-shadow-tertiary, @box-shadow-tertiary));
+  }
+
+  // 首帧后启用过渡，避免初始跳动
+  &-ready &-thumb {
+    transition: transform 0.2s var(--soui-transition-timing-function, @transition-timing-function),
+      width 0.2s var(--soui-transition-timing-function, @transition-timing-function);
+  }
+
+  // ==================== 选项 ====================
+  &-item {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 11px;
+    cursor: pointer;
+    border-radius: calc(var(--soui-segmented-border-radius, var(--soui-border-radius, @border-radius-base)) - @soui-segmented-track-padding);
+    color: var(--soui-segmented-color-text, var(--soui-text-color-secondary, @text-color-secondary));
+    white-space: nowrap;
+    user-select: none;
+    outline: none;
+    transition: color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover:not(&-disabled):not(&-selected) {
+      color: var(--soui-segmented-color-text-hover, var(--soui-text-color, @text-color));
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--soui-segmented-color-primary, var(--soui-primary-color, @primary-color));
+    }
+
+    &-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    &-icon {
+      display: inline-flex;
+      align-items: center;
+      font-size: 1.15em;
+    }
+
+    &-selected {
+      color: var(--soui-segmented-color-text-selected, var(--soui-text-color, @text-color));
+      font-weight: 500;
+    }
+
+    &-disabled {
+      cursor: not-allowed;
+      color: var(--soui-segmented-color-text-disabled, var(--soui-text-color-disabled, @text-color-disabled));
+    }
+  }
+
+  // ==================== 尺寸变体 ====================
+  &-middle {
+    height: @control-height-base;
+    font-size: var(--soui-segmented-font-size, var(--soui-font-size, @font-size-base));
+  }
+
+  &-small {
+    height: @control-height-sm;
+    font-size: var(--soui-segmented-font-size, var(--soui-font-size, @font-size-base));
+
+    .soui-segmented-item {
+      padding: 0 8px;
+    }
+  }
+
+  &-large {
+    height: @control-height-lg;
+    font-size: var(--soui-segmented-font-size, var(--soui-font-size-lg, @font-size-lg));
+
+    .soui-segmented-item {
+      padding: 0 14px;
+    }
+  }
+
+  // ==================== 撑满宽度 ====================
+  &-block {
+    display: flex;
+    width: 100%;
+
+    .soui-segmented-item {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  // ==================== 整体禁用 ====================
+  &-disabled {
+    .soui-segmented-item {
+      cursor: not-allowed;
+      color: var(--soui-segmented-color-text-disabled, var(--soui-text-color-disabled, @text-color-disabled));
+    }
+  }
+}
