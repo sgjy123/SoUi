@@ -95,15 +95,20 @@
     }
   }
 
+  // 裁剪层：min-height:0 允许完全收起，overflow hidden 裁剪溢出内容
   &-content-box {
+    min-height: 0;
     overflow: hidden;
-    padding: 0 @padding-md;
-    color: var(--soui-text-color, @text-color);
+  }
 
-    .soui-collapse-content-active > & {
-      padding-top: @padding-xs;
-      padding-bottom: @padding-md;
-    }
+  // 内层：承载实际 padding，不参与裁剪层尺寸计算
+  &-content-inner {
+    padding: @padding-xs @padding-md @padding-md;
+    color: var(--soui-text-color, @text-color);
+  }
+
+  &-ghost &-content-inner {
+    padding-left: 0;
   }
 
   // ==================== 尺寸 ====================

@@ -246,7 +246,9 @@ const Collapse: CollapseComponent = ({
                 })}
                 style={{ display: shouldRenderContent ? undefined : 'none' }}
               >
-                <div className="soui-collapse-content-box">{panel.children}</div>
+                <div className="soui-collapse-content-box">
+                  <div className="soui-collapse-content-inner">{panel.children}</div>
+                </div>
               </div>
             )}
           </div>
