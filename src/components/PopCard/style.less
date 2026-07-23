@@ -32,6 +32,14 @@
     color: var(--soui-text-color, @text-color);
   }
 
+  // bottom 系：卡片在触发元素下方、箭头朝上，inner 阴影朝上偏移与箭头方向一致，
+  // 避免默认朝下的阴影 blur 糊住朝上的箭头
+  &-placement-bottom &-inner,
+  &-placement-bottomLeft &-inner,
+  &-placement-bottomRight &-inner {
+    box-shadow: 0 -6px 16px @shadow-color;
+  }
+
   // ==================== 箭头（AntD clip-path 三角形方案） ====================
   &-arrow {
     position: absolute;
