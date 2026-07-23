@@ -1,6 +1,6 @@
 @import '../../styles/variables.less';
 
-@soui-popcard-arrow-size: 8px;
+@soui-popcard-arrow-size: 12px;
 
 .soui-popcard-trigger {
   display: inline-block;
@@ -32,18 +32,32 @@
     color: var(--soui-text-color, @text-color);
   }
 
-  // ==================== 箭头 ====================
+  // ==================== 箭头（AntD clip-path 三角形方案） ====================
   &-arrow {
     position: absolute;
-    z-index: 0;
+    z-index: 2;
     width: @soui-popcard-arrow-size;
     height: @soui-popcard-arrow-size;
-    background: var(--soui-popcard-color-bg-component, var(--soui-popcard-color-bg, @bg-color-container));
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
-    transform: rotate(45deg);
+    background: transparent;
+    pointer-events: none;
+    // drop-shadow 放在父元素（无 clip-path），沿子三角形轮廓投影且不被裁剪；
+    // 父元素 rotate 使阴影方向随 placement 旋转。⚠️ 不能写在 ::before 上，clip-path 会裁掉投影
+    //filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.12));
+
+    // 三角形主体：局部坐标尖端朝下，只渲染靠外的一半
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: var(--soui-popcard-color-bg-component, var(--soui-popcard-color-bg, @bg-color-container));
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
   }
 
-  // ---- 上方：箭头在底部 ----
+  // ---- 上方：箭头在底部，尖端朝下 ----
   &-placement-top &-arrow {
     bottom: -(@soui-popcard-arrow-size / 2);
     left: 50%;
@@ -58,48 +72,57 @@
     right: 16px;
   }
 
-  // ---- 下方：箭头在顶部 ----
+  // ---- 下方：箭头在顶部，尖端朝上 ----
   &-placement-bottom &-arrow {
     top: -(@soui-popcard-arrow-size / 2);
     left: 50%;
     margin-left: -(@soui-popcard-arrow-size / 2);
+    transform: rotate(180deg);
   }
   &-placement-bottomLeft &-arrow {
     top: -(@soui-popcard-arrow-size / 2);
     left: 16px;
+    transform: rotate(180deg);
   }
   &-placement-bottomRight &-arrow {
     top: -(@soui-popcard-arrow-size / 2);
     right: 16px;
+    transform: rotate(180deg);
   }
 
-  // ---- 左侧：箭头在右侧 ----
+  // ---- 左侧：箭头在右侧，尖端朝右 ----
   &-placement-left &-arrow {
     right: -(@soui-popcard-arrow-size / 2);
     top: 50%;
     margin-top: -(@soui-popcard-arrow-size / 2);
+    transform: rotate(-90deg);
   }
   &-placement-leftTop &-arrow {
     right: -(@soui-popcard-arrow-size / 2);
     top: 12px;
+    transform: rotate(-90deg);
   }
   &-placement-leftBottom &-arrow {
     right: -(@soui-popcard-arrow-size / 2);
     bottom: 12px;
+    transform: rotate(-90deg);
   }
 
-  // ---- 右侧：箭头在左侧 ----
+  // ---- 右侧：箭头在左侧，尖端朝左 ----
   &-placement-right &-arrow {
     left: -(@soui-popcard-arrow-size / 2);
     top: 50%;
     margin-top: -(@soui-popcard-arrow-size / 2);
+    transform: rotate(90deg);
   }
   &-placement-rightTop &-arrow {
     left: -(@soui-popcard-arrow-size / 2);
     top: 12px;
+    transform: rotate(90deg);
   }
   &-placement-rightBottom &-arrow {
     left: -(@soui-popcard-arrow-size / 2);
     bottom: 12px;
+    transform: rotate(90deg);
   }
 }

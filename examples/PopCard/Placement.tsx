@@ -8,7 +8,7 @@ const placements: PopCardPlacement[] = ['topLeft', 'top', 'topRight', 'bottomLef
 export default () => (
   <Space size={12} wrap>
     {placements.map((p) => (
-      <PopCard key={p} title={p} content={content} placement={p}>
+      <PopCard key={p} title={p} content={content} placement={p} trigger="click">
         <Button>{p}</Button>
       </PopCard>
     ))}
