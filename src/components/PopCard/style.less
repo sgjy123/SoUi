@@ -1,0 +1,105 @@
+@import '../../styles/variables.less';
+
+@soui-popcard-arrow-size: 8px;
+
+.soui-popcard-trigger {
+  display: inline-block;
+}
+
+.soui-popcard {
+  // 浮层根容器（定位由 JS 计算）
+
+  &-inner {
+    position: relative;
+    z-index: 1;
+    min-width: 120px;
+    max-width: 320px;
+    padding: @padding-sm + 4px @padding-md;
+    background: var(--soui-popcard-color-bg-component, var(--soui-popcard-color-bg, @bg-color-container));
+    border-radius: var(--soui-popcard-border-radius-component, var(--soui-popcard-border-radius, var(--soui-border-radius, @border-radius-base)));
+    box-shadow: var(--soui-popcard-box-shadow-component, var(--soui-popcard-box-shadow, var(--soui-box-shadow-secondary, @box-shadow-secondary)));
+    color: var(--soui-text-color, @text-color);
+    font-size: var(--soui-font-size, @font-size-base);
+  }
+
+  &-title {
+    margin-bottom: @margin-xs;
+    color: var(--soui-text-color, @text-color);
+    font-weight: 600;
+  }
+
+  &-content {
+    color: var(--soui-text-color, @text-color);
+  }
+
+  // ==================== 箭头 ====================
+  &-arrow {
+    position: absolute;
+    z-index: 0;
+    width: @soui-popcard-arrow-size;
+    height: @soui-popcard-arrow-size;
+    background: var(--soui-popcard-color-bg-component, var(--soui-popcard-color-bg, @bg-color-container));
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+    transform: rotate(45deg);
+  }
+
+  // ---- 上方：箭头在底部 ----
+  &-placement-top &-arrow {
+    bottom: -(@soui-popcard-arrow-size / 2);
+    left: 50%;
+    margin-left: -(@soui-popcard-arrow-size / 2);
+  }
+  &-placement-topLeft &-arrow {
+    bottom: -(@soui-popcard-arrow-size / 2);
+    left: 16px;
+  }
+  &-placement-topRight &-arrow {
+    bottom: -(@soui-popcard-arrow-size / 2);
+    right: 16px;
+  }
+
+  // ---- 下方：箭头在顶部 ----
+  &-placement-bottom &-arrow {
+    top: -(@soui-popcard-arrow-size / 2);
+    left: 50%;
+    margin-left: -(@soui-popcard-arrow-size / 2);
+  }
+  &-placement-bottomLeft &-arrow {
+    top: -(@soui-popcard-arrow-size / 2);
+    left: 16px;
+  }
+  &-placement-bottomRight &-arrow {
+    top: -(@soui-popcard-arrow-size / 2);
+    right: 16px;
+  }
+
+  // ---- 左侧：箭头在右侧 ----
+  &-placement-left &-arrow {
+    right: -(@soui-popcard-arrow-size / 2);
+    top: 50%;
+    margin-top: -(@soui-popcard-arrow-size / 2);
+  }
+  &-placement-leftTop &-arrow {
+    right: -(@soui-popcard-arrow-size / 2);
+    top: 12px;
+  }
+  &-placement-leftBottom &-arrow {
+    right: -(@soui-popcard-arrow-size / 2);
+    bottom: 12px;
+  }
+
+  // ---- 右侧：箭头在左侧 ----
+  &-placement-right &-arrow {
+    left: -(@soui-popcard-arrow-size / 2);
+    top: 50%;
+    margin-top: -(@soui-popcard-arrow-size / 2);
+  }
+  &-placement-rightTop &-arrow {
+    left: -(@soui-popcard-arrow-size / 2);
+    top: 12px;
+  }
+  &-placement-rightBottom &-arrow {
+    left: -(@soui-popcard-arrow-size / 2);
+    bottom: 12px;
+  }
+}

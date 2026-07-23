@@ -46,6 +46,7 @@ import Carousel from '../../src/components/Carousel';
 import Descriptions from '../../src/components/Descriptions';
 import Image from '../../src/components/Image';
 import Collapse from '../../src/components/Collapse';
+import PopCard from '../../src/components/PopCard';
 import Rate from '../../src/components/Rate';
 import ColorPicker from '../../src/components/ColorPicker';
 import DatePicker from '../../src/components/DatePicker';
@@ -151,6 +152,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     ImagePreviewGroup: Image.PreviewGroup,
     Collapse,
     CollapsePanel: Collapse.Panel,
+    PopCard,
     Rate,
     ColorPicker,
     DatePicker,

@@ -99,6 +99,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const imageTheme = mergedTheme.components?.Image || {};
     // 获取 Collapse 组件级配置
     const collapseTheme = mergedTheme.components?.Collapse || {};
+    // 获取 PopCard 组件级配置
+    const popCardTheme = mergedTheme.components?.PopCard || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -847,6 +849,17 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-collapse-header-bg-component': collapseTheme.headerBg,
       '--soui-collapse-border-color-component': collapseTheme.borderColor,
       '--soui-collapse-font-size-component': collapseTheme.fontSize ? `${collapseTheme.fontSize}px` : undefined,
+
+      // ==================== PopCard 组件配置 ====================
+      // 第2层: PopCard 配置点 (引用设计令牌)
+      '--soui-popcard-color-bg': popCardTheme.colorBg,
+      '--soui-popcard-border-radius': popCardTheme.borderRadius ? `${popCardTheme.borderRadius}px` : undefined,
+      '--soui-popcard-box-shadow': popCardTheme.boxShadow,
+
+      // 第3层: PopCard 组件级覆盖 (优先级最高)
+      '--soui-popcard-color-bg-component': popCardTheme.colorBg,
+      '--soui-popcard-border-radius-component': popCardTheme.borderRadius ? `${popCardTheme.borderRadius}px` : undefined,
+      '--soui-popcard-box-shadow-component': popCardTheme.boxShadow,
     } as any;
   }, [mergedTheme]);
 

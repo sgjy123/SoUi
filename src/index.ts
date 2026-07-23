@@ -261,6 +261,10 @@ export type { ImageProps, ImagePreviewProps, PreviewGroupProps } from './compone
 export { default as Collapse } from './components/Collapse';
 export type { CollapseProps, CollapsePanelProps, CollapseItemConfig, CollapseSize, CollapseExpandIconPosition, CollapseCollapsible } from './components/Collapse';
 
+// PopCard Component
+export { default as PopCard } from './components/PopCard';
+export type { PopCardProps, PopCardPlacement, PopCardTrigger } from './components/PopCard';
+
 // Utils
 export * from './utils';
 

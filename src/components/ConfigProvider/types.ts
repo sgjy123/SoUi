@@ -889,6 +889,15 @@ export interface ComponentThemeConfig {
     /** 字体大小（像素） */
     fontSize?: number;
   };
+  /** 气泡卡片组件配置 */
+  PopCard?: {
+    /** 卡片背景色 */
+    colorBg?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 阴影 */
+    boxShadow?: string;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

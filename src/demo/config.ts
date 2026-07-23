@@ -688,6 +688,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'collapse-theme', label: 'Collapse 主题定制', componentPath: 'Collapse', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'popcard',
+        label: 'PopCard 气泡卡片',
+        icon: 'TopicDiscussion',
+        items: [
+          { key: 'popcard-basic', label: 'PopCard 基础用法', componentPath: 'PopCard', exampleName: 'Basic', description: '悬停弹出带标题和内容的气泡卡片。' },
+          { key: 'popcard-trigger', label: 'PopCard 触发方式', componentPath: 'PopCard', exampleName: 'Trigger', description: 'hover / click / focus 三种触发方式。' },
+          { key: 'popcard-placement', label: 'PopCard 弹出位置', componentPath: 'PopCard', exampleName: 'Placement', description: '十二个方向的弹出位置。' },
+          { key: 'popcard-theme', label: 'PopCard 主题定制', componentPath: 'PopCard', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
   {

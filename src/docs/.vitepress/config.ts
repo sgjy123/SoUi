@@ -250,6 +250,7 @@ function sidebarComponents() {
         { text: 'Descriptions 描述列表', link: 'descriptions' },
         { text: 'Image 图片', link: 'image' },
         { text: 'Collapse 折叠面板', link: 'collapse' },
+        { text: 'PopCard 气泡卡片', link: 'popcard' },
       ],
     },
     {
