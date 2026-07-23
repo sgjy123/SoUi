@@ -257,6 +257,10 @@ export type { DescriptionsProps, DescriptionsItemProps, DescriptionsSize, Descri
 export { default as Image } from './components/Image';
 export type { ImageProps, ImagePreviewProps, PreviewGroupProps } from './components/Image';
 
+// Collapse Component
+export { default as Collapse } from './components/Collapse';
+export type { CollapseProps, CollapsePanelProps, CollapseItemConfig, CollapseSize, CollapseExpandIconPosition, CollapseCollapsible } from './components/Collapse';
+
 // Utils
 export * from './utils';
 

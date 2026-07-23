@@ -249,6 +249,7 @@ function sidebarComponents() {
         { text: 'Carousel 轮播', link: 'carousel' },
         { text: 'Descriptions 描述列表', link: 'descriptions' },
         { text: 'Image 图片', link: 'image' },
+        { text: 'Collapse 折叠面板', link: 'collapse' },
       ],
     },
     {

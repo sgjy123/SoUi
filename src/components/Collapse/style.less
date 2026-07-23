@@ -1,0 +1,119 @@
+@import '../../styles/variables.less';
+
+.soui-collapse {
+  font-size: var(--soui-collapse-font-size, var(--soui-font-size, @font-size-base));
+  color: var(--soui-text-color, @text-color);
+  background: var(--soui-collapse-color-bg-component, var(--soui-collapse-color-bg, var(--soui-bg-color-layout, @bg-color-layout)));
+  border-radius: var(--soui-border-radius, @border-radius-base);
+
+  // ==================== 有边框 ====================
+  &-bordered {
+    border: 1px solid var(--soui-collapse-border-color-component, var(--soui-collapse-border-color, var(--soui-border-color-split, @border-color-split)));
+
+    .soui-collapse-item {
+      border-bottom: 1px solid var(--soui-collapse-border-color-component, var(--soui-collapse-border-color, var(--soui-border-color-split, @border-color-split)));
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+
+  // ==================== 幽灵模式 ====================
+  &-ghost {
+    background: transparent;
+
+    .soui-collapse-header {
+      background: transparent;
+    }
+
+    .soui-collapse-content-box {
+      padding-left: 0;
+    }
+  }
+
+  // ==================== 面板项 ====================
+  &-item {
+    &-disabled {
+      .soui-collapse-header {
+        color: var(--soui-text-color-disabled, @text-color-disabled);
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  // ==================== 面板头 ====================
+  &-header {
+    display: flex;
+    align-items: center;
+    gap: @padding-sm;
+    padding: @padding-sm + 4px @padding-md;
+    background: var(--soui-collapse-header-bg-component, var(--soui-collapse-header-bg, transparent));
+    cursor: pointer;
+    transition: background var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+    user-select: none;
+
+    &:hover {
+      background: var(--soui-collapse-header-bg-hover-component, var(--soui-collapse-header-bg-hover, rgba(0, 0, 0, 0.02)));
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &-text {
+      flex: 1;
+      font-weight: 500;
+    }
+  }
+
+  &-extra {
+    margin-left: auto;
+  }
+
+  // ==================== 箭头 ====================
+  &-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    transition: transform var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &-active {
+      transform: rotate(90deg);
+    }
+  }
+
+  // ==================== 内容区（grid 动画） ====================
+  &-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &-active {
+      grid-template-rows: 1fr;
+    }
+  }
+
+  &-content-box {
+    overflow: hidden;
+    padding: 0 @padding-md;
+    color: var(--soui-text-color, @text-color);
+
+    .soui-collapse-content-active > & {
+      padding-top: @padding-xs;
+      padding-bottom: @padding-md;
+    }
+  }
+
+  // ==================== 尺寸 ====================
+  &-size-large &-header {
+    padding: @padding-md;
+    font-size: var(--soui-font-size-lg, @font-size-lg);
+  }
+
+  &-size-small &-header {
+    padding: @padding-xs + 2px @padding-sm + 4px;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+  }
+}

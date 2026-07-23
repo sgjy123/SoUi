@@ -878,6 +878,17 @@ export interface ComponentThemeConfig {
     /** 圆角大小（像素） */
     borderRadius?: number;
   };
+  /** 折叠面板组件配置 */
+  Collapse?: {
+    /** 面板背景色 */
+    colorBg?: string;
+    /** 面板头背景色 */
+    headerBg?: string;
+    /** 边框颜色 */
+    borderColor?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+  };
   /** 评分组件配置 */
   Rate?: {
     /** 选中时的星星颜色 */

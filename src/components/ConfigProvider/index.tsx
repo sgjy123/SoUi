@@ -97,6 +97,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const descriptionsTheme = mergedTheme.components?.Descriptions || {};
     // 获取 Image 组件级配置
     const imageTheme = mergedTheme.components?.Image || {};
+    // 获取 Collapse 组件级配置
+    const collapseTheme = mergedTheme.components?.Collapse || {};
 
     return {
       // ==================== 全局基础变量 ====================
@@ -832,6 +834,19 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       // 第3层: Image 组件级覆盖 (优先级最高)
       '--soui-image-placeholder-bg-component': imageTheme.placeholderBg,
       '--soui-image-border-radius-component': imageTheme.borderRadius ? `${imageTheme.borderRadius}px` : undefined,
+
+      // ==================== Collapse 组件配置 ====================
+      // 第2层: Collapse 配置点 (引用设计令牌)
+      '--soui-collapse-color-bg': collapseTheme.colorBg,
+      '--soui-collapse-header-bg': collapseTheme.headerBg,
+      '--soui-collapse-border-color': collapseTheme.borderColor,
+      '--soui-collapse-font-size': collapseTheme.fontSize ? `${collapseTheme.fontSize}px` : undefined,
+
+      // 第3层: Collapse 组件级覆盖 (优先级最高)
+      '--soui-collapse-color-bg-component': collapseTheme.colorBg,
+      '--soui-collapse-header-bg-component': collapseTheme.headerBg,
+      '--soui-collapse-border-color-component': collapseTheme.borderColor,
+      '--soui-collapse-font-size-component': collapseTheme.fontSize ? `${collapseTheme.fontSize}px` : undefined,
     } as any;
   }, [mergedTheme]);
 

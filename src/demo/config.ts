@@ -676,6 +676,18 @@ export const docsConfig: MenuGroup[] = [
           { key: 'image-theme', label: 'Image 主题定制', componentPath: 'Image', exampleName: 'Theme', description: '通过 ConfigProvider 自定义图片主题。' },
         ],
       },
+      {
+        key: 'collapse',
+        label: 'Collapse 折叠面板',
+        icon: 'MenuFold',
+        items: [
+          { key: 'collapse-basic', label: 'Collapse 基础用法', componentPath: 'Collapse', exampleName: 'Basic', description: '可同时展开多个面板，支持禁用。' },
+          { key: 'collapse-accordion', label: 'Collapse 手风琴', componentPath: 'Collapse', exampleName: 'Accordion', description: 'accordion 同时只展开一个面板。' },
+          { key: 'collapse-ghost', label: 'Collapse 幽灵模式', componentPath: 'Collapse', exampleName: 'Ghost', description: 'ghost 无边框无背景。' },
+          { key: 'collapse-items', label: 'Collapse items 配置', componentPath: 'Collapse', exampleName: 'Items', description: '通过 items 属性配置面板。' },
+          { key: 'collapse-theme', label: 'Collapse 主题定制', componentPath: 'Collapse', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
   {
