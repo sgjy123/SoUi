@@ -474,6 +474,27 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
+        key: 'auto-complete',
+        label: 'AutoComplete 自动完成',
+        icon: 'Search',
+        items: [
+          { key: 'auto-complete-basic', label: 'AutoComplete 基础用法', componentPath: 'AutoComplete', exampleName: 'Basic', description: '基本的自动完成输入框，根据输入提供建议。' },
+          { key: 'auto-complete-filter', label: 'AutoComplete 自定义过滤', componentPath: 'AutoComplete', exampleName: 'Filter', description: '自定义过滤规则或关闭过滤。' },
+          { key: 'auto-complete-size-status', label: 'AutoComplete 尺寸与状态', componentPath: 'AutoComplete', exampleName: 'SizeStatus', description: '不同尺寸和校验状态的自动完成。' },
+          { key: 'auto-complete-form', label: 'AutoComplete 表单集成', componentPath: 'AutoComplete', exampleName: 'Form', description: '在 Form 中使用 AutoComplete 组件。' },
+        ],
+      },
+      {
+        key: 'mentions',
+        label: 'Mentions 提及',
+        icon: 'Tips',
+        items: [
+          { key: 'mentions-basic', label: 'Mentions 基础用法', componentPath: 'Mentions', exampleName: 'Basic', description: '基本的提及输入框，输入 @ 触发建议。' },
+          { key: 'mentions-prefix', label: 'Mentions 自定义前缀', componentPath: 'Mentions', exampleName: 'Prefix', description: '支持多种前缀字符触发提及。' },
+          { key: 'mentions-form', label: 'Mentions 表单集成', componentPath: 'Mentions', exampleName: 'Form', description: '在 Form 中使用 Mentions 组件。' },
+        ],
+      },
+      {
         key: 'form',
         label: 'Form 表单',
         icon: 'Form',
@@ -678,6 +699,20 @@ export const docsConfig: MenuGroup[] = [
           { key: 'statistic-countdown', label: 'Statistic 倒计时', componentPath: 'Statistic', exampleName: 'Countdown', description: 'Statistic.Countdown 倒计时功能。' },
           { key: 'statistic-loading', label: 'Statistic 加载中', componentPath: 'Statistic', exampleName: 'Loading', description: '加载中骨架屏效果。' },
           { key: 'statistic-theme', label: 'Statistic 主题定制', componentPath: 'Statistic', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
+      {
+        key: 'timeline',
+        label: 'Timeline 时间轴',
+        icon: 'Timeline',
+        items: [
+          { key: 'timeline-basic', label: 'Timeline 基础用法', componentPath: 'Timeline', exampleName: 'Basic', description: '基础时间轴展示。' },
+          { key: 'timeline-color', label: 'Timeline 圆圈颜色', componentPath: 'Timeline', exampleName: 'Color', description: '预设颜色和自定义色值。' },
+          { key: 'timeline-alternate', label: 'Timeline 交替显示', componentPath: 'Timeline', exampleName: 'Alternate', description: 'alternate 模式带标签。' },
+          { key: 'timeline-custom-dot', label: 'Timeline 自定义节点', componentPath: 'Timeline', exampleName: 'CustomDot', description: '使用图标自定义时间轴点。' },
+          { key: 'timeline-pending', label: 'Timeline Pending', componentPath: 'Timeline', exampleName: 'Pending', description: '末尾追加 loading 状态节点。' },
+          { key: 'timeline-line-type', label: 'Timeline 连接线类型', componentPath: 'Timeline', exampleName: 'LineType', description: '虚线、点线连接线，支持全局和单项设置。' },
+          { key: 'timeline-theme', label: 'Timeline 主题定制', componentPath: 'Timeline', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
       {

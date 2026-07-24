@@ -1,0 +1,64 @@
+@import '../../styles/variables.less';
+
+.soui-auto-complete {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  // ==================== 下拉面板 ====================
+  &-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: @z-index-picker;
+    min-width: 100%;
+    margin-top: @margin-xs;
+    padding: @padding-xs 0;
+    background: var(--soui-auto-complete-dropdown-bg, @bg-color-base);
+    border-radius: var(--soui-auto-complete-border-radius, @border-radius-base);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    overflow: auto;
+    max-height: 256px;
+  }
+
+  &-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-option {
+    padding: 5px @padding-md;
+    cursor: pointer;
+    font-size: var(--soui-auto-complete-font-size, var(--soui-font-size, @font-size-base));
+    color: var(--soui-text-color, @text-color);
+    line-height: 22px;
+    transition: background var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover,
+    &-active {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    &-disabled {
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+      cursor: not-allowed;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+
+  &-empty {
+    padding: @padding-sm @padding-md;
+    color: var(--soui-text-color-disabled, @text-color-disabled);
+    text-align: center;
+    font-size: var(--soui-auto-complete-font-size, var(--soui-font-size, @font-size-base));
+  }
+
+  &-disabled {
+    cursor: not-allowed;
+  }
+}

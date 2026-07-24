@@ -34,6 +34,18 @@
     width: @tail-width;
     height: calc(100% - @dot-size);
     background: var(--soui-timeline-color-tail, @border-color-split);
+
+    &-dashed {
+      background: none;
+      border-left: @tail-width dashed var(--soui-timeline-color-tail, @border-color-split);
+      width: 0;
+    }
+
+    &-dotted {
+      background: none;
+      border-left: @tail-width dotted var(--soui-timeline-color-tail, @border-color-split);
+      width: 0;
+    }
   }
 
   // ==================== Dot ====================
@@ -144,15 +156,12 @@
       }
     }
 
-    // Left item
+    // Left item: content on left half, label on right half
     .soui-timeline-item-left {
-      width: 50%;
-      padding-right: @padding-md;
-      text-align: right;
-
       .soui-timeline-item-content {
+        width: calc(50% - @dot-size / 2 - @padding-sm);
         margin-left: 0;
-        margin-right: @dot-size / 2 + @padding-sm;
+        text-align: right;
       }
 
       .soui-timeline-item-label {
@@ -167,14 +176,12 @@
       }
     }
 
-    // Right item
+    // Right item: content on right half, label on left half
     .soui-timeline-item-right {
-      width: 50%;
-      margin-left: 50%;
-      padding-left: @padding-md;
-
       .soui-timeline-item-content {
-        margin-left: @dot-size / 2 + @padding-sm;
+        width: calc(50% - @dot-size / 2 - @padding-sm);
+        margin-left: calc(50% + @dot-size / 2 + @padding-sm);
+        text-align: left;
       }
 
       .soui-timeline-item-label {

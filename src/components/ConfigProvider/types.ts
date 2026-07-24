@@ -679,6 +679,32 @@ export interface ComponentThemeConfig {
     /** 字体大小（像素） */
     fontSize?: number;
   };
+  /** 自动完成组件配置 */
+  AutoComplete?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 圆角 */
+    borderRadius?: number;
+    /** 字体大小 */
+    fontSize?: number;
+    /** 下拉面板背景色 */
+    dropdownBg?: string;
+  };
+  /** 提及组件配置 */
+  Mentions?: {
+    /** 主色 */
+    colorPrimary?: string;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 圆角 */
+    borderRadius?: number;
+    /** 字体大小 */
+    fontSize?: number;
+    /** 背景色 */
+    colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+  };
   /** 多选框组件配置 */
   Checkbox?: {
     /** 主色 */

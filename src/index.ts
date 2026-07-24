@@ -158,7 +158,15 @@ export type { StatisticProps } from './components/Statistic';
 
 // Timeline Component
 export { default as Timeline } from './components/Timeline';
-export type { TimelineProps, TimelineItemProps, TimelineMode, TimelineItemColor } from './components/Timeline';
+export type { TimelineProps, TimelineItemProps, TimelineMode, TimelineItemColor, TimelineLineType } from './components/Timeline';
+
+// AutoComplete Component
+export { default as AutoComplete } from './components/AutoComplete';
+export type { AutoCompleteProps, AutoCompleteOption, AutoCompleteOptions, AutoCompleteSize, AutoCompleteStatus } from './components/AutoComplete';
+
+// Mentions Component
+export { default as Mentions } from './components/Mentions';
+export type { MentionsProps, MentionsOption, MentionsOptions, MentionsSize, MentionsStatus, MentionsPlacement } from './components/Mentions';
 
 // Checkbox Component
 export { default as Checkbox } from './components/Checkbox';

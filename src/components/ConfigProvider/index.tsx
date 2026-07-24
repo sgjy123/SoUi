@@ -67,6 +67,10 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const statisticTheme = mergedTheme.components?.Statistic || {};
     // 获取 Timeline 组件级配置
     const timelineTheme = mergedTheme.components?.Timeline || {};
+    // 获取 AutoComplete 组件级配置
+    const autoCompleteTheme = mergedTheme.components?.AutoComplete || {};
+    // 获取 Mentions 组件级配置
+    const mentionsTheme = mergedTheme.components?.Mentions || {};
     // 获取 Checkbox 组件级配置
     const checkboxTheme = mergedTheme.components?.Checkbox || {};
     // 获取 InputNumber 组件级配置
@@ -492,6 +496,20 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-timeline-color-dot': timelineTheme.colorDot || mergedTheme.primaryColor,
       '--soui-timeline-color-tail': timelineTheme.colorTail || mergedTheme.borderColorBase,
       '--soui-timeline-font-size': timelineTheme.fontSize ? `${timelineTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
+
+      // ==================== AutoComplete 组件配置 ====================
+      '--soui-auto-complete-color-primary': autoCompleteTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-auto-complete-border-radius': autoCompleteTheme.borderRadius ? `${autoCompleteTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
+      '--soui-auto-complete-font-size': autoCompleteTheme.fontSize ? `${autoCompleteTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
+      '--soui-auto-complete-dropdown-bg': autoCompleteTheme.dropdownBg || '#fff',
+
+      // ==================== Mentions 组件配置 ====================
+      '--soui-mentions-color-primary': mentionsTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-mentions-color-border': mentionsTheme.colorBorder || mergedTheme.borderColorBase,
+      '--soui-mentions-border-radius': mentionsTheme.borderRadius ? `${mentionsTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
+      '--soui-mentions-font-size': mentionsTheme.fontSize ? `${mentionsTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
+      '--soui-mentions-color-bg': mentionsTheme.colorBg || '#fff',
+      '--soui-mentions-color-text': mentionsTheme.colorText || 'rgba(0, 0, 0, 0.88)',
 
       // ==================== Checkbox 组件配置 ====================
       '--soui-checkbox-color-primary': checkboxTheme.colorPrimary || mergedTheme.primaryColor,

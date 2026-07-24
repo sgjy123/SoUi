@@ -1,0 +1,140 @@
+@import '../../styles/variables.less';
+
+.soui-mentions {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+
+  // ==================== Textarea ====================
+  &-textarea {
+    width: 100%;
+    padding: @padding-xs @padding-sm;
+    font-size: var(--soui-mentions-font-size, var(--soui-font-size, @font-size-base));
+    color: var(--soui-mentions-color-text, var(--soui-text-color, @text-color));
+    background: var(--soui-mentions-color-bg, @bg-color-base);
+    border: 1px solid var(--soui-mentions-color-border, @border-color);
+    border-radius: var(--soui-mentions-border-radius, @border-radius-base);
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+    font-family: inherit;
+    line-height: 1.5715;
+    transition: border-color var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function),
+                box-shadow var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &::placeholder {
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+    }
+
+    &:hover {
+      border-color: var(--soui-mentions-color-primary, @primary-hover-color);
+    }
+
+    &:focus {
+      border-color: var(--soui-mentions-color-primary, @primary-color);
+      box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+    }
+  }
+
+  // ==================== Size ====================
+  &-small &-textarea {
+    padding: 0 @padding-xs;
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+  }
+
+  &-large &-textarea {
+    padding: @padding-sm @padding-md;
+    font-size: var(--soui-font-size-lg, @font-size-lg);
+  }
+
+  // ==================== Status ====================
+  &-error &-textarea {
+    border-color: @error-color;
+
+    &:hover { border-color: @error-color; }
+    &:focus {
+      border-color: @error-color;
+      box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
+    }
+  }
+
+  &-warning &-textarea {
+    border-color: @warning-color;
+
+    &:hover { border-color: @warning-color; }
+    &:focus {
+      border-color: @warning-color;
+      box-shadow: 0 0 0 2px rgba(250, 173, 20, 0.1);
+    }
+  }
+
+  &-disabled &-textarea {
+    background: @bg-color-disable;
+    cursor: not-allowed;
+    color: var(--soui-text-color-disabled, @text-color-disabled);
+
+    &:hover {
+      border-color: var(--soui-mentions-color-border, @border-color);
+    }
+  }
+
+  // ==================== 下拉面板 ====================
+  &-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: @z-index-picker;
+    min-width: 120px;
+    margin-top: @margin-xs;
+    padding: @padding-xs 0;
+    background: var(--soui-mentions-color-bg, @bg-color-base);
+    border-radius: var(--soui-mentions-border-radius, @border-radius-base);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+    overflow: auto;
+    max-height: 256px;
+
+    &-top {
+      top: auto;
+      bottom: 100%;
+      margin-top: 0;
+      margin-bottom: @margin-xs;
+    }
+  }
+
+  &-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-option {
+    padding: 5px @padding-md;
+    cursor: pointer;
+    font-size: var(--soui-mentions-font-size, var(--soui-font-size, @font-size-base));
+    color: var(--soui-text-color, @text-color);
+    line-height: 22px;
+    transition: background var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:hover,
+    &-active {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    &-disabled {
+      color: var(--soui-text-color-disabled, @text-color-disabled);
+      cursor: not-allowed;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+  }
+
+  &-empty {
+    padding: @padding-sm @padding-md;
+    color: var(--soui-text-color-disabled, @text-color-disabled);
+    text-align: center;
+    font-size: var(--soui-mentions-font-size, var(--soui-font-size, @font-size-base));
+  }
+}

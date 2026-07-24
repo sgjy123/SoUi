@@ -34,6 +34,8 @@ import Avatar from '../../src/components/Avatar';
 import GlowBorder from '../../src/components/GlowBorder';
 import Statistic from '../../src/components/Statistic';
 import Timeline from '../../src/components/Timeline';
+import AutoComplete from '../../src/components/AutoComplete';
+import Mentions from '../../src/components/Mentions';
 import Checkbox from '../../src/components/Checkbox';
 import InputNumber from '../../src/components/InputNumber';
 import Switch from '../../src/components/Switch';
@@ -140,6 +142,8 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Countdown: Statistic.Countdown,
     Timeline,
     TimelineItem: Timeline.Item,
+    AutoComplete,
+    Mentions,
     Checkbox,
     CheckboxGroup: Checkbox.Group,
     InputNumber,
