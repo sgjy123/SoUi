@@ -63,6 +63,10 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const avatarTheme = mergedTheme.components?.Avatar || {};
     // 获取 GlowBorder 组件级配置
     const glowBorderTheme = mergedTheme.components?.GlowBorder || {};
+    // 获取 Statistic 组件级配置
+    const statisticTheme = mergedTheme.components?.Statistic || {};
+    // 获取 Timeline 组件级配置
+    const timelineTheme = mergedTheme.components?.Timeline || {};
     // 获取 Checkbox 组件级配置
     const checkboxTheme = mergedTheme.components?.Checkbox || {};
     // 获取 InputNumber 组件级配置
@@ -476,6 +480,18 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-glow-border-color-secondary': glowBorderTheme.colorSecondary || '#36cfc9',
       '--soui-glow-border-background': glowBorderTheme.background || '#fff',
       '--soui-glow-border-border-radius': glowBorderTheme.borderRadius ? `${glowBorderTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
+
+      // ==================== Statistic 组件配置 ====================
+      '--soui-statistic-color-text-heading': statisticTheme.colorTextHeading || 'rgba(0, 0, 0, 0.65)',
+      '--soui-statistic-color-text': statisticTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-statistic-font-size-heading': statisticTheme.fontSizeHeading ? `${statisticTheme.fontSizeHeading}px` : `${mergedTheme.fontSize}px`,
+      '--soui-statistic-font-size': statisticTheme.fontSize ? `${statisticTheme.fontSize}px` : '24px',
+
+      // ==================== Timeline 组件配置 ====================
+      '--soui-timeline-color-primary': timelineTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-timeline-color-dot': timelineTheme.colorDot || mergedTheme.primaryColor,
+      '--soui-timeline-color-tail': timelineTheme.colorTail || mergedTheme.borderColorBase,
+      '--soui-timeline-font-size': timelineTheme.fontSize ? `${timelineTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
 
       // ==================== Checkbox 组件配置 ====================
       '--soui-checkbox-color-primary': checkboxTheme.colorPrimary || mergedTheme.primaryColor,

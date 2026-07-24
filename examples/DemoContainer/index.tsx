@@ -32,6 +32,8 @@ import Radio from '../../src/components/Radio';
 import Segmented from '../../src/components/Segmented';
 import Avatar from '../../src/components/Avatar';
 import GlowBorder from '../../src/components/GlowBorder';
+import Statistic from '../../src/components/Statistic';
+import Timeline from '../../src/components/Timeline';
 import Checkbox from '../../src/components/Checkbox';
 import InputNumber from '../../src/components/InputNumber';
 import Switch from '../../src/components/Switch';
@@ -134,6 +136,10 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Avatar,
     AvatarGroup: Avatar.Group,
     GlowBorder,
+    Statistic,
+    Countdown: Statistic.Countdown,
+    Timeline,
+    TimelineItem: Timeline.Item,
     Checkbox,
     CheckboxGroup: Checkbox.Group,
     InputNumber,

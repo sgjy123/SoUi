@@ -1,0 +1,67 @@
+@import '../../styles/variables.less';
+
+.soui-statistic {
+  display: inline-block;
+
+  // ==================== 标题 ====================
+  &-title {
+    margin-bottom: @margin-xs;
+    font-size: var(--soui-statistic-font-size-heading, var(--soui-font-size, @font-size-base));
+    color: var(--soui-statistic-color-text-heading, var(--soui-text-color-secondary, @text-color-secondary));
+    line-height: 1.5;
+  }
+
+  // ==================== 数值区域 ====================
+  &-content {
+    display: flex;
+    align-items: baseline;
+    font-size: var(--soui-statistic-font-size, @font-size-xl * 1.2);
+    font-weight: 600;
+    color: var(--soui-statistic-color-text, var(--soui-text-color, @text-color));
+    line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // ==================== 前缀/后缀 ====================
+  &-prefix {
+    margin-right: @margin-xs;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &-suffix {
+    margin-left: @margin-xs;
+    font-size: var(--soui-statistic-font-size-heading, var(--soui-font-size, @font-size-base));
+    font-weight: normal;
+    color: var(--soui-statistic-color-text-heading, var(--soui-text-color-secondary, @text-color-secondary));
+  }
+
+  // ==================== 加载中骨架 ====================
+  &-skeleton {
+    display: inline-block;
+    width: 80px;
+    height: 1em;
+    border-radius: @border-radius-sm;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.06) 25%,
+      rgba(0, 0, 0, 0.1) 37%,
+      rgba(0, 0, 0, 0.06) 63%
+    );
+    background-size: 400% 100%;
+    animation: soui-statistic-skeleton-loading 1.4s ease infinite;
+  }
+
+  &-loading {
+    pointer-events: none;
+  }
+}
+
+@keyframes soui-statistic-skeleton-loading {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

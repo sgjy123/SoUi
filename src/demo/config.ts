@@ -668,6 +668,19 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
+        key: 'statistic',
+        label: 'Statistic 数值统计',
+        icon: 'Data',
+        items: [
+          { key: 'statistic-basic', label: 'Statistic 基础用法', componentPath: 'Statistic', exampleName: 'Basic', description: '基础数值展示，支持千分位和精度。' },
+          { key: 'statistic-prefix-suffix', label: 'Statistic 前后缀', componentPath: 'Statistic', exampleName: 'PrefixSuffix', description: '添加图标前缀和文字后缀。' },
+          { key: 'statistic-precision', label: 'Statistic 精度与分隔符', componentPath: 'Statistic', exampleName: 'Precision', description: '精度控制和自定义千分位分隔符。' },
+          { key: 'statistic-countdown', label: 'Statistic 倒计时', componentPath: 'Statistic', exampleName: 'Countdown', description: 'Statistic.Countdown 倒计时功能。' },
+          { key: 'statistic-loading', label: 'Statistic 加载中', componentPath: 'Statistic', exampleName: 'Loading', description: '加载中骨架屏效果。' },
+          { key: 'statistic-theme', label: 'Statistic 主题定制', componentPath: 'Statistic', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
+      {
         key: 'carousel',
         label: 'Carousel 轮播',
         icon: 'Carousel',

@@ -152,6 +152,14 @@ export type { AvatarProps, AvatarGroupProps, AvatarShape, AvatarSize } from './c
 export { default as GlowBorder } from './components/GlowBorder';
 export type { GlowBorderProps } from './components/GlowBorder';
 
+// Statistic Component
+export { default as Statistic } from './components/Statistic';
+export type { StatisticProps } from './components/Statistic';
+
+// Timeline Component
+export { default as Timeline } from './components/Timeline';
+export type { TimelineProps, TimelineItemProps, TimelineMode, TimelineItemColor } from './components/Timeline';
+
 // Checkbox Component
 export { default as Checkbox } from './components/Checkbox';
 export type { CheckboxProps, CheckboxGroupProps, CheckboxSize } from './components/Checkbox';

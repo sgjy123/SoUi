@@ -657,6 +657,28 @@ export interface ComponentThemeConfig {
     /** 圆角（像素） */
     borderRadius?: number;
   };
+  /** 数值统计组件配置 */
+  Statistic?: {
+    /** 标题文本颜色 */
+    colorTextHeading?: string;
+    /** 数值文本颜色 */
+    colorText?: string;
+    /** 标题字号（像素） */
+    fontSizeHeading?: number;
+    /** 数值字号（像素） */
+    fontSize?: number;
+  };
+  /** 时间轴组件配置 */
+  Timeline?: {
+    /** 主色（loading 点颜色） */
+    colorPrimary?: string;
+    /** 圆圈颜色 */
+    colorDot?: string;
+    /** 尾巴线条颜色 */
+    colorTail?: string;
+    /** 字体大小（像素） */
+    fontSize?: number;
+  };
   /** 多选框组件配置 */
   Checkbox?: {
     /** 主色 */

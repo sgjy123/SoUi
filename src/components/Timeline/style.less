@@ -1,0 +1,198 @@
+@import '../../styles/variables.less';
+
+@dot-size: 10px;
+@custom-dot-size: 22px;
+@tail-width: 2px;
+@item-padding-bottom: @padding-lg;
+
+.soui-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--soui-timeline-font-size, var(--soui-font-size, @font-size-base));
+
+  // ==================== Item ====================
+  &-item {
+    position: relative;
+    padding-bottom: @item-padding-bottom;
+    list-style: none;
+
+    &:last-child {
+      padding-bottom: 0;
+
+      .soui-timeline-item-tail {
+        display: none;
+      }
+    }
+  }
+
+  // ==================== Tail ====================
+  &-item-tail {
+    position: absolute;
+    top: @dot-size;
+    left: (@dot-size - @tail-width) / 2;
+    width: @tail-width;
+    height: calc(100% - @dot-size);
+    background: var(--soui-timeline-color-tail, @border-color-split);
+  }
+
+  // ==================== Dot ====================
+  &-item-dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: @dot-size;
+    height: @dot-size;
+    border-radius: 50%;
+    border: @tail-width solid var(--soui-timeline-color-dot, @primary-color);
+    background: var(--soui-bg-color-base, @bg-color-base);
+    box-sizing: border-box;
+
+    &-custom {
+      width: @custom-dot-size;
+      height: @custom-dot-size;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      left: (@dot-size - @custom-dot-size) / 2;
+      font-size: var(--soui-timeline-font-size, var(--soui-font-size, @font-size-base));
+    }
+
+    &-loading {
+      border-color: var(--soui-timeline-color-primary, @primary-color);
+    }
+
+    &-loading-icon {
+      display: block;
+      width: @dot-size - 4px;
+      height: @dot-size - 4px;
+      border-radius: 50%;
+      border: 2px solid var(--soui-timeline-color-primary, @primary-color);
+      border-top-color: transparent;
+      animation: soui-timeline-spin 0.8s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      box-sizing: border-box;
+    }
+  }
+
+  // ==================== Content ====================
+  &-item-content {
+    margin-left: @dot-size + @padding-sm;
+    line-height: 1.5715;
+    color: var(--soui-text-color, @text-color);
+    word-break: break-word;
+  }
+
+  // ==================== Label ====================
+  &-item-label {
+    display: none;
+  }
+
+  // ==================== Left mode (default) ====================
+  &-left {
+    .soui-timeline-item {
+      padding-left: 0;
+    }
+  }
+
+  // ==================== Right mode ====================
+  &-right {
+    .soui-timeline-item {
+      text-align: right;
+    }
+
+    .soui-timeline-item-tail {
+      left: auto;
+      right: (@dot-size - @tail-width) / 2;
+    }
+
+    .soui-timeline-item-dot {
+      left: auto;
+      right: 0;
+
+      &-custom {
+        left: auto;
+        right: (@dot-size - @custom-dot-size) / 2;
+      }
+    }
+
+    .soui-timeline-item-content {
+      margin-left: 0;
+      margin-right: @dot-size + @padding-sm;
+    }
+  }
+
+  // ==================== Alternate mode ====================
+  &-alternate {
+    .soui-timeline-item-tail {
+      left: 50%;
+      margin-left: -@tail-width / 2;
+    }
+
+    .soui-timeline-item-dot {
+      left: 50%;
+      margin-left: -@dot-size / 2;
+
+      &-custom {
+        margin-left: -@custom-dot-size / 2;
+      }
+    }
+
+    // Left item
+    .soui-timeline-item-left {
+      width: 50%;
+      padding-right: @padding-md;
+      text-align: right;
+
+      .soui-timeline-item-content {
+        margin-left: 0;
+        margin-right: @dot-size / 2 + @padding-sm;
+      }
+
+      .soui-timeline-item-label {
+        display: block;
+        position: absolute;
+        left: calc(50% + @dot-size / 2 + @padding-sm);
+        top: 0;
+        width: calc(50% - @dot-size / 2 - @padding-sm);
+        text-align: left;
+        color: var(--soui-text-color-secondary, @text-color-secondary);
+        font-size: var(--soui-font-size-sm, @font-size-sm);
+      }
+    }
+
+    // Right item
+    .soui-timeline-item-right {
+      width: 50%;
+      margin-left: 50%;
+      padding-left: @padding-md;
+
+      .soui-timeline-item-content {
+        margin-left: @dot-size / 2 + @padding-sm;
+      }
+
+      .soui-timeline-item-label {
+        display: block;
+        position: absolute;
+        right: calc(50% + @dot-size / 2 + @padding-sm);
+        top: 0;
+        width: calc(50% - @dot-size / 2 - @padding-sm);
+        text-align: right;
+        color: var(--soui-text-color-secondary, @text-color-secondary);
+        font-size: var(--soui-font-size-sm, @font-size-sm);
+      }
+    }
+  }
+}
+
+@keyframes soui-timeline-spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
