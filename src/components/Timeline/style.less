@@ -30,7 +30,7 @@
   &-item-tail {
     position: absolute;
     top: @dot-size;
-    left: (@dot-size - @tail-width) / 2;
+    left: calc((@dot-size - @tail-width) / 2);
     width: @tail-width;
     height: calc(100% - @dot-size);
     background: var(--soui-timeline-color-tail, @border-color-split);
@@ -121,7 +121,7 @@
 
     .soui-timeline-item-tail {
       left: auto;
-      right: (@dot-size - @tail-width) / 2;
+      right: calc((@dot-size - @tail-width) / 2);
     }
 
     .soui-timeline-item-dot {
@@ -130,13 +130,13 @@
 
       &-custom {
         left: auto;
-        right: (@dot-size - @custom-dot-size) / 2;
+        right: calc((@dot-size - @custom-dot-size) / 2);
       }
     }
 
     .soui-timeline-item-content {
       margin-left: 0;
-      margin-right: @dot-size + @padding-sm;
+      margin-right: calc(@dot-size + @padding-sm);
     }
   }
 
@@ -144,15 +144,15 @@
   &-alternate {
     .soui-timeline-item-tail {
       left: 50%;
-      margin-left: -@tail-width / 2;
+      margin-left: calc(-@tail-width / 2);
     }
 
     .soui-timeline-item-dot {
       left: 50%;
-      margin-left: -@dot-size / 2;
+      margin-left: calc(-@dot-size / 2);
 
       &-custom {
-        margin-left: -@custom-dot-size / 2;
+        margin-left: calc(-@custom-dot-size / 2);
       }
     }
 

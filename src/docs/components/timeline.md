@@ -33,6 +33,10 @@ title: Timeline 时间轴
 
 <code src="../../examples/Timeline/Pending.tsx"></code>
 
+### 连接线类型
+
+<code src="../../examples/Timeline/LineType.tsx"></code>
+
 ### 主题定制
 
 <code src="../../examples/Timeline/Theme.tsx"></code>
@@ -47,6 +51,7 @@ title: Timeline 时间轴
 | pending | 末尾追加 pending 节点，`true` 显示默认 loading 点 | ReactNode \| boolean | - |
 | pendingDot | 自定义 pending 图标 | ReactNode | - |
 | reverse | 逆序排列 | boolean | `false` |
+| lineType | 连接线类型 | `'solid' \| 'dashed' \| 'dotted'` | `'solid'` |
 | items | 时间轴节点数据 | TimelineItemProps[] | - |
 | children | 子节点（与 items 二选一，支持 Timeline.Item 写法） | ReactNode | - |
 
@@ -54,12 +59,13 @@ title: Timeline 时间轴
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| color | 圆圈颜色 | `'blue' \| 'red' \| 'green' \| 'gray' \| string` | `'blue'` |
+| color | 圆圈颜色，不设置时跟随主题色 | `'blue' \| 'red' \| 'green' \| 'gray' \| string` | - |
 | dot | 自定义时间轴点 | ReactNode | - |
 | label | 标签（仅 alternate 模式生效） | ReactNode | - |
 | children | 内容 | ReactNode | - |
 | position | 指定位置（仅 alternate 模式） | `'left' \| 'right'` | - |
 | loading | 加载中状态 | boolean | `false` |
+| lineType | 连接线类型（覆盖全局） | `'solid' \| 'dashed' \| 'dotted'` | - |
 
 ## 主题定制
 
