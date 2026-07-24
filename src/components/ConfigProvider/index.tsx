@@ -61,6 +61,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const segmentedTheme = mergedTheme.components?.Segmented || {};
     // 获取 Avatar 组件级配置
     const avatarTheme = mergedTheme.components?.Avatar || {};
+    // 获取 GlowBorder 组件级配置
+    const glowBorderTheme = mergedTheme.components?.GlowBorder || {};
     // 获取 Checkbox 组件级配置
     const checkboxTheme = mergedTheme.components?.Checkbox || {};
     // 获取 InputNumber 组件级配置
@@ -468,6 +470,12 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-avatar-color-text': avatarTheme.colorText || '#fff',
       '--soui-avatar-border-radius': avatarTheme.borderRadius ? `${avatarTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
       '--soui-avatar-group-border-color': avatarTheme.groupBorderColor || '#fff',
+
+      // ==================== GlowBorder 组件配置 ====================
+      '--soui-glow-border-color-primary': glowBorderTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-glow-border-color-secondary': glowBorderTheme.colorSecondary || '#36cfc9',
+      '--soui-glow-border-background': glowBorderTheme.background || '#fff',
+      '--soui-glow-border-border-radius': glowBorderTheme.borderRadius ? `${glowBorderTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
 
       // ==================== Checkbox 组件配置 ====================
       '--soui-checkbox-color-primary': checkboxTheme.colorPrimary || mergedTheme.primaryColor,

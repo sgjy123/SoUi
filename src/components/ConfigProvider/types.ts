@@ -646,6 +646,17 @@ export interface ComponentThemeConfig {
     /** 头像组内边框颜色 */
     groupBorderColor?: string;
   };
+  /** 流光边框组件配置 */
+  GlowBorder?: {
+    /** 主色（流光渐变色1） */
+    colorPrimary?: string;
+    /** 副色（流光渐变色2） */
+    colorSecondary?: string;
+    /** 内容区背景色 */
+    background?: string;
+    /** 圆角（像素） */
+    borderRadius?: number;
+  };
   /** 多选框组件配置 */
   Checkbox?: {
     /** 主色 */

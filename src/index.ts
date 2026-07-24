@@ -148,6 +148,10 @@ export type { SegmentedProps, SegmentedOption, SegmentedOptions, SegmentedSize, 
 export { default as Avatar } from './components/Avatar';
 export type { AvatarProps, AvatarGroupProps, AvatarShape, AvatarSize } from './components/Avatar';
 
+// GlowBorder Component
+export { default as GlowBorder } from './components/GlowBorder';
+export type { GlowBorderProps } from './components/GlowBorder';
+
 // Checkbox Component
 export { default as Checkbox } from './components/Checkbox';
 export type { CheckboxProps, CheckboxGroupProps, CheckboxSize } from './components/Checkbox';

@@ -889,6 +889,19 @@ export const docsConfig: MenuGroup[] = [
           { key: 'watermark-custom', label: 'Watermark 自定义样式', componentPath: 'Watermark', exampleName: 'CustomStyle', description: '自定义水印的颜色、大小、旋转角度等。' },
         ],
       },
+      {
+        key: 'glow-border',
+        label: 'GlowBorder 流光边框',
+        icon: 'Halo',
+        items: [
+          { key: 'glow-border-basic', label: 'GlowBorder 基础用法', componentPath: 'GlowBorder', exampleName: 'Basic', description: '基础流光边框效果。' },
+          { key: 'glow-border-colors', label: 'GlowBorder 自定义颜色', componentPath: 'GlowBorder', exampleName: 'Colors', description: '自定义流光渐变颜色。' },
+          { key: 'glow-border-duration', label: 'GlowBorder 速度与方向', componentPath: 'GlowBorder', exampleName: 'Duration', description: '旋转速度、反向旋转和暂停。' },
+          { key: 'glow-border-glow', label: 'GlowBorder 外发光', componentPath: 'GlowBorder', exampleName: 'Glow', description: '外发光模糊效果。' },
+          { key: 'glow-border-background', label: 'GlowBorder 背景色', componentPath: 'GlowBorder', exampleName: 'Background', description: '深色和透明背景场景。' },
+          { key: 'glow-border-theme', label: 'GlowBorder 主题定制', componentPath: 'GlowBorder', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
 ];
