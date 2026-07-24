@@ -712,6 +712,7 @@ export const docsConfig: MenuGroup[] = [
           { key: 'timeline-custom-dot', label: 'Timeline 自定义节点', componentPath: 'Timeline', exampleName: 'CustomDot', description: '使用图标自定义时间轴点。' },
           { key: 'timeline-pending', label: 'Timeline Pending', componentPath: 'Timeline', exampleName: 'Pending', description: '末尾追加 loading 状态节点。' },
           { key: 'timeline-line-type', label: 'Timeline 连接线类型', componentPath: 'Timeline', exampleName: 'LineType', description: '虚线、点线连接线，支持全局和单项设置。' },
+          { key: 'timeline-horizontal', label: 'Timeline 横向时间轴', componentPath: 'Timeline', exampleName: 'Horizontal', description: '水平方向展示时间轴。' },
           { key: 'timeline-theme', label: 'Timeline 主题定制', componentPath: 'Timeline', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },

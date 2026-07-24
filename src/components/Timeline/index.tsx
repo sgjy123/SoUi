@@ -26,10 +26,13 @@ export interface TimelineItemProps {
 }
 
 export type TimelineMode = 'left' | 'right' | 'alternate';
+export type TimelineDirection = 'vertical' | 'horizontal';
 
 export interface TimelineProps extends Omit<React.HTMLAttributes<HTMLUListElement>, 'children'> {
-  /** 模式：left/right/alternate */
+  /** 模式：left/right/alternate（仅 vertical 方向生效） */
   mode?: TimelineMode;
+  /** 方向：vertical/horizontal */
+  direction?: TimelineDirection;
   /** 末尾追加 pending 节点，值为 true 时使用默认 loading 点 */
   pending?: React.ReactNode | boolean;
   /** 自定义 pending 图标 */
@@ -114,6 +117,7 @@ TimelineItem.displayName = 'TimelineItem';
 
 const Timeline: React.FC<TimelineProps> & { Item: typeof TimelineItem } = ({
   mode = 'left',
+  direction = 'vertical',
   pending,
   pendingDot,
   reverse = false,
@@ -177,7 +181,8 @@ const Timeline: React.FC<TimelineProps> & { Item: typeof TimelineItem } = ({
   const rootCls = classNames(
     'soui-timeline',
     {
-      [`soui-timeline-${mode}`]: mode,
+      [`soui-timeline-${mode}`]: direction === 'vertical' && mode,
+      'soui-timeline-horizontal': direction === 'horizontal',
       'soui-timeline-pending': !!pending,
       'soui-timeline-reverse': reverse,
     },
@@ -187,14 +192,16 @@ const Timeline: React.FC<TimelineProps> & { Item: typeof TimelineItem } = ({
   return (
     <ul className={rootCls} style={componentStyle} {...rest}>
       {nodeList.map((item, index) => {
-        // alternate 模式：奇偶交替左右
+        // alternate 模式：奇偶交替左右（仅 vertical）
         let pos: 'left' | 'right' | undefined;
-        if (mode === 'alternate') {
-          pos = item.position || (index % 2 === 0 ? 'left' : 'right');
-        } else if (mode === 'right') {
-          pos = 'right';
-        } else {
-          pos = 'left';
+        if (direction === 'vertical') {
+          if (mode === 'alternate') {
+            pos = item.position || (index % 2 === 0 ? 'left' : 'right');
+          } else if (mode === 'right') {
+            pos = 'right';
+          } else {
+            pos = 'left';
+          }
         }
 
         return (

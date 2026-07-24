@@ -196,6 +196,60 @@
       }
     }
   }
+
+  // ==================== Horizontal mode ====================
+  &-horizontal {
+    display: flex;
+
+    .soui-timeline-item {
+      flex: 1;
+      padding-bottom: 0;
+      padding-top: calc(@dot-size + @padding-xs);
+
+      &:last-child {
+        .soui-timeline-item-tail {
+          display: none;
+        }
+      }
+    }
+
+    .soui-timeline-item-tail {
+      top: calc((@dot-size - @tail-width) / 2);
+      left: @dot-size;
+      width: calc(100% - @dot-size);
+      height: @tail-width;
+
+      &-dashed {
+        background: none;
+        border-left: none;
+        border-top: @tail-width dashed var(--soui-timeline-color-tail, @border-color-split);
+        width: calc(100% - @dot-size);
+        height: 0;
+      }
+
+      &-dotted {
+        background: none;
+        border-left: none;
+        border-top: @tail-width dotted var(--soui-timeline-color-tail, @border-color-split);
+        width: calc(100% - @dot-size);
+        height: 0;
+      }
+    }
+
+    .soui-timeline-item-dot {
+      top: 0;
+      left: 0;
+    }
+
+    .soui-timeline-item-content {
+      margin-left: 0;
+      margin-top: 0;
+    }
+
+    .soui-timeline-item-label {
+      display: none;
+    }
+  }
 }
 
 @keyframes soui-timeline-spin {

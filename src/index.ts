@@ -158,7 +158,7 @@ export type { StatisticProps } from './components/Statistic';
 
 // Timeline Component
 export { default as Timeline } from './components/Timeline';
-export type { TimelineProps, TimelineItemProps, TimelineMode, TimelineItemColor, TimelineLineType } from './components/Timeline';
+export type { TimelineProps, TimelineItemProps, TimelineMode, TimelineDirection, TimelineItemColor, TimelineLineType } from './components/Timeline';
 
 // AutoComplete Component
 export { default as AutoComplete } from './components/AutoComplete';

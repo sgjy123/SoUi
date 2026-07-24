@@ -4,7 +4,7 @@ title: Timeline 时间轴
 
 # Timeline 时间轴
 
-垂直展示时间流信息，支持左右交替、自定义节点、pending 状态。
+垂直或水平展示时间流信息，支持左右交替、自定义节点、pending 状态。
 
 ## 何时使用
 
@@ -37,6 +37,10 @@ title: Timeline 时间轴
 
 <code src="../../examples/Timeline/LineType.tsx"></code>
 
+### 横向时间轴
+
+<code src="../../examples/Timeline/Horizontal.tsx"></code>
+
 ### 主题定制
 
 <code src="../../examples/Timeline/Theme.tsx"></code>
@@ -47,7 +51,8 @@ title: Timeline 时间轴
 
 | 属性 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| mode | 模式 | `'left' \| 'right' \| 'alternate'` | `'left'` |
+| mode | 模式（仅 vertical 方向生效） | `'left' \| 'right' \| 'alternate'` | `'left'` |
+| direction | 方向 | `'vertical' \| 'horizontal'` | `'vertical'` |
 | pending | 末尾追加 pending 节点，`true` 显示默认 loading 点 | ReactNode \| boolean | - |
 | pendingDot | 自定义 pending 图标 | ReactNode | - |
 | reverse | 逆序排列 | boolean | `false` |
