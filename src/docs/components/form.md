@@ -315,7 +315,7 @@ export default () => {
 Form.Item 自动注入 `value` / `onChange` 给子控件，兼容所有 SoUi 表单组件。对于值属性名不是 `value` 的组件，使用 `valuePropName` 指定：
 
 ```tsx
-import { Form, Input, InputNumber, Select, Radio, Checkbox, Switch,
+import { Form, Input, InputNumber, Select, Radio, Segmented, Checkbox, Switch,
   Slider, Rate, DatePicker, TimePicker, Cascader, ColorPicker,
   TreeSelect, Transfer, Upload, Button, Message } from '@soui/ui';
 
@@ -325,7 +325,7 @@ export default () => {
   return (
     <Form form={form} layout="vertical"
       initialValues={{
-        gender: 'male', hobbies: ['reading'], enableNotify: true,
+        gender: 'male', view: 'list', hobbies: ['reading'], enableNotify: true,
         satisfaction: 3, volume: 50, themeColor: '#1677ff',
         assignedItems: ['1', '3'], avatar: [],
       }}
@@ -339,6 +339,9 @@ export default () => {
       </Form.Item>
       <Form.Item name="gender" label="性别">
         <Radio.Group options={[{ label: '男', value: 'male' }, { label: '女', value: 'female' }]} />
+      </Form.Item>
+      <Form.Item name="view" label="视图模式">
+        <Segmented options={[{ label: '列表', value: 'list' }, { label: '网格', value: 'grid' }, { label: '画廊', value: 'gallery' }]} />
       </Form.Item>
       <Form.Item name="hobbies" label="兴趣爱好">
         <Checkbox.Group options={[{ label: '阅读', value: 'reading' }, { label: '运动', value: 'sports' }]} />

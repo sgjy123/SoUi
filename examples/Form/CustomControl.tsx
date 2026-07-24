@@ -4,6 +4,7 @@ import Input from '../../src/components/Input';
 import InputNumber from '../../src/components/InputNumber';
 import Select from '../../src/components/Select';
 import Radio from '../../src/components/Radio';
+import Segmented from '../../src/components/Segmented';
 import Checkbox from '../../src/components/Checkbox';
 import Switch from '../../src/components/Switch';
 import Slider from '../../src/components/Slider';
@@ -105,6 +106,7 @@ const CustomControl: React.FC = () => {
           city: undefined,
           age: undefined,
           gender: 'male',
+          view: 'list',
           hobbies: ['reading'],
           enableNotify: true,
           satisfaction: 3,
@@ -159,6 +161,17 @@ const CustomControl: React.FC = () => {
               { label: '男', value: 'male' },
               { label: '女', value: 'female' },
               { label: '保密', value: 'secret' },
+            ]}
+          />
+        </Form.Item>
+
+        {/* 5. Segmented */}
+        <Form.Item name="view" label="视图模式">
+          <Segmented
+            options={[
+              { label: '列表', value: 'list' },
+              { label: '网格', value: 'grid' },
+              { label: '画廊', value: 'gallery' },
             ]}
           />
         </Form.Item>
