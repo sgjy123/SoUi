@@ -30,7 +30,8 @@
   &-item-tail {
     position: absolute;
     top: @dot-size;
-    left: calc((@dot-size - @tail-width) / 2);
+    left: (@dot-size / 2);
+    transform: translateX(-50%);
     width: @tail-width;
     height: calc(100% - @dot-size);
     background: var(--soui-timeline-color-tail, @border-color-split);
@@ -51,7 +52,8 @@
   // ==================== Dot ====================
   &-item-dot {
     position: absolute;
-    left: 0;
+    left: (@dot-size / 2);
+    transform: translateX(-50%);
     top: 0;
     width: @dot-size;
     height: @dot-size;
@@ -69,7 +71,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      left: (@dot-size - @custom-dot-size) / 2;
       font-size: var(--soui-timeline-font-size, var(--soui-font-size, @font-size-base));
     }
 
@@ -121,17 +122,14 @@
 
     .soui-timeline-item-tail {
       left: auto;
-      right: calc((@dot-size - @tail-width) / 2);
+      right: (@dot-size / 2);
+      transform: translateX(50%);
     }
 
     .soui-timeline-item-dot {
       left: auto;
-      right: 0;
-
-      &-custom {
-        left: auto;
-        right: calc((@dot-size - @custom-dot-size) / 2);
-      }
+      right: (@dot-size / 2);
+      transform: translateX(50%);
     }
 
     .soui-timeline-item-content {
@@ -144,16 +142,12 @@
   &-alternate {
     .soui-timeline-item-tail {
       left: 50%;
-      margin-left: calc(-@tail-width / 2);
+      transform: translateX(-50%);
     }
 
     .soui-timeline-item-dot {
       left: 50%;
-      margin-left: calc(-@dot-size / 2);
-
-      &-custom {
-        margin-left: calc(-@custom-dot-size / 2);
-      }
+      transform: translateX(-50%);
     }
 
     // Left item: content on left half, label on right half
@@ -214,7 +208,8 @@
     }
 
     .soui-timeline-item-tail {
-      top: calc((@dot-size - @tail-width) / 2);
+      top: (@dot-size / 2);
+      transform: translateY(-50%);
       left: @dot-size;
       width: calc(100% - @dot-size);
       height: @tail-width;
@@ -239,6 +234,7 @@
     .soui-timeline-item-dot {
       top: 0;
       left: 0;
+      transform: none;
     }
 
     .soui-timeline-item-content {
