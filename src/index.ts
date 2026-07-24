@@ -144,6 +144,10 @@ export type { RadioProps, RadioGroupProps, RadioSize, RadioOptionType, RadioButt
 export { default as Segmented } from './components/Segmented';
 export type { SegmentedProps, SegmentedOption, SegmentedOptions, SegmentedSize, SegmentedValue } from './components/Segmented';
 
+// Avatar Component
+export { default as Avatar } from './components/Avatar';
+export type { AvatarProps, AvatarGroupProps, AvatarShape, AvatarSize } from './components/Avatar';
+
 // Checkbox Component
 export { default as Checkbox } from './components/Checkbox';
 export type { CheckboxProps, CheckboxGroupProps, CheckboxSize } from './components/Checkbox';

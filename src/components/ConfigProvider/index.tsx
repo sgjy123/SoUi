@@ -59,6 +59,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const radioTheme = mergedTheme.components?.Radio || {};
     // 获取 Segmented 组件级配置
     const segmentedTheme = mergedTheme.components?.Segmented || {};
+    // 获取 Avatar 组件级配置
+    const avatarTheme = mergedTheme.components?.Avatar || {};
     // 获取 Checkbox 组件级配置
     const checkboxTheme = mergedTheme.components?.Checkbox || {};
     // 获取 InputNumber 组件级配置
@@ -460,6 +462,12 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-segmented-color-text-disabled': segmentedTheme.colorTextDisabled || 'rgba(0, 0, 0, 0.25)',
       '--soui-segmented-border-radius': segmentedTheme.borderRadius ? `${segmentedTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
       '--soui-segmented-font-size': segmentedTheme.fontSize ? `${segmentedTheme.fontSize}px` : `${mergedTheme.fontSize}px`,
+
+      // ==================== Avatar 组件配置 ====================
+      '--soui-avatar-color-bg': avatarTheme.colorBg || '#ccc',
+      '--soui-avatar-color-text': avatarTheme.colorText || '#fff',
+      '--soui-avatar-border-radius': avatarTheme.borderRadius ? `${avatarTheme.borderRadius}px` : `${mergedTheme.borderRadius}px`,
+      '--soui-avatar-group-border-color': avatarTheme.groupBorderColor || '#fff',
 
       // ==================== Checkbox 组件配置 ====================
       '--soui-checkbox-color-primary': checkboxTheme.colorPrimary || mergedTheme.primaryColor,

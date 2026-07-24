@@ -655,6 +655,19 @@ export const docsConfig: MenuGroup[] = [
         ],
       },
       {
+        key: 'avatar',
+        label: 'Avatar 头像',
+        icon: 'User',
+        items: [
+          { key: 'avatar-basic', label: 'Avatar 基础用法', componentPath: 'Avatar', exampleName: 'Basic', description: '图片、图标、文字三种类型，文字自动缩放。' },
+          { key: 'avatar-shape', label: 'Avatar 形状', componentPath: 'Avatar', exampleName: 'Shape', description: '圆形和方形两种形状。' },
+          { key: 'avatar-size', label: 'Avatar 尺寸', componentPath: 'Avatar', exampleName: 'Size', description: '预设尺寸和自定义像素尺寸。' },
+          { key: 'avatar-group', label: 'Avatar 头像组', componentPath: 'Avatar', exampleName: 'Group', description: 'Avatar.Group 头像组，maxCount 收起超出部分。' },
+          { key: 'avatar-fallback', label: 'Avatar 加载回退', componentPath: 'Avatar', exampleName: 'Fallback', description: '图片加载失败回退到文字或图标。' },
+          { key: 'avatar-theme', label: 'Avatar 主题定制', componentPath: 'Avatar', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
+      {
         key: 'carousel',
         label: 'Carousel 轮播',
         icon: 'Carousel',

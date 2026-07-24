@@ -635,6 +635,17 @@ export interface ComponentThemeConfig {
     /** 字体大小 */
     fontSize?: number;
   };
+  /** 头像组件配置 */
+  Avatar?: {
+    /** 默认背景色 */
+    colorBg?: string;
+    /** 文本/图标颜色 */
+    colorText?: string;
+    /** 方形头像圆角 */
+    borderRadius?: number;
+    /** 头像组内边框颜色 */
+    groupBorderColor?: string;
+  };
   /** 多选框组件配置 */
   Checkbox?: {
     /** 主色 */

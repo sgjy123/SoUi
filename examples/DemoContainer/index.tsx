@@ -30,6 +30,7 @@ import Input from '../../src/components/Input';
 import Select from '../../src/components/Select';
 import Radio from '../../src/components/Radio';
 import Segmented from '../../src/components/Segmented';
+import Avatar from '../../src/components/Avatar';
 import Checkbox from '../../src/components/Checkbox';
 import InputNumber from '../../src/components/InputNumber';
 import Switch from '../../src/components/Switch';
@@ -129,6 +130,8 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     RadioGroup: Radio.Group,
     RadioButton: Radio.Button,
     Segmented,
+    Avatar,
+    AvatarGroup: Avatar.Group,
     Checkbox,
     CheckboxGroup: Checkbox.Group,
     InputNumber,
