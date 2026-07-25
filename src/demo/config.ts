@@ -951,6 +951,17 @@ export const docsConfig: MenuGroup[] = [
           { key: 'glow-border-theme', label: 'GlowBorder 主题定制', componentPath: 'GlowBorder', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
         ],
       },
+      {
+        key: 'tour',
+        label: 'Tour 漫游式引导',
+        icon: 'Compass',
+        items: [
+          { key: 'tour-basic', label: 'Tour 基础用法', componentPath: 'Tour', exampleName: 'Basic', description: '基础的漫游式引导，依次高亮目标元素。' },
+          { key: 'tour-primary', label: 'Tour 主题色背景', componentPath: 'Tour', exampleName: 'Primary', description: '使用主题色背景的引导弹窗。' },
+          { key: 'tour-no-mask', label: 'Tour 无遮罩', componentPath: 'Tour', exampleName: 'NoMask', description: '不使用遮罩层的漫游式引导。' },
+          { key: 'tour-custom-indicator', label: 'Tour 自定义指示器', componentPath: 'Tour', exampleName: 'CustomIndicator', description: '自定义步骤指示器的渲染方式。' },
+        ],
+      },
     ],
   },
 ];

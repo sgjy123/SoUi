@@ -1211,6 +1211,27 @@ export interface ComponentThemeConfig {
     /** 边框颜色 */
     borderColor?: string;
   };
+  /** 漫游式引导组件配置 */
+  Tour?: {
+    /** 背景色 */
+    colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 次要文本颜色 */
+    colorTextSecondary?: string;
+    /** 字体大小 */
+    fontSize?: number;
+    /** 圆角 */
+    borderRadius?: number;
+    /** 主色 */
+    colorPrimary?: string;
+    /** primary 类型文本颜色 */
+    colorPrimaryText?: string;
+    /** 阴影 */
+    boxShadow?: string;
+    /** 遮罩颜色 */
+    maskColor?: string;
+  };
   // 可以继续添加其他组件的配置
 }
 

@@ -293,6 +293,10 @@ export type { CollapseProps, CollapsePanelProps, CollapseItemConfig, CollapseSiz
 export { default as PopCard } from './components/PopCard';
 export type { PopCardProps, PopCardPlacement, PopCardTrigger } from './components/PopCard';
 
+// Tour Component
+export { default as Tour } from './components/Tour';
+export type { TourProps, TourStep, TourPlacement, TourType, TourStepButtonProps } from './components/Tour';
+
 // Utils
 export * from './utils';
 

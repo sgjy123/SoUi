@@ -99,6 +99,8 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
     const formTheme = mergedTheme.components?.Form || {};
     // 获取 Pagination 组件级配置
     const paginationTheme = mergedTheme.components?.Pagination || {};
+    // 获取 Tour 组件级配置
+    const tourTheme = mergedTheme.components?.Tour || {};
     // 获取 Tag 组件级配置
     const tagTheme = mergedTheme.components?.Tag || {};
     // 获取 Card 组件级配置
@@ -922,6 +924,29 @@ const ConfigProvider: React.FC<ConfigProviderProps> = ({
       '--soui-popcard-color-bg-component': popCardTheme.colorBg,
       '--soui-popcard-border-radius-component': popCardTheme.borderRadius ? `${popCardTheme.borderRadius}px` : undefined,
       '--soui-popcard-box-shadow-component': popCardTheme.boxShadow,
+
+      // ==================== Tour 组件配置 ====================
+      // 第2层: Tour 配置点 (引用设计令牌)
+      '--soui-tour-color-bg': tourTheme.colorBg || '#fff',
+      '--soui-tour-color-text': tourTheme.colorText || 'rgba(0, 0, 0, 0.88)',
+      '--soui-tour-color-text-secondary': tourTheme.colorTextSecondary || 'rgba(0, 0, 0, 0.65)',
+      '--soui-tour-font-size': tourTheme.fontSize ? `${tourTheme.fontSize}px` : undefined,
+      '--soui-tour-border-radius': tourTheme.borderRadius ? `${tourTheme.borderRadius}px` : undefined,
+      '--soui-tour-color-primary': tourTheme.colorPrimary || mergedTheme.primaryColor,
+      '--soui-tour-color-primary-text': tourTheme.colorPrimaryText || '#fff',
+      '--soui-tour-box-shadow': tourTheme.boxShadow,
+      '--soui-tour-mask-color': tourTheme.maskColor || 'rgba(0, 0, 0, 0.45)',
+
+      // 第3层: Tour 组件级覆盖 (优先级最高)
+      '--soui-tour-color-bg-component': tourTheme.colorBg,
+      '--soui-tour-color-text-component': tourTheme.colorText,
+      '--soui-tour-color-text-secondary-component': tourTheme.colorTextSecondary,
+      '--soui-tour-font-size-component': tourTheme.fontSize ? `${tourTheme.fontSize}px` : undefined,
+      '--soui-tour-border-radius-component': tourTheme.borderRadius ? `${tourTheme.borderRadius}px` : undefined,
+      '--soui-tour-color-primary-component': tourTheme.colorPrimary,
+      '--soui-tour-color-primary-text-component': tourTheme.colorPrimaryText,
+      '--soui-tour-box-shadow-component': tourTheme.boxShadow,
+      '--soui-tour-mask-color-component': tourTheme.maskColor,
     } as any;
   }, [mergedTheme]);
 

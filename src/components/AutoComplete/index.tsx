@@ -17,7 +17,7 @@ export type AutoCompleteOptions = (AutoCompleteOption | string)[];
 export type AutoCompleteSize = 'small' | 'middle' | 'large';
 export type AutoCompleteStatus = 'error' | 'warning';
 
-export interface AutoCompleteProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onSelect' | 'defaultValue'> {
+export interface AutoCompleteProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onSelect' | 'defaultValue' | 'prefix'> {
   /** 当前值 */
   value?: string;
   /** 默认值 */

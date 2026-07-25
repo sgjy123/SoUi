@@ -283,6 +283,7 @@ function sidebarComponents() {
         { text: 'Divider 分割线', link: 'divider' },
         { text: 'Watermark 水印', link: 'watermark' },
         { text: 'GlowBorder 流光边框', link: 'glow-border' },
+        { text: 'Tour 漫游式引导', link: 'tour' },
       ],
     },
   ]

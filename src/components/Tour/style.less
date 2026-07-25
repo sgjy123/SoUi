@@ -1,0 +1,249 @@
+@import '../../styles/variables.less';
+
+// ==================== Animations ====================
+
+@keyframes soui-tour-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ==================== Mask ====================
+
+.soui-tour-mask {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.soui-tour-mask-cutout {
+  pointer-events: none;
+  transition: all var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+}
+
+// ==================== Tour Panel ====================
+
+.soui-tour {
+  position: fixed;
+  max-width: 360px;
+  min-width: 260px;
+  background: var(--soui-tour-color-bg, @bg-color-base);
+  border-radius: var(--soui-tour-border-radius, @border-radius-lg);
+  box-shadow: var(--soui-tour-box-shadow, 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05));
+  font-size: var(--soui-tour-font-size, var(--soui-font-size, @font-size-base));
+  color: var(--soui-tour-color-text, var(--soui-text-color, @text-color));
+  animation: soui-tour-fade-in var(--soui-transition-duration, 0.2s) var(--soui-transition-timing-function, @transition-timing-function);
+  box-sizing: border-box;
+  z-index: 1100;
+
+  &-hidden {
+    display: none;
+  }
+
+  // ==================== Primary Type ====================
+  &-primary {
+    background: var(--soui-tour-color-primary, @primary-color);
+    color: var(--soui-tour-color-primary-text, #fff);
+
+    .soui-tour-title {
+      color: var(--soui-tour-color-primary-text, #fff);
+    }
+
+    .soui-tour-description {
+      color: var(--soui-tour-color-primary-text, rgba(255, 255, 255, 0.85));
+    }
+
+    .soui-tour-close {
+      color: var(--soui-tour-color-primary-text, rgba(255, 255, 255, 0.65));
+
+      &:hover {
+        color: var(--soui-tour-color-primary-text, #fff);
+      }
+    }
+
+    .soui-tour-indicator-dot {
+      background: rgba(255, 255, 255, 0.35);
+
+      &-active {
+        background: #fff;
+      }
+    }
+
+    .soui-tour-arrow {
+      &-bottom::after {
+        border-top-color: var(--soui-tour-color-primary, @primary-color);
+      }
+      &-top::after {
+        border-bottom-color: var(--soui-tour-color-primary, @primary-color);
+      }
+      &-right::after {
+        border-left-color: var(--soui-tour-color-primary, @primary-color);
+      }
+      &-left::after {
+        border-right-color: var(--soui-tour-color-primary, @primary-color);
+      }
+    }
+  }
+
+  // ==================== Arrow ====================
+  &-arrow {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border: 8px solid transparent;
+    }
+
+    &-top {
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      &::after {
+        border-top: none;
+        border-bottom-color: var(--soui-tour-color-bg, @bg-color-base);
+      }
+    }
+
+    &-bottom {
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      &::after {
+        border-bottom: none;
+        border-top-color: var(--soui-tour-color-bg, @bg-color-base);
+      }
+    }
+
+    &-left {
+      left: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &::after {
+        border-left: none;
+        border-right-color: var(--soui-tour-color-bg, @bg-color-base);
+      }
+    }
+
+    &-right {
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &::after {
+        border-right: none;
+        border-left-color: var(--soui-tour-color-bg, @bg-color-base);
+      }
+    }
+  }
+
+  // ==================== Cover ====================
+  &-cover {
+    img {
+      display: block;
+      width: 100%;
+      border-radius: var(--soui-tour-border-radius, @border-radius-lg) var(--soui-tour-border-radius, @border-radius-lg) 0 0;
+    }
+  }
+
+  // ==================== Inner ====================
+  &-inner {
+    padding: @padding-lg;
+    position: relative;
+  }
+
+  // ==================== Close ====================
+  &-close {
+    position: absolute;
+    top: @padding-sm;
+    right: @padding-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--soui-tour-color-text, var(--soui-text-color-secondary, @text-color-secondary));
+    border-radius: var(--soui-border-radius, @border-radius-base);
+    transition: color var(--soui-transition-duration, @transition-duration),
+                background var(--soui-transition-duration, @transition-duration);
+
+    &:hover {
+      color: var(--soui-tour-color-text, var(--soui-text-color, @text-color));
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  // ==================== Title ====================
+  &-title {
+    font-weight: 600;
+    font-size: var(--soui-tour-font-size, var(--soui-font-size, @font-size-base));
+    line-height: 1.5;
+    padding-right: @padding-lg;
+    color: var(--soui-tour-color-text, var(--soui-text-color, @text-color));
+    margin-bottom: @padding-xs;
+  }
+
+  // ==================== Description ====================
+  &-description {
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    line-height: 1.6;
+    color: var(--soui-text-color-secondary, @text-color-secondary);
+    margin-top: @padding-xs;
+    word-break: break-word;
+  }
+
+  // ==================== Footer ====================
+  &-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: @padding-md;
+    gap: @padding-sm;
+  }
+
+  // ==================== Indicators ====================
+  &-indicators {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  &-indicator-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.15);
+    transition: all var(--soui-transition-duration, @transition-duration);
+
+    &-active {
+      width: 16px;
+      border-radius: 3px;
+      background: var(--soui-tour-color-primary, @primary-color);
+    }
+  }
+
+  // ==================== Buttons ====================
+  &-buttons {
+    display: flex;
+    gap: @padding-xs;
+    flex-shrink: 0;
+  }
+}
