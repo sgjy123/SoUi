@@ -284,6 +284,7 @@ function sidebarComponents() {
         { text: 'Watermark 水印', link: 'watermark' },
         { text: 'GlowBorder 流光边框', link: 'glow-border' },
         { text: 'Tour 漫游式引导', link: 'tour' },
+        { text: 'InfiniteList 无限加载', link: 'infinite-list' },
       ],
     },
   ]

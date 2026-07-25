@@ -63,6 +63,7 @@ import Transfer from '../../src/components/Transfer';
 import Empty from '../../src/components/Empty';
 import Slider from '../../src/components/Slider';
 import Tour from '../../src/components/Tour';
+import InfiniteList from '../../src/components/InfiniteList';
 import Upload from '../../src/components/Upload';
 import dayjs from 'dayjs';
 import ConfigProvider from '../../src/components/ConfigProvider';
@@ -180,6 +181,7 @@ const DemoContainer: React.FC<DemoContainerProps> = ({
     Empty,
     Slider,
     Tour,
+    InfiniteList,
     Upload,
     dayjs,
     ConfigProvider,

@@ -1,0 +1,95 @@
+@import '../../styles/variables.less';
+
+// ==================== InfiniteList ====================
+
+.soui-infinite-list {
+  overflow-y: auto;
+  background: var(--soui-infinite-list-color-bg, @bg-color-base);
+  border: 1px solid var(--soui-infinite-list-color-border, @border-color-split);
+  border-radius: var(--soui-infinite-list-border-radius, @border-radius-base);
+  font-size: var(--soui-infinite-list-font-size, @font-size-base);
+  color: var(--soui-infinite-list-color-text, @text-color);
+  box-sizing: border-box;
+
+  // Hide scrollbar
+  &-hide-scrollbar {
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // IE 10+
+
+    &::-webkit-scrollbar {
+      display: none; // Chrome / Safari
+    }
+  }
+
+  // ==================== Item ====================
+  &-item {
+    padding: @padding-md;
+    border-bottom: 1px solid var(--soui-infinite-list-color-border, @border-color-split);
+    transition: background var(--soui-transition-duration, @transition-duration) var(--soui-transition-timing-function, @transition-timing-function);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: var(--soui-infinite-list-item-hover-bg, rgba(0, 0, 0, 0.02));
+    }
+
+    &:active {
+      background: var(--soui-infinite-list-item-active-bg, rgba(0, 0, 0, 0.04));
+    }
+  }
+
+  // ==================== Footer ====================
+  &-footer {
+    padding: @padding-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-footer-loading {
+    color: var(--soui-infinite-list-color-text, @text-color-secondary);
+  }
+
+  &-footer-no-more {
+    color: var(--soui-infinite-list-color-text, @text-color-disabled);
+  }
+
+  // ==================== Loading ====================
+  &-loading {
+    display: flex;
+    align-items: center;
+    gap: @padding-sm;
+  }
+
+  &-loading-text {
+    font-size: var(--soui-infinite-list-font-size, @font-size-base);
+    color: var(--soui-infinite-list-color-text, @text-color-secondary);
+  }
+
+  // ==================== No More ====================
+  &-no-more-text {
+    font-size: var(--soui-font-size-sm, @font-size-sm);
+    color: var(--soui-text-color-disabled, @text-color-disabled);
+  }
+
+  // ==================== Empty ====================
+  &-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: @padding-xl;
+    min-height: 120px;
+  }
+
+  &-empty-text {
+    font-size: var(--soui-infinite-list-font-size, @font-size-base);
+    color: var(--soui-infinite-list-color-text, @text-color-disabled);
+  }
+
+  &-empty-state {
+    display: flex;
+    flex-direction: column;
+  }
+}

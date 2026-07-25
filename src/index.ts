@@ -297,6 +297,10 @@ export type { PopCardProps, PopCardPlacement, PopCardTrigger } from './component
 export { default as Tour } from './components/Tour';
 export type { TourProps, TourStep, TourPlacement, TourType, TourStepButtonProps } from './components/Tour';
 
+// InfiniteList Component
+export { default as InfiniteList } from './components/InfiniteList';
+export type { InfiniteListProps } from './components/InfiniteList';
+
 // Utils
 export * from './utils';
 

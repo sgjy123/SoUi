@@ -15,27 +15,160 @@ title: GlowBorder 流光边框
 
 ### 基础用法
 
-<code src="../../examples/GlowBorder/Basic.tsx"></code>
+```tsx
+import { GlowBorder } from '@soui/ui';
+
+export default () => (
+  <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+    <GlowBorder>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        流光边框
+      </div>
+    </GlowBorder>
+    <GlowBorder borderWidth={3} radius={16}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        更粗边框 + 更大圆角
+      </div>
+    </GlowBorder>
+  </div>
+);
+```
 
 ### 自定义颜色
 
-<code src="../../examples/GlowBorder/Colors.tsx"></code>
+```tsx
+import { GlowBorder } from '@soui/ui';
+
+export default () => (
+  <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+    <GlowBorder colors={['#ff4d4f', '#faad14']}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        红黄渐变
+      </div>
+    </GlowBorder>
+    <GlowBorder colors={['#52c41a', '#13c2c2', '#1677ff']}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        三色流光
+      </div>
+    </GlowBorder>
+    <GlowBorder colors={['#722ed1', '#eb2f96']}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        紫粉渐变
+      </div>
+    </GlowBorder>
+  </div>
+);
+```
 
 ### 旋转速度与方向
 
-<code src="../../examples/GlowBorder/Duration.tsx"></code>
+```tsx
+import { GlowBorder } from '@soui/ui';
+
+export default () => (
+  <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+    <GlowBorder duration={1}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        快速（1s）
+      </div>
+    </GlowBorder>
+    <GlowBorder duration={6}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        慢速（6s）
+      </div>
+    </GlowBorder>
+    <GlowBorder reverse>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        反向旋转
+      </div>
+    </GlowBorder>
+    <GlowBorder paused>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        暂停动画
+      </div>
+    </GlowBorder>
+  </div>
+);
+```
 
 ### 外发光效果
 
-<code src="../../examples/GlowBorder/Glow.tsx"></code>
+```tsx
+import { GlowBorder } from '@soui/ui';
+
+export default () => (
+  <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', padding: 16 }}>
+    <GlowBorder glow={8} colors={['#1677ff', '#36cfc9']}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        glow=8
+      </div>
+    </GlowBorder>
+    <GlowBorder glow={16} colors={['#722ed1', '#eb2f96']} borderWidth={3}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        glow=16
+      </div>
+    </GlowBorder>
+    <GlowBorder glow={24} colors={['#ff4d4f', '#faad14']} borderWidth={4} radius={20}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        glow=24
+      </div>
+    </GlowBorder>
+  </div>
+);
+```
 
 ### 深色/透明背景
 
-<code src="../../examples/GlowBorder/Background.tsx"></code>
+```tsx
+import { GlowBorder } from '@soui/ui';
+
+export default () => (
+  <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', padding: 16, background: '#141414', borderRadius: 8 }}>
+    <GlowBorder background="#1f1f1f" colors={['#1677ff', '#36cfc9']} borderWidth={2}>
+      <div style={{ padding: '24px 40px', textAlign: 'center', color: '#fff' }}>
+        深色背景
+      </div>
+    </GlowBorder>
+    <GlowBorder background="transparent" colors={['#722ed1', '#eb2f96']} borderWidth={2}>
+      <div style={{ padding: '24px 40px', textAlign: 'center', color: '#fff' }}>
+        透明背景
+      </div>
+    </GlowBorder>
+    <GlowBorder background="#1f1f1f" colors={['#ff4d4f', '#faad14']} borderWidth={2} glow={12}>
+      <div style={{ padding: '24px 40px', textAlign: 'center', color: '#fff' }}>
+        深色 + 外发光
+      </div>
+    </GlowBorder>
+  </div>
+);
+```
 
 ### 主题定制
 
-<code src="../../examples/GlowBorder/Theme.tsx"></code>
+```tsx
+import { GlowBorder, ConfigProvider } from '@soui/ui';
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      components: {
+        GlowBorder: {
+          colorPrimary: '#ff4d4f',
+          colorSecondary: '#faad14',
+          background: '#fff7e6',
+          borderRadius: 16,
+        },
+      },
+    }}
+  >
+    <GlowBorder glow={8} borderWidth={3}>
+      <div style={{ padding: '24px 40px', textAlign: 'center' }}>
+        主题定制
+      </div>
+    </GlowBorder>
+  </ConfigProvider>
+);
+```
 
 ## API
 

@@ -15,19 +15,125 @@ title: AutoComplete 自动完成
 
 ### 基础用法
 
-<code src="../../examples/AutoComplete/Basic.tsx"></code>
+```tsx
+import { AutoComplete, useState } from '@soui/ui';
+
+export default () => {
+  const [options, setOptions] = useState([]);
+
+  const handleSearch = (value) => {
+    if (!value) {
+      setOptions([]);
+      return;
+    }
+    setOptions([
+      { value: `${value}@gmail.com`, label: `${value}@gmail.com` },
+      { value: `${value}@outlook.com`, label: `${value}@outlook.com` },
+      { value: `${value}@qq.com`, label: `${value}@qq.com` },
+    ]);
+  };
+
+  return (
+    <AutoComplete
+      options={options}
+      onSearch={handleSearch}
+      placeholder="输入邮箱前缀"
+      style={{ width: 280 }}
+      allowClear
+    />
+  );
+};
+```
 
 ### 本地过滤
 
-<code src="../../examples/AutoComplete/Filter.tsx"></code>
+```tsx
+import { AutoComplete } from '@soui/ui';
+
+export default () => {
+  const options = [
+    { value: 'React', label: 'React — JavaScript 库' },
+    { value: 'Vue', label: 'Vue — 渐进式框架' },
+    { value: 'Angular', label: 'Angular — 平台框架' },
+    { value: 'Svelte', label: 'Svelte — 编译器' },
+    { value: 'Solid', label: 'Solid — 响应式框架' },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <AutoComplete
+        options={options}
+        placeholder="搜索前端框架（本地过滤）"
+        style={{ width: 320 }}
+        filterOption
+      />
+      <AutoComplete
+        options={options}
+        placeholder="禁用过滤（显示全部选项）"
+        style={{ width: 320 }}
+        filterOption={false}
+      />
+    </div>
+  );
+};
+```
 
 ### 尺寸与状态
 
-<code src="../../examples/AutoComplete/SizeStatus.tsx"></code>
+```tsx
+import { AutoComplete } from '@soui/ui';
+
+export default () => {
+  const options = [
+    { value: '选项 A' },
+    { value: '选项 B' },
+    { value: '选项 C', disabled: true },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <AutoComplete options={options} placeholder="小号" size="small" style={{ width: 240 }} />
+      <AutoComplete options={options} placeholder="默认" style={{ width: 240 }} />
+      <AutoComplete options={options} placeholder="大号" size="large" style={{ width: 240 }} />
+      <AutoComplete options={options} placeholder="错误状态" status="error" style={{ width: 240 }} />
+      <AutoComplete options={options} placeholder="警告状态" status="warning" style={{ width: 240 }} />
+      <AutoComplete options={options} placeholder="禁用" disabled style={{ width: 240 }} />
+    </div>
+  );
+};
+```
 
 ### Form 表单集成
 
-<code src="../../examples/AutoComplete/Form.tsx"></code>
+```tsx
+import { AutoComplete, Form, Button } from '@soui/ui';
+
+export default () => {
+  const [form] = Form.useForm();
+  const options = [
+    { value: '北京市' },
+    { value: '上海市' },
+    { value: '广州市' },
+    { value: '深圳市' },
+    { value: '杭州市' },
+  ];
+
+  const onFinish = (values) => {
+    console.log('表单值:', values);
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish} style={{ maxWidth: 400 }}>
+      <Form.Item label="城市" name="city" rules={[{ required: true, message: '请选择城市' }]}>
+        <AutoComplete options={options} placeholder="输入城市名" allowClear />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" onClick={() => form.submit()}>提交</Button>
+      </Form.Item>
+    </Form>
+  );
+};
+```
 
 ## API
 

@@ -16,19 +16,154 @@ title: Tour 漫游式引导
 
 ### 基础用法
 
-<code src="../../examples/Tour/Basic.tsx"></code>
+```tsx
+import { Tour, Button, useState, useRef } from '@soui/ui';
+
+export default () => {
+  const [open, setOpen] = useState(false);
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+
+  const steps = [
+    {
+      target: () => ref1.current,
+      title: '上传文件',
+      description: '点击这里可以上传文件到服务器。',
+    },
+    {
+      target: () => ref2.current,
+      title: '保存草稿',
+      description: '未完成的工作可以先保存为草稿。',
+    },
+    {
+      target: () => ref3.current,
+      title: '发布',
+      description: '确认无误后点击发布。',
+    },
+  ];
+
+  return (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <span ref={ref1}><Button>上传文件</Button></span>
+      <span ref={ref2}><Button>保存草稿</Button></span>
+      <span ref={ref3}><Button type="primary">发布</Button></span>
+      <Button type="link" onClick={() => setOpen(true)}>开始引导</Button>
+      <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+    </div>
+  );
+};
+```
 
 ### Primary 类型
 
-<code src="../../examples/Tour/Primary.tsx"></code>
+```tsx
+import { Tour, Button, useState, useRef } from '@soui/ui';
+
+export default () => {
+  const [open, setOpen] = useState(false);
+  const btnRef = useRef(null);
+
+  const steps = [
+    {
+      target: () => btnRef.current,
+      title: '功能介绍',
+      description: '这是 Primary 类型的漫游引导，使用主题色背景。',
+      type: 'primary',
+    },
+    {
+      target: () => btnRef.current,
+      title: '操作步骤',
+      description: '可以通过上一步/下一步按钮进行步骤导航。',
+      type: 'primary',
+    },
+  ];
+
+  return (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <span ref={btnRef}><Button type="primary">目标按钮</Button></span>
+      <Button type="link" onClick={() => setOpen(true)}>开始引导</Button>
+      <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+    </div>
+  );
+};
+```
 
 ### 无遮罩
 
-<code src="../../examples/Tour/NoMask.tsx"></code>
+```tsx
+import { Tour, Button, useState, useRef } from '@soui/ui';
+
+export default () => {
+  const [open, setOpen] = useState(false);
+  const btnRef = useRef(null);
+
+  const steps = [
+    {
+      target: () => btnRef.current,
+      title: '无遮罩引导',
+      description: '这个步骤没有遮罩，不会遮挡页面内容。',
+      mask: false,
+    },
+  ];
+
+  return (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <span ref={btnRef}><Button>目标按钮</Button></span>
+      <Button type="link" onClick={() => setOpen(true)}>开始引导</Button>
+      <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+    </div>
+  );
+};
+```
 
 ### 自定义指示器
 
-<code src="../../examples/Tour/CustomIndicator.tsx"></code>
+```tsx
+import { Tour, Button, useState, useRef } from '@soui/ui';
+
+export default () => {
+  const [open, setOpen] = useState(false);
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
+  const ref3 = useRef(null);
+
+  const steps = [
+    {
+      target: () => ref1.current,
+      title: '步骤一',
+      description: '这是第一个步骤的说明。',
+    },
+    {
+      target: () => ref2.current,
+      title: '步骤二',
+      description: '这是第二个步骤的说明。',
+    },
+    {
+      target: () => ref3.current,
+      title: '步骤三',
+      description: '这是第三个步骤的说明。',
+    },
+  ];
+
+  return (
+    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+      <span ref={ref1}><Button>按钮一</Button></span>
+      <span ref={ref2}><Button>按钮二</Button></span>
+      <span ref={ref3}><Button>按钮三</Button></span>
+      <Button type="link" onClick={() => setOpen(true)}>开始引导</Button>
+      <Tour
+        open={open}
+        onClose={() => setOpen(false)}
+        steps={steps}
+        indicatorsRender={(current, total) => (
+          <span>{current + 1} / {total}</span>
+        )}
+      />
+    </div>
+  );
+};
+```
 
 ## API
 

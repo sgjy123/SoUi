@@ -962,6 +962,16 @@ export const docsConfig: MenuGroup[] = [
           { key: 'tour-custom-indicator', label: 'Tour 自定义指示器', componentPath: 'Tour', exampleName: 'CustomIndicator', description: '自定义步骤指示器的渲染方式。' },
         ],
       },
+      {
+        key: 'infinite-list',
+        label: 'InfiniteList 无限加载',
+        icon: 'ArrowCircleDown',
+        items: [
+          { key: 'infinite-list-basic', label: 'InfiniteList 基础用法', componentPath: 'InfiniteList', exampleName: 'Basic', description: '滚动到底部自动加载更多数据。' },
+          { key: 'infinite-list-custom-item', label: 'InfiniteList 自定义列表项', componentPath: 'InfiniteList', exampleName: 'CustomItem', description: '带头像的联系人列表，自定义渲染每一项。' },
+          { key: 'infinite-list-theme', label: 'InfiniteList 主题定制', componentPath: 'InfiniteList', exampleName: 'Theme', description: '通过 ConfigProvider 自定义主题。' },
+        ],
+      },
     ],
   },
 ];

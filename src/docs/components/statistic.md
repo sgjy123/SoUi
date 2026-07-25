@@ -16,27 +16,159 @@ title: Statistic 数值统计
 
 ### 基础用法
 
-<code src="../../examples/Statistic/Basic.tsx"></code>
+```tsx
+import { Statistic, Row, Col } from '@soui/ui';
+
+export default () => (
+  <Row gutter={48}>
+    <Col span={12}>
+      <Statistic title="活跃用户数" value={112893} />
+    </Col>
+    <Col span={12}>
+      <Statistic title="账户余额" value={93.28} precision={2} suffix="元" />
+    </Col>
+  </Row>
+);
+```
 
 ### 前缀和后缀
 
-<code src="../../examples/Statistic/PrefixSuffix.tsx"></code>
+```tsx
+import { Statistic, Row, Col, Icon } from '@soui/ui';
+
+export default () => (
+  <Row gutter={48}>
+    <Col span={12}>
+      <Statistic
+        title="反馈数"
+        value={1128}
+        prefix={<Icon name="Comment" size={20} />}
+      />
+    </Col>
+    <Col span={12}>
+      <Statistic
+        title="增长率"
+        value={9.3}
+        precision={1}
+        suffix="%"
+        prefix={<Icon name="Up" size={20} style={{ color: '#52c41a' }} />}
+      />
+    </Col>
+  </Row>
+);
+```
 
 ### 精度与千分位
 
-<code src="../../examples/Statistic/Precision.tsx"></code>
+```tsx
+import { Statistic, Row, Col } from '@soui/ui';
+
+export default () => (
+  <Row gutter={48}>
+    <Col span={8}>
+      <Statistic title="总金额" value={1234567.89} precision={2} prefix="¥" />
+    </Col>
+    <Col span={8}>
+      <Statistic title="无千分位" value={1234567} groupSeparator="" />
+    </Col>
+    <Col span={8}>
+      <Statistic title="自定义分隔符" value={1234567} groupSeparator="." />
+    </Col>
+  </Row>
+);
+```
 
 ### 倒计时
 
-<code src="../../examples/Statistic/Countdown.tsx"></code>
+```tsx
+import { Statistic, Row, Col } from '@soui/ui';
+
+const { Countdown } = Statistic;
+
+export default () => {
+  const deadline = Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 60 * 30;
+
+  return (
+    <Row gutter={48}>
+      <Col span={12}>
+        <Countdown
+          title="倒计时"
+          value={deadline}
+          onFinish={() => console.log('倒计时结束')}
+        />
+      </Col>
+      <Col span={12}>
+        <Countdown
+          title="包含天数"
+          value={deadline}
+          format="DD 天 HH:mm:ss"
+        />
+      </Col>
+    </Row>
+  );
+};
+```
 
 ### 加载中状态
 
-<code src="../../examples/Statistic/Loading.tsx"></code>
+```tsx
+import { Statistic, Row, Col, Button, useState } from '@soui/ui';
+
+export default () => {
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <div>
+      <Button onClick={() => setLoading(!loading)} style={{ marginBottom: 16 }}>
+        {loading ? '加载完成' : '加载中'}
+      </Button>
+      <Row gutter={48}>
+        <Col span={12}>
+          <Statistic title="活跃用户" value={112893} loading={loading} />
+        </Col>
+        <Col span={12}>
+          <Statistic title="总营收" value={93827.5} precision={2} prefix="¥" loading={loading} />
+        </Col>
+      </Row>
+    </div>
+  );
+};
+```
 
 ### 主题定制
 
-<code src="../../examples/Statistic/Theme.tsx"></code>
+```tsx
+import { Statistic, Row, Col, ConfigProvider, Icon } from '@soui/ui';
+
+const { Countdown } = Statistic;
+
+export default () => (
+  <ConfigProvider
+    theme={{
+      components: {
+        Statistic: {
+          colorTextHeading: '#8c8c8c',
+          colorText: '#1677ff',
+          fontSizeHeading: 14,
+          fontSize: 32,
+        },
+      },
+    }}
+  >
+    <Row gutter={48}>
+      <Col span={8}>
+        <Statistic title="总用户" value={28394} prefix={<Icon name="User" size={20} />} />
+      </Col>
+      <Col span={8}>
+        <Statistic title="转化率" value={68.5} precision={1} suffix="%" />
+      </Col>
+      <Col span={8}>
+        <Countdown title="活动剩余" value={Date.now() + 3600000} format="HH:mm:ss" />
+      </Col>
+    </Row>
+  </ConfigProvider>
+);
+```
 
 ## API
 

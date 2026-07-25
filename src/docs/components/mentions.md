@@ -16,15 +16,80 @@ title: Mentions 提及
 
 ### 基础用法
 
-<code src="../../examples/Mentions/Basic.tsx"></code>
+```tsx
+import { Mentions } from '@soui/ui';
+
+export default () => {
+  const options = [
+    { value: '张三', label: '张三' },
+    { value: '李四', label: '李四' },
+    { value: '王五', label: '王五' },
+    { value: '赵六', label: '赵六' },
+  ];
+
+  return (
+    <Mentions
+      options={options}
+      placeholder="输入 @ 提及用户"
+      rows={3}
+      style={{ width: '100%' }}
+    />
+  );
+};
+```
 
 ### 多前缀
 
-<code src="../../examples/Mentions/Prefix.tsx"></code>
+```tsx
+import { Mentions } from '@soui/ui';
+
+export default () => {
+  const users = [
+    { value: 'alice', label: 'Alice' },
+    { value: 'bob', label: 'Bob' },
+    { value: 'charlie', label: 'Charlie' },
+  ];
+
+  return (
+    <Mentions
+      options={users}
+      prefix={['@', '#']}
+      placeholder="输入 @ 提及用户，# 提及话题"
+      style={{ width: '100%' }}
+    />
+  );
+};
+```
 
 ### Form 表单集成
 
-<code src="../../examples/Mentions/Form.tsx"></code>
+```tsx
+import { Mentions, Form, Button } from '@soui/ui';
+
+export default () => {
+  const [form] = Form.useForm();
+  const options = [
+    { value: '张三', label: '张三' },
+    { value: '李四', label: '李四' },
+    { value: '王五', label: '王五' },
+  ];
+
+  const onFinish = (values) => {
+    console.log('表单值:', values);
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish} style={{ maxWidth: 500 }}>
+      <Form.Item label="评论" name="comment" rules={[{ required: true, message: '请输入评论内容' }]}>
+        <Mentions options={options} placeholder="输入 @ 提及用户" rows={3} />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" onClick={() => form.submit()}>提交</Button>
+      </Form.Item>
+    </Form>
+  );
+};
+```
 
 ## API
 

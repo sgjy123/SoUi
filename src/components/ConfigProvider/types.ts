@@ -1232,6 +1232,23 @@ export interface ComponentThemeConfig {
     /** 遮罩颜色 */
     maskColor?: string;
   };
+  /** 无限加载列表组件配置 */
+  InfiniteList?: {
+    /** 背景色 */
+    colorBg?: string;
+    /** 文本颜色 */
+    colorText?: string;
+    /** 边框颜色 */
+    colorBorder?: string;
+    /** 列表项悬停背景色 */
+    itemHoverBg?: string;
+    /** 列表项激活背景色 */
+    itemActiveBg?: string;
+    /** 圆角大小（像素） */
+    borderRadius?: number;
+    /** 字体大小（像素） */
+    fontSize?: number;
+  };
   // 可以继续添加其他组件的配置
 }
 
