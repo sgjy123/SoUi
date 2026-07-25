@@ -341,14 +341,6 @@ function MyComponent() {
    npm install --save-dev rollup-plugin-visualizer
    ```
 
-4. **使用 CDN**
-   
-   对于大型项目，可以考虑使用 CDN：
-   ```html
-   <link rel="stylesheet" href="https://unpkg.com/@soui/ui/dist/soui.css">
-   <script src="https://unpkg.com/@soui/ui/dist/soui.umd.js"></script>
-   ```
-
 ### Q: 不支持的浏览器？
 
 **解决方案：**
@@ -417,4 +409,4 @@ export default TestPage;
 
 - 查看 [FAQ](/resources/faq)
 - 阅读 [更新日志](/resources/changelog)
-- 在 [GitHub Issues](https://github.com/souI/ui/issues) 提问
+- 在 [GitHub Issues](https://github.com/sgjy123/SoUi/issues) 提问

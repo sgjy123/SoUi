@@ -144,7 +144,7 @@ export default function UserInfo() {
           type="primary" 
           onClick={handleSubmit}
           loading={loading}
-          block
+          style={{ width: '100%' }}
         >
           提交
         </Button>
@@ -178,57 +178,31 @@ function App() {
 }
 ```
 
-### 暗黑模式
+### 组件级样式定制
 
-一键切换到暗黑模式：
+通过 `components` 属性对单个组件进行样式覆盖：
 
 ```tsx
-import { ConfigProvider, theme } from '@soui/ui';
+import { ConfigProvider } from '@soui/ui';
 
 function App() {
-  const isDark = true; // 根据用户偏好设置
-  
   return (
     <ConfigProvider
       theme={{
-        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        primaryColor: '#1677ff',
+        components: {
+          Button: {
+            borderRadius: 8,
+            primaryColor: '#fff',
+          },
+          Card: {
+            borderRadius: 12,
+            paddingLG: 24,
+          },
+        },
       }}
     >
-      <YourApp />
-    </ConfigProvider>
-  );
-}
-```
-
-### 动态主题
-
-支持运行时动态切换主题：
-
-```tsx
-import { useState } from 'react';
-import { ConfigProvider, Switch, Button } from '@soui/ui';
-
-function App() {
-  const [isDark, setIsDark] = useState(false);
-
-  return (
-    <ConfigProvider
-      theme={{
-        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        primaryColor: isDark ? '#177ddc' : '#1677ff',
-      }}
-    >
-      <div style={{ padding: 20 }}>
-        <Switch
-          checked={isDark}
-          onChange={setIsDark}
-          checkedChildren="暗色"
-          unCheckedChildren="亮色"
-        />
-        <div style={{ marginTop: 20 }}>
-          <Button type="primary">主要按钮</Button>
-        </div>
-      </div>
+      {/* 你的应用 */}
     </ConfigProvider>
   );
 }
@@ -351,4 +325,4 @@ import 'regenerator-runtime/runtime';
 
 - 查看 [FAQ](/resources/faq)
 - 阅读 [更新日志](/resources/changelog)
-- 在 [GitHub](https://github.com/souI/ui/issues) 提问
+- 在 [GitHub](https://github.com/sgjy123/SoUi/issues) 提问

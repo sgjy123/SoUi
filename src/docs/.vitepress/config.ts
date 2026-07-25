@@ -65,7 +65,7 @@ export default defineConfig({
 
     // 社交链接
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/souI/ui' },
+      { icon: 'github', link: 'https://github.com/sgjy123/SoUi' },
     ],
 
     // 页脚
@@ -81,7 +81,7 @@ export default defineConfig({
 
     // 编辑链接
     editLink: {
-      pattern: 'https://github.com/souI/ui/edit/main/docs/:path',
+      pattern: 'https://github.com/sgjy123/SoUi/edit/main/docs/:path',
       text: '在 GitHub 上编辑此页面',
     },
 

@@ -16,7 +16,7 @@ hero:
       link: /components/button
     - theme: alt
       text: GitHub
-      link: https://github.com/souI/ui
+      link: https://github.com/sgjy123/SoUi
 
 features:
   - icon: ⚡️

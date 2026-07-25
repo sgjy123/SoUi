@@ -163,7 +163,7 @@ npm install @soui/ui@latest
 
 ## 相关链接
 
-- [GitHub Repository](https://github.com/souI/ui)
+- [GitHub Repository](https://github.com/sgjy123/SoUi)
 - [NPM Package](https://www.npmjs.com/package/@soui/ui)
-- [问题反馈](https://github.com/souI/ui/issues)
+- [问题反馈](https://github.com/sgjy123/SoUi/issues)
 - [迁移指南](/resources/migration)

@@ -117,7 +117,7 @@ function App() {
 
 ```bash
 # 克隆项目
-git clone https://github.com/souI/ui.git
+git clone https://github.com/sgjy123/SoUi.git
 cd SoUi
 
 # 安装依赖
@@ -162,10 +162,10 @@ npm test
 
 ## 🔗 链接
 
-- [GitHub](https://github.com/souI/ui)
+- [GitHub](https://github.com/sgjy123/SoUi)
 - [NPM](https://www.npmjs.com/package/@soui/ui)
 - [文档站点](https://soui-ui.dev)
-- [问题反馈](https://github.com/souI/ui/issues)
+- [问题反馈](https://github.com/sgjy123/SoUi/issues)
 
 ## 👥 团队
 

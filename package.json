@@ -45,12 +45,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/souI/ui"
+    "url": "https://github.com/sgjy123/SoUi"
   },
   "bugs": {
-    "url": "https://github.com/souI/ui/issues"
+    "url": "https://github.com/sgjy123/SoUi/issues"
   },
-  "homepage": "https://github.com/souI/ui#readme",
+  "homepage": "https://github.com/sgjy123/SoUi#readme",
   "peerDependencies": {
     "react": ">=18.0.0 <20",
     "react-dom": ">=18.0.0 <20"

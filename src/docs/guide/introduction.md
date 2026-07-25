@@ -32,24 +32,19 @@ SoUi 是一套专为企业级应用设计的 React 组件库，提供了丰富�
 - 组件级样式定制
 
 📦 **开箱即用**
-- 13+ 高质量组件
+- 50+ 高质量组件
 - 完整的文档和示例
 - Tree Shaking 支持
 - 按需加载
 
 ## 快速体验
 
-### 在线沙箱
-
-- [CodeSandbox](https://codesandbox.io/s/soui-demo)
-- [StackBlitz](https://stackblitz.com/edit/soui-demo)
-
 ### 本地运行
 
 ```bash
-# 克隆示例项目
-git clone https://github.com/souI/ui-demo.git
-cd ui-demo
+# 克隆项目
+git clone https://github.com/sgjy123/SoUi.git
+cd SoUi
 
 # 安装依赖
 npm install
@@ -62,25 +57,84 @@ npm run dev
 
 ### 基础组件
 - [Button](/components/button) - 按钮
+- [FloatButton](/components/float-button) - 悬浮按钮
 - [Icon](/components/icon) - 图标
+- [Space](/components/space) - 间距
 - [Typography](/components/typography) - 排版
 
 ### 布局组件
-- [Grid](/components/grid) - 栅格布局
-- [Space](/components/space) - 间距
+- [Grid](/components/grid) - 栅格布局（Row/Col）
+- [Layout](/components/layout) - 布局
+- [Tabs](/components/tabs) - 标签页
+- [Dropdown](/components/dropdown) - 下拉菜单
+
+### 导航组件
+- [Menu](/components/menu) - 导航菜单
+- [Breadcrumb](/components/breadcrumb) - 面包屑
+- [Anchor](/components/anchor) - 锚点
+- [Affix](/components/affix) - 固钉
+- [Steps](/components/steps) - 步骤条
+- [Tree](/components/tree) - 树形控件
 
 ### 数据录入
 - [Input](/components/input) - 输入框
+- [Select](/components/select) - 选择器
+- [Radio](/components/radio) - 单选框
+- [Segmented](/components/segmented) - 分段控制器
+- [Checkbox](/components/checkbox) - 复选框
+- [InputNumber](/components/input-number) - 数字输入框
+- [Switch](/components/switch) - 开关
+- [Cascader](/components/cascader) - 级联选择
+- [TreeSelect](/components/tree-select) - 树选择
+- [Rate](/components/rate) - 评分
+- [ColorPicker](/components/color-picker) - 颜色选择器
+- [DatePicker](/components/date-picker) - 日期选择
+- [RangePicker](/components/range-picker) - 日期范围选择
+- [TimePicker](/components/time-picker) - 时间选择
+- [Transfer](/components/transfer) - 穿梭框
+- [Slider](/components/slider) - 滑动输入条
+- [Upload](/components/upload) - 上传
+- [Form](/components/form) - 表单
+- [AutoComplete](/components/auto-complete) - 自动完成
+- [Mentions](/components/mentions) - 提及
+- [Calendar](/components/calendar) - 日历
 
 ### 数据展示
+- [Table](/components/table) - 表格
+- [Pagination](/components/pagination) - 分页
+- [Empty](/components/empty) - 空状态
 - [Card](/components/card) - 卡片
 - [Tag](/components/tag) - 标签
 - [Badge](/components/badge) - 徽标
+- [Avatar](/components/avatar) - 头像
+- [Statistic](/components/statistic) - 统计数值
+- [Timeline](/components/timeline) - 时间轴
+- [Carousel](/components/carousel) - 走马灯
+- [Descriptions](/components/descriptions) - 描述列表
+- [Image](/components/image) - 图片
+- [Collapse](/components/collapse) - 折叠面板
+- [PopCard](/components/pop-card) - 弹出卡片
+- [Waterfall](/components/waterfall) - 瀑布流
 
 ### 反馈组件
-- [Modal](/components/modal) - 对话框
-- [Message](/components/message) - 全局提示
 - [Alert](/components/alert) - 警告提示
+- [Message](/components/message) - 全局提示
+- [Progress](/components/progress) - 进度条
+- [Notification](/components/notification) - 通知提醒
+- [Dialog](/components/dialog) - 对话框
+- [Drawer](/components/drawer) - 抽屉
+- [Loading](/components/loading) - 加载中
+- [Skeleton](/components/skeleton) - 骨架屏
+- [Result](/components/result) - 结果
+- [Popconfirm](/components/popconfirm) - 气泡确认框
+- [Tooltip](/components/tooltip) - 文字提示
+
+### 其他组件
+- [Divider](/components/divider) - 分割线
+- [Watermark](/components/watermark) - 水印
+- [GlowBorder](/components/glow-border) - 发光边框
+- [Tour](/components/tour) - 漫游式引导
+- [InfiniteList](/components/infinite-list) - 无限滚动列表
 
 ## 设计理念
 
@@ -150,9 +204,9 @@ SoUi Architecture
 
 ### 官方渠道
 
-- [GitHub](https://github.com/souI/ui)
+- [GitHub](https://github.com/sgjy123/SoUi)
 - [NPM](https://www.npmjs.com/package/@soui/ui)
-- [问题反馈](https://github.com/souI/ui/issues)
+- [问题反馈](https://github.com/sgjy123/SoUi/issues)
 
 ### 学习资源
 
@@ -160,12 +214,6 @@ SoUi Architecture
 - [样式系统](/styles/overview) - 设计基础
 - [主题定制](/theming/config-provider) - 自定义主题
 - [组件文档](/components/button) - 完整 API
-
-### 示例项目
-
-- [管理后台模板](https://github.com/souI/admin-template)
-- [登录页面示例](https://github.com/souI/login-demo)
-- [组件演示集合](https://github.com/souI/components-showcase)
 
 ## 贡献指南
 
@@ -181,8 +229,8 @@ SoUi Architecture
 
 ```bash
 # Fork 并克隆项目
-git clone https://github.com/your-name/ui.git
-cd ui/SoUi
+git clone https://github.com/sgjy123/SoUi.git
+cd SoUi
 
 # 安装依赖
 npm install
